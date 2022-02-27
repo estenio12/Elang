@@ -7,12 +7,18 @@ int main(int argc, char* argv[]){
 
 	Lexer* lexer = new Lexer();
 
-	std::string	GetFileData = File::Reader(argv[ 1 ]);
-	std::string GetLexicData = lexer->Processor(GetFileData);
+	std::string	Data = File::Reader(argv[ 1 ]);
+	lexer->Processor(Data);
 
-	//std::cout << GetFileData << std::endl;
+	std::cout << Data << std::endl << std::endl;
 
-	File::Writer(argv[ 1 ], GetLexicData);
+	for(int i = 0; i < lexer->SymbolTable.size(); i++){
+
+		std::cout << "id: " << lexer->SymbolTable[ i ].id << " | ";
+		std::cout << "Name:" << lexer->SymbolTable[ i ].name << std::endl;
+	}
+
+	File::Writer(argv[ 1 ], Data);
 
 	// # free instance from memory
 	delete lexer;

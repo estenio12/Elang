@@ -18,10 +18,28 @@
 
 class SymbolTableCell{
 
+public:
 	std::string id;
 	std::string type;
+	std::string scope;
 	std::string name;
 	std::string value;
+
+public:
+	SymbolTableCell(
+		std::string pid,
+		std::string ptype,
+		std::string pscope,
+		std::string pname,
+		std::string pvalue )
+	:
+		id(pid),
+		type(ptype),
+		scope(pscope),
+		name(pname),
+		value(pvalue){}
+	~SymbolTableCell(){}
+
 };
 
 class Lexer{
@@ -31,22 +49,30 @@ public:
 	std::vector<std::pair<std::string, std::string>> Functions;
 	std::vector<std::pair<std::string, std::string>> Delimiters;
 	std::vector<std::pair<std::string, std::string>> Operators;
-	std::vector<std::pair<std::string, std::string>> IncDec;
 	std::vector<std::pair<std::string, std::string>> Conditional;
 	std::vector<std::pair<std::string, std::string>> Loop;
 
 	std::vector<SymbolTableCell> SymbolTable;
+
+	// # Others Variables
+	bool isToken = false;
+	uint8_t c_pointer = 0; // c_pointer = chuck pointer
+	uint32_t globalIDCounter = 0;
 
 public:
 	Lexer();
 	~Lexer();
 
 public:
-	// # function for agregation
-	std::string Processor(std::string& content);
 	
-	// # 
+	// # Process chuck by chuck for determinate your attribute
 	std::string ChuckProcessor(std::string& chuck); 
+
+	// # function for agregation
+	void Processor(std::string& content);
+	
+	// # this function clear whitespace
+	void ClearWS(std::string& content);
 
 	// # this function remove the character formatation
 	void Formatter(std::string& content);

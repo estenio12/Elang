@@ -18,6 +18,7 @@ Lexer::Lexer(){
 	// # Load Delimiters
 	this->Delimiters.push_back(std::make_pair(";", "t_block_close"));
 	this->Delimiters.push_back(std::make_pair(" ", "t_empty"));
+	this->Delimiters.push_back(std::make_pair(":", "t_open_fun"));
 	this->Delimiters.push_back(std::make_pair("\"","t_str"));
 	this->Delimiters.push_back(std::make_pair("\'","t_str"));
 	this->Delimiters.push_back(std::make_pair("(", "t_param_open"));
@@ -28,19 +29,11 @@ Lexer::Lexer(){
 	this->Delimiters.push_back(std::make_pair("]", "t_brecket_close"));
 
 	// # Load Operators
+	this->Operators.push_back(std::make_pair("=", "t_set"));
 	this->Operators.push_back(std::make_pair("+", "t_plus"));
 	this->Operators.push_back(std::make_pair("-", "t_minus"));
 	this->Operators.push_back(std::make_pair("/", "t_div"));
 	this->Operators.push_back(std::make_pair("*", "t_mult"));
-	this->Operators.push_back(std::make_pair("+=", "t_addself"));
-	this->Operators.push_back(std::make_pair("-=", "t_subself"));
-	this->Operators.push_back(std::make_pair("/=", "t_divself"));
-	this->Operators.push_back(std::make_pair("*=", "t_multself"));
-
-	// # Load Incremeters and Decrementers
-	this->IncDec.push_back(std::make_pair("=", "t_set"));
-	this->IncDec.push_back(std::make_pair("++", "t_inc"));
-	this->IncDec.push_back(std::make_pair("--", "t_dec"));
 
 	// # Load Conditinals
 	this->Conditional.push_back(std::make_pair("==", "t_eguals"));
@@ -61,7 +54,6 @@ Lexer::~Lexer(){
 	this->Functions.clear();
 	this->Delimiters.clear();
 	this->Operators.clear();
-	this->IncDec.clear();
 	this->Conditional.clear();
 	this->Loop.clear();
 
@@ -69,15 +61,13 @@ Lexer::~Lexer(){
 	this->SymbolTable.clear();
 }
 
-std::string Lexer::Processor(std::string& content){
+void Lexer::Processor(std::string& content){
 
 	// # Apply formatation over content
 	this->Formatter(content);
 
 	// # Apply Lexic Process
 	this->Reader(content);
-
-	return "none";
 }
 
 void Lexer::Formatter(std::string& content){
@@ -122,39 +112,144 @@ void Lexer::Formatter(std::string& content){
 
 void Lexer::Reader(std::string& content){
 
+	std::string current_word;
 	std::string tmpContent;
-	char tmpStack;
-	uint32_t interator = 0;
-	uint8_t pointer = 0;
 
+	// # 
 	bool hit = false;
 
-	while( content[ interator ] != '\0' ){
+	// # p1 reader pointer
+	uint8_t p1 = 0;
+	uint8_t i = 0;
 
-		tmpContent.push_back(content[ interator ]);
-		
-		// # first step, separete by chuck
-		for( pointer = 0; pointer < this->Delimiters.size(); pointer++ ){
+	while( content[ p1 ] != '\0' ){
 
-			if( content[ interator ] == this->Delimiters[ pointer ].first[ 0 ] ){
+		hit = false;
+		current_word.push_back( content[ p1 ] );
 
-				hit = true;
+		// # Check if this next character is a delimiters
+		if( !hit ){
 
+			for( i = 0; i < this->Delimiters.size(); i++ ){
+			
+				if( content[ p1 + 1 ] == this->Delimiters[ i ].first[ 0 ] ){
+
+					hit = true;
+					break;
+				}
 			}
 		}
 
-		if( !hit ){
-			
-			this->ChuckProcessor(tmpContent);
+		// # This condition execute when one special character finded
+		if( hit ){
+
+			tmpContent += this->ChuckProcessor( current_word );
+			current_word.clear();
 		}
 
-		++interator;
+		++p1;
 	}
+
+	content = tmpContent;
+	tmpContent.clear();
 }
 
 std::string Lexer::ChuckProcessor(std::string& chuck){
 
-	std::cout << "TES: " << chuck << std::endl;
+	this->ClearWS(chuck);
 
-	return "none";
+	// # Check if a variable declaration
+	for( c_pointer = 0; c_pointer < this->Variables.size(); c_pointer++ ){
+
+		if( chuck == this->Variables[ c_pointer ].first ){
+
+			return "<" + this->Variables[ c_pointer ].second +">";
+		}
+	}
+
+	// # Check if a function declaration
+	for( c_pointer = 0; c_pointer < this->Functions.size(); c_pointer++ ){
+
+		if( chuck == this->Functions[ c_pointer ].first ){
+
+			return "<" + this->Functions[ c_pointer ].second +">";
+		}
+	}
+
+	// # Check if a Delimiters declaration
+	for( c_pointer = 0; c_pointer < this->Delimiters.size(); c_pointer++ ){
+
+		if( chuck == this->Delimiters[ c_pointer ].first ){
+
+			return "<" + this->Delimiters[ c_pointer ].second +">";
+		}
+	}
+
+	// # Check if a Operators declaration
+	for( c_pointer = 0; c_pointer < this->Operators.size(); c_pointer++ ){
+
+		if( chuck == this->Operators[ c_pointer ].first ){
+
+			return "<" + this->Operators[ c_pointer ].second +">";
+		}
+	}
+
+	// # Check if a Conditional declaration
+	for( c_pointer = 0; c_pointer < this->Conditional.size(); c_pointer++ ){
+
+		if( chuck == this->Conditional[ c_pointer ].first ){
+
+			return "<" + this->Conditional[ c_pointer ].second +">";
+		}
+	}
+
+	// # Check if a Loop declaration
+	for( c_pointer = 0; c_pointer < this->Loop.size(); c_pointer++ ){
+
+		if( chuck == this->Loop[ c_pointer ].first ){
+
+			return "<" + this->Loop[ c_pointer ].second +">";
+		}
+	}
+
+	// # case another verifications failure, will execute this
+	for( c_pointer = 0; c_pointer < this->SymbolTable.size(); c_pointer++ ){
+
+		if( chuck == this->SymbolTable[ c_pointer ].name){
+
+			return "<" + this->SymbolTable[ c_pointer ].id +">";
+		}
+	}
+
+	++this->globalIDCounter;
+	this->SymbolTable.push_back(
+		*new SymbolTableCell(
+			"id"+std::to_string(globalIDCounter), // # ID
+			"underfined", // # Type
+			"global",	  // # scope
+			chuck,		  // # name
+			"underfined"  // # value
+			)
+		);
+	// # return new identification
+	return "<id"+std::to_string( this->globalIDCounter )+">";
+}
+
+void Lexer::ClearWS(std::string& content){
+
+	std::string tmp;
+	uint8_t i = 0;
+
+	while( content[ i ] != '\0' ){
+
+		if( content[ i ] != ' ' ){
+
+			tmp.push_back( content[ i ] );
+		}
+
+		++i;
+	}
+
+	content = tmp;
+	tmp.clear();
 }

@@ -1,6 +1,1 @@
-sys => main(){
-	
-	var: int;
-
-	fun inc(pvar) => var + 1;
-}
+tes = 32;
