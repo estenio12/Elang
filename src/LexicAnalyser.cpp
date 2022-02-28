@@ -301,7 +301,7 @@ uint16_t Lexer::StringHandler(std::string& content, std::string& tmp, uint16_t p
 
 		if( content[ p2 ] == '\"' || content[ p2 ] == '\'' ){
 
-			return p2 + 1;
+			return p2;
 		}else{
 
 			tmp.push_back( content[ p2 ] );

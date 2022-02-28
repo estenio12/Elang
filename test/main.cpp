@@ -15,6 +15,8 @@ int main(int argc, char* argv[]){
 	for(int i = 0; i < lexer->SymbolTable.size(); i++){
 
 		std::cout << "id: " << lexer->SymbolTable[ i ].id << " | ";
+		std::cout << "type: " << lexer->SymbolTable[ i ].type << " | ";
+		std::cout << "scope: " << lexer->SymbolTable[ i ].scope << " | ";
 		std::cout << "Name:" << lexer->SymbolTable[ i ].name << std::endl;
 	}
 
