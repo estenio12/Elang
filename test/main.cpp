@@ -10,7 +10,7 @@ int main(int argc, char* argv[]){
 	std::string	Data = File::Reader(argv[ 1 ]);
 	lexer->Processor(Data);
 
-	std::cout << Data << std::endl << std::endl;
+	//std::cout << "Raw: "<< Data << std::endl << std::endl;
 
 	for(int i = 0; i < lexer->SymbolTable.size(); i++){
 

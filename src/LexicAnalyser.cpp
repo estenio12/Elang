@@ -5,8 +5,8 @@ Lexer::Lexer(){
 	// # Load Tokens
 
 	// # Load Variables
-	this->Variables.push_back(std::make_pair("var", "t_var"));
-	this->Variables.push_back(std::make_pair("const", "t_const"));
+	/*this->Variables.push_back(std::make_pair("var", "t_var"));
+	this->Variables.push_back(std::make_pair("const", "t_const"));*/
 
 	// # Load functions
 	this->Functions.push_back(std::make_pair("fun", "t_fun"));
@@ -68,6 +68,9 @@ void Lexer::Processor(std::string& content){
 
 	// # Apply Lexic Process
 	this->Reader(content);
+
+	// # Apply a cleaner empty tag
+	this->ClearEmptyTag(content);
 }
 
 void Lexer::Formatter(std::string& content){
@@ -76,34 +79,30 @@ void Lexer::Formatter(std::string& content){
 	char spc[] = {'\t','\b','\v','\a'};
 	std::string tmpContent;
 	bool isTarget = false;
-	uint16_t interator = 0;
+	uint16_t p = 0;
 	uint8_t i = 0;
 
-	while( content[ interator ] != '\0' ){
+	while( content[ p ] != '\0' ){
 
-		if( content[ 0 ] != ' ' ){ 
+		isTarget = false;
 
-			isTarget = false;
+		for( i = 0; i < 5; i++ ){
 
-			for( i = 0; i < 5; i++ ){
+			if( content[ p ] == spc[ i ] ||
+				// # check if is a empty character
+				( content[ p ] == ' ' && content[ p + 1 ] == ' ' ) ){
 
-				if( content[ interator ] == spc[ i ] ||
-					// # check if is a empty character
-					( content[ interator ] == ' ' && content[ interator + 1 ] == ' ' ) ){
-
-					isTarget = true;
-					break;
-				}
+				isTarget = true;
+				break;
 			}
-
-			if( !isTarget ){
-			
-				tmpContent.push_back( content[ interator ] );
-			}
-
 		}
 
-		++interator;
+		if( !isTarget ){
+		
+			tmpContent.push_back( content[ p ] );
+		}
+
+		++p;
 	}
 
 	content = tmpContent;
@@ -115,68 +114,47 @@ void Lexer::Reader(std::string& content){
 	std::string current_word;
 	std::string tmpContent;
 
-	// # 
-	bool hit = false;
-
 	// # p1 reader pointer
-	uint8_t p1 = 0;
-	uint8_t p2 = 0; // # string look ahead
+	uint16_t p1 = 0;
+	uint16_t p2 = 0; // # string look ahead
 	uint8_t i = 0;
 
 	while( content[ p1 ] != '\0' ){
 
-		hit = false;
+		current_word.clear();
+		
+		// # Check if this current character is whitespace
+		if( this->isToken( content[ p1 ] ) ){
 
-		// # Check if this next character is a delimiters
-		if( !hit ){
+			if( content[ p1 ] != '\"'){
 
-			for( i = 0; i < this->Delimiters.size(); i++ ){
-			
-				if( content[ p1 ] == this->Delimiters[ i ].first[ 0 ] ){
+				current_word.push_back( content[ p1 ] );
+			}
+		}else{
 
-					if( content[ p1 ] == '\"' || content[ p1 ] == '\'' ){
+			if( this->stringScopeUp ){
 
-						p2 = p1 + 1;
-						current_word.clear();
-						stringScopeClose = false;
+				p2 = this->StringHandler(content, current_word, p1);
 
-						while( content[ p2 ] != '\0' ){
+				if( p2 == 0 ){
 
-							if( content[ p2 ] == '\"' || content[ p2 ] == '\'' ){
-
-								this->stringScopeClose = true;
-								break;
-							}else{
-
-								current_word.push_back( content[ p2 ] );
-							}
-							++p2;
-						}
-
-						if( this->stringScopeClose ){
-
-							p1 = p2 + 1;
-						}else{
-
-							Console::Print("Error: string never closed!");
-							exit(1);
-						}
-					}
-
-					hit = true;
-					break;
+					Console::Print("Error: string never close!");
+					exit(1);
 				}
+
+				p1 = p2;
+				this->stringScopeUp = false;
+			}else{
+
+				this->ContentHandler(content, current_word, p1);
 			}
 		}
 
-		// # This condition execute when one special character finded
-		if( hit ){
+		if( current_word.size() > 0 ){ 
 
 			tmpContent += this->ChuckProcessor( current_word );
-			current_word.clear();
 		}
 
-		current_word.push_back( content[ p1 ] );
 		++p1;
 	}
 
@@ -185,11 +163,6 @@ void Lexer::Reader(std::string& content){
 }
 
 std::string Lexer::ChuckProcessor(std::string& chuck){
-
-	if( !this->stringScopeClose ){
-		
-		this->ClearWS(chuck);
-	}
 
 	// # Check if a variable declaration
 	for( c_pointer = 0; c_pointer < this->Variables.size(); c_pointer++ ){
@@ -210,6 +183,7 @@ std::string Lexer::ChuckProcessor(std::string& chuck){
 	}
 
 	// # Check if a Delimiters declaration
+
 	for( c_pointer = 0; c_pointer < this->Delimiters.size(); c_pointer++ ){
 
 		if( chuck == this->Delimiters[ c_pointer ].first ){
@@ -275,7 +249,7 @@ void Lexer::ClearWS(std::string& content){
 
 	while( content[ i ] != '\0' ){
 
-		if( content[ i ] != ' ' ){
+		if( content[ i ] != ' '){
 
 			tmp.push_back( content[ i ] );
 		}
@@ -285,4 +259,104 @@ void Lexer::ClearWS(std::string& content){
 
 	content = tmp;
 	tmp.clear();
+}
+
+bool Lexer::isToken(char content){
+
+	uint8_t i = 0;
+
+	// # Check if this character is a delimiters
+	for( i = 0; i < this->Delimiters.size(); i++ ){
+		
+		if( content == this->Delimiters[ i ].first[ 0 ] ){
+
+			if( content == '\"' || content == '\'' ){
+
+				this->stringScopeUp = true;
+			}
+
+			return true;
+			break;
+		}
+	}
+
+	// # Check if this character is a Operators
+	for( i = 0; i < this->Operators.size(); i++ ){
+		
+		if( content == this->Operators[ i ].first[ 0 ] ){
+
+			return true;
+			break;
+		}
+	}
+
+	return false;
+}
+
+uint16_t Lexer::StringHandler(std::string& content, std::string& tmp, uint16_t pointer){
+
+	uint16_t p2 = pointer;
+
+	while( content[ p2 ] != '\0' ){
+
+		if( content[ p2 ] == '\"' || content[ p2 ] == '\'' ){
+
+			return p2 + 1;
+		}else{
+
+			tmp.push_back( content[ p2 ] );
+		}
+
+		++p2;
+	}
+
+	return 0;
+}
+
+void Lexer::ContentHandler(std::string& content, std::string& tmp, uint16_t& pointer){
+
+	uint16_t p2 = pointer;
+	uint8_t i = 0;
+
+	while( content[ p2 ] != '\0' ){
+
+		tmp.push_back( content[ p2 ] );
+
+		if( this->isToken(content[ p2 + 1 ]) ){
+
+			break;
+		}
+
+		++p2;
+	}
+
+	this->stringScopeUp = false;
+	pointer = p2;
+}
+
+void Lexer::ClearEmptyTag(std::string& content){
+
+	uint16_t p1 = 0; // # pointer 01
+
+	std::string current_word;
+	std::string tmpContent;
+
+	while( content[ p1 ] != '\0' ){
+
+		current_word.push_back( content[ p1 ] );
+		
+		if( content[ p1 ] == '>' ){
+
+			if( current_word != "<t_empty>" ){
+
+				tmpContent += current_word;
+			}
+			current_word.clear();
+		}
+
+		++p1;
+	}
+
+	content = tmpContent;
+	tmpContent.clear();
 }

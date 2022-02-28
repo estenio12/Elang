@@ -31,7 +31,7 @@ std::string File::Reader(char* path){
 		while( std::getline(fileHandle, pointer) ){
 
 			content += pointer;
-			content.push_back('\n');
+			//ontent.push_back('\n');
 		}
 
 		// # check if file is empty

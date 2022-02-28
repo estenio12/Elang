@@ -57,7 +57,7 @@ public:
 	std::vector<SymbolTableCell> SymbolTable;
 
 	// # Others Variables
-	bool stringScopeClose = false;
+	bool stringScopeUp = false;
 	uint8_t c_pointer = 0; // c_pointer = chuck pointer
 	uint32_t globalIDCounter = 0;
 
@@ -70,6 +70,15 @@ public:
 	// # Process chuck by chuck for determinate your attribute
 	std::string ChuckProcessor(std::string& chuck); 
 
+	// # this function check if this character is a token
+	bool isToken(char content);
+
+	// # this function search string close scope
+	uint16_t StringHandler(std::string& content, std::string& tmp, uint16_t pointer);
+
+	// # this function search end current word
+	void ContentHandler(std::string& content, std::string& tmp, uint16_t& pointer);
+
 	// # function for agregation
 	void Processor(std::string& content);
 
@@ -81,5 +90,8 @@ public:
 
 	// # this function apply lexic process
 	void Reader(std::string& content);
+
+	// # this function clear empty tags
+	void ClearEmptyTag(std::string& content);
 
 };
