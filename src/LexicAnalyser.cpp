@@ -16,7 +16,7 @@ Lexer::Lexer(){
 	this->Functions.push_back(std::make_pair("else", "t_else"));
 
 	// # Load Delimiters
-	this->Delimiters.push_back(std::make_pair(";", "t_block_close"));
+	this->Delimiters.push_back(std::make_pair(";", "t_cmd_end"));
 	this->Delimiters.push_back(std::make_pair(" ", "t_empty"));
 	this->Delimiters.push_back(std::make_pair(":", "t_open_fun"));
 	this->Delimiters.push_back(std::make_pair("\"","t_str"));
@@ -120,19 +120,48 @@ void Lexer::Reader(std::string& content){
 
 	// # p1 reader pointer
 	uint8_t p1 = 0;
+	uint8_t p2 = 0; // # string look ahead
 	uint8_t i = 0;
 
 	while( content[ p1 ] != '\0' ){
 
 		hit = false;
-		current_word.push_back( content[ p1 ] );
 
 		// # Check if this next character is a delimiters
 		if( !hit ){
 
 			for( i = 0; i < this->Delimiters.size(); i++ ){
 			
-				if( content[ p1 + 1 ] == this->Delimiters[ i ].first[ 0 ] ){
+				if( content[ p1 ] == this->Delimiters[ i ].first[ 0 ] ){
+
+					if( content[ p1 ] == '\"' || content[ p1 ] == '\'' ){
+
+						p2 = p1 + 1;
+						current_word.clear();
+						stringScopeClose = false;
+
+						while( content[ p2 ] != '\0' ){
+
+							if( content[ p2 ] == '\"' || content[ p2 ] == '\'' ){
+
+								this->stringScopeClose = true;
+								break;
+							}else{
+
+								current_word.push_back( content[ p2 ] );
+							}
+							++p2;
+						}
+
+						if( this->stringScopeClose ){
+
+							p1 = p2 + 1;
+						}else{
+
+							Console::Print("Error: string never closed!");
+							exit(1);
+						}
+					}
 
 					hit = true;
 					break;
@@ -147,6 +176,7 @@ void Lexer::Reader(std::string& content){
 			current_word.clear();
 		}
 
+		current_word.push_back( content[ p1 ] );
 		++p1;
 	}
 
@@ -156,7 +186,10 @@ void Lexer::Reader(std::string& content){
 
 std::string Lexer::ChuckProcessor(std::string& chuck){
 
-	this->ClearWS(chuck);
+	if( !this->stringScopeClose ){
+		
+		this->ClearWS(chuck);
+	}
 
 	// # Check if a variable declaration
 	for( c_pointer = 0; c_pointer < this->Variables.size(); c_pointer++ ){

@@ -16,6 +16,8 @@
 #include <cstdint>
 #include <iostream>
 
+#include "../includes/Console.hpp"
+
 class SymbolTableCell{
 
 public:
@@ -55,7 +57,7 @@ public:
 	std::vector<SymbolTableCell> SymbolTable;
 
 	// # Others Variables
-	bool isToken = false;
+	bool stringScopeClose = false;
 	uint8_t c_pointer = 0; // c_pointer = chuck pointer
 	uint32_t globalIDCounter = 0;
 
@@ -70,7 +72,7 @@ public:
 
 	// # function for agregation
 	void Processor(std::string& content);
-	
+
 	// # this function clear whitespace
 	void ClearWS(std::string& content);
 
