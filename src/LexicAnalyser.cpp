@@ -34,12 +34,22 @@ Lexer::Lexer(){
 	this->Operators.push_back(std::make_pair("-", "t_minus"));
 	this->Operators.push_back(std::make_pair("/", "t_div"));
 	this->Operators.push_back(std::make_pair("*", "t_mult"));
+	this->Operators.push_back(std::make_pair("+=", "t_addself"));
+	this->Operators.push_back(std::make_pair("-=", "t_subself"));
+	this->Operators.push_back(std::make_pair("/=", "t_divself"));
+	this->Operators.push_back(std::make_pair("*=", "t_multself"));
+	this->Operators.push_back(std::make_pair("++", "t_inc"));
+	this->Operators.push_back(std::make_pair("--", "t_dec"));
 
 	// # Load Conditinals
 	this->Conditional.push_back(std::make_pair("==", "t_eguals"));
 	this->Conditional.push_back(std::make_pair("!=", "t_diff"));
 	this->Conditional.push_back(std::make_pair("&&", "t_and"));
 	this->Conditional.push_back(std::make_pair("||", "t_or"));
+	this->Conditional.push_back(std::make_pair(">=", "t_goreq"));
+	this->Conditional.push_back(std::make_pair("<=", "t_loreq"));
+	this->Conditional.push_back(std::make_pair(">", "t_greatthen"));
+	this->Conditional.push_back(std::make_pair("<", "t_lessthen"));
 
 	// #  Load Loop
 	this->Loop.push_back(std::make_pair("for", "t_for"));
@@ -130,6 +140,22 @@ void Lexer::Reader(std::string& content){
 
 				current_word.push_back( content[ p1 ] );
 			}
+
+		}else if( this->isTokenRange( content[ p1 ], content[ p1 + 1 ] ) ){
+
+			switch( this->t_type ){
+
+				case 1:
+
+					current_word.push_back( content[ p1 ] );
+					current_word.push_back( content[ p1 + 1 ] );
+					++p1;
+					break;
+				case 2:
+
+					current_word.push_back( content[ p1 ] );
+					break;
+			}
 		}else{
 
 			if( this->stringScopeUp ){
@@ -150,6 +176,7 @@ void Lexer::Reader(std::string& content){
 			}
 		}
 
+		// # check if this is a null string
 		if( current_word.size() > 0 ){ 
 
 			tmpContent += this->ChuckProcessor( current_word );
@@ -263,12 +290,12 @@ void Lexer::ClearWS(std::string& content){
 
 bool Lexer::isToken(char content){
 
-	uint8_t i = 0;
+	this->t_interator = 0;
 
 	// # Check if this character is a delimiters
-	for( i = 0; i < this->Delimiters.size(); i++ ){
+	for( this->t_interator = 0; this->t_interator < this->Delimiters.size(); this->t_interator++ ){
 		
-		if( content == this->Delimiters[ i ].first[ 0 ] ){
+		if( content == this->Delimiters[ this->t_interator ].first[ 0 ] ){
 
 			if( content == '\"' || content == '\'' ){
 
@@ -280,11 +307,48 @@ bool Lexer::isToken(char content){
 		}
 	}
 
-	// # Check if this character is a Operators
-	for( i = 0; i < this->Operators.size(); i++ ){
-		
-		if( content == this->Operators[ i ].first[ 0 ] ){
+	return false;
+}
 
+bool Lexer::isTokenRange(char p1, char p2){
+
+	this->t_interator = 0;
+
+	// # Check if current and next character is a Operators
+	for( this->t_interator = 0; this->t_interator < this->Operators.size(); this->t_interator++ ){
+		
+		if( p1 == this->Operators[ this->t_interator ].first[ 0 ] ){
+			
+			for( this->t_aux = 0; this->t_aux < this->Operators.size(); t_aux++){
+
+				if( p2 == this->Operators[ this->t_aux ].first[ 0 ] ){
+
+					this->t_type = 1;
+					return true;
+				}
+			}
+
+			this->t_type = 2;
+			return true;
+			break;
+		}
+	}
+
+	// # Check if current and next character is a Conditions
+	for( this->t_interator = 0; this->t_interator < this->Conditional.size(); this->t_interator++ ){
+		
+		if( p1 == this->Conditional[ this->t_interator ].first[ 0 ] ){
+			
+			for( this->t_aux = 0; this->t_aux < this->Conditional.size(); t_aux++){
+
+				if( p2 == this->Conditional[ this->t_aux ].first[ 0 ] ){
+
+					this->t_type = 1;
+					return true;
+				}
+			}
+
+			this->t_type = 2;
 			return true;
 			break;
 		}
@@ -322,10 +386,8 @@ void Lexer::ContentHandler(std::string& content, std::string& tmp, uint16_t& poi
 
 		tmp.push_back( content[ p2 ] );
 
-		if( this->isToken(content[ p2 + 1 ]) ){
-
-			break;
-		}
+		if( this->isToken(content[ p2 + 1 ]) ){ break;}
+		if( this->isTokenRange(content[ p2 + 1 ], ' ') ){ break;}
 
 		++p2;
 	}

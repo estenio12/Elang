@@ -1,4 +1,1 @@
-tes = 32 ;
-val = 45 ;
-fizela = "estenio garcia";
-guria = 3.14;
+tes = val + 34;

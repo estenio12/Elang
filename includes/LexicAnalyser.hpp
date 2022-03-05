@@ -59,6 +59,12 @@ public:
 	// # Others Variables
 	bool stringScopeUp = false;
 	uint8_t c_pointer = 0; // c_pointer = chuck pointer
+	uint8_t t_interator = 0;
+
+	// # This variables identify what type token
+	uint8_t t_type = 0;
+	uint8_t t_aux = 0;
+
 	uint32_t globalIDCounter = 0;
 
 public:
@@ -72,6 +78,8 @@ public:
 
 	// # this function check if this character is a token
 	bool isToken(char content);
+
+	bool isTokenRange(char p1, char p2);
 
 	// # this function search string close scope
 	uint16_t StringHandler(std::string& content, std::string& tmp, uint16_t pointer);
