@@ -269,18 +269,56 @@ std::string Lexer::ChuckProcessor(std::string& chuck){
 		}
 	}
 
-	if( this->isDeclared( chuck ) ){
+	if( this->isNumber( chuck ) ){
 
-	++this->globalIDCounter;
-	this->SymbolTable.push_back(
-		*new SymbolTableCell(
-			"id"+std::to_string(globalIDCounter), // # ID
-			"underfined", // # Type
-			"global",	  // # scope
-			chuck,		  // # name
-			"underfined"  // # value
-			)
-		);
+		if( this->occurrence == "none" ){
+
+			Console::Print(1, "Number not assigned into variables | ( "+chuck+" )");
+			exit(1);
+		}else{
+
+			++this->globalIDCounter;
+			this->SymbolTable.push_back(
+				*new SymbolTableCell(
+					"id"+std::to_string(globalIDCounter), // # ID
+					( this->numberReal ) ? "float" : "number", // # Type
+					"global",	  // # scope
+					chuck,		  // # name
+					"underfined"  // # value
+					)
+			);
+		}
+
+	}else if( this->isDeclared( chuck ) ){
+
+		for( this->n_aux_1 = 0; this->n_aux_1 < this->numbers.size(); this->n_aux_1++ ){
+
+			this->numberHit = false;
+
+			if( chuck[ 0 ] == this->numbers[ this->n_aux_1 ] && chuck[ 0 ] != '.' ){
+
+				this->numberHit = true;
+				break;
+			}
+		}
+
+		if( !this->numberHit ){
+
+			++this->globalIDCounter;
+			this->SymbolTable.push_back(
+				*new SymbolTableCell(
+					"id"+std::to_string(globalIDCounter), // # ID
+					"underfined", // # Type
+					"global",	  // # scope
+					chuck,		  // # name
+					"underfined"  // # value
+					)
+				);
+		}else{
+
+			Console::Print(1, "Variables cannot start with a number | ( "+chuck+" )");
+			exit(1);
+		}
 	}else{
 
 		Console::Print(1, "Variable not declared in the scope | ( "+chuck+" )");
@@ -470,4 +508,35 @@ bool Lexer::isDeclared(std::string& content){
 void Lexer::SetOccurrence(std::string content){
 
 	this->occurrence = content;
+}
+
+bool Lexer::isNumber(std::string& content){
+
+	this->numberReal = false;
+
+	for( n_aux_1 = 0; n_aux_1 < content.size(); n_aux_1++ ){
+
+		this->numberHit = false;
+		
+		for( n_aux_2 = 0; n_aux_2 < this->numbers.size(); n_aux_2++ ){
+
+			if( content[ n_aux_1 ] == this->numbers[ n_aux_2 ] ){
+
+				if( content[ n_aux_1 ] == '.' ){
+
+					this->numberReal = true;
+				}
+
+				this->numberHit = true;
+				break;
+			}
+		}
+
+		if( !this->numberHit ){
+
+			return false;
+		}
+	}
+
+	return true;
 }

@@ -14,11 +14,11 @@
 
 #else
 
-#define ERROR 	"\033[31"
-#define SUCCESS "\033[32"
-#define WARNING "\033[33"
-#define INFORMATION "\033[36"
-#define DEFAULT "\033[0"
+#define ERROR 	"\033[31m"
+#define SUCCESS "\033[32m"
+#define WARNING "\033[33m"
+#define INFORMATION "\033[36m"
+#define DEFAULT "\033[0m"
 	
 #endif
 

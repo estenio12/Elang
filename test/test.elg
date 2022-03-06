@@ -1,2 +1,2 @@
-tes;
-tes = val;
+val = 35.12;
+tes = val + 15;

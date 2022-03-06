@@ -68,9 +68,17 @@ public:
 	// # This variables used to check if variables declared
 	uint16_t t_aux_isDec = 0;
 
-	// # Global Varaibles
+	// # this variables special character
+	const std::string numbers = "1234567890.";
+	bool numberHit = false;
+	bool numberReal = false;
+	uint8_t n_aux_1 = 0;
+	uint8_t n_aux_2 = 0;
+
+	// # Global Storage Varaibles
 	uint32_t globalIDCounter = 0;
-	// # this variable storage the last command readed
+
+		// # this variable storage the last command readed
 	std::string occurrence = "none";
 
 public:
@@ -88,6 +96,8 @@ public:
 	bool isTokenRange(char p1, char p2);
 
 	bool isDeclared(std::string& content);
+
+	bool isNumber(std::string& content);
 
 	// # this function search string close scope
 	uint16_t StringHandler(std::string& content, std::string& tmp, uint16_t pointer);
