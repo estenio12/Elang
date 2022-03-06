@@ -65,7 +65,13 @@ public:
 	uint8_t t_type = 0;
 	uint8_t t_aux = 0;
 
+	// # This variables used to check if variables declared
+	uint16_t t_aux_isDec = 0;
+
+	// # Global Varaibles
 	uint32_t globalIDCounter = 0;
+	// # this variable storage the last command readed
+	std::string occurrence = "none";
 
 public:
 	Lexer();
@@ -80,6 +86,8 @@ public:
 	bool isToken(char content);
 
 	bool isTokenRange(char p1, char p2);
+
+	bool isDeclared(std::string& content);
 
 	// # this function search string close scope
 	uint16_t StringHandler(std::string& content, std::string& tmp, uint16_t pointer);
@@ -102,4 +110,6 @@ public:
 	// # this function clear empty tags
 	void ClearEmptyTag(std::string& content);
 
+	// # this function change for the new occurrence
+	void SetOccurrence(std::string content);
 };

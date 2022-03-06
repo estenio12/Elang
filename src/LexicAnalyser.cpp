@@ -164,7 +164,7 @@ void Lexer::Reader(std::string& content){
 
 				if( p2 == 0 ){
 
-					Console::Print("Error: string never close!");
+					Console::Print(1, "Error: string never close!");
 					exit(1);
 				}
 
@@ -196,6 +196,7 @@ std::string Lexer::ChuckProcessor(std::string& chuck){
 
 		if( chuck == this->Variables[ c_pointer ].first ){
 
+			this->SetOccurrence("token");
 			return "<" + this->Variables[ c_pointer ].second +">";
 		}
 	}
@@ -205,6 +206,7 @@ std::string Lexer::ChuckProcessor(std::string& chuck){
 
 		if( chuck == this->Functions[ c_pointer ].first ){
 
+			this->SetOccurrence("token");
 			return "<" + this->Functions[ c_pointer ].second +">";
 		}
 	}
@@ -215,6 +217,14 @@ std::string Lexer::ChuckProcessor(std::string& chuck){
 
 		if( chuck == this->Delimiters[ c_pointer ].first ){
 
+			if( chuck == ";" ){
+
+				this->SetOccurrence("none");
+			}else{
+
+				this->SetOccurrence("token");
+			}
+
 			return "<" + this->Delimiters[ c_pointer ].second +">";
 		}
 	}
@@ -224,6 +234,7 @@ std::string Lexer::ChuckProcessor(std::string& chuck){
 
 		if( chuck == this->Operators[ c_pointer ].first ){
 
+			this->SetOccurrence("token");
 			return "<" + this->Operators[ c_pointer ].second +">";
 		}
 	}
@@ -233,6 +244,7 @@ std::string Lexer::ChuckProcessor(std::string& chuck){
 
 		if( chuck == this->Conditional[ c_pointer ].first ){
 
+			this->SetOccurrence("token");
 			return "<" + this->Conditional[ c_pointer ].second +">";
 		}
 	}
@@ -242,6 +254,7 @@ std::string Lexer::ChuckProcessor(std::string& chuck){
 
 		if( chuck == this->Loop[ c_pointer ].first ){
 
+			this->SetOccurrence("token");
 			return "<" + this->Loop[ c_pointer ].second +">";
 		}
 	}
@@ -251,9 +264,12 @@ std::string Lexer::ChuckProcessor(std::string& chuck){
 
 		if( chuck == this->SymbolTable[ c_pointer ].name){
 
+			this->SetOccurrence("token");
 			return "<" + this->SymbolTable[ c_pointer ].id +">";
 		}
 	}
+
+	if( this->isDeclared( chuck ) ){
 
 	++this->globalIDCounter;
 	this->SymbolTable.push_back(
@@ -265,6 +281,14 @@ std::string Lexer::ChuckProcessor(std::string& chuck){
 			"underfined"  // # value
 			)
 		);
+	}else{
+
+		Console::Print(1, "Variable not declared in the scope | ( "+chuck+" )");
+		exit(1);
+	}
+
+	// # Register new occurrence
+	this->SetOccurrence("id");
 	// # return new identification
 	return "<id"+std::to_string( this->globalIDCounter )+">";
 }
@@ -421,4 +445,29 @@ void Lexer::ClearEmptyTag(std::string& content){
 
 	content = tmpContent;
 	tmpContent.clear();
+}
+
+bool Lexer::isDeclared(std::string& content){
+
+	for( this->t_aux_isDec = 0; this->t_aux_isDec < this->SymbolTable.size(); this->t_aux_isDec++ ){
+
+		if( content == this->SymbolTable[ this->t_aux_isDec ].name ){
+
+			return true;
+		}
+	}
+
+	// # check if last occurrence is difference of token
+	// # if the last occurrence is a token, then create variable
+	if( this->occurrence != "token" ){
+
+		return true;
+	}
+
+	return false;
+}
+
+void Lexer::SetOccurrence(std::string content){
+
+	this->occurrence = content;
 }

@@ -22,6 +22,8 @@ int main(int argc, char* argv[]){
 
 	File::Writer(argv[ 1 ], Data);
 
+	Console::Print(0, "Compiled with successfully!");
+
 	// # free instance from memory
 	delete lexer;
 

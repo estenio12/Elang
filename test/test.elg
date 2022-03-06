@@ -1,1 +1,2 @@
-tes = val + 34;
+tes;
+tes = val;

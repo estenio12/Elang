@@ -39,14 +39,14 @@ std::string File::Reader(char* path){
 		if( content.size() <= 3 ){
 
 			fileHandle.close();
-			Console::Print("Error: Invalid File!");
+			Console::Print(1, "Invalid File!");
 			exit(1);
 		}
 
 	}else{
 
 		fileHandle.close();
-		Console::Print("Error: File cannot be readed!");
+		Console::Print(1, "Error: File cannot be readed!");
 		exit(1);
 	}
 
