@@ -2,3 +2,4 @@ test/*
 .git/*
 Assets/*
 token.txt
+doc/*

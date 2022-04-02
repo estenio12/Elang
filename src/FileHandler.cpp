@@ -31,11 +31,10 @@ std::string File::Reader(char* path){
 		while( std::getline(fileHandle, pointer) ){
 
 			content += pointer;
-			//ontent.push_back('\n');
+			content.push_back('\n');
 		}
 
 		// # check if file is empty
-
 		if( content.size() <= 3 ){
 
 			fileHandle.close();
