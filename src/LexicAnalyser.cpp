@@ -45,14 +45,14 @@ std::string Lexer::Processor(std::string& content){
 
 				if( this->stringScope ){
 
-					this->LEXER_ERROR("String never closed! | Linha: "+std::to_string(this->linec));
+					this->LEXER_ERROR("String never closed! | Line: "+std::to_string(this->linec));
 				}
 
 				p1 = p2 + 1;
 				tmpCopy.clear();
 			}else{
 
-				this->LEXER_ERROR("String never closed! | Linha: "+std::to_string(this->linec));
+				this->LEXER_ERROR("String never closed! | Line: "+std::to_string(this->linec));
 			}
 
 		}else if( content[ p1 ] != ' ' ){
