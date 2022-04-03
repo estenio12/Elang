@@ -16,10 +16,49 @@ std::string Lexer::Processor(std::string& content){
 
 		if( content[ p1 ] == '\n' ){
 
+			// # add line count for debug
 			++this->linec;
+		
+		}else if( content[ p1 ] == '\'' || content[ p1 ] == '\"' ){
+
+			// # process string data
+
+			if( !this->stringScope ){				
+				
+				p2 = p1 + 1;
+				tmpCopy.clear();
+				this->stringScope = true;
+
+				while( content [ p2 ] != '\0' ){
+
+					tmpCopy.push_back( content[ p2 ] );
+
+					if( content[ p2 + 1 ] == '\'' || content[ p2  + 1 ] == '\"' ){
+
+						this->memory += "<str,"+tmpCopy+">";
+						this->stringScope = false;
+						break;
+					}
+
+					++p2;
+				}
+
+				if( this->stringScope ){
+
+					this->LEXER_ERROR("String never closed! | Linha: "+std::to_string(this->linec));
+				}
+
+				p1 = p2 + 1;
+				tmpCopy.clear();
+			}else{
+
+				this->LEXER_ERROR("String never closed! | Linha: "+std::to_string(this->linec));
+			}
+
 		}else if( content[ p1 ] != ' ' ){
 
 			tmpCopy.push_back( content[ p1 ] );
+			this->hitted = false;
 
 			if( content[ p1 ] == ';' ){
 
@@ -31,9 +70,48 @@ std::string Lexer::Processor(std::string& content){
 
 				for( i = 0; i < 5; i++ ){
 
-					if( content[ p1 + 1 ] == this->operators[ i ] ){
+					if( content[ p1 + 1 ] == this->operators[ i ] ||
+						content[ p1 + 1 ] == '=' ){
 
-						this->hitted = true;
+						this->hitted = false;
+
+						if( content[ p1 ] == '+' &&
+							content[ p1 + 1 ] == '='  ){
+
+							tmpCopy.push_back(content[ p1 + 1 ]);
+							++p1;
+							this->hitted = true;
+						}else if( content[ p1 ] == '-' &&
+							content[ p1 + 1 ] == '='  ){
+
+							tmpCopy.push_back(content[ p1 + 1 ]);
+							++p1;
+							this->hitted = true;
+						}else if( content[ p1 ] == '*' &&
+							content[ p1 + 1 ] == '='  ){
+
+							tmpCopy.push_back(content[ p1 + 1 ]);
+							++p1;
+							this->hitted = true;
+						}else if( content[ p1 ] == '/' &&
+							content[ p1 + 1 ] == '='  ){
+
+							tmpCopy.push_back(content[ p1 + 1 ]);
+							++p1;
+							this->hitted = true;
+						}else if( content[ p1 ] == '+' &&
+							content[ p1 + 1 ] == '+'  ){
+
+							tmpCopy.push_back(content[ p1 + 1 ]);
+							++p1;
+							this->hitted = true;
+						}else if( content[ p1 ] == '-' &&
+							content[ p1 + 1 ] == '-'  ){
+
+							tmpCopy.push_back(content[ p1 + 1 ]);
+							++p1;
+							this->hitted = true;
+						}
 						break;
 					}
 				}
@@ -52,12 +130,45 @@ std::string Lexer::Processor(std::string& content){
 				}
 			}
 
-			// # Check statements
+			// # Check relational
 			if( !this->hitted ){
-
+			
 				for( i = 0; i < 6; i++ ){
 
-					if( content[ p1 + 1 ] == this->statements[ i ] ){
+					if( content[ p1 + 1 ] == this->relational[ i ] ){
+
+						// # Check if this pair
+						if( content[ p1 ] == '=' &&
+							content[ p1 + 1 ] == '='  ){
+
+							tmpCopy.push_back(content[ p1 + 1 ]);
+							++p1;
+						}else if( content[ p1 ] == '|' &&
+							content[ p1 + 1 ] == '|'  ){
+
+							tmpCopy.push_back(content[ p1 + 1 ]);
+							++p1;
+						}else if( content[ p1 ] == '&' &&
+							content[ p1 + 1 ] == '&'  ){
+
+							tmpCopy.push_back(content[ p1 + 1 ]);
+							++p1;
+						}else if( content[ p1 ] == '>' &&
+							content[ p1 + 1 ] == '='  ){
+
+							tmpCopy.push_back(content[ p1 + 1 ]);
+							++p1;
+						}else if( content[ p1 ] == '<' &&
+							content[ p1 + 1 ] == '='  ){
+
+							tmpCopy.push_back(content[ p1 + 1 ]);
+							++p1;
+						}else if( content[ p1 ] == '!' &&
+							content[ p1 + 1 ] == '='  ){
+
+							tmpCopy.push_back(content[ p1 + 1 ]);
+							++p1;
+						}
 
 						this->hitted = true;
 						break;
@@ -113,12 +224,12 @@ std::string Lexer::Parser(std::string& chunk){
 		}
 	}
 
-	// # Check if the chunk is a statement
+	// # Check if the chunk is a relational
 	for( i = 0; i < 6; i++ ){
 
-		if( chunk[ 0 ] == this->statements[ i ] ){
+		if( chunk[ 0 ] == this->relational[ i ] ){
 
-			return "<stat,"+chunk+">";
+			return "<rel,"+chunk+">";
 		}
 	}
 
@@ -183,7 +294,7 @@ bool Lexer::ValidateVarName(std::string& chunk){
 	// # Check if the chunk is a statement
 	for( i = 0; i < 6; i++ ){
 
-		if( chunk[ 0 ] == this->statements[ i ] ){
+		if( chunk[ 0 ] == this->relational[ i ] ){
 
 			return false;
 		}

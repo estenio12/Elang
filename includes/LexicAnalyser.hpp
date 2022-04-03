@@ -27,12 +27,12 @@ public:
 		"else"
 	};
 	char operators[5] = {
-		'=','+','-','*','/'
+		'+','-','*','/'
 	};
 	char delimiters[8] = {
 		' ','{','}','(',')',';','\'','\"'
 	};
-	char statements[6] = {
+	char relational[6] = {
 		'=','|','&','>','<','!'
 	};
 	char number[11]{
@@ -49,6 +49,7 @@ public:
 
 	bool hitted = false;
 	bool numberFlag = false;
+	bool stringScope = false;
 
 	// # Counters
 	uint32_t linec = 1; // # line counter

@@ -20,6 +20,7 @@ int main(int argc, char* argv[]){
 
 	// # free instance from memory
 	delete lexer;
+	delete st;
 
 	return 0;
 }
