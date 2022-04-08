@@ -19,37 +19,48 @@ std::string Lexer::Processor(std::string& content){
 			// # add line count for debug
 			++this->linec;
 		
-		}else if( content[ p1 ] == '\'' || content[ p1 ] == '\"' ){
+		}else if( content[ p1 ] == '\'' || content[ p1 ] == '\"'){
 
 			// # process string data
-
 			if( !this->stringScope ){				
 				
-				p2 = p1 + 1;
-				tmpCopy.clear();
-				this->stringScope = true;
+				if( content[ p1 - 1] != '\\' ){	
 
-				while( content [ p2 ] != '\0' ){
+					p2 = p1 + 1;
+					tmpCopy.clear();
+					this->stringScope = true;
 
-					tmpCopy.push_back( content[ p2 ] );
+					while( content [ p2 ] != '\0' ){
 
-					if( content[ p2 + 1 ] == '\'' || content[ p2  + 1 ] == '\"' ){
+						tmpCopy.push_back( content[ p2 ] );
 
-						this->memory += "<str,"+tmpCopy+">";
-						this->stringScope = false;
-						break;
+						if( content[ p2 + 1 ] == '\'' && content[ p2 ] != '\\' ||
+							content[ p2 + 1 ] == '\"' && content[ p2 ] != '\\'){
+
+							this->memory += "<str,"+tmpCopy+">";
+							this->stringScope = false;
+							break;
+						}
+
+						if( content[ p2 ] == '\\' ){
+
+							tmpCopy.pop_back();
+						}
+
+						++p2;
 					}
 
-					++p2;
+					if( this->stringScope ){
+
+						this->LEXER_ERROR("String never closed! | Line: "+std::to_string(this->linec));
+					}
+
+					p1 = p2 + 1;
+					tmpCopy.clear();
+				}else{
+
+					this->LEXER_ERROR("Invalid character! | Line: "+std::to_string(this->linec)+" | "+content[ p1 - 1] );
 				}
-
-				if( this->stringScope ){
-
-					this->LEXER_ERROR("String never closed! | Line: "+std::to_string(this->linec));
-				}
-
-				p1 = p2 + 1;
-				tmpCopy.clear();
 			}else{
 
 				this->LEXER_ERROR("String never closed! | Line: "+std::to_string(this->linec));
@@ -259,7 +270,7 @@ std::string Lexer::Parser(std::string& chunk){
 	// # validate variable name
 	if( !this->ValidateVarName(chunk) ){
 
-		this->LEXER_ERROR("Cannot start variable name with a number! | Line: "+std::to_string(this->linec)+" | "+chunk);
+		this->LEXER_ERROR("Invalid named variable! | Line: "+std::to_string(this->linec)+" | "+chunk);
 	}
 
 	return "<id,"+std::to_string(this->sb_table->Add(chunk))+">";
@@ -303,6 +314,49 @@ bool Lexer::ValidateVarName(std::string& chunk){
 	for( i = 0; i < 11; i++ ){
 		
 		if( chunk[ 0 ]  == this->number[ i ]){
+
+			return false;
+		}
+	}
+
+	// # Check if varaibles name have a invalid character in your compound!
+	for( i = 0; i < chunk.size(); i++ ){
+		
+		// # Here, i used a subRotine to check character by character
+		if( !this->SubValidateVarName( chunk[ 1 ] ) ){
+
+			return false;
+		}
+	}
+
+	return true;
+}
+
+
+bool Lexer::SubValidateVarName(char& target){
+
+	// # Check if the chunk is a operator
+	for( i = 0; i < 5; i++ ){
+
+		if( target == this->operators[ i ] ){
+
+			return false;
+		}
+	}
+
+	// # Check if the target is a delimiter
+	for( i = 0; i < 8; i++ ){
+
+		if( target == this->delimiters[ i ] ){
+
+			return false;
+		}
+	}
+
+	// # Check if the target is a statement
+	for( i = 0; i < 6; i++ ){
+
+		if( target == this->relational[ i ] ){
 
 			return false;
 		}

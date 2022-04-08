@@ -67,4 +67,5 @@ public:
 	void LEXER_ERROR(std::string msg);
 	
 	bool ValidateVarName(std::string& chunk);
+	bool SubValidateVarName(char& target);
 };
