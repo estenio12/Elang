@@ -3,6 +3,7 @@
 Lexer::Lexer(SymbolTable* ptable){
 
 	this->sb_table = ptable;
+	this->sb_table->linec = &this->linec;
 }
 
 Lexer::~Lexer(){}
@@ -18,7 +19,25 @@ std::string Lexer::Processor(std::string& content){
 
 			// # add line count for debug
 			++this->linec;
-		
+		// # Braces
+		}else if( content[ p1 ] == '[' || content[ p1 ] == ']'){
+
+			this->memory += "<del,";
+			this->memory.push_back( ( content[ p1 ] == '[' ) ? '[' : ']' );
+			this->memory.push_back('>');
+		// # parentesis
+		}else if( content[ p1 ] == '(' || content[ p1 ] == ')' ){
+
+			this->memory += "<del,";
+			this->memory.push_back( ( content[ p1 ] == '(' ) ? '(' : ')' );
+			this->memory.push_back('>');
+		// # Brackets
+		}else if( content[ p1 ] == '{' || content[ p1 ] == '}'){
+
+			this->memory += "<del,";
+			this->memory.push_back( ( content[ p1 ] == '{' ) ? '{' : '}' );
+			this->memory.push_back('>');
+		// # Work with string
 		}else if( content[ p1 ] == '\'' || content[ p1 ] == '\"'){
 
 			// # process string data
@@ -65,7 +84,7 @@ std::string Lexer::Processor(std::string& content){
 
 				this->LEXER_ERROR("String never closed! | Line: "+std::to_string(this->linec));
 			}
-
+		// # if before process not work, then, apply this!
 		}else if( content[ p1 ] != ' ' ){
 
 			tmpCopy.push_back( content[ p1 ] );
@@ -79,7 +98,7 @@ std::string Lexer::Processor(std::string& content){
 			// # Check Operators
 			if( !this->hitted ){
 
-				for( i = 0; i < 5; i++ ){
+				for( i = 0; i < this->size_oper; i++ ){
 
 					if( content[ p1 + 1 ] == this->operators[ i ] ||
 						content[ p1 + 1 ] == '=' ){
@@ -131,7 +150,7 @@ std::string Lexer::Processor(std::string& content){
 			// # Check delimiters
 			if( !this->hitted ){
 				
-				for( i = 0; i < 8; i++ ){
+				for( i = 0; i < this->size_del; i++ ){
 
 					if( content[ p1 + 1 ] == this->delimiters[ i ] ){
 
@@ -144,7 +163,7 @@ std::string Lexer::Processor(std::string& content){
 			// # Check relational
 			if( !this->hitted ){
 			
-				for( i = 0; i < 6; i++ ){
+				for( i = 0; i < this->size_rel; i++ ){
 
 					if( content[ p1 + 1 ] == this->relational[ i ] ){
 
@@ -209,16 +228,24 @@ std::string Lexer::Parser(std::string& chunk){
 	//std::cout << "Debug Parser: " << chunk << std::endl;
 
 	// # Check if the chunk is a keyword
-	for( i = 0; i < 10; i++ ){
+	for( i = 0; i < this->size_keywords; i++ ){
 
 		if( chunk == this->keywords[ i ] ){
+
+			// # Variable flag ups
+			if( this->keywords[ i ] == "var" ||
+				this->keywords[ i ] == "const" ||
+				this->keywords[ i ] == "fun" ){
+
+				this->varUp = true;
+			}
 
 			return "<keywords,"+chunk+">";
 		}
 	}
 
 	// # Check if the chunk is a operator
-	for( i = 0; i < 5; i++ ){
+	for( i = 0; i < this->size_oper; i++ ){
 
 		if( chunk[ 0 ] == this->operators[ i ] ){
 
@@ -227,7 +254,7 @@ std::string Lexer::Parser(std::string& chunk){
 	}
 
 	// # Check if the chunk is a delimiter
-	for( i = 0; i < 8; i++ ){
+	for( i = 0; i < this->size_del; i++ ){
 
 		if( chunk[ 0 ] == this->delimiters[ i ] ){
 
@@ -236,7 +263,7 @@ std::string Lexer::Parser(std::string& chunk){
 	}
 
 	// # Check if the chunk is a relational
-	for( i = 0; i < 6; i++ ){
+	for( i = 0; i < this->size_rel; i++ ){
 
 		if( chunk[ 0 ] == this->relational[ i ] ){
 
@@ -249,7 +276,7 @@ std::string Lexer::Parser(std::string& chunk){
 
 		this->numberFlag = false;
 
-		for( aux = 0; aux < 11; aux++ ){
+		for( aux = 0; aux < this->size_num; aux++ ){
 
 			if( chunk[ i ] == this->number[ aux ] ){
 
@@ -273,7 +300,10 @@ std::string Lexer::Parser(std::string& chunk){
 		this->LEXER_ERROR("Invalid named variable! | Line: "+std::to_string(this->linec)+" | "+chunk);
 	}
 
-	return "<id,"+std::to_string(this->sb_table->Add(chunk))+">";
+	std::string build = "<id,"+std::to_string(this->sb_table->Add(chunk, this->varUp))+">";
+	this->varUp = false;
+
+	return build;
 }
 
 void Lexer::LEXER_ERROR(std::string msg){
@@ -285,7 +315,7 @@ void Lexer::LEXER_ERROR(std::string msg){
 bool Lexer::ValidateVarName(std::string& chunk){
 
 	// # Check if the chunk is a operator
-	for( i = 0; i < 5; i++ ){
+	for( i = 0; i < this->size_oper; i++ ){
 
 		if( chunk[ 0 ] == this->operators[ i ] ){
 
@@ -294,7 +324,7 @@ bool Lexer::ValidateVarName(std::string& chunk){
 	}
 
 	// # Check if the chunk is a delimiter
-	for( i = 0; i < 8; i++ ){
+	for( i = 0; i < this->size_del; i++ ){
 
 		if( chunk[ 0 ] == this->delimiters[ i ] ){
 
@@ -302,8 +332,8 @@ bool Lexer::ValidateVarName(std::string& chunk){
 		}
 	}
 
-	// # Check if the chunk is a statement
-	for( i = 0; i < 6; i++ ){
+	// # Check if the chunk is a relational
+	for( i = 0; i < this->size_rel; i++ ){
 
 		if( chunk[ 0 ] == this->relational[ i ] ){
 
@@ -311,12 +341,18 @@ bool Lexer::ValidateVarName(std::string& chunk){
 		}
 	}
 
-	for( i = 0; i < 11; i++ ){
+	for( i = 0; i < this->size_num; i++ ){
 		
 		if( chunk[ 0 ]  == this->number[ i ]){
 
 			return false;
 		}
+	}
+
+	// # check if variable name have a single character
+	if( chunk.size() == 1 ){
+
+		return true;
 	}
 
 	// # Check if varaibles name have a invalid character in your compound!
@@ -332,11 +368,10 @@ bool Lexer::ValidateVarName(std::string& chunk){
 	return true;
 }
 
-
 bool Lexer::SubValidateVarName(char& target){
 
 	// # Check if the chunk is a operator
-	for( i = 0; i < 5; i++ ){
+	for( i = 0; i < this->size_oper; i++ ){
 
 		if( target == this->operators[ i ] ){
 
@@ -345,7 +380,7 @@ bool Lexer::SubValidateVarName(char& target){
 	}
 
 	// # Check if the target is a delimiter
-	for( i = 0; i < 8; i++ ){
+	for( i = 0; i < this->size_del; i++ ){
 
 		if( target == this->delimiters[ i ] ){
 
@@ -353,8 +388,8 @@ bool Lexer::SubValidateVarName(char& target){
 		}
 	}
 
-	// # Check if the target is a statement
-	for( i = 0; i < 6; i++ ){
+	// # Check if the target is a relational
+	for( i = 0; i < this->size_rel; i++ ){
 
 		if( target == this->relational[ i ] ){
 

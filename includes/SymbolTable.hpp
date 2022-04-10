@@ -26,11 +26,12 @@ class SymbolTable{
 
 public:
 	uint32_t globalID = 1;
+	uint32_t* linec;
 	std::vector<Cell*> table;
 
 public:
 	SymbolTable();
 	~SymbolTable();
 
-	int Add(std::string name);
+	int Add(std::string name, bool& varUp);
 };

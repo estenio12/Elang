@@ -53,7 +53,29 @@ std::string File::Reader(char* path){
 	fileHandle.close();
 	pointer.clear();
 
-	return content;
+	// # Clear special character
+	File::Formatter( content );
+
+	return content; 
+}
+
+void File::Formatter(std::string& content){
+
+	std::string tmpCopy;
+	uint32_t p1 = 0;
+
+	while( content[ p1 ] != '\0' ){
+
+		if( content[ p1 ] != '\t' ){
+
+			tmpCopy.push_back( content[ p1 ] );
+		}
+
+		++p1;
+	}
+
+	content = tmpCopy;
+	tmpCopy.clear();
 }
 
 bool File::Writer(char* path, std::string content){
@@ -68,6 +90,7 @@ bool File::Writer(char* path, std::string content){
 		fileHandle << content;
 	}else{
 
+		fileHandle.close();
 		return false;
 	}
 

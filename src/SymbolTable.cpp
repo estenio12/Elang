@@ -7,7 +7,7 @@ SymbolTable::~SymbolTable(){
 	this->table.clear();
 }
 
-int SymbolTable::Add(std::string name){
+int SymbolTable::Add(std::string name, bool& varUp){
 
 	// # check if exist, case yes, return then!
 	for(int i = 0; i < this->table.size(); i++){
@@ -16,6 +16,12 @@ int SymbolTable::Add(std::string name){
 		
 			return this->table[ i ]->id;
 		}
+	}
+
+	if( !varUp ){
+
+		Console::Print(1, "Variable not declared in the scope! | Line: "+std::to_string(*this->linec)+" | "+name);
+		exit(1);
 	}
 
 	// # Case not exist, make a new id
