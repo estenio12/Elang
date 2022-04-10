@@ -1,32 +1,26 @@
-var tes1 = "lorem amet ipsum";
-var tes2 = "lorem \'ipsum\' amet";
-var tes3 = "\"lorem\" ipsum";
+var test = 45;
 
-var array = [34, "tes2", 67.34];
+fun foo(){
 
-fun fact(var n1, var n2){
+	test = 5;
 
-	tes1 = "zino";
-	return n1 + n2;
+	for(var i = 0; in 10){
+
+		var tes2 = "There and back again!";
+
+		for(var j = 0; in 10){
+
+			tes2 = "melon";
+		}
+	}
 }
 
-for(var i in 10){
-	
-	array[ 0 ] += i;
+fun bar(){
+
+	while( test != 0 ){
+
+		test--;
+	}
 }
 
-if( tes1 == tes2 ){
-	
-	tes3 = tes1;
-}elif( tes2 == tes3 ){
-	
-	tes2 = tes1;
-}else{
-	
-	tes1 = tes3;
-}
-
-do{
-	
-	array[ 0 ]++;
-}while( array[ 0 ] > 50 );
+test = 73;

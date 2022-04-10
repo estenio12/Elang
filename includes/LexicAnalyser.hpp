@@ -55,6 +55,11 @@ public:
 	uint8_t i = 0;
 	uint8_t aux = 0;
 
+	// # Scope Handler
+	uint32_t scope;
+	uint32_t current_scope;
+	uint32_t deepLevel;
+
 	bool hitted = false;
 	bool numberFlag = false;
 	bool stringScope = false;

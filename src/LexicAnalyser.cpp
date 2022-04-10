@@ -4,6 +4,8 @@ Lexer::Lexer(SymbolTable* ptable){
 
 	this->sb_table = ptable;
 	this->sb_table->linec = &this->linec;
+	this->sb_table->current_scope = &this->current_scope;
+	this->sb_table->current_deepLevel = &this->deepLevel;
 }
 
 Lexer::~Lexer(){}
@@ -37,6 +39,21 @@ std::string Lexer::Processor(std::string& content){
 			this->memory += "<del,";
 			this->memory.push_back( ( content[ p1 ] == '{' ) ? '{' : '}' );
 			this->memory.push_back('>');
+
+			// # Case find } simbol, subtract one for deep level
+			if( content[ p1 ] == '}' ){
+
+
+				// # if deep level less or eguals then zero, reset default values
+				if( this->deepLevel <= 0 ){
+
+					this->deepLevel = 0;
+					this->current_scope = 0;
+				}else{
+
+					this->deepLevel--;
+				}
+			}
 		// # Work with string
 		}else if( content[ p1 ] == '\'' || content[ p1 ] == '\"'){
 
@@ -98,6 +115,7 @@ std::string Lexer::Processor(std::string& content){
 			// # Check Operators
 			if( !this->hitted ){
 
+				// # Check compound operators
 				for( i = 0; i < this->size_oper; i++ ){
 
 					if( content[ p1 + 1 ] == this->operators[ i ] ||
@@ -142,6 +160,16 @@ std::string Lexer::Processor(std::string& content){
 							++p1;
 							this->hitted = true;
 						}
+						break;
+					}
+				}
+
+				// # Check singulaty operators
+				for( i = 0; i < this->size_oper; i++ ){
+
+					if( content[ p1 + 1 ] == this->operators[ i ] ){
+
+						this->hitted = true;
 						break;
 					}
 				}
@@ -240,6 +268,22 @@ std::string Lexer::Parser(std::string& chunk){
 				this->varUp = true;
 			}
 
+			// # Check for upscope
+			if( this->keywords[ i ] == "fun" ){
+
+				this->scope++;
+				this->current_scope = this->scope;
+				this->deepLevel = 0;
+			}
+
+			// # Check for set deep level
+			if( this->keywords[ i ] == "for" || this->keywords[ i ] == "while" ||
+				this->keywords[ i ] == "do"  || this->keywords[ i ] == "if"  ||
+				this->keywords[ i ] == "elif"|| this->keywords[ i ] == "else" ){
+
+				this->deepLevel++;
+			}
+
 			return "<keywords,"+chunk+">";
 		}
 	}
@@ -302,6 +346,11 @@ std::string Lexer::Parser(std::string& chunk){
 
 	std::string build = "<id,"+std::to_string(this->sb_table->Add(chunk, this->varUp))+">";
 	this->varUp = false;
+
+	/*std::cout << "variable: " << chunk;
+	std::cout << " | scope: " << this->current_scope;
+	std::cout << " | deepLevel: " << this->deepLevel;
+	std::cout << " | "<< this->linec << std::endl;*/
 
 	return build;
 }
