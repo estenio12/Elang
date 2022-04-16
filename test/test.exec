@@ -1,1 +1,26 @@
-<keywords,var><id,1><rel,=><number,45><del,;><keywords,fun><id,2><del,(><del,)><del,{><id,1><rel,=><number,5><del,;><keywords,for><del,(><keywords,var><id,3><rel,=><number,0><del,;><keywords,in><number,10><del,)><del,{><keywords,var><id,4><rel,=><str,There and back again!><del,;><keywords,for><del,(><keywords,var><id,5><rel,=><number,0><del,;><keywords,in><number,10><del,)><del,{><id,4><rel,=><str,melon><del,;><del,}><del,}><del,}><keywords,fun><id,6><del,(><del,)><del,{><keywords,while><del,(><id,1><rel,!=><number,0><del,)><del,{><id,1><oper,--><del,;><del,}><del,}><id,1><rel,=><number,73><del,;>
+<keywords,var><id,1><rel,=><number,45><del,;>
+
+<keywords,fun><id,2><del,(><del,)><del,{>
+
+<id,1><rel,=><number,5><del,;>
+
+<keywords,for><del,(><keywords,var><id,3><rel,=><number,0><del,;><keywords,in><number,10><del,)><del,{>
+
+<keywords,var><id,4><rel,=><str,There and back again!><del,;>
+
+<keywords,for><del,(><keywords,var><id,5><rel,=><number,0><del,;><keywords,in><number,10><del,)><del,{>
+
+<id,4><rel,=><str,melon><del,;>
+<del,}>
+<del,}>
+<del,}>
+
+<keywords,fun><id,6><del,(><del,)><del,{>
+
+<keywords,while><del,(><id,1><rel,!=><number,0><del,)><del,{>
+
+<id,1><oper,--><del,;>
+<del,}>
+<del,}>
+
+<id,1><rel,=><number,73><del,;>

@@ -21,32 +21,6 @@ class Lexer{
 
 public:
 
-	// # checker size
-	const static size_t size_keywords = 13;
-	const static size_t size_oper = 4;
-	const static size_t size_del  = 11;
-	const static size_t size_rel  = 6;
-	const static size_t size_num  = 11;
-
-	std::string keywords[size_keywords] = {
-		"var","const","fun",
-		"for","while","do",
-		"return","if","elif",
-		"else","in","at","break"
-	};
-	char operators[size_oper] = {
-		'+','-','*','/'
-	};
-	char delimiters[size_del] = {
-		' ','{','}','(',')',';','\'','\"','[',']',','
-	};
-	char relational[size_rel] = {
-		'=','|','&','>','<','!'
-	};
-	char number[size_num]{
-		'0','1','2','3','4','5','6','7','8','9','.'
-	};
-
 	// # Here storage data processed
 	std::string memory;
 	

@@ -21,6 +21,7 @@ std::string Lexer::Processor(std::string& content){
 
 			// # add line count for debug
 			++this->linec;
+			this->memory.push_back(content[ p1 ]);
 		// # Braces
 		}else if( content[ p1 ] == '[' || content[ p1 ] == ']'){
 
@@ -116,9 +117,9 @@ std::string Lexer::Processor(std::string& content){
 			if( !this->hitted ){
 
 				// # Check compound operators
-				for( i = 0; i < this->size_oper; i++ ){
+				for( i = 0; i < this->sb_table->size_oper; i++ ){
 
-					if( content[ p1 + 1 ] == this->operators[ i ] ||
+					if( content[ p1 + 1 ] == this->sb_table->operators[ i ] ||
 						content[ p1 + 1 ] == '=' ){
 
 						this->hitted = false;
@@ -165,9 +166,9 @@ std::string Lexer::Processor(std::string& content){
 				}
 
 				// # Check singulaty operators
-				for( i = 0; i < this->size_oper; i++ ){
+				for( i = 0; i < this->sb_table->size_oper; i++ ){
 
-					if( content[ p1 + 1 ] == this->operators[ i ] ){
+					if( content[ p1 + 1 ] == this->sb_table->operators[ i ] ){
 
 						this->hitted = true;
 						break;
@@ -178,9 +179,9 @@ std::string Lexer::Processor(std::string& content){
 			// # Check delimiters
 			if( !this->hitted ){
 				
-				for( i = 0; i < this->size_del; i++ ){
+				for( i = 0; i < this->sb_table->size_del; i++ ){
 
-					if( content[ p1 + 1 ] == this->delimiters[ i ] ){
+					if( content[ p1 + 1 ] == this->sb_table->delimiters[ i ] ){
 
 						this->hitted = true;
 						break;
@@ -191,9 +192,9 @@ std::string Lexer::Processor(std::string& content){
 			// # Check relational
 			if( !this->hitted ){
 			
-				for( i = 0; i < this->size_rel; i++ ){
+				for( i = 0; i < this->sb_table->size_rel; i++ ){
 
-					if( content[ p1 + 1 ] == this->relational[ i ] ){
+					if( content[ p1 + 1 ] == this->sb_table->relational[ i ] ){
 
 						// # Check if this pair
 						if( content[ p1 ] == '=' &&
@@ -256,20 +257,20 @@ std::string Lexer::Parser(std::string& chunk){
 	//std::cout << "Debug Parser: " << chunk << std::endl;
 
 	// # Check if the chunk is a keyword
-	for( i = 0; i < this->size_keywords; i++ ){
+	for( i = 0; i < this->sb_table->size_keywords; i++ ){
 
-		if( chunk == this->keywords[ i ] ){
+		if( chunk == this->sb_table->keywords[ i ] ){
 
 			// # Variable flag ups
-			if( this->keywords[ i ] == "var" ||
-				this->keywords[ i ] == "const" ||
-				this->keywords[ i ] == "fun" ){
+			if( this->sb_table->keywords[ i ] == "var" ||
+				this->sb_table->keywords[ i ] == "const" ||
+				this->sb_table->keywords[ i ] == "fun" ){
 
 				this->varUp = true;
 			}
 
 			// # Check for upscope
-			if( this->keywords[ i ] == "fun" ){
+			if( this->sb_table->keywords[ i ] == "fun" ){
 
 				this->scope++;
 				this->current_scope = this->scope;
@@ -277,9 +278,9 @@ std::string Lexer::Parser(std::string& chunk){
 			}
 
 			// # Check for set deep level
-			if( this->keywords[ i ] == "for" || this->keywords[ i ] == "while" ||
-				this->keywords[ i ] == "do"  || this->keywords[ i ] == "if"  ||
-				this->keywords[ i ] == "elif"|| this->keywords[ i ] == "else" ){
+			if( this->sb_table->keywords[ i ] == "for" || this->sb_table->keywords[ i ] == "while" ||
+				this->sb_table->keywords[ i ] == "do"  || this->sb_table->keywords[ i ] == "if"  ||
+				this->sb_table->keywords[ i ] == "elif"|| this->sb_table->keywords[ i ] == "else" ){
 
 				this->deepLevel++;
 			}
@@ -289,27 +290,27 @@ std::string Lexer::Parser(std::string& chunk){
 	}
 
 	// # Check if the chunk is a operator
-	for( i = 0; i < this->size_oper; i++ ){
+	for( i = 0; i < this->sb_table->size_oper; i++ ){
 
-		if( chunk[ 0 ] == this->operators[ i ] ){
+		if( chunk[ 0 ] == this->sb_table->operators[ i ] ){
 
 			return "<oper,"+chunk+">";
 		}
 	}
 
 	// # Check if the chunk is a delimiter
-	for( i = 0; i < this->size_del; i++ ){
+	for( i = 0; i < this->sb_table->size_del; i++ ){
 
-		if( chunk[ 0 ] == this->delimiters[ i ] ){
+		if( chunk[ 0 ] == this->sb_table->delimiters[ i ] ){
 
 			return "<del,"+chunk+">";
 		}
 	}
 
 	// # Check if the chunk is a relational
-	for( i = 0; i < this->size_rel; i++ ){
+	for( i = 0; i < this->sb_table->size_rel; i++ ){
 
-		if( chunk[ 0 ] == this->relational[ i ] ){
+		if( chunk[ 0 ] == this->sb_table->relational[ i ] ){
 
 			return "<rel,"+chunk+">";
 		}
@@ -320,9 +321,9 @@ std::string Lexer::Parser(std::string& chunk){
 
 		this->numberFlag = false;
 
-		for( aux = 0; aux < this->size_num; aux++ ){
+		for( aux = 0; aux < this->sb_table->size_num; aux++ ){
 
-			if( chunk[ i ] == this->number[ aux ] ){
+			if( chunk[ i ] == this->sb_table->number[ aux ] ){
 
 				this->numberFlag = true;
 				break;
@@ -347,11 +348,6 @@ std::string Lexer::Parser(std::string& chunk){
 	std::string build = "<id,"+std::to_string(this->sb_table->Add(chunk, this->varUp))+">";
 	this->varUp = false;
 
-	/*std::cout << "variable: " << chunk;
-	std::cout << " | scope: " << this->current_scope;
-	std::cout << " | deepLevel: " << this->deepLevel;
-	std::cout << " | "<< this->linec << std::endl;*/
-
 	return build;
 }
 
@@ -364,35 +360,35 @@ void Lexer::LEXER_ERROR(std::string msg){
 bool Lexer::ValidateVarName(std::string& chunk){
 
 	// # Check if the chunk is a operator
-	for( i = 0; i < this->size_oper; i++ ){
+	for( i = 0; i < this->sb_table->size_oper; i++ ){
 
-		if( chunk[ 0 ] == this->operators[ i ] ){
+		if( chunk[ 0 ] == this->sb_table->operators[ i ] ){
 
 			return false;
 		}
 	}
 
 	// # Check if the chunk is a delimiter
-	for( i = 0; i < this->size_del; i++ ){
+	for( i = 0; i < this->sb_table->size_del; i++ ){
 
-		if( chunk[ 0 ] == this->delimiters[ i ] ){
+		if( chunk[ 0 ] == this->sb_table->delimiters[ i ] ){
 
 			return false;
 		}
 	}
 
 	// # Check if the chunk is a relational
-	for( i = 0; i < this->size_rel; i++ ){
+	for( i = 0; i < this->sb_table->size_rel; i++ ){
 
-		if( chunk[ 0 ] == this->relational[ i ] ){
+		if( chunk[ 0 ] == this->sb_table->relational[ i ] ){
 
 			return false;
 		}
 	}
 
-	for( i = 0; i < this->size_num; i++ ){
+	for( i = 0; i < this->sb_table->size_num; i++ ){
 		
-		if( chunk[ 0 ]  == this->number[ i ]){
+		if( chunk[ 0 ]  == this->sb_table->number[ i ]){
 
 			return false;
 		}
@@ -420,27 +416,27 @@ bool Lexer::ValidateVarName(std::string& chunk){
 bool Lexer::SubValidateVarName(char& target){
 
 	// # Check if the chunk is a operator
-	for( i = 0; i < this->size_oper; i++ ){
+	for( i = 0; i < this->sb_table->size_oper; i++ ){
 
-		if( target == this->operators[ i ] ){
+		if( target == this->sb_table->operators[ i ] ){
 
 			return false;
 		}
 	}
 
 	// # Check if the target is a delimiter
-	for( i = 0; i < this->size_del; i++ ){
+	for( i = 0; i < this->sb_table->size_del; i++ ){
 
-		if( target == this->delimiters[ i ] ){
+		if( target == this->sb_table->delimiters[ i ] ){
 
 			return false;
 		}
 	}
 
 	// # Check if the target is a relational
-	for( i = 0; i < this->size_rel; i++ ){
+	for( i = 0; i < this->sb_table->size_rel; i++ ){
 
-		if( target == this->relational[ i ] ){
+		if( target == this->sb_table->relational[ i ] ){
 
 			return false;
 		}
