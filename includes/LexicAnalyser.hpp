@@ -50,9 +50,9 @@ public:
 	Lexer(SymbolTable* ptable);
 	~Lexer();
 
-	std::string Processor(std::string& content);
 	std::string Parser(std::string& chunk);
 	
+	void Processor(std::string& content);
 	void LEXER_ERROR(std::string msg);
 	
 	bool ValidateVarName(std::string& chunk);

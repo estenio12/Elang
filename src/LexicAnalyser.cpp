@@ -10,7 +10,7 @@ Lexer::Lexer(SymbolTable* ptable){
 
 Lexer::~Lexer(){}
 
-std::string Lexer::Processor(std::string& content){
+void Lexer::Processor(std::string& content){
 
 	// # storage
 	std::string tmpCopy;
@@ -248,8 +248,8 @@ std::string Lexer::Processor(std::string& content){
 	}
 
 	content.clear();
-
-	return content = this->memory;
+	content = this->memory;
+	this->memory.clear();
 }
 
 std::string Lexer::Parser(std::string& chunk){

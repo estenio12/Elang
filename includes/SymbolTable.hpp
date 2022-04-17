@@ -37,9 +37,9 @@ public:
 
 	std::string keywords[size_keywords] = {
 		"var","const","fun",
-		"for","while","do",
-		"return","if","elif",
-		"else","in","at","break"
+		"for","while","return",
+		"if","elif","else",
+		"in","at","break"
 	};
 	char operators[size_oper] = {
 		'+','-','*','/'
