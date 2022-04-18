@@ -29,7 +29,7 @@ class SymbolTable{
 public:
 
 	// # Tokens arrays size
-	const static size_t size_keywords = 13;
+	const static size_t size_keywords = 12;
 	const static size_t size_oper = 4;
 	const static size_t size_del  = 11;
 	const static size_t size_rel  = 6;
@@ -41,6 +41,11 @@ public:
 		"if","elif","else",
 		"in","at","break"
 	};
+
+	std::string typedata[3] = {
+		"id", "number", "str",
+		"oper", "rel"
+	}
 	char operators[size_oper] = {
 		'+','-','*','/'
 	};

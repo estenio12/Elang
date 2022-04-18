@@ -36,6 +36,7 @@ public:
 	// # SeekBlockCode Variables
 	std::string tmpStack;
 	bool tokenFlag = false;
+	bool statFlag = false;
 
 	// # Memory
 	std::string memory;
@@ -54,6 +55,7 @@ public:
 					   std::string& bockcopy,
 					   uint32_t& pp1);
 
+	bool SeekCloseStatement(char& target); 
 	bool ValidateComposition(std::string& chunk);
 	bool ValidateVariables(std::string& chunk);
 	bool SubValidateVariables(std::vector<std::string>& t_stack,
