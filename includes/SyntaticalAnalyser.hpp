@@ -37,6 +37,7 @@ public:
 	std::string tmpStack;
 	bool tokenFlag = false;
 	bool statFlag = false;
+	bool arrayFlag = false;
 
 	// # Memory
 	std::string memory;

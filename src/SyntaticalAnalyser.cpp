@@ -182,8 +182,9 @@ bool Syntax::ValidateVariables(std::string& chunk){
 
 	// # tmp_historic codex
 	// # 
-	// # 0 = null; 1 = var; 2 = id; 3 = del_1( ';' ); 4 = del_2( '(' )
-	// # 5 = rel; 6 = id; 7 = num; 8 = string; 9 = oper;
+	// # 0 = null; 1 = var; 2 = id_declaration; 3 = del_1( ';' ); 4 = del_2( '(' )
+	// # 5 = rel; 6 = id; 7 = num; 8 = string; 9 = oper; 10 = del_3 ( ')' )
+	// # 11= rel others; 12 = del_3( [ ); 13 = del_4( ] ); 14 = del_5( , );
 
 	tagStack = this->SplitTags(chunk);
 
@@ -192,20 +193,26 @@ bool Syntax::ValidateVariables(std::string& chunk){
 
 bool Syntax::SubValidateVariables(std::vector<std::string>& t_stack,
 									  uint8_t& p_historic,
-									  uint32_t& p_p1){
+									  uint32_t& index){
 
 	// # 0 = null; 1 = var; 2 = id_declaration; 3 = del_1( ';' ); 4 = del_2( '(' )
 	// # 5 = rel; 6 = id; 7 = num; 8 = string; 9 = oper; 10 = del_3 ( ')' )
-	// # 11= rel others;
+	// # 11= rel others; 12 = del_3( [ ); 13 = del_4( ] ); 14 = del_5( , );
 
 	this->TagIdentifier(t_stack[ index ]);
 	
 	if( this->map[ 0 ] == "del" && this->map[ 1 ][ 0 ] == ';' || 
-		p_historic == 3){
+		p_historic == 3 || 
+		t_stack.size() == ( index - 1 ){
 
 		if( this->statFlag ){
 
-			this->SYNTAX_ERROR("Syntax error: \'(\' is open, but never closed!");
+			this->SYNTAX_ERROR("Syntax error: \'(\' is openned, but never closed!");
+		}
+
+		if( this->arrayFlag ){
+
+			this->SYNTAX_ERROR("Syntax error: \'[\' is openned, but never closed!");
 		}
 
 		return true;
@@ -261,11 +268,17 @@ bool Syntax::SubValidateVariables(std::vector<std::string>& t_stack,
 
 			case 5:
 
-				// # 3 = ")"   
+				// # 3 = "("   
 				if( this->map[ 1 ] ==  this->sb_table->delimiters[ 3 ]){
 
 					this->statFlag = true;
 					p_historic = 4;
+					this->SubValidateVariables(t_stack, p_historic, ++index);
+
+				}else if( this->map[ 1 ] ==  this->sb_table->delimiters[ 8 ]){
+
+					this->arrayFlag = true;
+					p_historic = 12;
 					this->SubValidateVariables(t_stack, p_historic, ++index);
 
 				}else if( this->map[ 0 ] ==  this->sb_table->typedata[0]){
@@ -320,6 +333,17 @@ bool Syntax::SubValidateVariables(std::vector<std::string>& t_stack,
 					p_historic = 10;
 					this->SubValidateVariables(t_stack, p_historic, ++index);
 
+				}else if( this->map[ 1 ] ==  this->sb_table->delimiters[ 9 ]){
+
+					this->arrayFlag = false;
+					p_historic = 13;
+					this->SubValidateVariables(t_stack, p_historic, ++index);
+
+				}else if( this->map[ 1 ] ==  this->sb_table->typedata[ 10 ]){
+
+					p_historic = 14;
+					this->SubValidateVariables(t_stack, p_historic, ++index);
+
 				}else if( this->map[ 0 ] ==  this->sb_table->typedata[ 3 ]){
 
 					p_historic = 3;
@@ -372,6 +396,12 @@ bool Syntax::SubValidateVariables(std::vector<std::string>& t_stack,
 					p_historic = 9;
 					this->SubValidateVariables(t_stack, p_historic, ++index);
 
+				}else if( this->map[ 1 ] ==  this->sb_table->delimiters[ 9 ]){
+
+					this->arrayFlag = false;
+					p_historic = 13;
+					this->SubValidateVariables(t_stack, p_historic, ++index);
+
 				}else if( this->map[ 1 ] ==  this->sb_table->delimiters[ 5 ]){
 
 					p_historic = 3;
@@ -410,6 +440,79 @@ bool Syntax::SubValidateVariables(std::vector<std::string>& t_stack,
 					this->SYNTAX_ERROR("Syntax error: Invalid sequence!", this->map[ 1 ]);
 				}
 				break;
+
+			case 12:
+
+				if( this->map[ 1 ] ==  this->sb_table->delimiters[ 3 ]){
+
+					this->statFlag = true;
+					p_historic = 4;
+					this->SubValidateVariables(t_stack, p_historic, ++index);
+
+				}else if( this->map[ 0 ] ==  this->sb_table->typedata[0]){
+
+					p_historic = 6;
+					this->SubValidateVariables(t_stack, p_historic, ++index);
+
+				}else if( this->map[ 0 ] ==  this->sb_table->typedata[1]){
+
+					p_historic = 7;
+					this->SubValidateVariables(t_stack, p_historic, ++index);
+
+				}else if( this->map[ 0 ] ==  this->sb_table->typedata[2]){
+
+					p_historic = 8;
+					this->SubValidateVariables(t_stack, p_historic, ++index);
+
+				}else{
+
+					this->SYNTAX_ERROR("Syntax error: it's expected a type data", this->map[ 1 ]);
+				}
+				break;
+
+			case 13:
+
+				// # 5 = ";";   
+				if( this->map[ 1 ] ==  this->sb_table->delimiters[ 5 ]){
+
+					p_historic = 3;
+					this->SubValidateVariables(t_stack, p_historic, ++index);
+
+				}else{
+
+					this->SYNTAX_ERROR("Syntax error: it's expected a ';'", this->map[ 1 ]);
+				}
+				break;
+
+			case 14:
+
+				if( this->map[ 1 ] ==  this->sb_table->delimiters[ 3 ]){
+
+					this->statFlag = true;
+					p_historic = 4;
+					this->SubValidateVariables(t_stack, p_historic, ++index);
+
+				}else if( this->map[ 0 ] ==  this->sb_table->typedata[0]){
+
+					p_historic = 6;
+					this->SubValidateVariables(t_stack, p_historic, ++index);
+
+				}else if( this->map[ 0 ] ==  this->sb_table->typedata[1]){
+
+					p_historic = 7;
+					this->SubValidateVariables(t_stack, p_historic, ++index);
+
+				}else if( this->map[ 0 ] ==  this->sb_table->typedata[2]){
+
+					p_historic = 8;
+					this->SubValidateVariables(t_stack, p_historic, ++index);
+
+				}else{
+
+					this->SYNTAX_ERROR("Syntax error: it's expected a type data", this->map[ 1 ]);
+				}
+				break;
+			}
 		}
 	}
 }
