@@ -1,4 +1,4 @@
-#include "../includes/SyntaticalAnalyser.hpp>"
+#include "../includes/SyntaticalAnalyser.hpp" 
 
 Syntax::Syntax(SymbolTable* ptable){
 
@@ -35,7 +35,7 @@ void Syntax::Processor(std::string& content){
 
 			tmpCopy.push_back( content[ p1 ] );
 
-			if( content[ p1 ] == '>' && content[ p1 + 1 ] != '>'){
+			if( content[ p1 ] == this->sb_table->relational[ 3 ] && content[ p1 + 1 ] != this->sb_table->relational[ 3 ]){
 
 				// # Token Processing
 				this->TagIdentifier(tmpCopy);
@@ -45,13 +45,13 @@ void Syntax::Processor(std::string& content){
 				// # Register what token is up context
 				this->MakeHistory();
 
-				// # Seek completly block code
+				// # Seek completely block code
 				this->SeekBlockCode(content, blockCopy, p1);
 
 				// # Validate Composition
 				if( this->ValidateComposition(blockCopy) ){
 
-					this->MakeSintaxTree(blockCopy);
+					this->MakeSyntaxTree(blockCopy);
 					this->history = 0;
 					blockCopy.clear();
 				}
@@ -66,12 +66,14 @@ void Syntax::TagIdentifier( std::string& chunk ){
 
 	uint8_t p = 0;
 	uint8_t i = 0;
+	this->map[ 0 ].clear();
+	this->map[ 1 ].clear();
 	
 	while( chunk[ p ] != '\0' ){
 
-		if( chunk[ p ] != '<' || chunk[ p ] != '>' ){
+		if( chunk[ p ] != this->sb_table->relational[ 3 ] && chunk[ p ] != this->sb_table->relational[ 4 ] ){
 
-			if( chunk[ p ] != ',' ){
+			if( chunk[ p ] != this->sb_table->delimiters[ 10 ] ){
 
 				this->map[ i ].push_back( chunk[ p ] );
 			}else{
@@ -79,45 +81,40 @@ void Syntax::TagIdentifier( std::string& chunk ){
 				i = 1;
 			}
 		}
+
+		++p;
 	}
 }
 
 void Syntax::MakeHistory(){
 
+
 	if( this->history == 0 ){
 
-		if( this->map[ 0 ] == "keywords" ){
+		if( this->map[ 0 ] == "keyword" ){
 
-			switch( this->map[ 1 ] ){
+			if( this->map[ 1 ] == this->sb_table->keywords[ 0 ] ||
+			 	this->map[ 1 ] == this->sb_table->keywords[ 1 ] ){
 
-				case "var" || "const":
+				this->history = 1;
+			}else if( this->map[ 1 ] == this->sb_table->keywords[ 2 ] ){
 
-					this->history = 1;
-					break;
+				this->history = 2;
+			}else if( this->map[ 1 ] == this->sb_table->keywords[ 3 ] ||
+					  this->map[ 1 ] == this->sb_table->keywords[ 4 ] ){
 
-				case "fun":
+				this->history = 3;
+			}else if( this->map[ 1 ] == this->sb_table->keywords[ 6 ] ){
 
-					this->history = 2;
-					break;
-
-				case "for" || "while":
-
-					this->history = 3;
-					break;
-
-				case "if":
-
-					this->history = 5;
-					break;
-
+				this->history = 5;
 			}
-			
+
 		}else if( this->map[ 0 ] == "id" ){
 
 			this->history = 4;
 		}else{
 
-			this->SYNTAX_ERROR("Syntax error!");
+			this->SYNTAX_ERROR("Syntax error: unrecognized keyword!");
 		}
 	}
 }
@@ -126,10 +123,13 @@ void Syntax::SeekBlockCode(std::string& content, std::string& blockCopy, uint32_
 
 	uint32_t p1 = pp1 + 1;
 
+
 	switch( this->history ){
 
 		// # Separate the variable declaration block
 		case 1:
+
+			this->tmpStack.clear();
 
 			while( content[ p1 ] != '\0' ){
 
@@ -140,14 +140,23 @@ void Syntax::SeekBlockCode(std::string& content, std::string& blockCopy, uint32_
 					// # Token Processing
 					this->TagIdentifier(this->tmpStack);
 
-					if( this->map[ 0 ] == "del" && this->map[ 1 ][ 0 ] == ';' ){
+					if( this->map[ 1 ][ 0 ] == this->sb_table->delimiters[ 5 ] ){
 
 						blockCopy += this->tmpStack;
 						this->tmpStack.clear();
 						this->tokenFlag = true;
 						break;
 					}
+
+					this->tmpStack.clear();
 				}
+
+				if( tokenFlag ){
+
+					break;
+				}
+
+				++p1;
 			}
 
 			if( !tokenFlag ){
@@ -156,7 +165,9 @@ void Syntax::SeekBlockCode(std::string& content, std::string& blockCopy, uint32_
 			}
 
 			this->tokenFlag = false;
-			break;
+			pp1 = p1;
+
+		break;
 	}
 }
 
@@ -167,14 +178,15 @@ bool Syntax::ValidateComposition(std::string& chunk){
 		case 1:
 
 			return this->ValidateVariables(chunk);
-			break;
+		break;
 	}
+
+	return false;
 }
 
 bool Syntax::ValidateVariables(std::string& chunk){
 
-	// # Was decide use recursive method, 
-	// # with acknoledge token before
+	// # It was decided to use the recursive method, with previous knowledge token
 
 	uint8_t tmp_historic = 0;
 	uint32_t index = 0;
@@ -203,7 +215,7 @@ bool Syntax::SubValidateVariables(std::vector<std::string>& t_stack,
 	
 	if( this->map[ 0 ] == "del" && this->map[ 1 ][ 0 ] == ';' || 
 		p_historic == 3 || 
-		t_stack.size() == ( index - 1 ){
+		t_stack.size() == ( index - 1 ) ){
 
 		if( this->statFlag ){
 
@@ -233,7 +245,7 @@ bool Syntax::SubValidateVariables(std::vector<std::string>& t_stack,
 
 					this->SYNTAX_ERROR("Syntax error: Invalid keyword!", this->map[ 1 ]);
 				}
-				break;
+			break;
 
 			case 1:
 
@@ -245,17 +257,17 @@ bool Syntax::SubValidateVariables(std::vector<std::string>& t_stack,
 
 					this->SYNTAX_ERROR("Syntax error: Invalid Identifier. ", this->map[ 1 ]);
 				}
-				break;
+			break;
 
 			case 2:
 
 				// # 5 = ";";   
-				if( this->map[ 1 ] ==  this->sb_table->delimiters[ 5 ]){
+				if( this->map[ 1 ][ 0 ] ==  this->sb_table->delimiters[ 5 ]){
 
 					p_historic = 3;
 					this->SubValidateVariables(t_stack, p_historic, ++index);
 
-				}else if( this->map[ 1 ] ==  this->sb_table->relational[ 0 ]){
+				}else if( this->map[ 1 ][ 0 ] ==  this->sb_table->relational[ 0 ]){
 
 					p_historic = 5;
 					this->SubValidateVariables(t_stack, p_historic, ++index);
@@ -264,18 +276,18 @@ bool Syntax::SubValidateVariables(std::vector<std::string>& t_stack,
 
 					this->SYNTAX_ERROR("Syntax error: It's expected ( = ) or ( ; )", this->map[ 1 ]);
 				}
-				break;
+			break;
 
 			case 5:
 
 				// # 3 = "("   
-				if( this->map[ 1 ] ==  this->sb_table->delimiters[ 3 ]){
+				if( this->map[ 1 ][ 0 ] ==  this->sb_table->delimiters[ 3 ]){
 
 					this->statFlag = true;
 					p_historic = 4;
 					this->SubValidateVariables(t_stack, p_historic, ++index);
 
-				}else if( this->map[ 1 ] ==  this->sb_table->delimiters[ 8 ]){
+				}else if( this->map[ 1 ][ 0 ] ==  this->sb_table->delimiters[ 8 ]){
 
 					this->arrayFlag = true;
 					p_historic = 12;
@@ -300,7 +312,7 @@ bool Syntax::SubValidateVariables(std::vector<std::string>& t_stack,
 
 					this->SYNTAX_ERROR("Syntax error: Invalid data!", this->map[ 1 ]);
 				}
-				break;
+			break;
 
 			case 4:
 
@@ -323,23 +335,23 @@ bool Syntax::SubValidateVariables(std::vector<std::string>& t_stack,
 
 					this->SYNTAX_ERROR("Syntax error: Invalid delimiter! it's expected a type data.", this->map[ 1 ]);
 				}
-				break;
+			break;
 
-			case 6 || 7 || 8:
+			case 6: case 7: case 8:
 
-				if( this->map[ 1 ] ==  this->sb_table->delimiters[ 4 ]){
+				if( this->map[ 1 ][ 0 ] ==  this->sb_table->delimiters[ 4 ]){
 
 					this->statFlag = false;
 					p_historic = 10;
 					this->SubValidateVariables(t_stack, p_historic, ++index);
 
-				}else if( this->map[ 1 ] ==  this->sb_table->delimiters[ 9 ]){
+				}else if( this->map[ 1 ][ 0 ] ==  this->sb_table->delimiters[ 9 ]){
 
 					this->arrayFlag = false;
 					p_historic = 13;
 					this->SubValidateVariables(t_stack, p_historic, ++index);
 
-				}else if( this->map[ 1 ] ==  this->sb_table->typedata[ 10 ]){
+				}else if( this->map[ 1 ][ 0 ] ==  this->sb_table->delimiters[ 10 ]){
 
 					p_historic = 14;
 					this->SubValidateVariables(t_stack, p_historic, ++index);
@@ -358,11 +370,11 @@ bool Syntax::SubValidateVariables(std::vector<std::string>& t_stack,
 
 					this->SYNTAX_ERROR("Syntax error: Invalid sequence!", this->map[ 1 ]);
 				}
-				break;
+			break;
 
 			case 9:
 
-				if( this->map[ 1 ] ==  this->sb_table->delimiters[ 3 ]){
+				if( this->map[ 1 ][ 0 ] ==  this->sb_table->delimiters[ 3 ]){
 
 					this->statFlag = true;
 					p_historic = 4;
@@ -387,7 +399,7 @@ bool Syntax::SubValidateVariables(std::vector<std::string>& t_stack,
 
 					this->SYNTAX_ERROR("Syntax error: it's expected a type data", this->map[ 1 ]);
 				}
-				break;
+			break;
 
 			case 10:
 
@@ -396,13 +408,13 @@ bool Syntax::SubValidateVariables(std::vector<std::string>& t_stack,
 					p_historic = 9;
 					this->SubValidateVariables(t_stack, p_historic, ++index);
 
-				}else if( this->map[ 1 ] ==  this->sb_table->delimiters[ 9 ]){
+				}else if( this->map[ 1 ][ 0 ] ==  this->sb_table->delimiters[ 9 ]){
 
 					this->arrayFlag = false;
 					p_historic = 13;
 					this->SubValidateVariables(t_stack, p_historic, ++index);
 
-				}else if( this->map[ 1 ] ==  this->sb_table->delimiters[ 5 ]){
+				}else if( this->map[ 1 ][ 0 ] ==  this->sb_table->delimiters[ 5 ]){
 
 					p_historic = 3;
 					this->SubValidateVariables(t_stack, p_historic, ++index);
@@ -411,11 +423,11 @@ bool Syntax::SubValidateVariables(std::vector<std::string>& t_stack,
 
 					this->SYNTAX_ERROR("Syntax error: Invalid sequence!", this->map[ 1 ]);
 				}
-				break;
+			break;
 
 			case 11:
 
-				if( this->map[ 1 ] ==  this->sb_table->delimiters[ 3 ]){
+				if( this->map[ 1 ][ 0 ] ==  this->sb_table->delimiters[ 3 ]){
 
 					p_historic = 4;
 					this->SubValidateVariables(t_stack, p_historic, ++index);
@@ -439,11 +451,11 @@ bool Syntax::SubValidateVariables(std::vector<std::string>& t_stack,
 
 					this->SYNTAX_ERROR("Syntax error: Invalid sequence!", this->map[ 1 ]);
 				}
-				break;
+			break;
 
 			case 12:
 
-				if( this->map[ 1 ] ==  this->sb_table->delimiters[ 3 ]){
+				if( this->map[ 1 ][ 0 ] ==  this->sb_table->delimiters[ 3 ]){
 
 					this->statFlag = true;
 					p_historic = 4;
@@ -468,12 +480,12 @@ bool Syntax::SubValidateVariables(std::vector<std::string>& t_stack,
 
 					this->SYNTAX_ERROR("Syntax error: it's expected a type data", this->map[ 1 ]);
 				}
-				break;
+			break;
 
 			case 13:
 
 				// # 5 = ";";   
-				if( this->map[ 1 ] ==  this->sb_table->delimiters[ 5 ]){
+				if( this->map[ 1 ][ 0 ] ==  this->sb_table->delimiters[ 5 ]){
 
 					p_historic = 3;
 					this->SubValidateVariables(t_stack, p_historic, ++index);
@@ -482,11 +494,11 @@ bool Syntax::SubValidateVariables(std::vector<std::string>& t_stack,
 
 					this->SYNTAX_ERROR("Syntax error: it's expected a ';'", this->map[ 1 ]);
 				}
-				break;
+			break;
 
 			case 14:
 
-				if( this->map[ 1 ] ==  this->sb_table->delimiters[ 3 ]){
+				if( this->map[ 1 ][ 0 ] ==  this->sb_table->delimiters[ 3 ]){
 
 					this->statFlag = true;
 					p_historic = 4;
@@ -511,13 +523,14 @@ bool Syntax::SubValidateVariables(std::vector<std::string>& t_stack,
 
 					this->SYNTAX_ERROR("Syntax error: it's expected a type data", this->map[ 1 ]);
 				}
-				break;
-			}
+			break;
 		}
 	}
+
+	return false;
 }
 
-std::vector<std::string>& SplitTags(std::string& chunk){
+std::vector<std::string> Syntax::SplitTags(std::string& chunk){
 
 	uint32_t p1 = 0;
 	std::string tmpObj;
@@ -568,4 +581,9 @@ bool Syntax::SeekCloseStatement(std::string& chunk ,char& target){
 	}
 
 	return false;
+}
+
+void Syntax::MakeSyntaxTree(std::string& content){
+
+	
 }

@@ -42,10 +42,10 @@ public:
 		"in","at","break"
 	};
 
-	std::string typedata[3] = {
+	std::string typedata[6] = {
 		"id", "number", "str",
-		"oper", "rel"
-	}
+		"oper", "rel", "del"
+	};
 	char operators[size_oper] = {
 		'+','-','*','/'
 	};

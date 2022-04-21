@@ -285,7 +285,7 @@ std::string Lexer::Parser(std::string& chunk){
 				this->deepLevel++;
 			}
 
-			return "<keywords,"+chunk+">";
+			return "<keyword,"+chunk+">";
 		}
 	}
 
