@@ -17,7 +17,7 @@
 #include "../includes/SymbolTable.hpp"
 #include "../includes/Console.hpp"
 
-#define debug(x) std::cout << "Inside in: " << x << std::endl;
+#define debug(x) std::cout << "Debug: " << x << std::endl;
 
 class Syntax{
 
@@ -38,8 +38,8 @@ public:
 	// # SeekBlockCode Variables
 	std::string tmpStack;
 	bool tokenFlag = false;
-	bool statFlag = false;
-	bool arrayFlag = false;
+	uint8_t statFlag = 0;
+	uint8_t arrayFlag = 0;
 
 	// # Memory
 	std::string memory;
@@ -53,17 +53,12 @@ public:
 	void SYNTAX_ERROR(std::string msg);
 	void SYNTAX_ERROR(std::string msg, std::string& target);
 	void TagIdentifier(std::string& chunk);
-	void MakeHistory();
-	void SeekBlockCode(std::string& content,
-					   std::string& bockcopy,
-					   uint32_t& pp1);
+	void MakeHistory(std::string& chunk);
 
 	bool SeekCloseStatement(std::string& chunk, char& target); 
 	bool ValidateComposition(std::string& chunk);
 	bool ValidateVariables(std::string& chunk);
-	bool SubValidateVariables(std::vector<std::string>& t_stack,
-							  uint8_t& p_historic,
-							  uint32_t& p_p1);
+	bool SubValidateVariables(std::string& t_stack, uint8_t& p_historic);
 
 	std::vector<std::string> SplitTags(std::string& chunk);
 };

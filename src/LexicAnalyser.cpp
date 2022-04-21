@@ -22,8 +22,23 @@ void Lexer::Processor(std::string& content){
 			// # add line count for debug
 			++this->linec;
 			this->memory.push_back(content[ p1 ]);
+		}else if( content[ p1 ] == ',' && this->arrayUp == true){
+
+			this->memory += "<del,";
+			this->memory.push_back( content[ p1 ] );
+			this->memory.push_back('>');
 		// # Braces
 		}else if( content[ p1 ] == '[' || content[ p1 ] == ']'){
+
+			if( content[ p1 ] == '[' ){
+
+				this->arrayUp = true;
+			}
+
+			if( content[ p1 ] == ']' ){
+
+				this->arrayUp = false;
+			}
 
 			this->memory += "<del,";
 			this->memory.push_back( ( content[ p1 ] == '[' ) ? '[' : ']' );
