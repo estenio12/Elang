@@ -21,7 +21,6 @@ void Syntax::SYNTAX_ERROR(std::string msg, std::string& target){
 
 void Syntax::Processor(std::string& content){
 
-
 	uint32_t p1 = 0;
 	std::string tmpCopy;
 	std::string blockCopy;
@@ -51,7 +50,6 @@ void Syntax::Processor(std::string& content){
 						this->history = 0;
 						blockCopy.clear();
 					}
-					debug("------------------------");
 					blockCopy.clear();
 				}
 
@@ -75,18 +73,20 @@ void Syntax::TagIdentifier( std::string& chunk ){
 
 		if( chunk[ p ] != this->sb_table->relational[ 3 ] && chunk[ p ] != this->sb_table->relational[ 4 ] ){
 
-			if( chunk[ p ] == this->sb_table->delimiters[ 10 ] &&
-				chunk[ p ] != this->sb_table->delimiters[ 10 ] ){
-
-				this->map[ i ].push_back( chunk[ p ] );
-			}else{
+			if( chunk[ p ] == this->sb_table->delimiters[ 10 ] && this->splitHit == false){
 
 				i = 1;
+				this->splitHit = true;
+			}else{
+
+				this->map[ i ].push_back( chunk[ p ] );
 			}
 		}
 
 		++p;
 	}
+
+	this->splitHit = false;
 }
 
 void Syntax::MakeHistory(std::string& chunk){
@@ -287,6 +287,15 @@ bool Syntax::SubValidateVariables(std::string& t_stack, uint8_t& p_historic ){
 			}else if( this->map[ 1 ][ 0 ] == this->sb_table->delimiters[ 10 ] ){
 
 				p_historic = 9;
+			}else if( this->map[ 1 ][ 0 ] == this->sb_table->delimiters[ 9 ] ){
+
+				if( this->arrayFlag <= 0 ){
+
+					this->SYNTAX_ERROR("Syntax error: Invalid character! ", this->map[ 1 ]);
+				}
+
+				p_historic = 8;
+				--this->arrayFlag;
 			}else{
 
 				this->SYNTAX_ERROR("Syntax error: It's expected ';' or ','! ", this->map[ 1 ]);

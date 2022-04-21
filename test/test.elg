@@ -1,1 +1,2 @@
-var t = ,,,.;;
+var t = [4, "Fly your fools", ( 12.50 + 45.80 ), [ 32, "Lorem ipsum" ]];
+var g = 73;

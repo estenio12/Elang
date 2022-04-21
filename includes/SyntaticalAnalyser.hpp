@@ -38,6 +38,7 @@ public:
 	// # SeekBlockCode Variables
 	std::string tmpStack;
 	bool tokenFlag = false;
+	bool splitHit = false;
 	uint8_t statFlag = 0;
 	uint8_t arrayFlag = 0;
 
