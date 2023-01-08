@@ -10,6 +10,7 @@
 #include <filesystem>
 
 #include "../Includes/Console.hpp"
+#include "../Includes/Lexer.hpp"
 #include "../Helpers/SymbolTable.hpp"
 
 class Compiler
@@ -19,6 +20,8 @@ class Compiler
         std::string FilePathOutput;
         std::ifstream FileReader;
         std::ofstream FileWriter;
+
+        Lexer* lexer;
 
     private:
         uint64_t LineCount = 0;

@@ -15,7 +15,7 @@ namespace TokenList
     static Tokens_lst Tokens;
 }
 
-namespace DEFAULT
+namespace LANG
 {
     static const char LINEBREAK   = '\n';
     static const char LINECOMMENT = '/';
@@ -25,6 +25,9 @@ namespace DEFAULT
     static const char CLOSEDEFSCOPE  = ')';
     static const char OPENSCOPE  = '{';
     static const char CLOSESCOPE  = '}';
+    static const char ARRAYOPENSCOPE  = '[';
+    static const char ARRAYCLOSESCOPE  = ']';
+    static const char NUMBERFLOAT  = '.';
 }
 
 namespace KEYWORDS
@@ -32,14 +35,14 @@ namespace KEYWORDS
     static const uint8_t SIZE_DECLARATOR = 3;
     static const uint8_t SIZE_ASSIGNMENT = 5;
     static const uint8_t SIZE_LOGIC      = 9;
-    static const uint8_t SIZE_DATATYPE   = 4;
+    static const uint8_t SIZE_TYPE       = 4;
     
     static const std::string digits  = "0123456789";
     static const std::string letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-    static const std::string datatype[]
+    static const std::string type[SIZE_TYPE]
     {
-        "number", "boolean", "char", "string"
+        "number", "bool", "char", "string"
     };
 
     static const std::string declarator[SIZE_DECLARATOR]

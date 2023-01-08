@@ -4,6 +4,8 @@ Compiler::Compiler(char** Path)
 {
     this->FilePathSource = Path[1];
     this->FilePathOutput = "./Test/App.html";
+
+    this->lexer = new Lexer();
 }
 
 Compiler::~Compiler(){}
@@ -32,8 +34,8 @@ void Compiler::Run()
             ++LineCount;
             
             if(Line.empty() || 
-               Line[0] == DEFAULT::LINEBREAK ||
-               Line[0] == DEFAULT::LINECOMMENT && Line[1] == DEFAULT::LINECOMMENT)
+               Line[0] == LANG::LINEBREAK ||
+               Line[0] == LANG::LINECOMMENT && Line[1] == LANG::LINECOMMENT)
             {
                 // # Do nothing
                 // # this block is designed to catch and ignore whitespace, tabs and other 
@@ -51,5 +53,5 @@ void Compiler::Run()
 
 void Compiler::Manager(std::string Line)
 {
-
+    this->lexer->Tokenaze(Line);
 }
