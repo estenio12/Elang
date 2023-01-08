@@ -36,13 +36,20 @@ void Compiler::Run()
                Line[0] == DEFAULT::LINECOMMENT && Line[1] == DEFAULT::LINECOMMENT)
             {
                 // # Do nothing
+                // # this block is designed to catch and ignore whitespace, tabs and other 
+                // # throwaways elements 
             }
             else
             {
-                Console::Print(Line);
+                this->Manager(Line);
             }
         }
     }
 
     FileReader.close();
+}
+
+void Compiler::Manager(std::string Line)
+{
+
 }

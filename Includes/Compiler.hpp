@@ -29,6 +29,7 @@ class Compiler
 
     private:
         bool PathIsRight();
+        void Manager(std::string );
 
     public:
         void Run();

@@ -6,6 +6,14 @@
 #pragma once
 
 #include <string>
+#include <vector>
+
+using Tokens_lst = std::vector<std::pair<std::string, std::string>>;
+
+namespace TokenList
+{
+    static Tokens_lst Tokens;
+}
 
 namespace DEFAULT
 {
@@ -21,16 +29,22 @@ namespace DEFAULT
 
 namespace KEYWORDS
 {
-    static const uint8_t SIZE_DECLARATOR = 2;
+    static const uint8_t SIZE_DECLARATOR = 3;
     static const uint8_t SIZE_ASSIGNMENT = 5;
     static const uint8_t SIZE_LOGIC      = 9;
+    static const uint8_t SIZE_DATATYPE   = 4;
     
     static const std::string digits  = "0123456789";
     static const std::string letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
+    static const std::string datatype[]
+    {
+        "number", "boolean", "char", "string"
+    };
+
     static const std::string declarator[SIZE_DECLARATOR]
     {
-        "var", "const"
+        "var", "const", "array"
     };
 
     static const std::string assignment[SIZE_ASSIGNMENT]
