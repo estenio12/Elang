@@ -10,6 +10,7 @@
 #include <filesystem>
 
 #include "../Includes/Console.hpp"
+#include "../Helpers/SymbolTable.hpp"
 
 class Compiler
 {
@@ -20,7 +21,7 @@ class Compiler
         std::ofstream FileWriter;
 
     private:
-
+        uint64_t LineCount = 0;
 
     public:
         Compiler(char** Path);

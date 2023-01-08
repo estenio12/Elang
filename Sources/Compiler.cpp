@@ -22,5 +22,27 @@ void Compiler::Run()
         exit(EXIT_FAILURE);
     }
 
-    Console::Print(this->FilePathSource);
+    std::string Line;
+    FileReader.open(this->FilePathSource);
+
+    if(FileReader.is_open() && FileReader.good())
+    {
+        while(std::getline(FileReader, Line))
+        {
+            ++LineCount;
+            
+            if(Line.empty() || 
+               Line[0] == DEFAULT::LINEBREAK ||
+               Line[0] == DEFAULT::LINECOMMENT && Line[1] == DEFAULT::LINECOMMENT)
+            {
+                // # Do nothing
+            }
+            else
+            {
+                Console::Print(Line);
+            }
+        }
+    }
+
+    FileReader.close();
 }
