@@ -1,14 +1,15 @@
 #include <iostream>
 
+#include "../Includes/Compiler.hpp"
 #include "../Includes/Console.hpp"
 
-int main()
+int main(int argc, char** argv)
 {
     
-    Console::PrintError("Teste erro");
-    Console::PrintSuccess("Teste success");
-    Console::PrintWarning("Teste warning");
-    Console::PrintStandard("Teste Standard");
+    Compiler* CC = new Compiler(argv);
+    CC->Run();
+
+    delete CC;
 
     return EXIT_SUCCESS;
 }

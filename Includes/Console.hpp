@@ -22,7 +22,7 @@ namespace Console
     {
         #if __linux
             std::cerr << ERRO_FLAG_MESSAGE << "Error: ";
-            std::cout << Message << std::endl; 
+            std::cout << STANDARD_FLAG_MESSAGE << Message << std::endl; 
         #else
 
             HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -38,11 +38,11 @@ namespace Console
         #endif
     }
 
-    void PrintSuccess(std::string Message)
+    static void PrintSuccess(std::string Message)
     {
         #if __linux
             std::cout << SUCCESS_FLAG_MESSAGE << "Error: ";
-            std::cout << Message << std::endl; 
+            std::cout << STANDARD_FLAG_MESSAGE << Message << std::endl; 
         #else
 
             HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -58,11 +58,11 @@ namespace Console
         #endif
     }
 
-    void PrintWarning(std::string Message)
+    static void PrintWarning(std::string Message)
     {
         #if __linux
             std::cout << WARNING_FLAG_MESSAGE << "Error: ";
-            std::cout << Message << std::endl; 
+            std::cout << STANDARD_FLAG_MESSAGE << Message << std::endl; 
         #else
 
             HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -78,7 +78,7 @@ namespace Console
         #endif
     }
     
-    void Print(std::string Message)
+    static void Print(std::string Message)
     {
         #if __linux
             std::cout << STANDARD_FLAG_MESSAGE<< Message << std::endl; 

@@ -9,10 +9,13 @@
 #include <fstream>
 #include <filesystem>
 
+#include "../Includes/Console.hpp"
+
 class Compiler
 {
     private:
-        std::string Path;
+        std::string FilePathSource;
+        std::string FilePathOutput;
         std::ifstream FileReader;
         std::ofstream FileWriter;
 
