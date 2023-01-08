@@ -5,7 +5,6 @@
 
 int main(int argc, char** argv)
 {
-    
     Compiler* CC = new Compiler(argv);
     CC->Run();
 

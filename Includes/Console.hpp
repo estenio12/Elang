@@ -28,11 +28,11 @@ namespace Console
             HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
             
             // # Write Message flag in red color
-            SetConsoleTextAttribute(hConsole, 31);
+            SetConsoleTextAttribute(hConsole, 4);
             std::cerr << "Error: ";
 
             // # Write Message in white color
-            SetConsoleTextAttribute(hConsole, 37);
+            SetConsoleTextAttribute(hConsole, 7);
             std::cout << Message << std::endl;
 
         #endif
@@ -48,11 +48,11 @@ namespace Console
             HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
             
             // # Write Message flag in red color
-            SetConsoleTextAttribute(hConsole, 32);
+            SetConsoleTextAttribute(hConsole, 2);
             std::cout << "Success: ";
 
             // # Write Message in white color
-            SetConsoleTextAttribute(hConsole, 37);
+            SetConsoleTextAttribute(hConsole, 7);
             std::cout << Message << std::endl;
 
         #endif
@@ -68,11 +68,11 @@ namespace Console
             HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
             
             // # Write Message flag in red color
-            SetConsoleTextAttribute(hConsole, 33);
+            SetConsoleTextAttribute(hConsole, 6);
             std::cout << "Warning: ";
 
             // # Write Message in white color
-            SetConsoleTextAttribute(hConsole, 37);
+            SetConsoleTextAttribute(hConsole, 7);
             std::cout << Message << std::endl;
 
         #endif
@@ -87,7 +87,7 @@ namespace Console
             HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
             // # Write Message in white color
-            SetConsoleTextAttribute(hConsole, 37);
+            SetConsoleTextAttribute(hConsole, 7);
             std::cout << Message << std::endl;
 
         #endif
