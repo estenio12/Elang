@@ -17,17 +17,17 @@ namespace TokenList
 
 namespace LANG
 {
-    static const char LINEBREAK   = '\n';
-    static const char LINECOMMENT = '/';
-    static const char WHITESPACE  = ' ';
-    static const char ENDOFLINE   = ';';
-    static const char OPENDEFSCOPE   = '(';
-    static const char CLOSEDEFSCOPE  = ')';
-    static const char OPENSCOPE  = '{';
-    static const char CLOSESCOPE  = '}';
+    static const char LINEBREAK       = '\n';
+    static const char LINECOMMENT     = '/';
+    static const char WHITESPACE      = ' ';
+    static const char ENDOFLINE       = ';';
+    static const char OPENDEFSCOPE    = '(';
+    static const char CLOSEDEFSCOPE   = ')';
+    static const char OPENSCOPE       = '{';
+    static const char CLOSESCOPE      = '}';
     static const char ARRAYOPENSCOPE  = '[';
-    static const char ARRAYCLOSESCOPE  = ']';
-    static const char NUMBERFLOAT  = '.';
+    static const char ARRAYCLOSESCOPE = ']';
+    static const char NUMBERFLOAT     = '.';
 }
 
 namespace KEYWORDS
@@ -60,4 +60,33 @@ namespace KEYWORDS
         "true", "false", "!=", ">", "<", ">=", "<=",
         "==", "||"
     };
+}
+
+namespace TOOLS
+{
+    static bool IsNumber(char character)
+    {
+        for(int i = 0; i < KEYWORDS::digits.size(); i++)
+        {
+            if(KEYWORDS::digits[i] == character)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    static bool IsLetter(char character)
+    {
+        for(int i = 0; i < KEYWORDS::letters.size(); i++)
+        {
+            if(character == KEYWORDS::letters[i])
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

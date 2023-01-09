@@ -4,83 +4,49 @@ Lexer::Lexer(){}
 
 Lexer::~Lexer(){}
 
-Tokens_lst* Lexer::Tokenaze(const std::string line)
+void Lexer::Tokenaze(const std::string line)
 {
     std::string CurrentWord;
-    bool IsLetter = false;
-    bool IsDigit  = false;
+    std::string CurrentDigit;
 
     for(int i = 0; i < line.size(); i++)
     {
-        IsLetter = false;
-
-        for(int j = 0; j < KEYWORDS::letters.size(); i++)
-        {
-            if(line[i] == KEYWORDS::letters[j])
-            {
-                IsLetter = true;
-            }
-        }
-
-        if(IsLetter)
+        if(TOOLS::IsLetter(line[i]))
         {
             CurrentWord.push_back(line[i]);
         }
         else
         {
+            // # Send word builded to identify
             this->IdentifyToken(CurrentWord);
             CurrentWord.clear();
 
-            for(int j = 0; j < KEYWORDS::digits.size(); j++)
+            if(line[i] != LANG::WHITESPACE)
             {
-                IsDigit = false;
-
-                if(line[i] == KEYWORDS::digits[j])
+                if(TOOLS::IsNumber(line[i]))
                 {
-                    IsDigit = true;
+                    CurrentDigit.push_back(line[i]);
                 }
-
-                // # Check if is a dot of float number
-                if(!IsDigit)
+                else
                 {
-                    bool CheckNextLetterIsDigit = false;
-
-                    if(line[i] == LANG::NUMBERFLOAT)
+                    if(!CurrentDigit.empty())
                     {
-                        for(int k = 0; k < KEYWORDS::digits.size(); k++)
-                        {
-                            CheckNextLetterIsDigit = false;
-
-                            if(line[i + 1] == KEYWORDS::digits[k])
-                            {
-                                CheckNextLetterIsDigit = true;
-                            }
-
-                            if(CheckNextLetterIsDigit)
-                            {
-                                IsDigit = true;
-                                break;
-                            }
-                        }
-
-                        if(!CheckNextLetterIsDigit)
-                        {
-                            if(line[i] != LANG::WHITESPACE)
-                            {
-                                this->IdentifyToken(std::to_string(line[i]));
-                            }
-                        }
+                        this->IdentifyToken(CurrentDigit);
+                        CurrentDigit.clear();
                     }
+
+                    //this->IdentifyToken(std::to_string(line[i]));
                 }
             }
         }
-
+        
     }
 
-    return nullptr;
+    // return nullptr;
 }
 
 void Lexer::IdentifyToken(const std::string Token)
 {
     Console::Print(Token);
 }
+

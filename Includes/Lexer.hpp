@@ -20,7 +20,6 @@ class Lexer
     private:
         void IdentifyToken(const std::string );
 
-
     public:
-        Tokens_lst* Tokenaze(const std::string );
+        void Tokenaze(const std::string );
 };
