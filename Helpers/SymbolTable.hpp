@@ -10,11 +10,6 @@
 
 using Tokens_lst = std::vector<std::pair<std::string, std::string>>;
 
-namespace TokenList
-{
-    static Tokens_lst Tokens;
-}
-
 namespace LANG
 {
     static const char LINEBREAK       = '\n';
@@ -28,39 +23,46 @@ namespace LANG
     static const char ARRAYOPENSCOPE  = '[';
     static const char ARRAYCLOSESCOPE = ']';
     static const char NUMBERFLOAT     = '.';
-}
+    static const char TYPEASSIGNMENT  = ':';
+};
 
 namespace KEYWORDS
 {
-    static const uint8_t SIZE_DECLARATOR = 3;
-    static const uint8_t SIZE_ASSIGNMENT = 5;
-    static const uint8_t SIZE_LOGIC      = 9;
-    static const uint8_t SIZE_TYPE       = 4;
+    static const int SIZE_DECLARATOR = 3;
+    static const int SIZE_ASSIGNMENT = 5;
+    static const int SIZE_RELATIONAL = 9;
+    static const int SIZE_LOGIC      = 2;
+    static const int SIZE_TYPE       = 4;
     
     static const std::string digits  = "0123456789";
     static const std::string letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-    static const std::string type[SIZE_TYPE]
+    static const std::string type[]
     {
         "number", "bool", "char", "string"
     };
 
-    static const std::string declarator[SIZE_DECLARATOR]
+    static const std::string declarator[]
     {
         "var", "const", "array"
     };
 
-    static const std::string assignment[SIZE_ASSIGNMENT]
+    static const std::string assignment[]
     {
         "+", "-", "*", "/", "="
     };
 
-    static const std::string logic[SIZE_LOGIC]
+    static const std::string relational[]
     {
         "true", "false", "!=", ">", "<", ">=", "<=",
-        "==", "||"
+        "=="
     };
-}
+
+    static const std::string logic[]
+    {
+        "&&", "||"
+    };
+};
 
 namespace TOOLS
 {
@@ -105,4 +107,9 @@ namespace TOOLS
 
         return false;
     }
-}
+};
+
+namespace NAMES
+{
+    static const std::string DECLARATOR = "declarator";
+};

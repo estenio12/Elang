@@ -5,25 +5,24 @@
 
 #pragma once
 
+#include <utility>
+
 #include "../Includes/Console.hpp"
 #include "../Helpers/SymbolTable.hpp"
 
 class Lexer
 {
-    private:
-        Tokens_lst Tokens;
-
     public:
         Lexer();
         ~Lexer();
 
     private:
-        void IdentifyToken(const std::string );
-        void IdentifyChar(const char );
+        bool IdentifyToken(std::string, Tokens_lst* );
+        bool IdentifyChar(char, Tokens_lst* );
 
     public:
-        void Tokenaze(const std::string );
+        void Tokenaze(const std::string);
 
     private:
-        bool IsDeclarator(const std::string& );
+        bool IsDeclarator(std::string& );
 };
