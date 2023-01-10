@@ -19,7 +19,11 @@ class Lexer
 
     private:
         void IdentifyToken(const std::string );
+        void IdentifyChar(const char );
 
     public:
         void Tokenaze(const std::string );
+
+    private:
+        bool IsDeclarator(const std::string& );
 };

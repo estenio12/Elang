@@ -27,6 +27,10 @@ void Lexer::Tokenaze(const std::string line)
                 {
                     CurrentDigit.push_back(line[i]);
                 }
+                else if(TOOLS::IsFloatNumber(line[i], line[i + 1]))
+                {
+                    CurrentDigit.push_back(line[i]);
+                }
                 else
                 {
                     if(!CurrentDigit.empty())
@@ -35,7 +39,7 @@ void Lexer::Tokenaze(const std::string line)
                         CurrentDigit.clear();
                     }
 
-                    //this->IdentifyToken(std::to_string(line[i]));
+                    this->IdentifyChar(line[i]);
                 }
             }
         }
@@ -47,6 +51,18 @@ void Lexer::Tokenaze(const std::string line)
 
 void Lexer::IdentifyToken(const std::string Token)
 {
-    Console::Print(Token);
+    if(Token.size() > 0)
+    {
+        std::cout << "Debug: " << Token << " | " << Token.size() << std::endl;
+    }
 }
 
+void Lexer::IdentifyChar(const char Token)
+{
+    std::cout << "Debug: " << Token << std::endl;
+}
+
+bool Lexer::IsDeclarator(const std::string& Token)
+{
+    return false;
+}

@@ -89,4 +89,20 @@ namespace TOOLS
 
         return false;
     }
+
+    static bool IsFloatNumber(char Current, char Next)
+    {
+        if(Current == LANG::NUMBERFLOAT)
+        {
+            for(int i = 0; i < KEYWORDS::digits.size(); i++)
+            {
+                if(KEYWORDS::digits[i] == Next)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
 }
