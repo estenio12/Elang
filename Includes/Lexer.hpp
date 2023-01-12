@@ -18,11 +18,13 @@ class Lexer
 
     private:
         bool IdentifyToken(std::string, Tokens_lst* );
-        bool IdentifyChar(char, Tokens_lst* );
+        bool IdentifySpecialChar(char, Tokens_lst* );
 
     public:
         void Tokenaze(const std::string);
 
     private:
         bool IsDeclarator(std::string& );
+        bool IsNumber(std::string& );
+        bool IsValidIdentifier(std::string& );
 };

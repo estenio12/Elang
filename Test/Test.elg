@@ -1,1 +1,1 @@
-var name = 100.50 + art;
+var name: number = 100.50 + 50;

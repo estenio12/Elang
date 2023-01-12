@@ -41,7 +41,7 @@ void Lexer::Tokenaze(const std::string line)
                         CurrentDigit.clear();
                     }
 
-                    this->IdentifyChar(line[i], &Tokens);
+                    this->IdentifySpecialChar(line[i], &Tokens);
                 }
             }
         }
@@ -63,6 +63,41 @@ bool Lexer::IdentifyToken(std::string Token, Tokens_lst* Tokens)
                 std::make_pair(NAMES::DECLARATOR, Token)
             );
 
+            std::cout << "Debug Token: ";
+            std::cout << NAMES::DECLARATOR;
+            std::cout << " | " << Token;
+            std::cout << std::endl;
+
+            return true;
+        }
+        
+        if(this->IsNumber(Token))
+        {
+            Tokens->push_back
+            (
+                std::make_pair(NAMES::DECLARATOR, Token)
+            );
+
+            std::cout << "Debug Token: ";
+            std::cout << NAMES::NUMBER;
+            std::cout << " | " << Token;
+            std::cout << std::endl;
+
+            return true;
+        }
+
+        if(this->IsValidIdentifier(Token))
+        {
+            Tokens->push_back
+            (
+                std::make_pair(NAMES::IDENTIFIER, Token)
+            );
+
+            std::cout << "Debug Token: ";
+            std::cout << NAMES::IDENTIFIER;
+            std::cout << " | " << Token;
+            std::cout << std::endl;
+
             return true;
         }
 
@@ -73,9 +108,9 @@ bool Lexer::IdentifyToken(std::string Token, Tokens_lst* Tokens)
     return false;
 }
 
-bool Lexer::IdentifyChar(const char Token, Tokens_lst* Tokens)
+bool Lexer::IdentifySpecialChar(const char Token, Tokens_lst* Tokens)
 {
-    std::cout << "Debug: " << Token << std::endl;
+    // std::cout << "Debug: " << Token << std::endl;
 
     return false;
 }
@@ -91,4 +126,35 @@ bool Lexer::IsDeclarator(std::string& Token)
     }
 
     return false;
+}
+
+
+bool Lexer::IsNumber(std::string& Token)
+{
+    for(int i = 0; i < Token.size(); i++)
+    {
+        if(!TOOLS::IsNumber(Token[i]))
+        {
+            if(TOOLS::IsFloatNumber(Token[i], Token[i + 1]))
+            {
+                continue;
+            }
+
+            return false;
+        }
+
+    }
+
+    return true;
+}
+
+bool Lexer::IsValidIdentifier(std::string& Token)
+{
+    if(TOOLS::IsNumber(Token[0]))
+    {   
+        Console::PrintError("The first letter of variable name, cannot be a number!");
+        return false;
+    }
+
+    return true;
 }

@@ -24,6 +24,8 @@ namespace LANG
     static const char ARRAYCLOSESCOPE = ']';
     static const char NUMBERFLOAT     = '.';
     static const char TYPEASSIGNMENT  = ':';
+    static const char UNDERLINE       = '_';
+    static const char UNDEFINED       = '0';
 };
 
 namespace KEYWORDS
@@ -32,14 +34,14 @@ namespace KEYWORDS
     static const int SIZE_ASSIGNMENT = 5;
     static const int SIZE_RELATIONAL = 9;
     static const int SIZE_LOGIC      = 2;
-    static const int SIZE_TYPE       = 4;
+    static const int SIZE_TYPE       = 3;
     
-    static const std::string digits  = "0123456789";
-    static const std::string letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    static const std::string Digits  = "0123456789";
+    static const std::string Letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
     static const std::string type[]
     {
-        "number", "bool", "char", "string"
+        "number", "bool", "char"
     };
 
     static const std::string declarator[]
@@ -68,9 +70,9 @@ namespace TOOLS
 {
     static bool IsNumber(char character)
     {
-        for(int i = 0; i < KEYWORDS::digits.size(); i++)
+        for(int i = 0; i < KEYWORDS::Digits.size(); i++)
         {
-            if(KEYWORDS::digits[i] == character)
+            if(KEYWORDS::Digits[i] == character)
             {
                 return true;
             }
@@ -81,9 +83,9 @@ namespace TOOLS
 
     static bool IsLetter(char character)
     {
-        for(int i = 0; i < KEYWORDS::letters.size(); i++)
+        for(int i = 0; i < KEYWORDS::Letters.size(); i++)
         {
-            if(character == KEYWORDS::letters[i])
+            if(character == KEYWORDS::Letters[i])
             {
                 return true;
             }
@@ -96,9 +98,9 @@ namespace TOOLS
     {
         if(Current == LANG::NUMBERFLOAT)
         {
-            for(int i = 0; i < KEYWORDS::digits.size(); i++)
+            for(int i = 0; i < KEYWORDS::Digits.size(); i++)
             {
-                if(KEYWORDS::digits[i] == Next)
+                if(KEYWORDS::Digits[i] == Next)
                 {
                     return true;
                 }
@@ -112,4 +114,6 @@ namespace TOOLS
 namespace NAMES
 {
     static const std::string DECLARATOR = "declarator";
+    static const std::string NUMBER     = "number";
+    static const std::string IDENTIFIER = "identifier";
 };
