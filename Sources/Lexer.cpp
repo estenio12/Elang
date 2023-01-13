@@ -48,6 +48,12 @@ void Lexer::Tokenaze(const std::string line)
         
     }
 
+    for(int i = 0; i < Tokens.size(); i++)
+    {
+        std::cout << "Debug: " << Tokens[i].first << " | ";
+        std::cout << Tokens[i].second << std::endl;
+    }
+
     // return nullptr;
 }
 
@@ -63,25 +69,28 @@ bool Lexer::IdentifyToken(std::string Token, Tokens_lst* Tokens)
                 std::make_pair(NAMES::DECLARATOR, Token)
             );
 
-            std::cout << "Debug Token: ";
-            std::cout << NAMES::DECLARATOR;
-            std::cout << " | " << Token;
-            std::cout << std::endl;
+            return true;
+        }
+
+        // # Check if is type
+        if(this->IsType(Token))
+        {
+            Tokens->push_back
+            (
+                std::make_pair(NAMES::TYPE, Token)
+            );
 
             return true;
         }
+
+        // # Always will the last to be identifiers
         
         if(this->IsNumber(Token))
         {
             Tokens->push_back
             (
-                std::make_pair(NAMES::DECLARATOR, Token)
+                std::make_pair(NAMES::NUMBER, Token)
             );
-
-            std::cout << "Debug Token: ";
-            std::cout << NAMES::NUMBER;
-            std::cout << " | " << Token;
-            std::cout << std::endl;
 
             return true;
         }
@@ -92,11 +101,6 @@ bool Lexer::IdentifyToken(std::string Token, Tokens_lst* Tokens)
             (
                 std::make_pair(NAMES::IDENTIFIER, Token)
             );
-
-            std::cout << "Debug Token: ";
-            std::cout << NAMES::IDENTIFIER;
-            std::cout << " | " << Token;
-            std::cout << std::endl;
 
             return true;
         }
@@ -110,16 +114,30 @@ bool Lexer::IdentifyToken(std::string Token, Tokens_lst* Tokens)
 
 bool Lexer::IdentifySpecialChar(const char Token, Tokens_lst* Tokens)
 {
-    // std::cout << "Debug: " << Token << std::endl;
+    for(int i = 0; i < LANG::SIZE_STMT; i++)
+    {
+        if(LANG::STMT[i] == Token)
+        {
+            Tokens->push_back
+            (
+                std::make_pair(LANG::STMTNAME[i], std::to_string(Token))
+            );
+
+            return true;
+        }
+    }
+
+    // # Not recognize token
+    Console::PrintError("unrecognized token | " + std::to_string(Token));
 
     return false;
 }
 
 bool Lexer::IsDeclarator(std::string& Token)
 {
-    for(int i = 0; i < 3; i++)
+    for(int i = 0; i < KEYWORDS::SIZE_DECLARATOR; i++)
     {
-        if(KEYWORDS::declarator[i] == Token)
+        if(KEYWORDS::Declarator[i] == Token)
         {
             return true;
         }
@@ -152,9 +170,22 @@ bool Lexer::IsValidIdentifier(std::string& Token)
 {
     if(TOOLS::IsNumber(Token[0]))
     {   
-        Console::PrintError("The first letter of variable name, cannot be a number!");
+        Console::PrintError("The first letter of variable name, cannot be a number! | " + Token);
         return false;
     }
 
     return true;
+}
+
+bool Lexer::IsType(std::string& Token)
+{
+    for(int i = 0; i < KEYWORDS::SIZE_TYPE; i++)
+    {
+        if(KEYWORDS::Type[i] == Token)
+        {
+            return true;
+        }
+    }
+
+    return false;
 }

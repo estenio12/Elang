@@ -15,17 +15,28 @@ namespace LANG
     static const char LINEBREAK       = '\n';
     static const char LINECOMMENT     = '/';
     static const char WHITESPACE      = ' ';
-    static const char ENDOFLINE       = ';';
-    static const char OPENDEFSCOPE    = '(';
-    static const char CLOSEDEFSCOPE   = ')';
-    static const char OPENSCOPE       = '{';
-    static const char CLOSESCOPE      = '}';
-    static const char ARRAYOPENSCOPE  = '[';
-    static const char ARRAYCLOSESCOPE = ']';
-    static const char NUMBERFLOAT     = '.';
-    static const char TYPEASSIGNMENT  = ':';
-    static const char UNDERLINE       = '_';
-    static const char UNDEFINED       = '0';
+
+    static const int SIZE_STMT        = 11;
+    
+    static const char STMT[SIZE_STMT]
+    {
+        ';','(',')','{','}','[',']','.',':','_','0'
+    };
+
+    static const std::string STMTNAME[]
+    {
+        "endofline",
+        "openparam",
+        "closeparam",
+        "openbrace",
+        "closebrace",
+        "openbracket",
+        "closebracket",
+        "dot",
+        "typeassignment",
+        "underline",
+        "undefined"
+    };
 };
 
 namespace KEYWORDS
@@ -39,28 +50,28 @@ namespace KEYWORDS
     static const std::string Digits  = "0123456789";
     static const std::string Letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-    static const std::string type[]
+    static const std::string Type[]
     {
         "number", "bool", "char"
     };
 
-    static const std::string declarator[]
+    static const std::string Declarator[]
     {
         "var", "const", "array"
     };
 
-    static const std::string assignment[]
+    static const std::string Assignment[]
     {
         "+", "-", "*", "/", "="
     };
 
-    static const std::string relational[]
+    static const std::string Relational[]
     {
         "true", "false", "!=", ">", "<", ">=", "<=",
         "=="
     };
 
-    static const std::string logic[]
+    static const std::string Logic[]
     {
         "&&", "||"
     };
@@ -96,7 +107,7 @@ namespace TOOLS
 
     static bool IsFloatNumber(char Current, char Next)
     {
-        if(Current == LANG::NUMBERFLOAT)
+        if(Current == LANG::STMT[7])
         {
             for(int i = 0; i < KEYWORDS::Digits.size(); i++)
             {
@@ -116,4 +127,5 @@ namespace NAMES
     static const std::string DECLARATOR = "declarator";
     static const std::string NUMBER     = "number";
     static const std::string IDENTIFIER = "identifier";
+    static const std::string TYPE       = "type";
 };

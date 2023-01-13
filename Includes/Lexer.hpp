@@ -27,4 +27,5 @@ class Lexer
         bool IsDeclarator(std::string& );
         bool IsNumber(std::string& );
         bool IsValidIdentifier(std::string& );
+        bool IsType(std::string& );
 };
