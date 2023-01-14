@@ -18,9 +18,9 @@ namespace LANG
 
     static const int SIZE_STMT        = 11;
     
-    static const char STMT[SIZE_STMT]
+    static const std::string STMT[SIZE_STMT]
     {
-        ';','(',')','{','}','[',']','.',':','_','0'
+        ";","(",")","{","}","[","]",".",":","_","0"
     };
 
     static const std::string STMTNAME[]
@@ -43,7 +43,7 @@ namespace KEYWORDS
 {
     static const int SIZE_DECLARATOR = 3;
     static const int SIZE_ASSIGNMENT = 5;
-    static const int SIZE_RELATIONAL = 9;
+    static const int SIZE_RELATIONAL = 8;
     static const int SIZE_LOGIC      = 2;
     static const int SIZE_TYPE       = 3;
     
@@ -107,7 +107,7 @@ namespace TOOLS
 
     static bool IsFloatNumber(char Current, char Next)
     {
-        if(Current == LANG::STMT[7])
+        if(Current == LANG::STMT[7][0])
         {
             for(int i = 0; i < KEYWORDS::Digits.size(); i++)
             {
@@ -128,4 +128,6 @@ namespace NAMES
     static const std::string NUMBER     = "number";
     static const std::string IDENTIFIER = "identifier";
     static const std::string TYPE       = "type";
+    static const std::string ASSIGNMENT = "assignment";
+    static const std::string RELATIONAL = "relacional";
 };

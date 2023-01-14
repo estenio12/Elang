@@ -41,7 +41,7 @@ void Lexer::Tokenaze(const std::string line)
                         CurrentDigit.clear();
                     }
 
-                    this->IdentifySpecialChar(line[i], &Tokens);
+                    this->IdentifySpecialChar(ConvertCharToString(line[i]), &Tokens);
                 }
             }
         }
@@ -112,15 +112,37 @@ bool Lexer::IdentifyToken(std::string Token, Tokens_lst* Tokens)
     return false;
 }
 
-bool Lexer::IdentifySpecialChar(const char Token, Tokens_lst* Tokens)
+bool Lexer::IdentifySpecialChar(std::string Token, Tokens_lst* Tokens)
 {
+    // # Check if is Relational
+    if(this->IsRelational(Token))
+    {
+        Tokens->push_back
+        (
+            std::make_pair(NAMES::RELATIONAL, Token)
+        );
+
+        return true;
+    }
+
+    // # Check if is Assignment
+    if(this->IsAssignment(Token))
+    {
+        Tokens->push_back
+        (
+            std::make_pair(NAMES::ASSIGNMENT, Token)
+        );
+
+        return true;
+    }
+
     for(int i = 0; i < LANG::SIZE_STMT; i++)
     {
         if(LANG::STMT[i] == Token)
         {
             Tokens->push_back
             (
-                std::make_pair(LANG::STMTNAME[i], std::to_string(Token))
+                std::make_pair(LANG::STMTNAME[i], Token)
             );
 
             return true;
@@ -128,64 +150,15 @@ bool Lexer::IdentifySpecialChar(const char Token, Tokens_lst* Tokens)
     }
 
     // # Not recognize token
-    Console::PrintError("unrecognized token | " + std::to_string(Token));
+    Console::PrintError("unrecognized token | " + Token);
 
     return false;
 }
 
-bool Lexer::IsDeclarator(std::string& Token)
+std::string Lexer::ConvertCharToString(const char Letter)
 {
-    for(int i = 0; i < KEYWORDS::SIZE_DECLARATOR; i++)
-    {
-        if(KEYWORDS::Declarator[i] == Token)
-        {
-            return true;
-        }
-    }
-
-    return false;
+    std::string tmp;
+    tmp.push_back(Letter);
+    return tmp;
 }
 
-
-bool Lexer::IsNumber(std::string& Token)
-{
-    for(int i = 0; i < Token.size(); i++)
-    {
-        if(!TOOLS::IsNumber(Token[i]))
-        {
-            if(TOOLS::IsFloatNumber(Token[i], Token[i + 1]))
-            {
-                continue;
-            }
-
-            return false;
-        }
-
-    }
-
-    return true;
-}
-
-bool Lexer::IsValidIdentifier(std::string& Token)
-{
-    if(TOOLS::IsNumber(Token[0]))
-    {   
-        Console::PrintError("The first letter of variable name, cannot be a number! | " + Token);
-        return false;
-    }
-
-    return true;
-}
-
-bool Lexer::IsType(std::string& Token)
-{
-    for(int i = 0; i < KEYWORDS::SIZE_TYPE; i++)
-    {
-        if(KEYWORDS::Type[i] == Token)
-        {
-            return true;
-        }
-    }
-
-    return false;
-}
