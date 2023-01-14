@@ -10,6 +10,7 @@ Tokens_lst Lexer::Tokenaze(const std::string line)
 
     std::string CurrentWord;
     std::string CurrentDigit;
+    bool AlphaNumericFlag = false;
 
     for(int i = 0; i < line.size(); i++)
     {
@@ -19,22 +20,45 @@ Tokens_lst Lexer::Tokenaze(const std::string line)
         }
         else
         {
-            // # Send word builded to identify
-            this->IdentifyToken(CurrentWord, &Tokens);
-            CurrentWord.clear();
-
-            if(line[i] != LANG::WHITESPACE)
+            if(line[i] == LANG::WHITESPACE)
             {
-                if(TOOLS::IsNumber(line[i]))
+                this->IdentifyToken(CurrentWord, &Tokens);
+                CurrentWord.clear();
+            }
+            else
+            {
+                if(TOOLS::IsNumber(line[i]) && 
+                   TOOLS::IsLetter(line[i - 1]))
                 {
-                    CurrentDigit.push_back(line[i]);
+                    CurrentWord.push_back(line[i]);
+                    AlphaNumericFlag = true;
+                }
+                else if(TOOLS::IsNumber(line[i]) )
+                {
+                    if(AlphaNumericFlag)
+                    {
+                        CurrentWord.push_back(line[i]);
+                    }
+                    else
+                    {
+                        CurrentDigit.push_back(line[i]);
+                    }
                 }
                 else if(TOOLS::IsFloatNumber(line[i], line[i + 1]))
                 {
-                    CurrentDigit.push_back(line[i]);
+                    if(AlphaNumericFlag)
+                    {
+                        CurrentWord.push_back(line[i]);
+                    }
+                    else
+                    {
+                        CurrentDigit.push_back(line[i]);
+                    }
                 }
                 else
                 {
+                    AlphaNumericFlag = false;
+
                     if(!CurrentDigit.empty())
                     {
                         this->IdentifyToken(CurrentDigit, &Tokens);

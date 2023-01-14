@@ -1,1 +1,1 @@
-var name: bool = 10 == 10;
+var name123 : bool = 10 == 10;
