@@ -8,6 +8,7 @@
 #include <string>
 #include <vector>
 
+using Dictionary = std::pair<std::string, std::string>;
 using Tokens_lst = std::vector<std::pair<std::string, std::string>>;
 
 namespace LANG
