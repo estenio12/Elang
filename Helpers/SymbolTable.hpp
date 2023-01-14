@@ -16,11 +16,11 @@ namespace LANG
     static const char LINECOMMENT     = '/';
     static const char WHITESPACE      = ' ';
 
-    static const int SIZE_STMT        = 11;
+    static const int SIZE_STMT        = 12;
     
     static const std::string STMT[SIZE_STMT]
     {
-        ";","(",")","{","}","[","]",".",":","_","0"
+        ";","(",")","{","}","[","]",".",":","_","0",","
     };
 
     static const std::string STMTNAME[]
@@ -43,9 +43,10 @@ namespace KEYWORDS
 {
     static const int SIZE_DECLARATOR = 3;
     static const int SIZE_ASSIGNMENT = 5;
-    static const int SIZE_RELATIONAL = 8;
-    static const int SIZE_LOGIC      = 2;
+    static const int SIZE_RELATIONAL = 6;
+    static const int SIZE_LOGICAL    = 2;
     static const int SIZE_TYPE       = 3;
+    static const int SIZE_VALUE = 3;
     
     static const std::string Digits  = "0123456789";
     static const std::string Letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -67,13 +68,17 @@ namespace KEYWORDS
 
     static const std::string Relational[]
     {
-        "true", "false", "!=", ">", "<", ">=", "<=",
-        "=="
+        "!=", ">", "<", ">=", "<=", "=="
     };
 
-    static const std::string Logic[]
+    static const std::string Logical[]
     {
         "&&", "||"
+    };
+
+    static const std::string VALUE[]
+    {
+        "true", "false", "null"
     };
 };
 
@@ -130,4 +135,6 @@ namespace NAMES
     static const std::string TYPE       = "type";
     static const std::string ASSIGNMENT = "assignment";
     static const std::string RELATIONAL = "relacional";
+    static const std::string LOGICAL    = "logical";
+    static const std::string VALUE      = "value";
 };

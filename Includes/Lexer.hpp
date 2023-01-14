@@ -22,6 +22,7 @@ class Lexer
 
     private:
         std::string ConvertCharToString(const char);
+        bool BindCharacterSequence(const std::string&, int );
 
     public:
         void Tokenaze(const std::string);
@@ -33,4 +34,6 @@ class Lexer
         bool IsType(std::string& );
         bool IsAssignment(std::string& );
         bool IsRelational(std::string& );
+        bool IsLogical(std::string& );
+        bool IsDefualtValue(std::string& );
 };

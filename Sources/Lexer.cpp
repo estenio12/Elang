@@ -41,7 +41,18 @@ void Lexer::Tokenaze(const std::string line)
                         CurrentDigit.clear();
                     }
 
-                    this->IdentifySpecialChar(ConvertCharToString(line[i]), &Tokens);
+                    if(BindCharacterSequence(line, i))
+                    {
+                        std::string Operator;
+                        Operator.push_back(line[i]); 
+                        Operator.push_back(line[i + 1]); 
+                        this->IdentifySpecialChar(Operator, &Tokens);
+                        i++;
+                    }
+                    else
+                    {
+                        this->IdentifySpecialChar(ConvertCharToString(line[i]), &Tokens);
+                    }
                 }
             }
         }
@@ -61,6 +72,17 @@ bool Lexer::IdentifyToken(std::string Token, Tokens_lst* Tokens)
 {
     if(Token.size() > 0)
     {
+        // # Check if is default values
+        if(this->IsDefualtValue(Token))
+        {
+            Tokens->push_back
+            (
+                std::make_pair(NAMES::VALUE, Token)
+            );
+
+            return true;
+        }
+
         // # Check if is declarator
         if(this->IsDeclarator(Token))
         {
@@ -114,6 +136,17 @@ bool Lexer::IdentifyToken(std::string Token, Tokens_lst* Tokens)
 
 bool Lexer::IdentifySpecialChar(std::string Token, Tokens_lst* Tokens)
 {
+    // # Check if is Logical
+    if(this->IsLogical(Token))
+    {
+        Tokens->push_back
+        (
+            std::make_pair(NAMES::LOGICAL, Token)
+        );
+
+        return true;
+    }
+
     // # Check if is Relational
     if(this->IsRelational(Token))
     {
@@ -162,3 +195,27 @@ std::string Lexer::ConvertCharToString(const char Letter)
     return tmp;
 }
 
+bool Lexer::BindCharacterSequence(const std::string& line, int position)
+{
+    // # Relational Check
+    for(int i = 0; i < KEYWORDS::SIZE_RELATIONAL; i++)
+    {
+        if(line[position] == KEYWORDS::Relational[i][0] && 
+           line[position + 1] == KEYWORDS::Relational[i][1] )
+        {   
+            return true;
+        }
+    }
+
+    // # Logical Check
+    for(int i = 0; i < KEYWORDS::SIZE_LOGICAL; i++)
+    {
+        if(line[position] == KEYWORDS::Logical[i][0] && 
+           line[position + 1] == KEYWORDS::Logical[i][1] )
+        {   
+            return true;
+        }
+    }
+
+    return false;
+}

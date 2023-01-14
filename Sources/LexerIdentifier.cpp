@@ -1,5 +1,32 @@
 #include "../Includes/Lexer.hpp"
 
+bool Lexer::IsDefualtValue(std::string& Token)
+{
+    for(int i = 0; i < KEYWORDS::SIZE_VALUE; i++)
+    {
+        if(KEYWORDS::VALUE[i] == Token)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool Lexer::IsLogical(std::string& Token)
+{
+    for(int i = 0; i < KEYWORDS::SIZE_LOGICAL; i++)
+    {
+        if(KEYWORDS::Logical[i] == Token)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
 bool Lexer::IsRelational(std::string& Token)
 {
     for(int i = 0; i < KEYWORDS::SIZE_RELATIONAL; i++)
