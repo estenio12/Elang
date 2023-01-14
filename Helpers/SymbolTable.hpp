@@ -46,7 +46,7 @@ namespace KEYWORDS
     static const int SIZE_RELATIONAL = 6;
     static const int SIZE_LOGICAL    = 2;
     static const int SIZE_TYPE       = 3;
-    static const int SIZE_VALUE = 3;
+    static const int SIZE_VALUE      = 3;
     
     static const std::string Digits  = "0123456789";
     static const std::string Letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
