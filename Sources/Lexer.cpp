@@ -4,7 +4,7 @@ Lexer::Lexer(){}
 
 Lexer::~Lexer(){}
 
-void Lexer::Tokenaze(const std::string line)
+Tokens_lst Lexer::Tokenaze(const std::string line)
 {
     Tokens_lst Tokens;
 
@@ -59,13 +59,7 @@ void Lexer::Tokenaze(const std::string line)
         
     }
 
-    for(int i = 0; i < Tokens.size(); i++)
-    {
-        std::cout << "Debug: " << Tokens[i].first << " | ";
-        std::cout << Tokens[i].second << std::endl;
-    }
-
-    // return nullptr;
+    return Tokens;
 }
 
 bool Lexer::IdentifyToken(std::string Token, Tokens_lst* Tokens)

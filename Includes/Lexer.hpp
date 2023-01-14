@@ -25,7 +25,7 @@ class Lexer
         bool BindCharacterSequence(const std::string&, int );
 
     public:
-        void Tokenaze(const std::string);
+        Tokens_lst Tokenaze(const std::string);
 
     private:
         bool IsDeclarator(std::string& );

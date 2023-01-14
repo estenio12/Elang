@@ -13,7 +13,7 @@ Compiler::~Compiler(){}
 bool Compiler::PathIsRight()
 {
     return std::filesystem::exists(
-        std::filesystem::path(this->FilePathSource));
+           std::filesystem::path(this->FilePathSource));
 }
 
 void Compiler::Run()
@@ -38,7 +38,7 @@ void Compiler::Run()
                Line[0] == LANG::LINECOMMENT && Line[1] == LANG::LINECOMMENT)
             {
                 // # Do nothing
-                // # this block is designed to catch and ignore whitespace, tabs and other 
+                // # this block is designed to catch and ignore lines in blank, tabs and other 
                 // # throwaways elements 
             }
             else
@@ -53,5 +53,12 @@ void Compiler::Run()
 
 void Compiler::Manager(std::string Line)
 {
-    this->lexer->Tokenaze(Line);
+    Tokens_lst GetTokens = this->lexer->Tokenaze(Line);
+
+    for(int i = 0; i < GetTokens.size(); i++)
+    {
+        std::cout << "Debug Tokens Manager: ";
+        std::cout << GetTokens[i].first << " | ";
+        std::cout << GetTokens[i].second << std::endl;
+    }
 }
