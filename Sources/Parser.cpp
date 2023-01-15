@@ -20,6 +20,11 @@ void Parser::RunCheck(Tokens_lst Tokens)
 {
     for(int i = 0; i < Tokens.size(); i++)
     {
-        this->SintaxCheck(Tokens[i].first);
+        this->SintaxCheck(Tokens[i]);
     }
+}
+
+void Parser::ExitProgram()
+{
+    exit(EXIT_FAILURE);
 }

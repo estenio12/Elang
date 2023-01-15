@@ -11,6 +11,7 @@
 
 #include "../Includes/Console.hpp"
 #include "../Includes/Lexer.hpp"
+#include "../Includes/Parser.hpp"
 #include "../Helpers/SymbolTable.hpp"
 
 class Compiler
@@ -22,6 +23,7 @@ class Compiler
         std::ofstream FileWriter;
 
         Lexer* lexer;
+        Parser* parser;
 
     private:
         uint64_t LineCount = 0;

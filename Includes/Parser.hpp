@@ -8,6 +8,7 @@ class Parser
     private:
         Dictionary History;
         bool DeclaratorIsUp = false;
+        int Level = 0;
 
     public:
         Parser();
@@ -16,12 +17,13 @@ class Parser
     private:
         void AddHistory(std::string, std::string );
         void RemoveHistory();
+        void ExitProgram();
 
     public:
         void RunCheck(Tokens_lst );
 
     private:
-        bool SintaxCheck(std::string );
-
+        bool SintaxCheck(Dictionary );
+        bool CheckEmptyHistory(Dictionary& );
 
 };

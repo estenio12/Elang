@@ -5,7 +5,8 @@ Compiler::Compiler(char** Path)
     this->FilePathSource = Path[1];
     this->FilePathOutput = "./Test/App.html";
 
-    this->lexer = new Lexer();
+    this->lexer  = new Lexer();
+    this->parser = new Parser();
 }
 
 Compiler::~Compiler(){}
@@ -54,11 +55,5 @@ void Compiler::Run()
 void Compiler::Manager(std::string Line)
 {
     Tokens_lst GetTokens = this->lexer->Tokenaze(Line);
-
-    for(int i = 0; i < GetTokens.size(); i++)
-    {
-        std::cout << "Debug Tokens Manager: ";
-        std::cout << GetTokens[i].first << " | ";
-        std::cout << GetTokens[i].second << std::endl;
-    }
+    this->parser->RunCheck(GetTokens);
 }
