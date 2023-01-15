@@ -1,3 +1,8 @@
+// #
+// # This project was licensed by MIT
+// # @author: Estenio Garcia 
+// #
+
 #pragma once 
 
 #include "../Includes/Console.hpp"
@@ -5,6 +10,7 @@
 
 class Parser
 {   
+    // # Sintax Variables
     private:
         Dictionary History;
         bool DeclaratorIsUp = false;
@@ -15,7 +21,6 @@ class Parser
         ~Parser();
     
     private:
-        void AddHistory(std::string, std::string );
         void RemoveHistory();
         void ExitProgram();
 
@@ -25,5 +30,13 @@ class Parser
     private:
         bool SintaxCheck(Dictionary );
         bool CheckEmptyHistory(Dictionary& );
+        bool CheckDeclaratorHistory(Dictionary& );
+        bool CheckDeclaratorTypeAssignmentHistory(Dictionary& );
+        bool CheckDeclaratorTypeHistory(Dictionary& );
+        bool CheckDeclaratorBranchHistory(Dictionary& );
+        bool CheckDataAssignmentHistory(Dictionary& );
+        bool CheckValueHistory(Dictionary& );
+        bool CheckNumberHistory(Dictionary& );
+        bool CheckIdentifierHistory(Dictionary& );
 
 };

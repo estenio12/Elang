@@ -36,8 +36,22 @@ namespace LANG
         "dot",
         "typeassignment",
         "underline",
-        "undefined"
+        "undefined",
+        "separate"
     };
+
+    static const int ENDOFLINE  = 0;
+    static const int OPENPARAM  = 1;
+    static const int CLOSEPARAM = 2;
+    static const int OPENBRACE  = 3;
+    static const int CLOSEBRACE = 4;
+    static const int OPENBRACKET    = 5;
+    static const int CLOSEBRACKET   = 6;
+    static const int DOT            = 7;
+    static const int TYPEASSIGNMENT = 8;
+    static const int UNDERLINE      = 9;
+    static const int UNDEFINED      = 10;
+    static const int SEPARATE       = 10;
 };
 
 namespace KEYWORDS
@@ -47,10 +61,12 @@ namespace KEYWORDS
     static const int SIZE_RELATIONAL = 6;
     static const int SIZE_LOGICAL    = 2;
     static const int SIZE_TYPE       = 3;
-    static const int SIZE_VALUE      = 3;
+    static const int SIZE_VALUE      = 2;
     
     static const std::string Digits  = "0123456789";
     static const std::string Letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+    static const int ASSIGN = 4;
 
     static const std::string Type[]
     {
@@ -79,8 +95,10 @@ namespace KEYWORDS
 
     static const std::string VALUE[]
     {
-        "true", "false", "null"
+        "true", "false"
     };
+
+    static const std::string null = "null";
 };
 
 namespace TOOLS

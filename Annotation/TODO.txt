@@ -1,0 +1,5 @@
+
+# TO DO
+
+[  ] Add STMT check in sintax checker;
+     Exemple: (, [

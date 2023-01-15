@@ -4,12 +4,6 @@ Parser::Parser(){}
 
 Parser::~Parser(){}
 
-void Parser::AddHistory(std::string key, std::string value)
-{
-    this->History.first  = key;
-    this->History.second = value;
-}
-
 void Parser::RemoveHistory()
 {
     this->History.first.clear();
