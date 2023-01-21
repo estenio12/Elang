@@ -55,5 +55,5 @@ void Compiler::Run()
 void Compiler::Manager(std::string Line)
 {
     Tokens_lst GetTokens = this->lexer->Tokenaze(Line);
-    this->parser->RunCheck(GetTokens);
+    this->parser->RunCheck(GetTokens, this->LineCount);
 }

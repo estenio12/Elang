@@ -54,6 +54,19 @@ namespace LANG
     static const int SEPARATE       = 10;
 };
 
+namespace NAMES
+{
+    static const std::string DECLARATOR = "declarator";
+    static const std::string NUMBER     = "number";
+    static const std::string IDENTIFIER = "identifier";
+    static const std::string TYPE       = "type";
+    static const std::string ASSIGNMENT = "assignment";
+    static const std::string RELATIONAL = "relacional";
+    static const std::string LOGICAL    = "logical";
+    static const std::string VALUE      = "value";
+};
+
+
 namespace KEYWORDS
 {
     static const int SIZE_DECLARATOR = 3;
@@ -146,14 +159,3 @@ namespace TOOLS
     }
 };
 
-namespace NAMES
-{
-    static const std::string DECLARATOR = "declarator";
-    static const std::string NUMBER     = "number";
-    static const std::string IDENTIFIER = "identifier";
-    static const std::string TYPE       = "type";
-    static const std::string ASSIGNMENT = "assignment";
-    static const std::string RELATIONAL = "relacional";
-    static const std::string LOGICAL    = "logical";
-    static const std::string VALUE      = "value";
-};
