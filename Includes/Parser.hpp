@@ -3,7 +3,8 @@
 // # @author: Estenio Garcia 
 // #
 
-#pragma once 
+#ifndef PARSER_H
+#define PARSER_H
 
 #include "../Includes/Console.hpp"
 #include "../Helpers/SymbolTable.hpp"
@@ -28,6 +29,8 @@ class Parser
         void RemoveHistory();
         void ExitProgram();
         void PrintError(std::string );
+        void CloseDeclaration();
+        void CallbackLevel();
 
     public:
         void RunCheck(Tokens_lst, uint64_t );
@@ -36,11 +39,15 @@ class Parser
         void SyntaxCheck(Dictionary );
 
     private:
-        bool ValidateDeclarations(Dictionary );
+        bool ValidateDeclarations(Dictionary& );
         bool CheckDeclaration(Dictionary );
         bool CheckDeclarationDeclarator(Dictionary );
         bool CheckDeclarationIdentfier(Dictionary );
         bool CheckDeclarationTypeAssign(Dictionary );
         bool CheckDeclarationType(Dictionary );
+        
+        bool CheckOperation(Dictionary );
 
 };
+
+#endif

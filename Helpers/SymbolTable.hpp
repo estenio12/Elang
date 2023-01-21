@@ -3,7 +3,8 @@
 // # @author: Estenio Garcia 
 // #
 
-#pragma once
+#ifndef SYMBOLTABLE_H
+#define SYMBOLTABLE_H
 
 #include <string>
 #include <vector>
@@ -64,12 +65,13 @@ namespace NAMES
     static const std::string RELATIONAL = "relacional";
     static const std::string LOGICAL    = "logical";
     static const std::string VALUE      = "value";
+    static const std::string CHARACTER  = "character";
 };
 
 
 namespace KEYWORDS
 {
-    static const int SIZE_DECLARATOR = 3;
+    static const int SIZE_DECLARATOR = 2;
     static const int SIZE_ASSIGNMENT = 5;
     static const int SIZE_RELATIONAL = 6;
     static const int SIZE_LOGICAL    = 2;
@@ -88,7 +90,7 @@ namespace KEYWORDS
 
     static const std::string Declarator[]
     {
-        "var", "const", "array"
+        "var", "const"
     };
 
     static const std::string Assignment[]
@@ -159,3 +161,4 @@ namespace TOOLS
     }
 };
 
+#endif

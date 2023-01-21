@@ -35,3 +35,17 @@ void Parser::PrintError(std::string Message)
 {
     Console::PrintError("Line: " + std::to_string(this->LineCount) + " | " + Message);
 }
+
+void Parser::CloseDeclaration()
+{
+    this->CallbackLevel();
+    this->DeclaratorIsUp = false;
+    this->RemoveHistory();
+}
+
+void Parser::CallbackLevel()
+{
+    this->Level--;
+
+    if(this->Level <= 0) this->Level = 0;
+}
