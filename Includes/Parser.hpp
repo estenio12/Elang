@@ -6,6 +6,8 @@
 #ifndef PARSER_H
 #define PARSER_H
 
+#include <cstdint>
+
 #include "../Includes/Console.hpp"
 #include "../Helpers/SymbolTable.hpp"
 
@@ -16,6 +18,7 @@ class Parser
         Dictionary History;
         bool DeclaratorIsUp = false;
         int Level = 0;
+        int ParanOpen = 0;
 
     private:
         uint64_t LineCount = 0;
@@ -31,6 +34,9 @@ class Parser
         void PrintError(std::string );
         void CloseDeclaration();
         void CallbackLevel();
+        void AddParanOpen();
+        void RemoveParanOpen();
+        void CheckParentheses();
 
     public:
         void RunCheck(Tokens_lst, uint64_t );

@@ -23,7 +23,9 @@ void Parser::RunCheck(Tokens_lst Tokens, uint64_t LineCount)
     for(int i = 0; i < Tokens.size(); i++)
     {
         this->SyntaxCheck(Tokens[i]);
-    }
+    }   
+
+    this->CheckParentheses();
 }
 
 void Parser::ExitProgram()
@@ -48,4 +50,27 @@ void Parser::CallbackLevel()
     this->Level--;
 
     if(this->Level <= 0) this->Level = 0;
+}
+
+void Parser::AddParanOpen()
+{
+    this->ParanOpen++;
+}
+
+void Parser::RemoveParanOpen()
+{
+    this->ParanOpen--;
+}
+
+void Parser::CheckParentheses()
+{
+     if(this->ParanOpen > 0)
+    {
+        this->PrintError("Sintax Error | parentheses open but never closed!");
+    }
+    
+    if(this->ParanOpen < 0)
+    {
+        this->PrintError("Sintax Error | parentheses close but never opened!");
+    }
 }

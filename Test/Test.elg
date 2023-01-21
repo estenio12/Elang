@@ -1,1 +1,2 @@
-var name123 : bool = 10 + 10 - (2 * 45);
+var name123 : number = 10 + 10 - (2 * 45);
+var name123 : number || 10 - 10 / (2 * 45);

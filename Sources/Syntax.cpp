@@ -31,12 +31,12 @@ bool Parser::CheckDeclaration(Dictionary Token)
         if(Token.first == NAMES::DECLARATOR)
         {
             this->SetHistory(Token);
+            this->DeclaratorIsUp = true;
 
             return true;
         }
 
-        this->PrintError("Syntax error | Expected a declarator.");
-
+        this->PrintError("Syntax error | Expected a declarator | " + Token.second);
     }
 
     return false;
@@ -134,6 +134,7 @@ bool Parser::CheckOperation(Dictionary Token)
         if(Token.first == LANG::STMTNAME[LANG::CLOSEPARAM])
         {
             this->SetHistory(Token);
+            this->RemoveParanOpen();
 
             return true;
         }
@@ -171,6 +172,7 @@ bool Parser::CheckOperation(Dictionary Token)
         if(Token.first == LANG::STMTNAME[LANG::OPENPARAM])
         {
             this->SetHistory(Token);
+            this->AddParanOpen();
 
             return true;
         }
@@ -239,6 +241,7 @@ bool Parser::CheckOperation(Dictionary Token)
         if(Token.first == LANG::STMTNAME[LANG::OPENPARAM])
         {
             this->SetHistory(Token);
+            this->AddParanOpen();
 
             return true;
         }
