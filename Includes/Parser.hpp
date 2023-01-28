@@ -9,6 +9,7 @@
 #include <cstdint>
 
 #include "../Includes/Console.hpp"
+#include "../Includes/TableIdentifier.hpp"
 #include "../Helpers/SymbolTable.hpp"
 
 class Parser
@@ -26,9 +27,12 @@ class Parser
         bool SemanticDeclaratorIsUp = false;
         int SemanticLevel = 0;
         int SemanticParanOpen = 0;
+        bool ItsConstant = false;
+        std::string CurrentIdentifier = "";
 
     private:
         uint64_t LineCount = 0;
+        TableID* IDTable;
 
     public:
         Parser();
@@ -46,6 +50,9 @@ class Parser
         void CheckParentheses();
         void SetSemanticHistory(Dictionary );
         void RemoveSemanticHistory();
+        void SetCurrentIdentifier(std::string );
+        void RemoveCurrentIdentifier();
+        void SemanticCloseDeclaration();
 
     public:
         void RunCheck(Tokens_lst, uint64_t );

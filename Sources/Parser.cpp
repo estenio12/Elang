@@ -1,6 +1,9 @@
 #include "../Includes/Parser.hpp"
 
-Parser::Parser(){}
+Parser::Parser()
+{
+    IDTable = new TableID();
+}
 
 Parser::~Parser(){}
 
@@ -61,6 +64,13 @@ void Parser::CloseDeclaration()
     this->RemoveHistory();
 }
 
+void Parser::SemanticCloseDeclaration()
+{
+    this->SemanticDeclaratorIsUp = false;
+    this->ItsConstant = false;
+    this->RemoveSemanticHistory();
+}
+
 void Parser::CallbackLevel()
 {
     this->Level--;
@@ -89,4 +99,14 @@ void Parser::CheckParentheses()
     {
         this->PrintError("Sintax Error | parentheses close but never opened!");
     }
+}
+
+void Parser::SetCurrentIdentifier(std::string Identifier)
+{
+    this->CurrentIdentifier = Identifier;
+}
+
+void Parser::RemoveCurrentIdentifier()
+{
+    this->CurrentIdentifier.clear();
 }

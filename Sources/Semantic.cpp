@@ -21,7 +21,7 @@ bool Parser::SemanticValidateDeclarations(Dictionary& Token)
     if(this->SemanticCheckDeclarationType(Token)) return true;
     if(this->SemanticCheckOperation(Token)) return true;
 
-    this->PrintError("Semantic error | Unexpected " + Token.second);
+    this->PrintError("Unexpected " + Token.second);
 
     return false;
 }
@@ -46,7 +46,7 @@ bool Parser::SemanticCheckDeclaration(Dictionary Token)
             return true;
         }
 
-        this->PrintError("Semantic error | unexpected declarator | " + Token.second);
+        this->PrintError("Unexpected declarator | " + Token.second);
     }
 
     return false;
@@ -54,16 +54,24 @@ bool Parser::SemanticCheckDeclaration(Dictionary Token)
 
 bool Parser::SemanticCheckDeclarationDeclarator(Dictionary Token)
 {
-    if(this->History.first == NAMES::DECLARATOR)
+    if(this->SemanticHistory.first == NAMES::DECLARATOR)
     {
         if(Token.first == NAMES::IDENTIFIER)
         {
-            this->SetHistory(Token);
+            if(IDTable->CheckIfExistIdentifier(Token.second))
+            {
+                this->PrintError("Duplicate identifier, previously declared identifier | " + Token.second);
+                this->ExitProgram();
+            }
+
+            this->IDTable->CreateID(Token.second);
+            this->SetCurrentIdentifier(Token.second);
+            this->SetSemanticHistory(Token);
 
             return true;
         }
 
-        this->PrintError("Semantic error | Expected a identifier after 'declarators'.");
+        this->PrintError("Expected a identifier after 'declarators'.");
     }
 
     return false;
@@ -71,16 +79,16 @@ bool Parser::SemanticCheckDeclarationDeclarator(Dictionary Token)
 
 bool Parser::SemanticCheckDeclarationIdentfier(Dictionary Token)
 {
-    if(this->History.first == NAMES::IDENTIFIER)
+    if(this->SemanticHistory.first == NAMES::IDENTIFIER)
     {
-        if(Token.first == LANG::STMTNAME[LANG::TYPEASSIGNMENT])
+        if(Token.second == LANG::STMT[LANG::TYPEASSIGNMENT])
         {
-            this->SetHistory(Token);
+            this->SetSemanticHistory(Token);
 
             return true;
         }
 
-        this->PrintError("Semantic error | Expected a type assignment ':' after Identifier.");
+        this->PrintError("Expected a type assignment ':' after Identifier.");
     }
 
     return false;
@@ -88,16 +96,30 @@ bool Parser::SemanticCheckDeclarationIdentfier(Dictionary Token)
 
 bool Parser::SemanticCheckDeclarationTypeAssign(Dictionary Token)
 {
-    if(this->History.first == LANG::STMTNAME[LANG::TYPEASSIGNMENT])
+    if(this->SemanticHistory.first == LANG::STMTNAME[LANG::TYPEASSIGNMENT])
     {
-        if(Token.first == NAMES::TYPE)
+        if(Token.second == KEYWORDS::Type[KEYWORDS::EType::NUMBER])
         {
-            this->SetHistory(Token);
+            this->SetSemanticHistory(Token);
 
             return true;
         }
 
-        this->PrintError("Semantic error | Expected a type specifier.");
+        if(Token.second == KEYWORDS::Type[KEYWORDS::EType::BOOL])
+        {
+            this->SetSemanticHistory(Token);
+
+            return true;
+        }
+
+        if(Token.second == KEYWORDS::Type[KEYWORDS::EType::CHAR])
+        {
+            this->SetSemanticHistory(Token);
+
+            return true;
+        }
+
+        this->PrintError("Expected a type specifier | " + Token.second);
     }
     
     return false;
@@ -105,23 +127,24 @@ bool Parser::SemanticCheckDeclarationTypeAssign(Dictionary Token)
 
 bool Parser::SemanticCheckDeclarationType(Dictionary Token)
 {
-    if(this->History.first == NAMES::TYPE)
+    if(this->SemanticHistory.first == NAMES::TYPE)
     {
-        if(Token.first == NAMES::ASSIGNMENT)
+        if(Token.second == 
+            KEYWORDS::Assignment[KEYWORDS::EAssignment::ASSIGNMENT])
         {
-            this->SetHistory(Token);
+            this->SetSemanticHistory(Token);
 
             return true;
         }
 
-        if(Token.first == LANG::STMTNAME[LANG::ENDOFLINE])
+        if(Token.second == LANG::STMT[LANG::ENDOFLINE])
         {
-            this->SetHistory(Token);
+            this->SemanticCloseDeclaration();
 
             return true;
         }
 
-        this->PrintError("Semantic error | Expected an '=' or ';' after type specifier.");
+        this->PrintError("Expected an '=' or ';' after type specifier.");
     }
 
     return false;

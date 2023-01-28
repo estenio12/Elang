@@ -120,6 +120,22 @@ namespace KEYWORDS
         VAR = 0,
         CONST
     };
+
+    enum EType
+    {
+        NUMBER = 0,
+        BOOL,
+        CHAR
+    };
+
+    enum EAssignment
+    {
+        PLUS,
+        LESS,
+        MUL,
+        DIV,
+        ASSIGNMENT
+    };
 };
 
 namespace TOOLS

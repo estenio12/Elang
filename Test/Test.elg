@@ -1,1 +1,2 @@
-array name123 : number = 10 + 10 - (2 * 45);
+var name123 : number ;
+var name123 : number ;

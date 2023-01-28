@@ -44,6 +44,7 @@ bool Parser::SyntaxCheckDeclaration(Dictionary Token)
 
 bool Parser::SyntaxCheckDeclarationDeclarator(Dictionary Token)
 {
+    // std::cout << "Debug: " << Token.first << std::endl;
     if(this->History.first == NAMES::DECLARATOR)
     {
         if(Token.first == NAMES::IDENTIFIER)
@@ -107,7 +108,7 @@ bool Parser::SyntaxCheckDeclarationType(Dictionary Token)
 
         if(Token.first == LANG::STMTNAME[LANG::ENDOFLINE])
         {
-            this->SetHistory(Token);
+            this->CloseDeclaration();
 
             return true;
         }
