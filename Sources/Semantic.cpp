@@ -42,6 +42,7 @@ bool Parser::SemanticCheckDeclaration(Dictionary Token)
         {
             this->SetSemanticHistory(Token);
             this->SemanticDeclaratorIsUp = true;
+            this->ItsConstant = true;
 
             return true;
         }

@@ -31,19 +31,19 @@ class IDRow
         std::string Name    = DEFAULT_ENTITY;
         std::string Value   = DEFAULT_VALUE;
         TYPE TypeIdentidier = TYPE::UNDEFINED;
-        bool ItsConstant    = false;
+        bool IsConstant    = false;
 
     public:
         IDRow(uint32_t ID,
               std::string Name ,
               std::string Value = "0",
               TYPE TypeID = TYPE::UNDEFINED,
-              bool ItsConstant = false):
+              bool IsConstant = false):
               ID(ID),
               Name(Name),
               Value(Value),
               TypeIdentidier(TypeID),
-              ItsConstant(ItsConstant)
+              IsConstant(IsConstant)
               {}
 };
 
@@ -58,7 +58,7 @@ class TableID
         ~TableID();
 
     public:
-        void CreateID(std::string Name, TYPE TypeID = TYPE::UNDEFINED);
+        void CreateID(std::string Name, TYPE TypeID = TYPE::UNDEFINED, bool IsConstant = false);
         void SetType(TYPE NewTypeID, std::string TargetName);
         void SetValue(std::string NewValue, std::string TargetName);
 

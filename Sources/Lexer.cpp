@@ -59,6 +59,12 @@ Tokens_lst Lexer::Tokenaze(const std::string line)
                 {
                     AlphaNumericFlag = false;
 
+                    if(!CurrentWord.empty())
+                    {
+                        this->IdentifyToken(CurrentWord, &Tokens);
+                        CurrentWord.clear();
+                    }
+
                     if(!CurrentDigit.empty())
                     {
                         this->IdentifyToken(CurrentDigit, &Tokens);

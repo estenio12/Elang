@@ -7,7 +7,7 @@ TableID::~TableID()
     this->Table.clear();
 }
 
-void TableID::CreateID(std::string Name, TYPE TypeID)
+void TableID::CreateID(std::string Name, TYPE TypeID, bool IsConstant)
 {
     this->Table.push_back
     (
@@ -17,7 +17,7 @@ void TableID::CreateID(std::string Name, TYPE TypeID)
             Name, 
             DEFAULT_VALUE,
             TypeID,
-            false
+            IsConstant
         )
     );
 }
