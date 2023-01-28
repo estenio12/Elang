@@ -20,6 +20,13 @@ class Parser
         int Level = 0;
         int ParanOpen = 0;
 
+    // # Semantic Variables
+    private:
+        Dictionary SemanticHistory;
+        bool SemanticDeclaratorIsUp = false;
+        int SemanticLevel = 0;
+        int SemanticParanOpen = 0;
+
     private:
         uint64_t LineCount = 0;
 
@@ -37,23 +44,35 @@ class Parser
         void AddParanOpen();
         void RemoveParanOpen();
         void CheckParentheses();
+        void SetSemanticHistory(Dictionary );
+        void RemoveSemanticHistory();
 
     public:
         void RunCheck(Tokens_lst, uint64_t );
 
     private:
         void SyntaxCheck(Dictionary );
+        void SemanticCheck(Dictionary );
 
+    // # Syntax
     private:
-        bool ValidateDeclarations(Dictionary& );
-        bool CheckDeclaration(Dictionary );
-        bool CheckDeclarationDeclarator(Dictionary );
-        bool CheckDeclarationIdentfier(Dictionary );
-        bool CheckDeclarationTypeAssign(Dictionary );
-        bool CheckDeclarationType(Dictionary );
-        
-        bool CheckOperation(Dictionary );
+        bool SyntaxValidateDeclarations(Dictionary& );
+        bool SyntaxCheckDeclaration(Dictionary );
+        bool SyntaxCheckDeclarationDeclarator(Dictionary );
+        bool SyntaxCheckDeclarationIdentfier(Dictionary );
+        bool SyntaxCheckDeclarationTypeAssign(Dictionary );
+        bool SyntaxCheckDeclarationType(Dictionary );
+        bool SyntaxCheckOperation(Dictionary );
 
+    // # Semantic
+    private:
+        bool SemanticValidateDeclarations(Dictionary& );
+        bool SemanticCheckDeclaration(Dictionary );
+        bool SemanticCheckDeclarationDeclarator(Dictionary );
+        bool SemanticCheckDeclarationIdentfier(Dictionary );
+        bool SemanticCheckDeclarationTypeAssign(Dictionary );
+        bool SemanticCheckDeclarationType(Dictionary );
+        bool SemanticCheckOperation(Dictionary );
 };
 
 #endif

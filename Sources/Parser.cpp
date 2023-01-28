@@ -12,8 +12,19 @@ void Parser::RemoveHistory()
 
 void Parser::SetHistory(Dictionary Token)
 {
-    this->History.first = Token.first;
+    this->History.first  = Token.first;
     this->History.second = Token.second;
+}
+
+void Parser::RemoveSemanticHistory()
+{
+    this->SemanticHistory.first.clear();
+    this->SemanticHistory.second.clear();
+}
+
+void Parser::SetSemanticHistory(Dictionary Token)
+{
+    this->SemanticHistory = Token;
 }
 
 void Parser::RunCheck(Tokens_lst Tokens, uint64_t LineCount)
@@ -23,6 +34,11 @@ void Parser::RunCheck(Tokens_lst Tokens, uint64_t LineCount)
     for(int i = 0; i < Tokens.size(); i++)
     {
         this->SyntaxCheck(Tokens[i]);
+    }
+
+    for(int i = 0; i < Tokens.size(); i++)
+    {
+        this->SemanticCheck(Tokens[i]);
     }   
 
     this->CheckParentheses();

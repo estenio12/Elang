@@ -1,6 +1,6 @@
 
 # TO DO
 
-[  ] Do test 
+[ WORKING ] Do test 
 [ OK ] Do Implement open paranthesis checker count.
 [  ] Do Implement of sematic checker.  

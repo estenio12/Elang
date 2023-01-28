@@ -71,7 +71,7 @@ namespace NAMES
 
 namespace KEYWORDS
 {
-    static const int SIZE_DECLARATOR = 2;
+    static const int SIZE_DECLARATOR = 3;
     static const int SIZE_ASSIGNMENT = 5;
     static const int SIZE_RELATIONAL = 6;
     static const int SIZE_LOGICAL    = 2;
@@ -114,6 +114,12 @@ namespace KEYWORDS
     };
 
     static const std::string null = "null";
+
+    enum EDeclarator
+    {
+        VAR = 0,
+        CONST
+    };
 };
 
 namespace TOOLS

@@ -1,48 +1,58 @@
 #include "../Includes/Parser.hpp"
 
-void Parser::SyntaxCheck(Dictionary Token)
+#include "../Includes/Parser.hpp"
+
+void Parser::SemanticCheck(Dictionary Token)
 {
     switch(this->Level)
     {
         case 0:
-            if(!this->SyntaxValidateDeclarations(Token)) this->ExitProgram();
+            if(!this->SemanticValidateDeclarations(Token)) this->ExitProgram();
         break;
     }
 }
 
-bool Parser::SyntaxValidateDeclarations(Dictionary& Token)
+bool Parser::SemanticValidateDeclarations(Dictionary& Token)
 {
-    if(this->SyntaxCheckDeclaration(Token)) return true;
-    if(this->SyntaxCheckDeclarationDeclarator(Token)) return true;
-    if(this->SyntaxCheckDeclarationIdentfier(Token)) return true;
-    if(this->SyntaxCheckDeclarationTypeAssign(Token)) return true;
-    if(this->SyntaxCheckDeclarationType(Token)) return true;
-    if(this->SyntaxCheckOperation(Token)) return true;
+    if(this->SemanticCheckDeclaration(Token)) return true;
+    if(this->SemanticCheckDeclarationDeclarator(Token)) return true;
+    if(this->SemanticCheckDeclarationIdentfier(Token)) return true;
+    if(this->SemanticCheckDeclarationTypeAssign(Token)) return true;
+    if(this->SemanticCheckDeclarationType(Token)) return true;
+    if(this->SemanticCheckOperation(Token)) return true;
 
-    this->PrintError("Syntax error | Unexpected " + Token.second);
+    this->PrintError("Semantic error | Unexpected " + Token.second);
 
     return false;
 }
 
-bool Parser::SyntaxCheckDeclaration(Dictionary Token)
+bool Parser::SemanticCheckDeclaration(Dictionary Token)
 {
-    if(this->History.first.empty())
+    if(this->SemanticHistory.first.empty())
     {
-        if(Token.first == NAMES::DECLARATOR)
+        if(Token.second == KEYWORDS::Declarator[KEYWORDS::EDeclarator::VAR])
         {
-            this->SetHistory(Token);
-            this->DeclaratorIsUp = true;
+            this->SetSemanticHistory(Token);
+            this->SemanticDeclaratorIsUp = true;
 
             return true;
         }
 
-        this->PrintError("Syntax error | Expected a declarator | " + Token.second);
+        if(Token.second == KEYWORDS::Declarator[KEYWORDS::EDeclarator::CONST])
+        {
+            this->SetSemanticHistory(Token);
+            this->SemanticDeclaratorIsUp = true;
+
+            return true;
+        }
+
+        this->PrintError("Semantic error | unexpected declarator | " + Token.second);
     }
 
     return false;
 }
 
-bool Parser::SyntaxCheckDeclarationDeclarator(Dictionary Token)
+bool Parser::SemanticCheckDeclarationDeclarator(Dictionary Token)
 {
     if(this->History.first == NAMES::DECLARATOR)
     {
@@ -53,14 +63,13 @@ bool Parser::SyntaxCheckDeclarationDeclarator(Dictionary Token)
             return true;
         }
 
-        this->PrintError("Syntax error | Expected a identifier after 'declarators'.");
-
+        this->PrintError("Semantic error | Expected a identifier after 'declarators'.");
     }
 
     return false;
 }
 
-bool Parser::SyntaxCheckDeclarationIdentfier(Dictionary Token)
+bool Parser::SemanticCheckDeclarationIdentfier(Dictionary Token)
 {
     if(this->History.first == NAMES::IDENTIFIER)
     {
@@ -71,13 +80,13 @@ bool Parser::SyntaxCheckDeclarationIdentfier(Dictionary Token)
             return true;
         }
 
-        this->PrintError("Syntax error | Expected a type assignment ':' after Identifier.");
+        this->PrintError("Semantic error | Expected a type assignment ':' after Identifier.");
     }
 
     return false;
 }
 
-bool Parser::SyntaxCheckDeclarationTypeAssign(Dictionary Token)
+bool Parser::SemanticCheckDeclarationTypeAssign(Dictionary Token)
 {
     if(this->History.first == LANG::STMTNAME[LANG::TYPEASSIGNMENT])
     {
@@ -88,13 +97,13 @@ bool Parser::SyntaxCheckDeclarationTypeAssign(Dictionary Token)
             return true;
         }
 
-        this->PrintError("Syntax error | Expected a type specifier.");
+        this->PrintError("Semantic error | Expected a type specifier.");
     }
     
     return false;
 }
 
-bool Parser::SyntaxCheckDeclarationType(Dictionary Token)
+bool Parser::SemanticCheckDeclarationType(Dictionary Token)
 {
     if(this->History.first == NAMES::TYPE)
     {
@@ -112,13 +121,13 @@ bool Parser::SyntaxCheckDeclarationType(Dictionary Token)
             return true;
         }
 
-        this->PrintError("Syntax error | Expected an '=' or ';' after type specifier.");
+        this->PrintError("Semantic error | Expected an '=' or ';' after type specifier.");
     }
 
     return false;
 }
 
-bool Parser::SyntaxCheckOperation(Dictionary Token)
+bool Parser::SemanticCheckOperation(Dictionary Token)
 {
     if(this->History.first == NAMES::IDENTIFIER || 
        this->History.first == NAMES::NUMBER || 
