@@ -1,6 +1,7 @@
 
 # TO DO
 
-[ WORKING ] Do test 
+[ OK ] Do test 
 [ OK ] Do Implement open paranthesis checker count.
-[  ] Do Implement of sematic checker.  
+[ OK ] Do Implement of sematic checker.  
+[ TO DO ] Do Implement of SemanticCheckOperation sematic checker.  
