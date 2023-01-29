@@ -45,7 +45,6 @@ bool Parser::SyntaxCheckDeclaration(Dictionary Token)
 
 bool Parser::SyntaxCheckDeclarationDeclarator(Dictionary Token)
 {
-    // std::cout << "Debug: " << Token.first << std::endl;
     if(this->History.first == NAMES::DECLARATOR)
     {
         if(Token.first == NAMES::IDENTIFIER)

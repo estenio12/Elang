@@ -32,7 +32,7 @@ bool Parser::SemanticCheckDeclaration(Dictionary Token)
         {
             this->SetSemanticHistory(Token);
             this->SemanticDeclaratorIsUp = true;
-            this->SemanticDeclaratorIsAssigned = false;
+            this->SemanticDeclaratorItsAssigned = false;
 
             return true;
         }
@@ -41,7 +41,7 @@ bool Parser::SemanticCheckDeclaration(Dictionary Token)
         {
             this->SetSemanticHistory(Token);
             this->SemanticDeclaratorIsUp = true;
-            this->SemanticDeclaratorIsAssigned = false;
+            this->SemanticDeclaratorItsAssigned = false;
             this->ItsConstant = true;
 
             return true;
@@ -80,12 +80,12 @@ bool Parser::SemanticCheckDeclarationDeclarator(Dictionary Token)
 
 bool Parser::SemanticCheckDeclarationIdentfier(Dictionary Token)
 {
-    if(this->SemanticHistory.first == NAMES::IDENTIFIER && !SemanticDeclaratorIsAssigned)
+    if(this->SemanticHistory.first == NAMES::IDENTIFIER && !SemanticDeclaratorItsAssigned)
     {
         if(Token.second == LANG::STMT[LANG::TYPEASSIGNMENT])
         {
             this->SetSemanticHistory(Token);
-            this->SemanticDeclaratorIsAssigned = true;
+            this->SemanticDeclaratorItsAssigned = true;
 
             return true;
         }
@@ -103,6 +103,7 @@ bool Parser::SemanticCheckDeclarationTypeAssign(Dictionary Token)
         if(Token.second == KEYWORDS::Type[KEYWORDS::EType::NUMBER])
         {
             this->SetSemanticHistory(Token);
+            this->IDTable->SetType(TYPE::NUMBER, CurrentIdentifier);
 
             return true;
         }
@@ -110,6 +111,7 @@ bool Parser::SemanticCheckDeclarationTypeAssign(Dictionary Token)
         if(Token.second == KEYWORDS::Type[KEYWORDS::EType::BOOL])
         {
             this->SetSemanticHistory(Token);
+            this->IDTable->SetType(TYPE::BOOL, CurrentIdentifier);
 
             return true;
         }
@@ -117,6 +119,7 @@ bool Parser::SemanticCheckDeclarationTypeAssign(Dictionary Token)
         if(Token.second == KEYWORDS::Type[KEYWORDS::EType::CHAR])
         {
             this->SetSemanticHistory(Token);
+            this->IDTable->SetType(TYPE::CHAR, CurrentIdentifier);
 
             return true;
         }
@@ -135,7 +138,7 @@ bool Parser::SemanticCheckDeclarationType(Dictionary Token)
             KEYWORDS::Assignment[KEYWORDS::EAssignment::ASSIGNMENT])
         {
             this->SetSemanticHistory(Token);
-            this->SemanticDeclaratorIsAssigned = true;
+            this->SemanticDeclaratorItsAssigned = true;
 
             return true;
         }
@@ -208,7 +211,7 @@ bool Parser::SemanticCheckOperation(Dictionary Token)
     {
         if(Token.second == LANG::STMT[LANG::ENDOFLINE])
         {
-            this->CloseDeclaration();
+            this->SemanticCloseDeclaration();
 
             return true;
         }
@@ -256,7 +259,7 @@ bool Parser::SemanticCheckOperation(Dictionary Token)
     {
         if(Token.second == LANG::STMT[LANG::ENDOFLINE])
         {
-            this->CloseDeclaration();
+            this->SemanticCloseDeclaration();
 
             return true;
         }
@@ -322,6 +325,13 @@ bool Parser::SemanticCheckOperation(Dictionary Token)
         this->PrintError("Unexpected operator | " + Token.second);
         
         return false;
+    }
+
+    if(this->SemanticHistory.second == LANG::STMT[LANG::ENDOFLINE])
+    {
+        this->SemanticCloseDeclaration();
+
+        return true;
     }
 
     return false;

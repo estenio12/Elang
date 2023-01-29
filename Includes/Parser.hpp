@@ -26,9 +26,8 @@ class Parser
     private:
         Dictionary SemanticHistory;
         bool SemanticDeclaratorIsUp = false;
-        bool SemanticDeclaratorIsAssigned = false;
+        bool SemanticDeclaratorItsAssigned = false;
         int SemanticLevel = 0;
-        int SemanticParanOpen = 0;
         bool ItsConstant = false;
         std::string CurrentIdentifier = "";
 

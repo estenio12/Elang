@@ -1,9 +1,6 @@
 
 # TO DO
 
-[ OK ] Do test 
-[ OK ] Do Implement open paranthesis checker count.
-[ OK ] Do Implement of sematic checker.  
-[ WORKING ] Do Implement of SemanticCheckOperation sematic checker.  
+[ TO DO ] Add assignment for 'char' types.
 [ TO DO ] Add support to null value.
 [ TO DO ] Refactoring Semantic Operation.

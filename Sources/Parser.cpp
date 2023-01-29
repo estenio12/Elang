@@ -68,7 +68,7 @@ void Parser::CloseDeclaration()
 void Parser::SemanticCloseDeclaration()
 {
     this->SemanticDeclaratorIsUp = false;
-    this->SemanticDeclaratorIsAssigned = false;
+    this->SemanticDeclaratorItsAssigned = false;
     this->ItsConstant = false;
     this->RemoveSemanticHistory();
 }
