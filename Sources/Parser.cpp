@@ -42,7 +42,7 @@ void Parser::RunCheck(Tokens_lst Tokens, uint64_t LineCount)
     for(int i = 0; i < Tokens.size(); i++)
     {
         this->SemanticCheck(Tokens[i]);
-    }   
+    }
 
     this->CheckParentheses();
 }
@@ -61,12 +61,14 @@ void Parser::CloseDeclaration()
 {
     this->CallbackLevel();
     this->DeclaratorIsUp = false;
+    this->DeclaratorItsAssigned = false;
     this->RemoveHistory();
 }
 
 void Parser::SemanticCloseDeclaration()
 {
     this->SemanticDeclaratorIsUp = false;
+    this->SemanticDeclaratorIsAssigned = false;
     this->ItsConstant = false;
     this->RemoveSemanticHistory();
 }
@@ -90,7 +92,7 @@ void Parser::RemoveParanOpen()
 
 void Parser::CheckParentheses()
 {
-     if(this->ParanOpen > 0)
+    if(this->ParanOpen > 0)
     {
         this->PrintError("Sintax Error | parentheses open but never closed!");
     }

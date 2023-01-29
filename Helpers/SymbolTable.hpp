@@ -42,8 +42,8 @@ namespace LANG
     };
 
     static const int ENDOFLINE  = 0;
-    static const int OPENPARAM  = 1;
-    static const int CLOSEPARAM = 2;
+    static const int OPENPAREM  = 1;
+    static const int CLOSEPAREM = 2;
     static const int OPENBRACE  = 3;
     static const int CLOSEBRACE = 4;
     static const int OPENBRACKET    = 5;
@@ -135,6 +135,12 @@ namespace KEYWORDS
         MUL,
         DIV,
         ASSIGNMENT
+    };
+
+    enum EValues
+    {
+        TRUE = 0,
+        FALSE
     };
 };
 

@@ -18,6 +18,7 @@ class Parser
     private:
         Dictionary History;
         bool DeclaratorIsUp = false;
+        bool DeclaratorItsAssigned = false;
         int Level = 0;
         int ParanOpen = 0;
 
@@ -25,6 +26,7 @@ class Parser
     private:
         Dictionary SemanticHistory;
         bool SemanticDeclaratorIsUp = false;
+        bool SemanticDeclaratorIsAssigned = false;
         int SemanticLevel = 0;
         int SemanticParanOpen = 0;
         bool ItsConstant = false;

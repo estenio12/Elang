@@ -1,7 +1,5 @@
 #include "../Includes/Parser.hpp"
 
-#include "../Includes/Parser.hpp"
-
 void Parser::SemanticCheck(Dictionary Token)
 {
     switch(this->Level)
@@ -21,7 +19,7 @@ bool Parser::SemanticValidateDeclarations(Dictionary& Token)
     if(this->SemanticCheckDeclarationType(Token)) return true;
     if(this->SemanticCheckOperation(Token)) return true;
 
-    this->PrintError("Unexpected " + Token.second);
+    this->PrintError("Unexpected | " + Token.second);
 
     return false;
 }
@@ -34,6 +32,7 @@ bool Parser::SemanticCheckDeclaration(Dictionary Token)
         {
             this->SetSemanticHistory(Token);
             this->SemanticDeclaratorIsUp = true;
+            this->SemanticDeclaratorIsAssigned = false;
 
             return true;
         }
@@ -42,6 +41,7 @@ bool Parser::SemanticCheckDeclaration(Dictionary Token)
         {
             this->SetSemanticHistory(Token);
             this->SemanticDeclaratorIsUp = true;
+            this->SemanticDeclaratorIsAssigned = false;
             this->ItsConstant = true;
 
             return true;
@@ -80,11 +80,12 @@ bool Parser::SemanticCheckDeclarationDeclarator(Dictionary Token)
 
 bool Parser::SemanticCheckDeclarationIdentfier(Dictionary Token)
 {
-    if(this->SemanticHistory.first == NAMES::IDENTIFIER)
+    if(this->SemanticHistory.first == NAMES::IDENTIFIER && !SemanticDeclaratorIsAssigned)
     {
         if(Token.second == LANG::STMT[LANG::TYPEASSIGNMENT])
         {
             this->SetSemanticHistory(Token);
+            this->SemanticDeclaratorIsAssigned = true;
 
             return true;
         }
@@ -134,6 +135,7 @@ bool Parser::SemanticCheckDeclarationType(Dictionary Token)
             KEYWORDS::Assignment[KEYWORDS::EAssignment::ASSIGNMENT])
         {
             this->SetSemanticHistory(Token);
+            this->SemanticDeclaratorIsAssigned = true;
 
             return true;
         }
@@ -153,42 +155,143 @@ bool Parser::SemanticCheckDeclarationType(Dictionary Token)
 
 bool Parser::SemanticCheckOperation(Dictionary Token)
 {
-    if(this->History.first == NAMES::IDENTIFIER || 
-       this->History.first == NAMES::NUMBER || 
-       this->History.first == NAMES::VALUE )
+    if(this->SemanticHistory.second == 
+        KEYWORDS::Assignment[KEYWORDS::EAssignment::ASSIGNMENT] ||
+       this->SemanticHistory.second == 
+        KEYWORDS::Assignment[KEYWORDS::EAssignment::PLUS] ||
+       this->SemanticHistory.second == 
+        KEYWORDS::Assignment[KEYWORDS::EAssignment::LESS] ||
+       this->SemanticHistory.second == 
+        KEYWORDS::Assignment[KEYWORDS::EAssignment::MUL]  ||
+       this->SemanticHistory.second == 
+        KEYWORDS::Assignment[KEYWORDS::EAssignment::DIV]  || 
+       this->SemanticHistory.first == NAMES::RELATIONAL           || 
+       this->SemanticHistory.first == NAMES::LOGICAL)
     {
-        if(Token.first == LANG::STMTNAME[LANG::ENDOFLINE])
+        if(Token.second == LANG::STMT[LANG::OPENPAREM])
+        {
+            this->SetSemanticHistory(Token);
+
+            return true;
+        }
+
+        if(this->IDTable->CheckIfExistIdentifier(Token.second))
+        {
+            this->SetSemanticHistory(Token);
+
+            return true;
+        }
+
+        if(Token.first == NAMES::NUMBER)
+        {
+            this->SetSemanticHistory(Token);
+
+            return true;
+        }
+
+        if(Token.second == KEYWORDS::VALUE[KEYWORDS::EValues::TRUE] ||
+           Token.second == KEYWORDS::VALUE[KEYWORDS::EValues::FALSE])
+        {
+            this->SetSemanticHistory(Token);
+
+            return true;
+        }
+
+        this->PrintError("Unexpected operator | " + Token.second);
+        
+        return false;
+    }
+
+    if(this->SemanticHistory.first == NAMES::IDENTIFIER ||
+       this->SemanticHistory.first == NAMES::NUMBER || 
+       this->SemanticHistory.first == NAMES::VALUE)
+    {
+        if(Token.second == LANG::STMT[LANG::ENDOFLINE])
         {
             this->CloseDeclaration();
 
             return true;
         }
-        
-        if(Token.first == LANG::STMTNAME[LANG::CLOSEPARAM])
+
+        if(Token.second == LANG::STMT[LANG::CLOSEPAREM])
         {
-            this->SetHistory(Token);
-            this->RemoveParanOpen();
+            this->SetSemanticHistory(Token);
 
             return true;
         }
 
-        if(Token.first == NAMES::ASSIGNMENT)
+        if(Token.second == 
+            KEYWORDS::Assignment[KEYWORDS::EAssignment::PLUS] || 
+           Token.second == 
+            KEYWORDS::Assignment[KEYWORDS::EAssignment::LESS] || 
+           Token.second == 
+            KEYWORDS::Assignment[KEYWORDS::EAssignment::DIV] || 
+           Token.second == 
+            KEYWORDS::Assignment[KEYWORDS::EAssignment::MUL])
         {
-            this->SetHistory(Token);
+            this->SetSemanticHistory(Token);
 
             return true;
         }
 
         if(Token.first == NAMES::RELATIONAL)
         {
-            this->SetHistory(Token);
+            this->SetSemanticHistory(Token);
 
             return true;
         }
 
         if(Token.first == NAMES::LOGICAL)
         {
-            this->SetHistory(Token);
+            this->SetSemanticHistory(Token);
+
+            return true;
+        }
+
+        this->PrintError("Unexpected operator | " + Token.second);
+        return false;
+    }
+
+    if(this->SemanticHistory.second == LANG::STMT[LANG::CLOSEPAREM])
+    {
+        if(Token.second == LANG::STMT[LANG::ENDOFLINE])
+        {
+            this->CloseDeclaration();
+
+            return true;
+        }
+
+        if(Token.second == 
+            KEYWORDS::Assignment[KEYWORDS::EAssignment::PLUS] || 
+           Token.second == 
+            KEYWORDS::Assignment[KEYWORDS::EAssignment::LESS] || 
+           Token.second == 
+            KEYWORDS::Assignment[KEYWORDS::EAssignment::DIV] || 
+           Token.second == 
+            KEYWORDS::Assignment[KEYWORDS::EAssignment::MUL])
+        {
+            this->SetSemanticHistory(Token);
+
+            return true;
+        }
+
+        if(Token.first == NAMES::RELATIONAL)
+        {
+            this->SetSemanticHistory(Token);
+
+            return true;
+        }
+
+        if(Token.first == NAMES::LOGICAL)
+        {
+            this->SetSemanticHistory(Token);
+
+            return true;
+        }
+
+        if(this->SemanticHistory.second == LANG::STMT[LANG::CLOSEPAREM])
+        {
+            this->SetSemanticHistory(Token);
 
             return true;
         }
@@ -198,88 +301,27 @@ bool Parser::SemanticCheckOperation(Dictionary Token)
         return false;
     }
 
-    if(this->History.first == NAMES::ASSIGNMENT ||
-       this->History.first == NAMES::RELATIONAL || 
-       this->History.first == NAMES::LOGICAL )
+    if(this->SemanticHistory.second == LANG::STMT[LANG::OPENPAREM])
     {
-        if(Token.first == LANG::STMTNAME[LANG::OPENPARAM])
+        if(this->IDTable->CheckIfExistIdentifier(Token.second) ||
+           Token.first == NAMES::NUMBER || 
+           Token.first == NAMES::VALUE)
         {
-            this->SetHistory(Token);
-            this->AddParanOpen();
+            this->SetSemanticHistory(Token);
 
             return true;
         }
 
-        if(Token.first == NAMES::IDENTIFIER)
+        if(Token.second == LANG::STMT[LANG::OPENPAREM])
         {
-            this->SetHistory(Token);
-
-            return true;
-        }
-
-        if(Token.first == NAMES::NUMBER)
-        {
-            this->SetHistory(Token);
-
-            return true;
-        }
-
-        if(Token.first == NAMES::VALUE)
-        {
-            this->SetHistory(Token);
-
-            return true;
-        }
-
-        this->PrintError("Expected a value | " + Token.second);
-
-        return false;
-    }
-
-    if(this->History.first == LANG::STMTNAME[LANG::CLOSEPARAM])
-    {
-        if(Token.first == LANG::STMTNAME[LANG::ENDOFLINE])
-        {
-            this->CloseDeclaration();
+            this->SetSemanticHistory(Token);
 
             return true;
         }
 
         this->PrintError("Unexpected operator | " + Token.second);
-    }
-
-    if(this->History.first == LANG::STMTNAME[LANG::OPENPARAM])
-    {
-        if(Token.first == NAMES::IDENTIFIER)
-        {
-            this->SetHistory(Token);
-
-            return true;
-        }
-
-        if(Token.first == NAMES::NUMBER)
-        {
-            this->SetHistory(Token);
-
-            return true;
-        }
-
-        if(Token.first == NAMES::VALUE)
-        {
-            this->SetHistory(Token);
-
-            return true;
-        }
-
-        if(Token.first == LANG::STMTNAME[LANG::OPENPARAM])
-        {
-            this->SetHistory(Token);
-            this->AddParanOpen();
-
-            return true;
-        }
-
-        this->PrintError("Expected a data after '(' | " + Token.second);
+        
+        return false;
     }
 
     return false;

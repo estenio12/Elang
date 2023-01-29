@@ -32,6 +32,7 @@ bool Parser::SyntaxCheckDeclaration(Dictionary Token)
         {
             this->SetHistory(Token);
             this->DeclaratorIsUp = true;
+            this->DeclaratorItsAssigned = false;
 
             return true;
         }
@@ -63,11 +64,12 @@ bool Parser::SyntaxCheckDeclarationDeclarator(Dictionary Token)
 
 bool Parser::SyntaxCheckDeclarationIdentfier(Dictionary Token)
 {
-    if(this->History.first == NAMES::IDENTIFIER)
+    if(this->History.first == NAMES::IDENTIFIER && !this->DeclaratorItsAssigned)
     {
         if(Token.first == LANG::STMTNAME[LANG::TYPEASSIGNMENT])
         {
             this->SetHistory(Token);
+            this->DeclaratorItsAssigned = true;
 
             return true;
         }
@@ -102,6 +104,7 @@ bool Parser::SyntaxCheckDeclarationType(Dictionary Token)
         if(Token.first == NAMES::ASSIGNMENT)
         {
             this->SetHistory(Token);
+            this->DeclaratorItsAssigned = true;
 
             return true;
         }
@@ -109,6 +112,7 @@ bool Parser::SyntaxCheckDeclarationType(Dictionary Token)
         if(Token.first == LANG::STMTNAME[LANG::ENDOFLINE])
         {
             this->CloseDeclaration();
+            this->DeclaratorItsAssigned = false;
 
             return true;
         }
@@ -132,7 +136,7 @@ bool Parser::SyntaxCheckOperation(Dictionary Token)
             return true;
         }
         
-        if(Token.first == LANG::STMTNAME[LANG::CLOSEPARAM])
+        if(Token.first == LANG::STMTNAME[LANG::CLOSEPAREM])
         {
             this->SetHistory(Token);
             this->RemoveParanOpen();
@@ -170,7 +174,7 @@ bool Parser::SyntaxCheckOperation(Dictionary Token)
        this->History.first == NAMES::RELATIONAL || 
        this->History.first == NAMES::LOGICAL )
     {
-        if(Token.first == LANG::STMTNAME[LANG::OPENPARAM])
+        if(Token.first == LANG::STMTNAME[LANG::OPENPAREM])
         {
             this->SetHistory(Token);
             this->AddParanOpen();
@@ -204,7 +208,7 @@ bool Parser::SyntaxCheckOperation(Dictionary Token)
         return false;
     }
 
-    if(this->History.first == LANG::STMTNAME[LANG::CLOSEPARAM])
+    if(this->History.first == LANG::STMTNAME[LANG::CLOSEPAREM])
     {
         if(Token.first == LANG::STMTNAME[LANG::ENDOFLINE])
         {
@@ -213,33 +217,43 @@ bool Parser::SyntaxCheckOperation(Dictionary Token)
             return true;
         }
 
+        if(Token.first == NAMES::ASSIGNMENT)
+        {   
+            this->SetHistory(Token);
+
+            return true;
+        }
+
+        if(Token.first == NAMES::RELATIONAL)
+        {   
+            this->SetHistory(Token);
+
+            return true;
+        }
+
+        if(Token.first == LANG::STMTNAME[LANG::CLOSEPAREM])
+        {   
+            this->SetHistory(Token);
+            this->RemoveParanOpen();
+
+            return true;
+        }
+
         this->PrintError("Unexpected operator | " + Token.second);
     }
 
-    if(this->History.first == LANG::STMTNAME[LANG::OPENPARAM])
+    if(this->History.first == LANG::STMTNAME[LANG::OPENPAREM])
     {
-        if(Token.first == NAMES::IDENTIFIER)
+        if(Token.first == NAMES::IDENTIFIER ||
+           Token.first == NAMES::NUMBER ||
+           Token.first == NAMES::VALUE)
         {
             this->SetHistory(Token);
 
             return true;
         }
 
-        if(Token.first == NAMES::NUMBER)
-        {
-            this->SetHistory(Token);
-
-            return true;
-        }
-
-        if(Token.first == NAMES::VALUE)
-        {
-            this->SetHistory(Token);
-
-            return true;
-        }
-
-        if(Token.first == LANG::STMTNAME[LANG::OPENPARAM])
+        if(Token.first == LANG::STMTNAME[LANG::OPENPAREM])
         {
             this->SetHistory(Token);
             this->AddParanOpen();
