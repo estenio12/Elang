@@ -1,5 +1,1 @@
-var test: number = (10 + 45);
-const MAX: number = 135;
-var onoff: bool = true;
-var doublequote: char = 12;
-var name123: number = (5 + 10) + test - 80 * ((35 != 34)) / MAX;
+var test: char = 'C';

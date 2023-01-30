@@ -1,6 +1,9 @@
 
 # TO DO
 
-[ TO DO ] Add assignment for 'char' types.
+[ OK ] Add assignment for 'char' types.
 [ TO DO ] Add support to null value.
+[ TO DO ] Add support to string value.
+[ TO DO ] Validate if data it the same of declared.
+[ TO DO ] Validate opertation totaly.
 [ TO DO ] Refactoring Semantic Operation.

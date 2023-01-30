@@ -6,8 +6,9 @@ Lexer::~Lexer(){}
 
 Tokens_lst Lexer::Tokenaze(const std::string line)
 {
-    Tokens_lst Tokens;
+    this->lineCount++;
 
+    Tokens_lst Tokens;
     std::string CurrentWord;
     std::string CurrentDigit;
     bool AlphaNumericFlag = false;
@@ -17,6 +18,31 @@ Tokens_lst Lexer::Tokenaze(const std::string line)
         if(TOOLS::IsLetter(line[i]))
         {
             CurrentWord.push_back(line[i]);
+        }
+        else if(line[i] == LANG::CHARSTMT)
+        {
+            this->IdentifyToken(CurrentWord, &Tokens);
+            CurrentWord.clear();
+
+            if(line[i + 2] == LANG::CHARSTMT)
+            {
+                Tokens.push_back(
+                        std::make_pair
+                        (
+                            NAMES::CHARACTER,
+                            this->ConvertCharToString(line[i + 1])
+                        )
+                    );
+
+                i += 2; 
+            }
+            else
+            {
+                Console::PrintError("Line: " + 
+                                    std::to_string(this->lineCount) + 
+                                    " | Invalid character declaration | ");
+                exit(1);
+            }
         }
         else
         {

@@ -200,6 +200,13 @@ bool Parser::SemanticCheckOperation(Dictionary Token)
             return true;
         }
 
+        if(Token.first == NAMES::CHARACTER)
+        {
+            this->SetSemanticHistory(Token);
+
+            return true;
+        }
+
         this->PrintError("Unexpected operator | " + Token.second);
         
         return false;
@@ -207,7 +214,8 @@ bool Parser::SemanticCheckOperation(Dictionary Token)
 
     if(this->SemanticHistory.first == NAMES::IDENTIFIER ||
        this->SemanticHistory.first == NAMES::NUMBER || 
-       this->SemanticHistory.first == NAMES::VALUE)
+       this->SemanticHistory.first == NAMES::VALUE ||
+       this->SemanticHistory.first == NAMES::CHARACTER)
     {
         if(Token.second == LANG::STMT[LANG::ENDOFLINE])
         {
@@ -308,7 +316,8 @@ bool Parser::SemanticCheckOperation(Dictionary Token)
     {
         if(this->IDTable->CheckIfExistIdentifier(Token.second) ||
            Token.first == NAMES::NUMBER || 
-           Token.first == NAMES::VALUE)
+           Token.first == NAMES::VALUE || 
+           Token.first == NAMES::CHARACTER)
         {
             this->SetSemanticHistory(Token);
 

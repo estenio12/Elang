@@ -124,9 +124,55 @@ bool Parser::SyntaxCheckDeclarationType(Dictionary Token)
 
 bool Parser::SyntaxCheckOperation(Dictionary Token)
 {
+    if(this->History.first == NAMES::ASSIGNMENT ||
+       this->History.first == NAMES::RELATIONAL || 
+       this->History.first == NAMES::LOGICAL )
+    {
+        if(Token.first == LANG::STMTNAME[LANG::OPENPAREM])
+        {
+            this->SetHistory(Token);
+            this->AddParanOpen();
+
+            return true;
+        }
+
+        if(Token.first == NAMES::IDENTIFIER)
+        {
+            this->SetHistory(Token);
+
+            return true;
+        }
+
+        if(Token.first == NAMES::NUMBER)
+        {
+            this->SetHistory(Token);
+
+            return true;
+        }
+
+        if(Token.first == NAMES::VALUE)
+        {
+            this->SetHistory(Token);
+
+            return true;
+        }
+
+        if(Token.first == NAMES::CHARACTER)
+        {
+            this->SetHistory(Token);
+
+            return true;
+        }
+
+        this->PrintError("Expected a value | " + Token.second);
+
+        return false;
+    }
+
     if(this->History.first == NAMES::IDENTIFIER || 
        this->History.first == NAMES::NUMBER || 
-       this->History.first == NAMES::VALUE )
+       this->History.first == NAMES::VALUE ||
+       this->History.first == NAMES::CHARACTER )
     {
         if(Token.first == LANG::STMTNAME[LANG::ENDOFLINE])
         {
@@ -169,44 +215,6 @@ bool Parser::SyntaxCheckOperation(Dictionary Token)
         return false;
     }
 
-    if(this->History.first == NAMES::ASSIGNMENT ||
-       this->History.first == NAMES::RELATIONAL || 
-       this->History.first == NAMES::LOGICAL )
-    {
-        if(Token.first == LANG::STMTNAME[LANG::OPENPAREM])
-        {
-            this->SetHistory(Token);
-            this->AddParanOpen();
-
-            return true;
-        }
-
-        if(Token.first == NAMES::IDENTIFIER)
-        {
-            this->SetHistory(Token);
-
-            return true;
-        }
-
-        if(Token.first == NAMES::NUMBER)
-        {
-            this->SetHistory(Token);
-
-            return true;
-        }
-
-        if(Token.first == NAMES::VALUE)
-        {
-            this->SetHistory(Token);
-
-            return true;
-        }
-
-        this->PrintError("Expected a value | " + Token.second);
-
-        return false;
-    }
-
     if(this->History.first == LANG::STMTNAME[LANG::CLOSEPAREM])
     {
         if(Token.first == LANG::STMTNAME[LANG::ENDOFLINE])
@@ -245,7 +253,8 @@ bool Parser::SyntaxCheckOperation(Dictionary Token)
     {
         if(Token.first == NAMES::IDENTIFIER ||
            Token.first == NAMES::NUMBER ||
-           Token.first == NAMES::VALUE)
+           Token.first == NAMES::VALUE ||
+           Token.first == NAMES::CHARACTER)
         {
             this->SetHistory(Token);
 

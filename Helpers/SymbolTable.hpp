@@ -17,6 +17,7 @@ namespace LANG
     static const char LINEBREAK       = '\n';
     static const char LINECOMMENT     = '/';
     static const char WHITESPACE      = ' ';
+    static const char CHARSTMT        = '\'';
 
     static const int SIZE_STMT        = 12;
     
@@ -38,7 +39,7 @@ namespace LANG
         "typeassignment",
         "underline",
         "undefined",
-        "separate"
+        "separate",
     };
 
     static const int ENDOFLINE  = 0;

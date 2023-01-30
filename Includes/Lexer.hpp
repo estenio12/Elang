@@ -12,6 +12,9 @@
 
 class Lexer
 {
+    private:
+        uint64_t lineCount = 0;
+
     public:
         Lexer();
         ~Lexer();
