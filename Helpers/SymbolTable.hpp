@@ -77,7 +77,7 @@ namespace KEYWORDS
     static const int SIZE_RELATIONAL = 6;
     static const int SIZE_LOGICAL    = 2;
     static const int SIZE_TYPE       = 3;
-    static const int SIZE_VALUE      = 2;
+    static const int SIZE_VALUE      = 3;
     
     static const std::string Digits  = "0123456789";
     static const std::string Letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -111,10 +111,10 @@ namespace KEYWORDS
 
     static const std::string VALUE[]
     {
-        "true", "false"
+        "true", "false", "null"
     };
 
-    static const std::string null = "null";
+    // static const std::string null = "null";
 
     enum EDeclarator
     {
@@ -141,7 +141,8 @@ namespace KEYWORDS
     enum EValues
     {
         TRUE = 0,
-        FALSE
+        FALSE,
+        PNULL
     };
 };
 

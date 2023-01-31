@@ -2,8 +2,7 @@
 # TO DO
 
 [ OK ] Add assignment for 'char' types.
-[ TO DO ] Add support to null value.
-[ TO DO ] Add support to string value.
-[ TO DO ] Validate if data it the same of declared.
-[ TO DO ] Validate opertation totaly.
-[ TO DO ] Refactoring Semantic Operation.
+[ OK ] Add support to null values.
+[ TO DO ] Generate Parser Tree.
+[ TO DO ] Validate if data it the same of declared, after made result with parser tree.
+[ TO DO ] Generate intermidiate code(IPL - intermidiate PACKAGED LANGUAGE).

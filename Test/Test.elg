@@ -1,1 +1,1 @@
-var test: char = 'C';
+var test: number = 10 + null;

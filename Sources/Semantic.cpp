@@ -168,7 +168,7 @@ bool Parser::SemanticCheckOperation(Dictionary Token)
         KEYWORDS::Assignment[KEYWORDS::EAssignment::MUL]  ||
        this->SemanticHistory.second == 
         KEYWORDS::Assignment[KEYWORDS::EAssignment::DIV]  || 
-       this->SemanticHistory.first == NAMES::RELATIONAL           || 
+       this->SemanticHistory.first == NAMES::RELATIONAL   || 
        this->SemanticHistory.first == NAMES::LOGICAL)
     {
         if(Token.second == LANG::STMT[LANG::OPENPAREM])
@@ -193,7 +193,8 @@ bool Parser::SemanticCheckOperation(Dictionary Token)
         }
 
         if(Token.second == KEYWORDS::VALUE[KEYWORDS::EValues::TRUE] ||
-           Token.second == KEYWORDS::VALUE[KEYWORDS::EValues::FALSE])
+           Token.second == KEYWORDS::VALUE[KEYWORDS::EValues::FALSE] ||
+           Token.second == KEYWORDS::VALUE[KEYWORDS::EValues::PNULL])
         {
             this->SetSemanticHistory(Token);
 
@@ -213,8 +214,8 @@ bool Parser::SemanticCheckOperation(Dictionary Token)
     }
 
     if(this->SemanticHistory.first == NAMES::IDENTIFIER ||
-       this->SemanticHistory.first == NAMES::NUMBER || 
-       this->SemanticHistory.first == NAMES::VALUE ||
+       this->SemanticHistory.first == NAMES::NUMBER     || 
+       this->SemanticHistory.first == NAMES::VALUE      ||
        this->SemanticHistory.first == NAMES::CHARACTER)
     {
         if(Token.second == LANG::STMT[LANG::ENDOFLINE])
