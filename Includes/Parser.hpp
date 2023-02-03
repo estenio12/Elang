@@ -3,8 +3,7 @@
 // # @author: Estenio Garcia 
 // #
 
-#ifndef PARSER_H
-#define PARSER_H
+#pragma once
 
 #include <cstdint>
 
@@ -82,5 +81,3 @@ class Parser
         bool SemanticCheckDeclarationType(Dictionary );
         bool SemanticCheckOperation(Dictionary );
 };
-
-#endif
