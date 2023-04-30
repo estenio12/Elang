@@ -1,8 +1,0 @@
-
-# TO DO
-
-[ OK ] Add assignment for 'char' types.
-[ OK ] Add support to null values.
-[ WORKING ] Generate Parser Tree.
-[ TO DO ] Validate if data it the same of declared, after made result with parser tree.
-[ TO DO ] Generate intermidiate code(IPL - intermidiate PACKAGED LANGUAGE).

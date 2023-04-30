@@ -1,191 +1,86 @@
-// #
-// # This project was licensed by MIT
-// # @author: Estenio Garcia 
-// #
+// #######################################
+// ## 
+// ## @author: Estenio Garcia
+// ## @copyright: (c) Allright reserved 
+// ## @License: MIT
+// ## 
+// #######################################
 
 #pragma once
 
 #include <string>
 #include <vector>
 
-using Dictionary = std::pair<std::string, std::string>;
-using Tokens_lst = std::vector<std::pair<std::string, std::string>>;
-
-namespace LANG
-{
-    static const char LINEBREAK       = '\n';
-    static const char LINECOMMENT     = '/';
-    static const char WHITESPACE      = ' ';
-    static const char CHARSTMT        = '\'';
-
-    static const int SIZE_STMT        = 12;
-    
-    static const std::string STMT[SIZE_STMT]
-    {
-        ";","(",")","{","}","[","]",".",":","_","0",","
-    };
-
-    static const std::string STMTNAME[]
-    {
-        "endofline",
-        "openparam",
-        "closeparam",
-        "openbrace",
-        "closebrace",
-        "openbracket",
-        "closebracket",
-        "dot",
-        "typeassignment",
-        "underline",
-        "undefined",
-        "separate",
-    };
-
-    static const int ENDOFLINE  = 0;
-    static const int OPENPAREM  = 1;
-    static const int CLOSEPAREM = 2;
-    static const int OPENBRACE  = 3;
-    static const int CLOSEBRACE = 4;
-    static const int OPENBRACKET    = 5;
-    static const int CLOSEBRACKET   = 6;
-    static const int DOT            = 7;
-    static const int TYPEASSIGNMENT = 8;
-    static const int UNDERLINE      = 9;
-    static const int UNDEFINED      = 10;
-    static const int SEPARATE       = 10;
-};
-
-namespace NAMES
-{
-    static const std::string DECLARATOR = "declarator";
-    static const std::string NUMBER     = "number";
-    static const std::string IDENTIFIER = "identifier";
-    static const std::string TYPE       = "type";
-    static const std::string ASSIGNMENT = "assignment";
-    static const std::string RELATIONAL = "relacional";
-    static const std::string LOGICAL    = "logical";
-    static const std::string VALUE      = "value";
-    static const std::string CHARACTER  = "character";
-};
-
-
 namespace KEYWORDS
 {
-    static const int SIZE_DECLARATOR = 3;
-    static const int SIZE_ASSIGNMENT = 5;
-    static const int SIZE_RELATIONAL = 6;
-    static const int SIZE_LOGICAL    = 2;
-    static const int SIZE_TYPE       = 3;
-    static const int SIZE_VALUE      = 3;
-    
-    static const std::string Digits  = "0123456789";
-    static const std::string Letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    static const std::string DIGIT                     = "digit";
+    static const std::string ALPHA                     = "alpha";
+    static const std::string IDENTIFIER                = "identifier";
+    static const std::string TYPE                      = "type";
+    static const std::string VALUE                     = "value";
+    static const std::string VARIABLE_DECARATION       = "variable-declaration";
+    static const std::string FUNCTION_DECARATION       = "function-declaration";
+    static const std::string PARAMETER_LIST            = "parameter-list";
+    static const std::string COMPOUD_STATEMENT         = "compound-statement";
+    static const std::string CALL_FUNCTION             = "call-function";
+    static const std::string ARGUMENT_LIST             = "argument-list";
+    static const std::string JUMP_STATEMENT            = "jump-statement";
+    static const std::string CAST_EXPRESSION           = "cast-expression";
+    static const std::string ADDITIVE_EXPRESSION       = "additive-expression";
+    static const std::string MULTIPLICATIVE_EXPRESSION = "multiplicative-expression";
+    static const std::string EXPRESSION                = "expression";
+    static const std::string SELECTION_STATEMENT       = "selection-statement";
+    static const std::string LOGICAL_EXPRESSION        = "logical-expression";
+    static const std::string LOOP_STATEMENT            = "loop-statement";
+    static const std::string SYSTEM_CALL               = "system-call";
+}
 
-    static const int ASSIGN = 4;
-
-    static const std::string Type[]
-    {
-        "number", "bool", "char"
-    };
-
-    static const std::string Declarator[]
-    {
-        "var", "const"
-    };
-
-    static const std::string Assignment[]
-    {
-        "+", "-", "*", "/", "="
-    };
-
-    static const std::string Relational[]
-    {
-        "!=", ">", "<", ">=", "<=", "=="
-    };
-
-    static const std::string Logical[]
-    {
-        "&&", "||"
-    };
-
-    static const std::string VALUE[]
-    {
-        "true", "false", "null"
-    };
-
-    // static const std::string null = "null";
-
-    enum EDeclarator
-    {
-        VAR = 0,
-        CONST
-    };
-
-    enum EType
-    {
-        NUMBER = 0,
-        BOOL,
-        CHAR
-    };
-
-    enum EAssignment
-    {
-        PLUS,
-        LESS,
-        MUL,
-        DIV,
-        ASSIGNMENT
-    };
-
-    enum EValues
-    {
-        TRUE = 0,
-        FALSE,
-        PNULL
-    };
-};
-
-namespace TOOLS
+namespace DELIMITERS
 {
-    static bool IsNumber(char character)
-    {
-        for(int i = 0; i < KEYWORDS::Digits.size(); i++)
-        {
-            if(KEYWORDS::Digits[i] == character)
-            {
-                return true;
-            }
-        }
+    static const std::string EOL                 = ";";
+    static const std::string OPEN_PARAM          = "(";
+    static const std::string CLOSE_PARAM         = ")";
+    static const std::string OPEN_BRACE          = "{";
+    static const std::string CLOSE_BRACE         = "}";
+    static const std::string OPEN_SQUAREBRACKET  = "[";
+    static const std::string CLOSE_SQUAREBRACKET = "]";
+    static const std::string COMMA               = ",";
+    static const std::string APOSTROPHE          = "\'";
+    static const std::string QUOTATION_MARKS     = "\"";
+    static const std::string BACK_SLASH          = "/";
+    static const std::string WHITESPACE          = " ";
+    static const std::string NEWLINE             = "\n";
+    static const std::string RETURNING           = "\b";
+    static const std::string TABULATION          = "\b";
+}
 
-        return false;
-    }
+namespace DIGIT
+{
+    static const std::string DIGIT = "0123456789";
+}
 
-    static bool IsLetter(char character)
-    {
-        for(int i = 0; i < KEYWORDS::Letters.size(); i++)
-        {
-            if(character == KEYWORDS::Letters[i])
-            {
-                return true;
-            }
-        }
+namespace ALPHA
+{
+    static const std::string ALPHA        = "_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    static const std::string ALPHANUMERIC = "_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+}
 
-        return false;
-    }
+namespace TYPE
+{
+    static const std::vector<std::string> TYPE {"number", "letter", "word", "void", "bool" };
+    
+    static const uint8_t NUMBER = 0;
+    static const uint8_t LETTER = 1;
+    static const uint8_t WORD   = 2;
+    static const uint8_t VOID   = 3;
+    static const uint8_t BOOL   = 4;
+}
 
-    static bool IsFloatNumber(char Current, char Next)
-    {
-        if(Current == LANG::STMT[7][0])
-        {
-            for(int i = 0; i < KEYWORDS::Digits.size(); i++)
-            {
-                if(KEYWORDS::Digits[i] == Next)
-                {
-                    return true;
-                }
-            }
-        }
+namespace VALUE
+{
+    static const std::string TRUE  = "true";
+    static const std::string FALSE = "false";
+}
 
-        return false;
-    }
-};
+
+

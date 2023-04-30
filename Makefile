@@ -1,3 +1,3 @@
-Compiling:	./Sources/*.cpp
-	clang++ ./Sources/*.cpp -std=c++17 -o ./Test/Elangc
-	./Test/Elangc ./Test/Test.elg
+Conpiling:	./Source/*.cpp
+	clang++ ./Source/*.cpp -std=c++17 -o ./Bin/elangc
+	./Bin/elangc ./Bin/test.elang
