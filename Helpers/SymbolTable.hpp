@@ -33,6 +33,12 @@ namespace KEYWORDS
     static const std::string LOGICAL_EXPRESSION        = "logical-expression";
     static const std::string LOOP_STATEMENT            = "loop-statement";
     static const std::string SYSTEM_CALL               = "system-call";
+
+    static const std::string RETURN   = "return";
+    static const std::string BREAK    = "break";
+    static const std::string CONTINUE = "continue";
+    static const std::string SYSWRITE = "syswrite";
+    static const std::string SYSREAD  = "sysread";
 }
 
 namespace DELIMITERS
@@ -82,5 +88,26 @@ namespace VALUE
     static const std::string FALSE = "false";
 }
 
+namespace OPERATOR
+{
+    static const std::string PLUS     = "+";
+    static const std::string SUBTRACT = "-";
+    static const std::string DIVIDE   = "/";
+    static const std::string MULTIPLY = "*";
+}
+
+namespace LOGICAL
+{
+    static const std::string OR      = "or";
+    static const std::string AND     = "and";
+    static const std::string NAND    = "nand";
+    static const std::string XOR     = "xor";
+    static const std::string DIFF    = "diff";
+    static const std::string EQUALS  = "equals";
+    static const std::string GREAT   = "great";
+    static const std::string LESS    = "less";
+    static const std::string GREATEQ = "greateq";
+    static const std::string LESSEQ  = "lesseq";
+}
 
 

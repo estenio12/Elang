@@ -39,6 +39,22 @@ namespace Tools
 
         return nstring;
     }
+
+    static const token_list ExtractArgumentListFromCallFunction(token_list list)
+    {
+        token_list argument_list;
+        bool capture = false;
+
+        for(auto token : list)
+        {
+            if(token == DELIMITERS::CLOSE_PARAM) { capture = false; continue; }
+            if(token == DELIMITERS::OPEN_PARAM) { capture = true; continue; }
+            if(capture && token != DELIMITERS::COMMA) argument_list.push_back(token);
+        }
+
+        return argument_list;
+    }
+
 }
 
 namespace Checker
@@ -94,10 +110,60 @@ namespace Checker
         return true;
     }
 
+    static bool IsValidWorld(token target)
+    {
+        if(target[0] == DELIMITERS::QUOTATION_MARKS[0] &&
+           target[target.length() - 1] == DELIMITERS::QUOTATION_MARKS[0])
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    static bool IsDigit(token target)
+    {
+        bool hit = false;
+
+        for(char letter : target)
+        {
+            hit = false;
+            
+            for(char iterator : DIGIT::DIGIT)
+            {
+                if(letter == iterator)
+                {
+                    hit = true;
+                }
+            }
+
+            if(!hit) return false;
+        }
+    }
+
     static bool IsEOLCharacter(token target)
     {
         if(DELIMITERS::EOL == target) return true;
         return false;
     }
 
+    static bool IsOpenParam(token target)
+    {
+        return target == DELIMITERS::OPEN_PARAM;
+    }
+
+    static bool IsCloseParam(token target)
+    {
+        return target == DELIMITERS::CLOSE_PARAM;
+    }
+
+    static bool IsOpenBrace(token target)
+    {
+        return target == DELIMITERS::OPEN_BRACE;
+    }
+
+    static bool IsCloseBrace(token target)
+    {
+        return target == DELIMITERS::CLOSE_BRACE;
+    }
 }

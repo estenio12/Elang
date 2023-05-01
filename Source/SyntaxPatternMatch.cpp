@@ -3,7 +3,7 @@
 SyntaxPatternMatch::SyntaxPatternMatch(){}
 SyntaxPatternMatch::~SyntaxPatternMatch(){}
 
-bool SyntaxPatternMatch::MatchVariableDeclaration(token_list buildPattern)
+bool SyntaxPatternMatch::CheckVariableDeclaration(token_list buildPattern)
 {
     if(this->VariableDeclarationOnlyDeclaration(buildPattern)) return true;
 

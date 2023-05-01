@@ -38,7 +38,7 @@
 
 <parameter-list> ::=
 	  <type> <identifier>
-	| <type> <identifier> ,
+	| <type> <identifier> , <type> <identifier> , ...
 
 <compoud-statement> ::=
 	  <variable-declaration>
@@ -57,7 +57,7 @@
 
 <argument-list> ::=
 	  <value>
-	| <value> , <value>
+	| <value> , <value> , ...
 
 <jump-statement> ::=
 	  return <value> ;
@@ -88,7 +88,6 @@
 	| <multiplicative-expression> 
 	| <multiplicative-expression> + | - | * | / <additive-expression> 
 	| ( <multiplicative-expression> + | - | * | / <additive-expression> ) 
-	| ( <multiplicative-expression> ) + | - | * | / ( <additive-expression> ) 
 
 <selection-statement> ::= 
 	  if ( <logical-expression> ) {  }
@@ -103,9 +102,7 @@
 	| if ( 1 | 0 ) { <compound-statement> } else { <compound-statement> }
 
 <logical-expression> ::= 
-	  <expression> or | and | nand | xor | diff | equals | great | less | greateq | lesseq <expression>
-	| <value> or | and | nand | xor | diff | equals | great | less | greateq | lesseq <expression>
-	| <value> or | and | nand | xor | diff | equals | great | less | greateq | lesseq <value>
+	  <value> or | and | nand | xor | diff | equals | great | less | greateq | lesseq <value>
 
 <loop-statement> ::= 
 	  repeat ( <digit> ) {  }
@@ -116,5 +113,5 @@
 	| while ( 1 | 0 ) { <compoud-statement> }
 
 <system-call> ::=
-	  syswrite ( <alpha> ) ;
+	  syswrite ( <word> ) ;
 	| sysread (  ) ;

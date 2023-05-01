@@ -40,7 +40,7 @@ bool Parser::IsTerminateCharacter(token target)
 
 void Parser::PatternMatch()
 {
-    if(this->syntax->MatchVariableDeclaration(this->buildPattern))
+    if(this->syntax->CheckVariableDeclaration(this->buildPattern))
         std::cout << "Debug: Syntax OK for variable declaration\n";
     else
         std::cout << "Debug: Syntax ERROR for variable declaration\n";
