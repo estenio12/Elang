@@ -55,6 +55,38 @@ namespace Tools
         return argument_list;
     }
 
+    static const token_list ExtractFunctionFromOperationFirstInstance(token_list list)
+    {
+        token_list tempToken {list[0]};
+        int param_open_counter = 0;
+
+        // # Extract without argument
+        if(list.size() == 4)
+        {
+            tempToken.push_back(list[1]);
+            tempToken.push_back(list[2]);
+            tempToken.push_back(list[3]);
+        }
+        // # Extract with argument
+        else
+        {
+            for(auto token : list)
+            {
+                if(token == DELIMITERS::CLOSE_PARAM)
+                {
+                    tempToken.push_back(token);
+                    return tempToken;
+                }
+                else
+                {
+                    tempToken.push_back(token);
+                }
+            }
+        }
+
+        return tempToken;
+    }
+
 }
 
 namespace Checker
@@ -139,6 +171,8 @@ namespace Checker
 
             if(!hit) return false;
         }
+
+        return false;
     }
 
     static bool IsEOLCharacter(token target)

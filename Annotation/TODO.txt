@@ -2,14 +2,14 @@
 
 ## Annotation
 
-	> [ OK ] - CallFunction;
-	> [ OK ] - ArgumentList;
-	> [ OK ] - JumpStatement;
-	> [ OK ] - CastExpression;
-	> [ OK ] - AdditiveExpression;
-	> [ OK ] - MultiplicativeExpression;
-	> [ OK ] - Expression;
-	> [ OK ] - LogicalExpression;
-	> [ OK ] - SystemCall;
-	> [ OK ] - ParameterList;
+	> [ TO DO ] - CallFunction;
+	> [ TO DO ] - ArgumentList;
+	> [ TO DO ] - JumpStatement;
+	> [ TO DO ] - CastExpression;
+	> [ TO DO ] - AdditiveExpression;
+	> [ TO DO ] - MultiplicativeExpression;
+	> [ TO DO ] - Expression;
+	> [ TO DO ] - LogicalExpression;
+	> [ TO DO ] - SystemCall;
+	> [ TO DO ] - ParameterList;
 	> [ TO DO ] - Verificar VALUE se está faltando implementar algum;

@@ -12,37 +12,30 @@
 #include "../Helpers/Tools.hpp"
 #include "../Helpers/Definition.hpp"
 #include "../Helpers/SymbolTable.hpp"
-#include "../Include/SyntaxPatternMatch.hpp"
 #include "../Include/Output.hpp"
 #include "../Include/Ast.hpp"
+#include "../Include/LexicalAnalyser.hpp"
 
 class Parser
 {
     private:
         AST ast;
-        SyntaxPatternMatch* syntax;
+        // SyntaxPatternMatch* syntax
+        Lexer* lexer;
 
     private:
         int* lineCounter;
-        bool AstReady = false;
 
     private:
-        token_list buildPattern;
-
-    // # States
-    private:
-        const int globalscope = 0;
-        int currentscope = globalscope;
+        AstNode* buildingNode;
 
     public:
-        Parser(int* lineCounter);
+        Parser(Lexer* lexer);
         ~Parser();
 
     public:
-        bool Parse(token_list );
+        void Parse();
 
     private:
-        void ResetBuildPattern();
-        bool IsTerminateCharacter(token );
-        void PatternMatch();
+        
 };

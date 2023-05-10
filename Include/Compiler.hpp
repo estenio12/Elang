@@ -21,9 +21,6 @@ class Compiler
 {
     private:
         int lineCounter = 0;
-        std::string path;
-        std::string pathOutput;
-        std::fstream fileHandle;
 
     private:
         Lexer* lexer;
@@ -37,6 +34,5 @@ class Compiler
         void Run();
 
     private:
-        void CheckIfFileExist();
-        std::string SanitizeLine(std::string );
+        void CheckIfFileExist(std::string path);
 };
