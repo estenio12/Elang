@@ -13,32 +13,12 @@
 
 namespace KEYWORDS
 {
-    static const std::string DIGIT                     = "digit";
-    static const std::string ALPHA                     = "alpha";
-    static const std::string IDENTIFIER                = "identifier";
-    static const std::string TYPE                      = "type";
-    static const std::string VALUE                     = "value";
-    static const std::string VARIABLE_DECARATION       = "variable-declaration";
-    static const std::string FUNCTION_DECARATION       = "function-declaration";
-    static const std::string PARAMETER_LIST            = "parameter-list";
-    static const std::string COMPOUD_STATEMENT         = "compound-statement";
-    static const std::string CALL_FUNCTION             = "call-function";
-    static const std::string ARGUMENT_LIST             = "argument-list";
-    static const std::string JUMP_STATEMENT            = "jump-statement";
-    static const std::string CAST_EXPRESSION           = "cast-expression";
-    static const std::string ADDITIVE_EXPRESSION       = "additive-expression";
-    static const std::string MULTIPLICATIVE_EXPRESSION = "multiplicative-expression";
-    static const std::string EXPRESSION                = "expression";
-    static const std::string SELECTION_STATEMENT       = "selection-statement";
-    static const std::string LOGICAL_EXPRESSION        = "logical-expression";
-    static const std::string LOOP_STATEMENT            = "loop-statement";
-    static const std::string SYSTEM_CALL               = "system-call";
-
+    static const std::string VAR      = "var";
+    static const std::string CONST    = "const";
+    static const std::string FUN      = "fun";
     static const std::string RETURN   = "return";
     static const std::string BREAK    = "break";
     static const std::string CONTINUE = "continue";
-    static const std::string SYSWRITE = "syswrite";
-    static const std::string SYSREAD  = "sysread";
 }
 
 namespace DELIMITERS
@@ -56,8 +36,8 @@ namespace DELIMITERS
     static const std::string BACK_SLASH          = "/";
     static const std::string WHITESPACE          = " ";
     static const std::string NEWLINE             = "\n";
-    static const std::string RETURNING           = "\b";
-    static const std::string TABULATION          = "\b";
+    static const std::string BACKSPACE           = "\b";
+    static const std::string TABULATION          = "\t";
 }
 
 namespace DIGIT
@@ -73,41 +53,58 @@ namespace ALPHA
 
 namespace TYPE
 {
-    static const std::vector<std::string> TYPE {"number", "letter", "word", "void", "bool" };
+    static const std::vector<std::string> TYPE {"number", "char", "void", "bool", "text" };
     
     static const uint8_t NUMBER = 0;
-    static const uint8_t LETTER = 1;
-    static const uint8_t WORD   = 2;
-    static const uint8_t VOID   = 3;
-    static const uint8_t BOOL   = 4;
+    static const uint8_t CHAR   = 1;
+    static const uint8_t VOID   = 2;
+    static const uint8_t BOOL   = 3;
+    static const uint8_t TEXT   = 4;
 }
 
-namespace VALUE
+namespace BOOLEAN_VALUE
 {
     static const std::string TRUE  = "true";
     static const std::string FALSE = "false";
 }
 
-namespace OPERATOR
+namespace ARITHMETIC
 {
     static const std::string PLUS     = "+";
     static const std::string SUBTRACT = "-";
     static const std::string DIVIDE   = "/";
     static const std::string MULTIPLY = "*";
+    static const std::string MOD      = "%";
+    static const std::string AND      = "&";
+    static const std::string OR       = "|";
+    static const std::string SHIFT_RIGHT = ">>";
+    static const std::string SHIFT_LEFT  = "<<";
+}
+
+namespace COMPARISON
+{
+    static const std::string DIFF    = "!=";
+    static const std::string EQUALS  = "==";
+    static const std::string GREAT   = ">";
+    static const std::string LESS    = "<";
+    static const std::string GREATEQ = ">=";
+    static const std::string LESSEQ  = "<=";
 }
 
 namespace LOGICAL
 {
-    static const std::string OR      = "or";
-    static const std::string AND     = "and";
-    static const std::string NAND    = "nand";
-    static const std::string XOR     = "xor";
-    static const std::string DIFF    = "diff";
-    static const std::string EQUALS  = "equals";
-    static const std::string GREAT   = "great";
-    static const std::string LESS    = "less";
-    static const std::string GREATEQ = "greateq";
-    static const std::string LESSEQ  = "lesseq";
+    static const std::string AND = "&&";
+    static const std::string OR  = "||";
 }
 
+namespace PREFIX
+{
+    static const std::string INCREMENT = "++";
+    static const std::string DECREMENT = "--";
+}
 
+namespace POSFIX
+{
+    static const std::string INCREMENT = "++";
+    static const std::string DECREMENT = "--";
+}

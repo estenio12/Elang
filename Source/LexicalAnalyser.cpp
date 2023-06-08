@@ -94,7 +94,7 @@ void Lexer::CheckTokenList()
 {
     cursorTokenList++;
 
-    if(cursorTokenList >= currentTokenList.size())
+    if(cursorTokenList <= currentTokenList.size())
     {
         if(this->FileIsOpen)
         {
@@ -143,7 +143,7 @@ std::string Lexer::SanitizeLine(std::string line)
             }
 
             if(line[i] != DELIMITERS::NEWLINE[0] &&
-               line[i] != DELIMITERS::RETURNING[0] &&
+               line[i] != DELIMITERS::BACKSPACE[0] &&
                line[i] != DELIMITERS::TABULATION[0])
             {
                 nline.push_back(line[i]);

@@ -20,7 +20,6 @@ class Parser
 {
     private:
         AST ast;
-        // SyntaxPatternMatch* syntax
         Lexer* lexer;
 
     private:
@@ -28,6 +27,7 @@ class Parser
 
     private:
         AstNode* buildingNode;
+        std::string currentBranch;
 
     public:
         Parser(Lexer* lexer);

@@ -1,6 +1,1 @@
-number test = 100;
-
-if(test and foo())
-{
-    write("You win!");
-}
+var:text altura;

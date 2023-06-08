@@ -1,3 +1,5 @@
+ // # DEFINITIONS
+
 <digit> ::=
 	  0-9
 
@@ -9,109 +11,30 @@
 	| <alpha><digit>
 
 <type> ::=
-	  number
-	| letter
-	| word
+	  int
+	| char
 	| void
 	| bool
+	| string
+	| float
 
-<value> ::=
-	  <digit>
-	| <alpha>
-	| <identifier>
-	| <call-function>
-	| <expression>
-	| ' <alpha> '
-	| " <alpha> "
-	| true
-	| false
+// # GRAMMAR
 
-<variable-declaration> ::=
-	  <type> <identifier> ;
-	| <type> <identifier> = <value> ;
-	| <type> <identifier> = <system-call> ;
-	| <type> <identifier> = <cast-expression> ;
-
-<function-declaration> ::= 
-	  <type> <identifier> (  ) <compoud-statement>  
-	| <type> <identifier> ( <parameter-list> ) <compoud-statement>  
-
-<parameter-list> ::=
-	  <type> <identifier>
-	| <type> <identifier> , <type> <identifier> , ...
-
-<compoud-statement> ::=
-	  <variable-declaration>
-	| <call-function>
-	| <expression>
-	| <jump-statement>
-	| (  )
-	| {  }
-	| ( <compoud-statement> )
-	| { <compoud-statement> }
-	| <selection-statement>
-
-<call-function> ::= 
-	  <identifier> (  ) ;
-	| <identifier> ( <argument-list> ) ;
-
-<argument-list> ::=
-	  <value>
-	| <value> , <value> , ...
-
-<jump-statement> ::=
-	  return <value> ;
-	| break ;
-	| continue ; 
-
-<cast-expression> ::=
-	  ( <type> ) <value>
-
-<additive-expression> ::=
-	  <digit> + <digit>
-	| <digit> + <identifier>
-	| <digit> + <call-function>
-	| <digit> - <digit>
-	| <digit> - <identifier>
-	| <digit> - <call-function>
-
-<multiplicative-expression> ::=
-	  <digit> * <digit>
-	| <digit> * <identifier>
-	| <digit> * <call-function>
-	| <digit> / <digit>
-	| <digit> / <identifier>
-	| <digit> / <call-function>
+<variable-declaration> ::= 
+	  'var' ':' <type> ';'
+	| 'var' ':' <type> <identifier> ';'
+	| 'var' ':' <type> <identifier> '=' <expression> ';'
+	| 'var' ':' <type> <identifier> '=' "bind of type data" ';'
+	| 'var' ':' <type> <identifier> [ <digit> ] ';'
+	| 'var' ':' <type> <identifier> [ <digit> ] '=' { "bind of type data", "bind of type data" } ';'
 
 <expression> ::= 
-	  <additive-expression>
-	| <multiplicative-expression> 
-	| <multiplicative-expression> + | - | * | / <additive-expression> 
-	| ( <multiplicative-expression> + | - | * | / <additive-expression> ) 
+	   <expression>
+	|  <digit> + | - | * | / <digit>
+	|  <digit> + | - | * | / <identifier>
+	|  <digit> + | - | * | / <expression>
 
-<selection-statement> ::= 
-	  if ( <logical-expression> ) {  }
-	| if ( <logical-expression> ) {  } else {  }
-	| if ( <logical-expression> ) { <compound-statement> } else {  }
-	| if ( <logical-expression> ) {  } else { <compound-statement> }
-	| if ( <logical-expression> ) { <compound-statement> } else { <compound-statement> }
-	| if ( 1 | 0 ) {  }
-	| if ( 1 | 0 ) {  } else {  }
-	| if ( 1 | 0 ) {  } else { <compound-statement> }
-	| if ( 1 | 0 ) { <compound-statement> } else {  }
-	| if ( 1 | 0 ) { <compound-statement> } else { <compound-statement> }
-
-<logical-expression> ::= 
-	  <value> or | and | nand | xor | diff | equals | great | less | greateq | lesseq <value>
-
-<loop-statement> ::= 
-	  repeat ( <digit> ) {  }
-	| repeat ( <digit> ) { <compoud-statement> }
-	| while ( <logical-expression> ) {  }
-	| while ( <logical-expression> ) { <compoud-statement> }
-	| while ( 1 | 0 ) {  }
-	| while ( 1 | 0 ) { <compoud-statement> }
-
-<system-call> ::=
-	  syswrite ( <word> ) ;
-	| sysread (  ) ;
+<function-declaration> ::=
+	   'fun' '::' <identifier> '(' ')' ':' <type> '{' '}'
+	|  'fun' '::' <identifier> '(' <list-variable-declaration> ')' ':' <type> '{' <expression> '}'
+	

@@ -1,6 +1,9 @@
 #include "../Include/Parser.hpp"
 
-Parser::Parser(Lexer* lexer):lexer(lexer){}
+Parser::Parser(Lexer* lexer):lexer(lexer)
+{
+    this->currentBranch = BRANCH_IDENTIFIER::UNDEFINED;
+}
 
 Parser::~Parser(){}
 
