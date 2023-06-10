@@ -44,7 +44,14 @@ class Lexer
                         std::string type, 
                         int startPos, 
                         int endPos);
+        Token* BindToken(std::string );
 
     private:
         bool IsDigit(char* );
+        bool IsAlpha(char* );
+
+    private:
+        Token* IsType(std::string );
+        Token* IsKeyword(std::string );
+        Token* IsBoolean(std::string );
 };

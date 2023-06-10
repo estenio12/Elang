@@ -81,7 +81,48 @@ void Lexer::Tokenize(std::string line)
         }
     
         // # Check if is char
-        
+        if(line[i] == DELIMITERS::APOSTROPHE && 
+          (current == NAME::UNDEFINED || current == NAME::CHARACTER))
+        {
+            if(current == NAME::UNDEFINED) current = NAME::CHARACTER;
+
+            if(line[i + 2] != '\0')
+            {
+                if(line[i + 2] == DELIMITERS::APOSTROPHE)
+                {
+                    int pos = i + 1;
+                    std::string token;
+                    token.push_back(line[i + 1]);
+                    this->BuildToken(token, NAME::CHARACTER, pos, pos);
+                    i += 2;
+                }
+            }
+        }
+    
+        // # Check if sentence
+        if(this->IsAlpha(&line[i]) && 
+          (current == NAME::UNDEFINED || current == NAME::BUILDING))
+        {
+            if(current == NAME::UNDEFINED) startPos = i; 
+            
+            current = NAME::BUILDING;
+
+            if(!this->IsAlpha(&line[i + 1]))
+            {
+                endPos = i + 1;
+                std::string token = line.substr(startPos, endPos);
+                auto entity = this->BindToken(token);
+                this->tokenList.push_back(entity);
+
+                // # Reset
+                current  = NAME::UNDEFINED;
+                startPos = 0;
+                endPos   = 0;
+            }
+
+            continue;
+        }
+    
     }
 }
 
@@ -108,7 +149,18 @@ void Lexer::BuildToken(std::string value, std::string type, int startPos, int en
     this->tokenList.push_back(token);
 }
 
+bool Lexer::IsAlpha(char* target)
+{
+    for(char item : ALPHA::ALPHANUMERIC)
+    {
+        if(*target == item)
+        {
+            return true;
+        }
+    }
 
+    return false;
+}
 
 
 

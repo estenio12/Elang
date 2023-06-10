@@ -13,8 +13,14 @@
 
 namespace NAME
 {
-    static const std::string UNDEFINED = "undefined";
-    static const std::string NUMBER    = "number";
+    static const std::string UNDEFINED  = "undefined";
+    static const std::string NUMBER     = "number";
+    static const std::string CHARACTER  = "character";
+    static const std::string BUILDING   = "building";
+    static const std::string KEYWORD    = "keyword";
+    static const std::string BOOLEAN    = "boolean";
+    static const std::string TYPE       = "type";
+    static const std::string IDENTIFIER = "identifier";
 }
 
 namespace KEYWORDS
@@ -29,17 +35,17 @@ namespace KEYWORDS
 
 namespace DELIMITERS
 {
-    static const std::string EOL                 = ";";
-    static const std::string OPEN_PARAM          = "(";
-    static const std::string CLOSE_PARAM         = ")";
-    static const std::string OPEN_BRACE          = "{";
-    static const std::string CLOSE_BRACE         = "}";
-    static const std::string OPEN_SQUAREBRACKET  = "[";
-    static const std::string CLOSE_SQUAREBRACKET = "]";
-    static const std::string COMMA               = ",";
-    static const std::string APOSTROPHE          = "\'";
-    static const std::string QUOTATION_MARKS     = "\"";
-    static const std::string BACK_SLASH          = "/";
+    static const char EOL                 = ';';
+    static const char OPEN_PARAM          = '(';
+    static const char CLOSE_PARAM         = ')';
+    static const char OPEN_BRACE          = '{';
+    static const char CLOSE_BRACE         = '}';
+    static const char OPEN_SQUAREBRACKET  = '[';
+    static const char CLOSE_SQUAREBRACKET = ']';
+    static const char COMMA               = ',';
+    static const char APOSTROPHE          = '\'';
+    static const char QUOTATION_MARKS     = '\"';
+    static const char BACK_SLASH          = '/';
     static const char _EOF                       = '\0';
 
     static const char SKIP_CHAR[] = {' ', '\n', '\b', '\t'};
