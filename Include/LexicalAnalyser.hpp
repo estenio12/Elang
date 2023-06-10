@@ -9,6 +9,7 @@
 #pragma once
 
 #include <fstream>
+#include <vector>
 #include "../Helpers/Definition.hpp"
 #include "../Helpers/SymbolTable.hpp"
 #include "../Helpers/Tools.hpp"
@@ -17,32 +18,33 @@
 class Lexer
 {
     private:
-        std::ifstream fileHandler;
-        token_list currentTokenList;
+        Tools* tools;
 
     private:
-        int cursorTokenList = 0;
-        int lineCounter     = 0;
-        bool FileIsOpen = true;
+        std::ifstream fileHandler;
+        std::vector<Token*> tokenList;
 
-    public:
-        bool FileIsEnd  = false;
+    private:
+        int lineCounter = 0;
 
     public:
         Lexer(std::string sourceCodePath);
         ~Lexer();
 
     public:
-        token GetNextToken();
+        Token* GetNextToken();
         int GetLineCounter(){ return this->lineCounter; }
 
     private:
-        void CheckTokenList();
-        token_list Tokenize(std::string );
-        std::string GetNextLineFromFile(); 
+        Token* GetToken();
+        void LoadLineFromFile();
+        void Tokenize(std::string line);
+        bool IsSkipCharacter(char* );
+        void BuildToken(std::string value, 
+                        std::string type, 
+                        int startPos, 
+                        int endPos);
 
     private:
-        bool IsNotAlphaNumeric(char ); 
-        token ConvertCharacterToToken(char );
-        std::string SanitizeLine(std::string );
+        bool IsDigit(char* );
 };

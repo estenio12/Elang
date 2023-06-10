@@ -9,14 +9,13 @@ Parser::~Parser(){}
 
 void Parser::Parse()
 {
-    while(!this->lexer->FileIsEnd)
+    while(true)
     {
         auto token = this->lexer->GetNextToken();
 
-        if(token[0] != '\0') 
-        {
-            Output::Print("Debug: " + token);
-        }
+        if(token == nullptr) break;
+
+        std::cout << "Debug Parser: " << token->type << " | " << token->value << "\n";
     }
 }
 

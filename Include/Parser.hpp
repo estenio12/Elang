@@ -13,8 +13,8 @@
 #include "../Helpers/Definition.hpp"
 #include "../Helpers/SymbolTable.hpp"
 #include "../Include/Output.hpp"
-#include "../Include/Ast.hpp"
 #include "../Include/LexicalAnalyser.hpp"
+#include "../Model/Ast.hpp"
 
 class Parser
 {

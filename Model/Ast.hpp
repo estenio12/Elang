@@ -9,18 +9,19 @@
 #pragma once
 
 #include <string>
+#include "../Model/Token.hpp"
 
 class AstNode
 {
     public:
-        std::string token;
         std::string syntax_name;
+        Token* token;
         AstNode* right;
         AstNode* left;
 
     public:
-        AstNode(std::string token):token(token){right = nullptr; left = nullptr;}
-        AstNode(std::string token, std::string syntax_name, AstNode* right, AstNode* left)
+        AstNode(Token* token):token(token){right = nullptr; left = nullptr;}
+        AstNode(Token* token, std::string syntax_name, AstNode* right, AstNode* left)
         :token(token),right(right),left(left),syntax_name(syntax_name){}
         ~AstNode(){}
 

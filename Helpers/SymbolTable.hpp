@@ -11,6 +11,12 @@
 #include <string>
 #include <vector>
 
+namespace NAME
+{
+    static const std::string UNDEFINED = "undefined";
+    static const std::string NUMBER    = "number";
+}
+
 namespace KEYWORDS
 {
     static const std::string VAR      = "var";
@@ -34,15 +40,14 @@ namespace DELIMITERS
     static const std::string APOSTROPHE          = "\'";
     static const std::string QUOTATION_MARKS     = "\"";
     static const std::string BACK_SLASH          = "/";
-    static const std::string WHITESPACE          = " ";
-    static const std::string NEWLINE             = "\n";
-    static const std::string BACKSPACE           = "\b";
-    static const std::string TABULATION          = "\t";
+    static const char _EOF                       = '\0';
+
+    static const char SKIP_CHAR[] = {' ', '\n', '\b', '\t'};
 }
 
 namespace DIGIT
 {
-    static const std::string DIGIT = "0123456789";
+    static const std::string DIGIT = ".0123456789";
 }
 
 namespace ALPHA
@@ -53,7 +58,7 @@ namespace ALPHA
 
 namespace TYPE
 {
-    static const std::vector<std::string> TYPE {"number", "char", "void", "bool", "text" };
+    static const std::vector<std::string> NAME {"number", "char", "void", "bool", "text" };
     
     static const uint8_t NUMBER = 0;
     static const uint8_t CHAR   = 1;
@@ -70,15 +75,15 @@ namespace BOOLEAN_VALUE
 
 namespace ARITHMETIC
 {
-    static const std::string PLUS     = "+";
-    static const std::string SUBTRACT = "-";
-    static const std::string DIVIDE   = "/";
-    static const std::string MULTIPLY = "*";
-    static const std::string MOD      = "%";
-    static const std::string AND      = "&";
-    static const std::string OR       = "|";
-    static const std::string SHIFT_RIGHT = ">>";
-    static const std::string SHIFT_LEFT  = "<<";
+    static const std::string ADD = "+";
+    static const std::string SUB = "-";
+    static const std::string DIV = "/";
+    static const std::string MUL = "*";
+    static const std::string MOD = "%";
+    static const std::string AND = "&";
+    static const std::string OR  = "|";
+    static const std::string SHRIGHT = ">>";
+    static const std::string SHLEFT  = "<<";
 }
 
 namespace COMPARISON

@@ -10,10 +10,8 @@
 
 #include <string>
 #include <vector>
-#include "../Include/Ast.hpp"
-
-using token      = std::string;
-using token_list = std::vector<token>;
+#include "../Model/Ast.hpp"
+#include "../Model/Token.hpp"
 
 ///@param string branch name 
 ///@param AstNode token list

@@ -2,157 +2,116 @@
 
 Lexer::Lexer(std::string sourceCodePath)
 {
+    this->tools   = new Tools();
+
     this->fileHandler.open(sourceCodePath, std::ios::binary);
 }
 
 Lexer::~Lexer(){}
 
-token Lexer::GetNextToken()
+Token* Lexer::GetNextToken()
 {
-    this->CheckTokenList();
-    return this->currentTokenList[this->cursorTokenList];
+    return this->GetToken();
 }
 
-token_list Lexer::Tokenize(std::string line)
+Token* Lexer::GetToken()
 {
-    token_list list;
-    std::string current_word;
+    if(this->tokenList.size() <= 0)
+        this->LoadLineFromFile();
 
-    for(char letter : line)
+    if(this->tokenList.size() > 0)
     {
-        if(this->IsNotAlphaNumeric(letter))
-        {
-            if(Checker::IsValidLine(current_word)) list.push_back(current_word);
+        auto token = this->tokenList.at(0);
+        this->tokenList.erase(tokenList.begin());
 
-            if(letter != DELIMITERS::WHITESPACE[0])
-            {
-                list.push_back(this->ConvertCharacterToToken(letter));
-            }
-            
-            current_word.clear();
-        }
-        else
-        {
-            current_word.push_back(letter);
-        }
+        return token;
     }
 
-    return list;
+    return nullptr;
 }
 
-token Lexer::ConvertCharacterToToken(char letter)
+void Lexer::LoadLineFromFile()
 {
-    token ntoken = "";
-    ntoken.push_back(letter); 
-    return ntoken; 
-}
-
-bool Lexer::IsNotAlphaNumeric(char letter)
-{
-    for(char iterator : ALPHA::ALPHANUMERIC)
-    {
-        if(letter == iterator)
-        {
-            return false;
-        }
-    }
-
-    return true;
-}
-
-std::string Lexer::GetNextLineFromFile()
-{
-    std::string line;
-
     try
     {
-        if(this->fileHandler)
-        {
-            if(std::getline(this->fileHandler, line))
-            {
-                return line;
-            }
-        }
-        else
-        {
-            Output::PrintError("File cannot be read!");
-            exit(EXIT_FAILURE);
-        }
+        std::string line;
+        std::getline(this->fileHandler, line);
+        this->lineCounter++;
+
+        this->Tokenize(line);
     }
     catch(const std::exception& e)
     {
         std::cerr << e.what() << '\n';
-        exit(EXIT_FAILURE);
-    }
-
-    this->FileIsOpen = false;
-    this->fileHandler.close();
-    return "";
-}
-
-void Lexer::CheckTokenList()
-{
-    cursorTokenList++;
-
-    if(cursorTokenList <= currentTokenList.size())
-    {
-        if(this->FileIsOpen)
-        {
-            auto getline = this->GetNextLineFromFile();
-            getline = this->SanitizeLine(getline);
-            this->lineCounter++;
-
-            if(Checker::IsValidLine(getline))
-            {
-                currentTokenList = this->Tokenize(getline);
-                cursorTokenList  = 0;
-            }
-            else
-            {
-                this->CheckTokenList();
-            }
-        }
-        else
-        {
-            this->FileIsEnd = true;
-        }
     }
 }
 
-std::string Lexer::SanitizeLine(std::string line)
+void Lexer::Tokenize(std::string line)
 {
-    std::string nline;
+    int startPos = 0;
+    int endPos   = 0;
+    std::string current = NAME::UNDEFINED;
 
     for(int i = 0; i < line.size(); i++)
     {
-       if(i == 0 && line[0] == DELIMITERS::WHITESPACE[0] ||
-          line[i] == DELIMITERS::WHITESPACE[0] && 
-          line[i - 1] == DELIMITERS::WHITESPACE[0] )
-       {
-            continue;
-       }
-       else
-       {
-            if((i + 1) < line.size())
-            {
-                if(line[i] == DELIMITERS::BACK_SLASH[0] &&
-                   line[i + 1] == DELIMITERS::BACK_SLASH[0])
-                {
-                    return nline;
-                }
-            }
+        // # Skip Characters
+        if(this->IsSkipCharacter(&line[i])) continue;
 
-            if(line[i] != DELIMITERS::NEWLINE[0] &&
-               line[i] != DELIMITERS::BACKSPACE[0] &&
-               line[i] != DELIMITERS::TABULATION[0])
+        // # Check if is digits
+        if(this->IsDigit(&line[i]) && 
+          (current == NAME::UNDEFINED || current == NAME::NUMBER))
+        {
+            if(current == NAME::UNDEFINED) startPos = i;
+
+            current  = NAME::NUMBER;
+            
+            if(!this->IsDigit(&line[i + 1]))
             {
-                nline.push_back(line[i]);
+                endPos = i + 1;
+                std::string token = line.substr(startPos, endPos);
+                this->BuildToken(token, NAME::NUMBER, startPos, endPos);
+
+                // # Reset
+                current  = NAME::UNDEFINED;
+                startPos = 0;
+                endPos   = 0;
             }
-       }
+            
+            continue;
+        }
+    
+        // # Check if is char
         
     }
-
-    return nline;
 }
+
+bool Lexer::IsSkipCharacter(char* target)
+{
+    for(char item : DELIMITERS::SKIP_CHAR)
+    {
+        if(*target == item)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+void Lexer::BuildToken(std::string value, std::string type, int startPos, int endPos)
+{
+    auto token = new Token
+    (
+        value, type, this->lineCounter, startPos, endPos
+    );
+
+    this->tokenList.push_back(token);
+}
+
+
+
+
+
+
 
 
