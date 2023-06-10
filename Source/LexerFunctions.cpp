@@ -1,10 +1,46 @@
 #include "../Include/LexicalAnalyser.hpp"
 
-bool Lexer::IsDigit(char* target)
+bool Lexer::IsDigit(char target)
 {
     for(char item : DIGIT::DIGIT)
     {
-        if(item == *target) return true;
+        if(item == target) return true;
+    }
+
+    return false;
+}
+
+bool Lexer::IsAlpha(char target)
+{
+    for(char item : ALPHA::ALPHANUMERIC)
+    {
+        if(target == item)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool Lexer::IsDelimiter(char target)
+{
+    if(target == DELIMITERS::EOL                 ||
+       target == DELIMITERS::COLON               ||
+       target == DELIMITERS::ASSIGN              ||
+       target == DELIMITERS::OPEN_PARAM          ||
+       target == DELIMITERS::CLOSE_PARAM         ||
+       target == DELIMITERS::OPEN_BRACE          ||
+       target == DELIMITERS::CLOSE_BRACE         ||
+       target == DELIMITERS::OPEN_SQUAREBRACKET  ||
+       target == DELIMITERS::CLOSE_SQUAREBRACKET ||
+       target == DELIMITERS::COMMA               ||
+       target == DELIMITERS::APOSTROPHE          ||
+       target == DELIMITERS::QUOTATION_MARKS     ||
+       target == DELIMITERS::BACK_SLASH
+      )
+    {
+        return true;
     }
 
     return false;
@@ -15,22 +51,26 @@ Token* Lexer::BindToken(std::string token)
     Token* tempToken;
 
     // # Check type
-    tempToken = this->IsType(token);
+    tempToken = this->BindType(token);
     if(tempToken != nullptr) return tempToken;
 
     // # Check keyword
-    tempToken = this->IsKeyword(token);
+    tempToken = this->BindKeyword(token);
     if(tempToken != nullptr) return tempToken;
 
     // # Check boolean values
-    tempToken = this->IsBoolean(token);
+    tempToken = this->BindBoolean(token);
+    if(tempToken != nullptr) return tempToken;
+
+    // # Check delimiters
+    tempToken = this->BindDelimiters(token);
     if(tempToken != nullptr) return tempToken;
 
     // # Return a identifier
     return new Token(token, NAME::IDENTIFIER);
 }
 
-Token* Lexer::IsType(std::string token)
+Token* Lexer::BindType(std::string token)
 {
     if(token == TYPE::NAME[TYPE::NUMBER] ||
        token == TYPE::NAME[TYPE::CHAR] ||
@@ -45,7 +85,7 @@ Token* Lexer::IsType(std::string token)
     return nullptr;
 }
 
-Token* Lexer::IsKeyword(std::string token)
+Token* Lexer::BindKeyword(std::string token)
 {
     if(token == KEYWORDS::VAR       ||
        token == KEYWORDS::CONST     ||
@@ -61,7 +101,7 @@ Token* Lexer::IsKeyword(std::string token)
     return nullptr;
 }
 
-Token* Lexer::IsBoolean(std::string token)
+Token* Lexer::BindBoolean(std::string token)
 {
     if(token == BOOLEAN_VALUE::TRUE ||
        token == BOOLEAN_VALUE::FALSE )
@@ -72,7 +112,28 @@ Token* Lexer::IsBoolean(std::string token)
     return nullptr;
 }
 
+Token* Lexer::BindDelimiters(std::string token)
+{
+    if(token[0] == DELIMITERS::EOL                 ||
+       token[0] == DELIMITERS::COLON               ||
+       token[0] == DELIMITERS::ASSIGN              ||
+       token[0] == DELIMITERS::OPEN_PARAM          ||
+       token[0] == DELIMITERS::CLOSE_PARAM         ||
+       token[0] == DELIMITERS::OPEN_BRACE          ||
+       token[0] == DELIMITERS::CLOSE_BRACE         ||
+       token[0] == DELIMITERS::OPEN_SQUAREBRACKET  ||
+       token[0] == DELIMITERS::CLOSE_SQUAREBRACKET ||
+       token[0] == DELIMITERS::COMMA               ||
+       token[0] == DELIMITERS::APOSTROPHE          ||
+       token[0] == DELIMITERS::QUOTATION_MARKS     ||
+       token[0] == DELIMITERS::BACK_SLASH
+      )
+    {
+        return new Token(token, NAME::DELIMITER);
+    }
 
+    return nullptr;
+}
 
 
 

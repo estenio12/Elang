@@ -21,6 +21,7 @@ namespace NAME
     static const std::string BOOLEAN    = "boolean";
     static const std::string TYPE       = "type";
     static const std::string IDENTIFIER = "identifier";
+    static const std::string DELIMITER  = "delimiter";
 }
 
 namespace KEYWORDS
@@ -36,6 +37,8 @@ namespace KEYWORDS
 namespace DELIMITERS
 {
     static const char EOL                 = ';';
+    static const char COLON               = ':';
+    static const char ASSIGN              = '=';
     static const char OPEN_PARAM          = '(';
     static const char CLOSE_PARAM         = ')';
     static const char OPEN_BRACE          = '{';
@@ -46,7 +49,7 @@ namespace DELIMITERS
     static const char APOSTROPHE          = '\'';
     static const char QUOTATION_MARKS     = '\"';
     static const char BACK_SLASH          = '/';
-    static const char _EOF                       = '\0';
+    static const char _EOF                = '\0';
 
     static const char SKIP_CHAR[] = {' ', '\n', '\b', '\t'};
 }
@@ -88,8 +91,8 @@ namespace ARITHMETIC
     static const std::string MOD = "%";
     static const std::string AND = "&";
     static const std::string OR  = "|";
-    static const std::string SHRIGHT = ">>";
-    static const std::string SHLEFT  = "<<";
+    static const std::string SHIFTRIGHT = ">>";
+    static const std::string SHIFTLEFT  = "<<";
 }
 
 namespace COMPARISON

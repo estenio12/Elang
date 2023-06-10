@@ -1,7 +1,11 @@
-var:char s = 't';
+var:number t = 876.6767;
+var:bool   h = true;
 
+fun:void foo(){}
 
-
-
+fun:number sum(var:number n1, var:number n2)
+{ 
+	return n1 + n2; 
+}
 
 

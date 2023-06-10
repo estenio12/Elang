@@ -39,19 +39,21 @@ class Lexer
         Token* GetToken();
         void LoadLineFromFile();
         void Tokenize(std::string line);
-        bool IsSkipCharacter(char* );
         void BuildToken(std::string value, 
                         std::string type, 
                         int startPos, 
                         int endPos);
+        std::string ConvertToChar(char );
+
+    private:
+        bool IsDigit(char );
+        bool IsAlpha(char );
+        bool IsDelimiter(char );
+
+    private:
         Token* BindToken(std::string );
-
-    private:
-        bool IsDigit(char* );
-        bool IsAlpha(char* );
-
-    private:
-        Token* IsType(std::string );
-        Token* IsKeyword(std::string );
-        Token* IsBoolean(std::string );
+        Token* BindType(std::string );
+        Token* BindKeyword(std::string );
+        Token* BindBoolean(std::string );
+        Token* BindDelimiters(std::string );
 };
