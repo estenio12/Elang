@@ -43,7 +43,8 @@ class Lexer
                         std::string type, 
                         int startPos, 
                         int endPos);
-        std::string ConvertToChar(char );
+        std::string ConvertToString(char );
+        void ThrowError(std::string, int);
 
     private:
         bool IsDigit(char );

@@ -1,11 +1,2 @@
-var:number t = 876.6767;
-var:bool   h = true;
-
-fun:void foo(){}
-
-fun:number sum(var:number n1, var:number n2)
-{ 
-	return n1 + n2; 
-}
-
+var:text t = "hello world! adasgd asiduafd dsfjdosfhsdbg sdghgh sdog dsofsd ff fsdflsdfkj EOF";
 

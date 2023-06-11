@@ -22,6 +22,7 @@ namespace NAME
     static const std::string TYPE       = "type";
     static const std::string IDENTIFIER = "identifier";
     static const std::string DELIMITER  = "delimiter";
+    static const std::string STRING     = "string";
 }
 
 namespace KEYWORDS

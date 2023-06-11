@@ -2,4 +2,5 @@
 
 ## Annotation
 
-	> [ TO DO ] - Support to char and text data; 
+	> [ OK ] - Lexer support to char and text data;
+	> [ TO DO ] - Lexer support to arithmetic symbols;

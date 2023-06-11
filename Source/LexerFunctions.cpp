@@ -12,14 +12,17 @@ bool Lexer::IsDigit(char target)
 
 bool Lexer::IsAlpha(char target)
 {
+    // std::cout << "...........Debug IsAlpha char: " << target << "\n";
     for(char item : ALPHA::ALPHANUMERIC)
     {
         if(target == item)
         {
+            // std::cout << "...........Debug IsAlpha char result: verdadeiro" << "\n";
             return true;
         }
     }
 
+    // std::cout << "...........Debug IsAlpha char result: falso" << "\n";
     return false;
 }
 
@@ -135,7 +138,11 @@ Token* Lexer::BindDelimiters(std::string token)
     return nullptr;
 }
 
-
+void Lexer::ThrowError(std::string msg, int position = 0)
+{
+    Output::PrintError("Line: " + std::to_string(this->lineCounter) + ":" + std::to_string(position) +" | " + msg);
+    exit(EXIT_FAILURE);
+}
 
 
 

@@ -58,6 +58,49 @@ void Lexer::Tokenize(std::string line)
     {
         if(current == NAME::UNDEFINED)
         {
+            if(this->IsDelimiter(line[i]))
+            {
+                if(line[i] == DELIMITERS::QUOTATION_MARKS)
+                {
+                    current = NAME::STRING;
+                    continue;
+                }
+                // # Check if char value
+                else if(line[i] == DELIMITERS::APOSTROPHE)
+                {
+                    if(line[i] == DELIMITERS::APOSTROPHE && 
+                       line[i + 2] == DELIMITERS::APOSTROPHE)
+                    {
+                        // # Build Token
+                        this->BuildToken(this->ConvertToString(line[i + 1]),
+                                         NAME::CHARACTER, i + 1, i + 1);
+                        i += 2;
+                    }
+                    else
+                    {
+                        this->ThrowError("Syntax error in char value declaration! the Apostrophe open but never closes.", i + 1);
+                    }
+                }
+                else
+                {
+                    // # Prepare Token
+                    auto token      = this->BindToken(this->ConvertToString(line[i]));
+                    token->startPos = i;
+                    token->line     = this->lineCounter;
+                    token->endPos   = i;
+
+                    // # Insert to list
+                    this->tokenList.push_back(token);
+                }
+
+                // # Reset
+                buildToken.clear();
+                startPos = 0;
+                current  = NAME::UNDEFINED;
+
+                continue;
+            }
+
             if(this->IsDigit(line[i]))
             {
                 startPos = i;
@@ -72,25 +115,6 @@ void Lexer::Tokenize(std::string line)
                 startPos = i;
                 current  = NAME::BUILDING;
                 buildToken.push_back(line[i]);
-
-                continue;
-            }
-
-            if(this->IsDelimiter(line[i]))
-            {
-                // # Prepare Token
-                auto token      = this->BindToken(this->ConvertToChar(line[i]));
-                token->startPos = i;
-                token->line     = this->lineCounter;
-                token->endPos   = i;
-
-                // # Insert to list
-                this->tokenList.push_back(token);
-
-                // # Reset
-                buildToken.clear();
-                startPos = 0;
-                current  = NAME::UNDEFINED;
 
                 continue;
             }
@@ -138,6 +162,72 @@ void Lexer::Tokenize(std::string line)
                 startPos = 0;
                 current = NAME::UNDEFINED;
             }
+
+            if(this->IsDelimiter(line[i]))
+            {
+                if(line[i] == DELIMITERS::QUOTATION_MARKS)
+                {
+                    current = NAME::STRING;
+                    continue;
+                }
+                // # Check if char value
+                else if(line[i] == DELIMITERS::APOSTROPHE)
+                {
+                    if(line[i] == DELIMITERS::APOSTROPHE && 
+                       line[i + 2] == DELIMITERS::APOSTROPHE)
+                    {
+                        // # Build Token
+                        this->BuildToken(this->ConvertToString(line[i + 1]),
+                                         NAME::CHARACTER, i + 1, i + 1);
+                        i += 2;
+                    }
+                    else
+                    {
+                        this->ThrowError("Syntax error in char value declaration! the Apostrophe open but never closes.", i + 1);
+                    }
+                }
+                else
+                {
+                    // # Prepare Token
+                    auto token      = this->BindToken(this->ConvertToString(line[i]));
+                    token->startPos = i;
+                    token->line     = this->lineCounter;
+                    token->endPos   = i;
+
+                    // # Insert to list
+                    this->tokenList.push_back(token);
+                }
+
+                // # Reset
+                buildToken.clear();
+                startPos = 0;
+                current  = NAME::UNDEFINED;
+
+                continue;
+            }
+        }
+    
+        if(current == NAME::STRING)
+        {
+            if(line[i + 1] == DELIMITERS::_EOF &&
+               line[i] != DELIMITERS::QUOTATION_MARKS)
+            {
+                this->ThrowError("Syntax error in string declaration! The quotes open but never close.", i + 1);
+            }
+
+            if(line[i] == DELIMITERS::QUOTATION_MARKS)
+            {
+                this->BuildToken(buildToken, NAME::STRING, startPos, i + 1);
+
+                // # Reset
+                buildToken.clear();
+                startPos = 0;
+                current  = NAME::UNDEFINED;
+            }
+            else
+            {
+                buildToken.push_back(line[i]);
+            }
         }
     }
 }
@@ -152,7 +242,7 @@ void Lexer::BuildToken(std::string value, std::string type, int startPos, int en
     this->tokenList.push_back(token);
 }
 
-std::string Lexer::ConvertToChar(char target)
+std::string Lexer::ConvertToString(char target)
 {
     std::string nstring;
     nstring.push_back(target);
