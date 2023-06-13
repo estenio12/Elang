@@ -13,16 +13,20 @@
 
 namespace NAME
 {
-    static const std::string UNDEFINED  = "undefined";
-    static const std::string NUMBER     = "number";
-    static const std::string CHARACTER  = "character";
-    static const std::string BUILDING   = "building";
-    static const std::string KEYWORD    = "keyword";
-    static const std::string BOOLEAN    = "boolean";
-    static const std::string TYPE       = "type";
-    static const std::string IDENTIFIER = "identifier";
-    static const std::string DELIMITER  = "delimiter";
-    static const std::string STRING     = "string";
+    static const std::string UNDEFINED   = "undefined";
+    static const std::string NUMBER      = "number";
+    static const std::string CHARACTER   = "character";
+    static const std::string BUILDING    = "building";
+    static const std::string KEYWORD     = "keyword";
+    static const std::string BOOLEAN     = "boolean";
+    static const std::string TYPE        = "type";
+    static const std::string IDENTIFIER  = "identifier";
+    static const std::string DELIMITER   = "delimiter";
+    static const std::string STRING      = "string";
+    static const std::string ARITHMETIC  = "arithmatic";
+    static const std::string COMPARISON  = "comparison";
+    static const std::string LOGICAL     = "logical";
+    static const std::string ATTRIBUTION = "attribution";
 }
 
 namespace KEYWORDS
@@ -104,6 +108,7 @@ namespace COMPARISON
     static const std::string LESS    = "<";
     static const std::string GREATEQ = ">=";
     static const std::string LESSEQ  = "<=";
+    static const char SYMBOL = '=';
 }
 
 namespace LOGICAL
@@ -112,14 +117,11 @@ namespace LOGICAL
     static const std::string OR  = "||";
 }
 
-namespace PREFIX
+namespace ATTRIBUTION
 {
     static const std::string INCREMENT = "++";
     static const std::string DECREMENT = "--";
 }
 
-namespace POSFIX
-{
-    static const std::string INCREMENT = "++";
-    static const std::string DECREMENT = "--";
-}
+
+

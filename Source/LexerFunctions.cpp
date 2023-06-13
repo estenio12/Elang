@@ -12,17 +12,14 @@ bool Lexer::IsDigit(char target)
 
 bool Lexer::IsAlpha(char target)
 {
-    // std::cout << "...........Debug IsAlpha char: " << target << "\n";
     for(char item : ALPHA::ALPHANUMERIC)
     {
         if(target == item)
         {
-            // std::cout << "...........Debug IsAlpha char result: verdadeiro" << "\n";
             return true;
         }
     }
 
-    // std::cout << "...........Debug IsAlpha char result: falso" << "\n";
     return false;
 }
 
@@ -42,6 +39,61 @@ bool Lexer::IsDelimiter(char target)
        target == DELIMITERS::QUOTATION_MARKS     ||
        target == DELIMITERS::BACK_SLASH
       )
+    {
+        return true;
+    }
+
+    return false;
+}
+
+bool Lexer::IsArithmatic(char target)
+{
+    if(target == ARITHMETIC::ADD[0] || 
+       target == ARITHMETIC::SUB[0] ||
+       target == ARITHMETIC::DIV[0] ||
+       target == ARITHMETIC::MUL[0] ||
+       target == ARITHMETIC::MOD[0] ||
+       target == ARITHMETIC::AND[0] ||
+       target == ARITHMETIC::OR[0] ||
+       target == ARITHMETIC::SHIFTLEFT[0] ||
+       target == ARITHMETIC::SHIFTRIGHT[0])
+    {
+        return true;
+    }
+
+    return false;
+}
+
+bool Lexer::IsComparison(char target)
+{
+    if(target == COMPARISON::DIFF[0]   ||
+       target == COMPARISON::EQUALS[0] ||
+       target == COMPARISON::GREAT[0]  ||
+       target == COMPARISON::LESS[0]   ||
+       target == COMPARISON::GREATEQ[0]||
+       target == COMPARISON::LESSEQ[0])
+    {
+        return true;
+    }
+
+    return false;
+}
+
+bool Lexer::IsLogical(char target)
+{
+    if(target == LOGICAL::AND[0] ||
+       target == LOGICAL::OR[0])
+    {
+        return true;
+    }
+
+    return false;
+}
+
+bool Lexer::IsAttribution(char target)
+{
+    if(target == ATTRIBUTION::INCREMENT[0] ||
+       target == ATTRIBUTION::DECREMENT[0])
     {
         return true;
     }

@@ -50,6 +50,10 @@ class Lexer
         bool IsDigit(char );
         bool IsAlpha(char );
         bool IsDelimiter(char );
+        bool IsArithmatic(char );
+        bool IsComparison(char );
+        bool IsLogical(char );
+        bool IsAttribution(char );
 
     private:
         Token* BindToken(std::string );

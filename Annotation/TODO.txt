@@ -3,4 +3,9 @@
 ## Annotation
 
 	> [ OK ] - Lexer support to char and text data;
-	> [ TO DO ] - Lexer support to arithmetic symbols;
+	> [ OK ] - Lexer support to arithmetic symbols;
+	> [ OK ] - Lexer support to comparison symbols;
+	> [ OK ] - Lexer support to logical symbols;
+	> [ OK ] - Lexer support to attribution symbols;
+	> [ TO DO ] - Fix the '=' delimiter recognized like the comparison;
+	> [ TO DO ] - Fix the single number, identifier or char has joinned to single word or number;

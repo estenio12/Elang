@@ -1,2 +1,1 @@
-var:text t = "hello world! adasgd asiduafd dsfjdosfhsdbg sdghgh sdog dsofsd ff fsdflsdfkj EOF";
-
+var:bool mask = 1+19;

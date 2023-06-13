@@ -58,6 +58,103 @@ void Lexer::Tokenize(std::string line)
     {
         if(current == NAME::UNDEFINED)
         {
+            if(this->IsAttribution(line[i]))
+            {
+                if(line[i] == ATTRIBUTION::INCREMENT[0] &&
+                   line[i + 1] == ATTRIBUTION::INCREMENT[0] ||
+                   line[i] == ATTRIBUTION::DECREMENT[0] &&
+                   line[i + 1] == ATTRIBUTION::DECREMENT[0] )
+                {
+                    buildToken.push_back(line[i]);
+                    buildToken.push_back(line[i]);
+                    
+                    this->BuildToken(buildToken, NAME::ATTRIBUTION, i, i + 1);
+
+                    // # Reset
+                    current  = NAME::UNDEFINED;
+                    startPos = 0;
+                    buildToken.clear();
+                    i++;
+
+                    continue;
+                }
+            }
+
+            if(this->IsComparison(line[i]))
+            {
+                // # Single Symbol
+                if(line[i + 1] != COMPARISON::SYMBOL)
+                {
+                    buildToken.push_back(line[i]);
+                    
+                    this->BuildToken(buildToken, NAME::COMPARISON, i, i + 1);
+
+                    // # Reset
+                    current  = NAME::UNDEFINED;
+                    startPos = 0;
+                    buildToken.clear();
+                    i++;
+
+                    continue;
+                }
+            
+                // # Double Symbol
+                else if(line[i + 1] == COMPARISON::SYMBOL)
+                {
+                    buildToken.push_back(line[i]);
+                    buildToken.push_back(line[i + 1]);
+                    
+                    this->BuildToken(buildToken, NAME::COMPARISON, i, i + 1);
+
+                    // # Reset
+                    current  = NAME::UNDEFINED;
+                    startPos = 0;
+                    buildToken.clear();
+                    i++;
+
+                    continue;
+                }
+            }
+
+            if(this->IsLogical(line[i]))
+            {
+                // # AND
+                if(line[i] == LOGICAL::AND[0] &&
+                   line[i + 1] == LOGICAL::AND[0])
+                {
+                    buildToken.push_back(line[i]);
+                    buildToken.push_back(line[i]);
+                    
+                    this->BuildToken(buildToken, NAME::LOGICAL, i, i + 1);
+
+                    // # Reset
+                    current  = NAME::UNDEFINED;
+                    startPos = 0;
+                    buildToken.clear();
+                    i++;
+
+                    continue;
+                }
+            
+                // # OR
+                if(line[i] == LOGICAL::OR[0] &&
+                   line[i + 1] == LOGICAL::OR[0])
+                {
+                    buildToken.push_back(line[i]);
+                    buildToken.push_back(line[i]);
+                    
+                    this->BuildToken(buildToken, NAME::LOGICAL, i, i + 1);
+
+                    // # Reset
+                    current  = NAME::UNDEFINED;
+                    startPos = 0;
+                    buildToken.clear();
+                    i++;
+
+                    continue;
+                }
+            }
+
             if(this->IsDelimiter(line[i]))
             {
                 if(line[i] == DELIMITERS::QUOTATION_MARKS)
@@ -115,6 +212,34 @@ void Lexer::Tokenize(std::string line)
                 startPos = i;
                 current  = NAME::BUILDING;
                 buildToken.push_back(line[i]);
+
+                continue;
+            }
+
+            if(this->IsArithmatic(line[i]))
+            {
+                // # Shift handle
+                if(line[i] == ARITHMETIC::SHIFTLEFT[0] &&
+                   line[i + 1] == ARITHMETIC::SHIFTLEFT[0] ||
+                   line[i] == ARITHMETIC::SHIFTRIGHT[0] &&
+                   line[i + 1] == ARITHMETIC::SHIFTRIGHT[0])
+                {
+                    buildToken.push_back(line[i]);
+                    buildToken.push_back(line[i]);
+                    
+                    this->BuildToken(buildToken, NAME::ARITHMETIC, i, i + 1);
+                    i++;
+                }
+                else
+                {
+                    buildToken.push_back(line[i]);
+                    this->BuildToken(buildToken, NAME::ARITHMETIC, i, i);
+                }
+
+                // # Reset
+                current  = NAME::UNDEFINED;
+                startPos = 0;
+                buildToken.clear();
 
                 continue;
             }
