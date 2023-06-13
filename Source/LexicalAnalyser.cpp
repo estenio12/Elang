@@ -83,7 +83,8 @@ void Lexer::Tokenize(std::string line)
             if(this->IsComparison(line[i]))
             {
                 // # Single Symbol
-                if(line[i + 1] != COMPARISON::SYMBOL)
+                if(line[i + 1] != COMPARISON::SYMBOL &&
+                   line[i] != COMPARISON::SYMBOL)
                 {
                     buildToken.push_back(line[i]);
                     
@@ -93,7 +94,6 @@ void Lexer::Tokenize(std::string line)
                     current  = NAME::UNDEFINED;
                     startPos = 0;
                     buildToken.clear();
-                    i++;
 
                     continue;
                 }
@@ -200,9 +200,18 @@ void Lexer::Tokenize(std::string line)
 
             if(this->IsDigit(line[i]))
             {
-                startPos = i;
-                current  = NAME::NUMBER;
                 buildToken.push_back(line[i]);
+                current  = NAME::NUMBER;
+                startPos = i;
+
+                if(!this->IsDigit(line[i + 1]))
+                {
+                    this->BuildToken(buildToken, NAME::NUMBER, i, i);
+                    
+                    current  = NAME::UNDEFINED;
+                    buildToken.clear();
+                    startPos = 0;
+                }
                 
                 continue;
             }
@@ -212,6 +221,23 @@ void Lexer::Tokenize(std::string line)
                 startPos = i;
                 current  = NAME::BUILDING;
                 buildToken.push_back(line[i]);
+
+                if(!this->IsAlpha(line[i + 1]))
+                {
+                    // # Prepare Token
+                    auto token = this->BindToken(buildToken);
+                    token->startPos = startPos;
+                    token->line     = this->lineCounter;
+                    token->endPos   = buildToken.size();
+
+                    // # Insert to list
+                    this->tokenList.push_back(token);
+
+                    // # Reset
+                    current = NAME::UNDEFINED;
+                    buildToken.clear();
+                    startPos = 0;
+                }
 
                 continue;
             }
