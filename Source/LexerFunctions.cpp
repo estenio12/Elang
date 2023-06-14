@@ -127,11 +127,11 @@ Token* Lexer::BindToken(std::string token)
 
 Token* Lexer::BindType(std::string token)
 {
-    if(token == TYPE::NAME[TYPE::NUMBER] ||
-       token == TYPE::NAME[TYPE::CHAR] ||
-       token == TYPE::NAME[TYPE::VOID] ||
-       token == TYPE::NAME[TYPE::BOOL] ||
-       token == TYPE::NAME[TYPE::TEXT]
+    if(token == TYPE::NAME[TYPE::TNUMBER] ||
+       token == TYPE::NAME[TYPE::TCHAR] ||
+       token == TYPE::NAME[TYPE::TVOID] ||
+       token == TYPE::NAME[TYPE::TBOOL] ||
+       token == TYPE::NAME[TYPE::TTEXT]
       )
     {
         return new Token(token, NAME::TYPE);
@@ -142,12 +142,12 @@ Token* Lexer::BindType(std::string token)
 
 Token* Lexer::BindKeyword(std::string token)
 {
-    if(token == KEYWORDS::VAR       ||
-       token == KEYWORDS::CONST     ||
-       token == KEYWORDS::FUN       ||
-       token == KEYWORDS::RETURN    ||
-       token == KEYWORDS::BREAK     ||
-       token == KEYWORDS::CONTINUE
+    if(token == KEYWORDS::TVAR       ||
+       token == KEYWORDS::TCONST     ||
+       token == KEYWORDS::TFUN       ||
+       token == KEYWORDS::TRETURN    ||
+       token == KEYWORDS::TBREAK     ||
+       token == KEYWORDS::TCONTINUE
        )
     {
         return new Token(token, NAME::KEYWORD);
@@ -158,8 +158,8 @@ Token* Lexer::BindKeyword(std::string token)
 
 Token* Lexer::BindBoolean(std::string token)
 {
-    if(token == BOOLEAN_VALUE::TRUE ||
-       token == BOOLEAN_VALUE::FALSE )
+    if(token == BOOLEAN_VALUE::TTRUE ||
+       token == BOOLEAN_VALUE::TFALSE )
     {
         return new Token(token, NAME::BOOLEAN);
     }

@@ -31,12 +31,12 @@ namespace NAME
 
 namespace KEYWORDS
 {
-    static const std::string VAR      = "var";
-    static const std::string CONST    = "const";
-    static const std::string FUN      = "fun";
-    static const std::string RETURN   = "return";
-    static const std::string BREAK    = "break";
-    static const std::string CONTINUE = "continue";
+    static const std::string TVAR      = "var";
+    static const std::string TCONST   = "const";
+    static const std::string TFUN      = "fun";
+    static const std::string TRETURN   = "return";
+    static const std::string TBREAK    = "break";
+    static const std::string TCONTINUE = "continue";
 }
 
 namespace DELIMITERS
@@ -74,17 +74,17 @@ namespace TYPE
 {
     static const std::vector<std::string> NAME {"number", "char", "void", "bool", "text" };
     
-    static const uint8_t NUMBER = 0;
-    static const uint8_t CHAR   = 1;
-    static const uint8_t VOID   = 2;
-    static const uint8_t BOOL   = 3;
-    static const uint8_t TEXT   = 4;
+    static const uint8_t TNUMBER = 0;
+    static const uint8_t TCHAR   = 1;
+    static const uint8_t TVOID   = 2;
+    static const uint8_t TBOOL   = 3;
+    static const uint8_t TTEXT   = 4;
 }
 
 namespace BOOLEAN_VALUE
 {
-    static const std::string TRUE  = "true";
-    static const std::string FALSE = "false";
+    static const std::string TTRUE  = "true";
+    static const std::string TFALSE = "false";
 }
 
 namespace ARITHMETIC
