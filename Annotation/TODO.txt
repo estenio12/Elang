@@ -4,12 +4,13 @@
 
 >> To implementation: 
 
-	> [ OK ] - Lexer support to char and text data;
-	> [ OK ] - Lexer support to arithmetic symbols;
-	> [ OK ] - Lexer support to comparison symbols;
-	> [ OK ] - Lexer support to logical symbols;
-	> [ OK ] - Lexer support to attribution symbols;
-	> [ TO DO ] - Lexer support to new keywords;
+	> [ OK ] 1 - Lexer support to char and text data;
+	> [ OK ] 2 - Lexer support to arithmetic symbols;
+	> [ OK ] 3 - Lexer support to comparison symbols;
+	> [ OK ] 4 - Lexer support to logical symbols;
+	> [ OK ] 5 - Lexer support to attribution symbols;
+	> [ OK ] 6 - Lexer support to new keywords;
+	> [ TO DO ] 7 - Lexer ignore empty and commented lines;
 
 >> To Fix:
 
