@@ -32,11 +32,18 @@ namespace NAME
 namespace KEYWORDS
 {
     static const std::string TVAR      = "var";
-    static const std::string TCONST   = "const";
+    static const std::string TCONST    = "const";
     static const std::string TFUN      = "fun";
     static const std::string TRETURN   = "return";
     static const std::string TBREAK    = "break";
     static const std::string TCONTINUE = "continue";
+    static const std::string TIF       = "if";
+    static const std::string TELIIF    = "elif";
+    static const std::string TELSE     = "else";
+    static const std::string TFOR      = "for";
+    static const std::string TFOREACH  = "foreach";
+    static const std::string TWHILE    = "while";
+    static const std::string TDO       = "do";
 }
 
 namespace DELIMITERS
