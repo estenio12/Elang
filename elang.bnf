@@ -15,18 +15,18 @@
 	| char
 	| void
 	| bool
-	| string
+	| text
 	| float
 
 // # GRAMMAR
 
 <variable-declaration> ::= 
-	  'var' ':' <type> ';'
-	| 'var' ':' <type> <identifier> ';'
-	| 'var' ':' <type> <identifier> '=' <expression> ';'
-	| 'var' ':' <type> <identifier> '=' "bind of type data" ';'
-	| 'var' ':' <type> <identifier> [ <digit> ] ';'
-	| 'var' ':' <type> <identifier> [ <digit> ] '=' { "bind of type data", "bind of type data" } ';'
+	  var : <type> ;
+	| var : <type> <identifier> ;
+	| var : <type> <identifier> = <expression> ;
+	| var : <type> <identifier> = "bind of type data" ;
+	| var : <type> [ <digit> ] <identifier> ;
+	| var : <type> [ <digit> ] <identifier> = { "bind of type data", "bind of type data" } ;
 
 <expression> ::= 
 	   <expression>
@@ -35,6 +35,6 @@
 	|  <digit> + | - | * | / <expression>
 
 <function-declaration> ::=
-	   'fun' '::' <identifier> '(' ')' ':' <type> '{' '}'
-	|  'fun' '::' <identifier> '(' <list-variable-declaration> ')' ':' <type> '{' <expression> '}'
+	   fun : <type> <identifier> ( ) { }
+	|  fun : <type> <identifier> ( <list-variable-declaration> ) { <expression> }
 	

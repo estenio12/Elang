@@ -154,7 +154,9 @@ Token* Lexer::BindKeyword(std::string token)
        token == KEYWORDS::TFOR       ||
        token == KEYWORDS::TFOREACH   ||
        token == KEYWORDS::TWHILE     ||
-       token == KEYWORDS::TDO        
+       token == KEYWORDS::TDO        ||
+       token == KEYWORDS::TIN        ||
+       token == KEYWORDS::TAT        
        )
     {
         return new Token(token, NAME::KEYWORD);

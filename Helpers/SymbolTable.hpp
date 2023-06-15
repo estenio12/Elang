@@ -44,6 +44,8 @@ namespace KEYWORDS
     static const std::string TFOREACH  = "foreach";
     static const std::string TWHILE    = "while";
     static const std::string TDO       = "do";
+    static const std::string TIN       = "in";
+    static const std::string TAT       = "at";
 }
 
 namespace DELIMITERS
