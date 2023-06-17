@@ -9,6 +9,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 #include "../Helpers/Tools.hpp"
 #include "../Helpers/Definition.hpp"
 #include "../Helpers/SymbolTable.hpp"
@@ -27,7 +28,8 @@ class Parser
 
     private:
         AstNode* buildingNode;
-        std::string currentBranch;
+        std::vector<Token*> buffer;
+        int currentBranch;
 
     public:
         Parser(Lexer* lexer);
@@ -37,5 +39,8 @@ class Parser
         void Parse();
 
     private:
-        
+        void BindOperation(Token* );
+
+    private:
+        void VariableDeclaration(Token* );
 };

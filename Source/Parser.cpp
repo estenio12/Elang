@@ -15,7 +15,27 @@ void Parser::Parse()
 
         if(token == nullptr) break;
 
-        std::cout << "Debug Parser: " << token->type << " | " << token->value << "\n";
+        switch(this->currentBranch)
+        {
+            case BRANCH_IDENTIFIER::UNDEFINED:
+                this->BindOperation(token);
+            break;
+
+            case BRANCH_IDENTIFIER::VARIABLE_DECLARATION:
+                this->VariableDeclaration(token);
+            break;
+        }
+    }
+}
+
+void Parser::BindOperation(Token* token)
+{
+    // # VARIABLE DECLARATION
+    if(token->value == KEYWORDS::TVAR   ||
+       token->value == KEYWORDS::TCONST)
+    {
+        this->currentBranch = BRANCH_IDENTIFIER::VARIABLE_DECLARATION;
+        this->VariableDeclaration(token);
     }
 }
 
