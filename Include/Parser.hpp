@@ -28,6 +28,7 @@ class Parser
 
     private:
         AstNode* buildingNode;
+        Token* history;
         std::vector<Token*> buffer;
         int currentBranch;
 
@@ -39,8 +40,16 @@ class Parser
         void Parse();
 
     private:
+        void ThrowError(std::string, int);
+        void ResetState();
+
+    private:
         void BindOperation(Token* );
+        void InsertAstNode(std::string, AstNode* );
+        void InsertBuildingNode(Token*, uint8_t );
+        AstNode* FindLastNode(AstNode*, uint8_t );
 
     private:
         void VariableDeclaration(Token* );
+        void VariableDeclarationCommit();
 };

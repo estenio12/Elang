@@ -39,8 +39,63 @@ void Parser::BindOperation(Token* token)
     }
 }
 
+void Parser::InsertBuildingNode(Token* token, uint8_t direction = 0)
+{
+    auto node = new AstNode(token);
 
+    if(this->buildingNode == nullptr)
+    {
+        this->buildingNode = node;
+        this->history = token;
+    }
+    else
+    {
+        auto lastNode = this->FindLastNode(buildingNode->left, direction);
 
+        if(direction == AST_DIRECTION::LEFT)
+           lastNode->left = node;
+        else
+           lastNode->right = node;
+    }
+}
+
+AstNode* Parser::FindLastNode(AstNode* node, uint8_t direction)
+{
+    if(node == nullptr) return nullptr;
+
+    if(direction == AST_DIRECTION::LEFT)
+    {
+        if(node->HasLeftNode())
+           return this->FindLastNode(node->left, direction);
+    
+        return node;
+    }
+    else
+    {
+        if(node->HasRightNode())
+           return this->FindLastNode(node->right, direction);
+    
+        return node;
+    }
+}
+
+void Lexer::ThrowError(std::string msg, int position = 0)
+{
+    Output::PrintError("Line: " + std::to_string(this->lineCounter) + ":" + std::to_string(position) +" | " + msg);
+    exit(EXIT_FAILURE);
+}
+
+void Parser::InsertAstNode(std::string branchName, AstNode* node)
+{
+    this->ast.push_back(std::make_pair(branchName, node));
+}
+
+void Parser::ResetState()
+{
+    this->currentBranch = BRANCH_IDENTIFIER::UNDEFINED;
+    this->history       = nullptr;
+    this->buildingNode  = nullptr;
+}
 
 
 
