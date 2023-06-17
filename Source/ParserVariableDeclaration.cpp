@@ -1,7 +1,8 @@
 #include "../Include/Parser.hpp"
 
-void Parser::VariableDeclaration(Token* token)
+bool Parser::VariableDeclaration(Token* token)
 {
+    // Output::Print("Debug: " + token->value);
     // # If history is null, is expected the variables declaration 
     if(history == nullptr)
     {
@@ -10,10 +11,11 @@ void Parser::VariableDeclaration(Token* token)
         {
             this->InsertBuildingNode(token, AST_DIRECTION::RIGHT);
             this->history = token;
+            return true;
         }
         else
         {
-            this->ThrowError("syntax error, unexpected token '" + token->value + "'", token->startPos);
+            this->ThrowError("unexpected token '" + token->value + "'", token->startPos);
         }
     }
 
@@ -25,10 +27,11 @@ void Parser::VariableDeclaration(Token* token)
         {
             this->InsertBuildingNode(token, AST_DIRECTION::RIGHT);
             this->history = token;
+            return true;
         }
         else
         {
-            this->ThrowError("syntax error, unexpected token '" + token->value + "'", token->startPos);
+            this->ThrowError("unexpected token '" + token->value + "'", token->startPos);
         }
     }
 
@@ -43,10 +46,11 @@ void Parser::VariableDeclaration(Token* token)
         {
             this->InsertBuildingNode(token, AST_DIRECTION::RIGHT);
             this->history = token;
+            return true;
         }
         else
         {
-            this->ThrowError("syntax error, unexpected token '" + token->value + "'", token->startPos);
+            this->ThrowError("unexpected token '" + token->value + "'", token->startPos);
         }
     }
 
@@ -57,14 +61,15 @@ void Parser::VariableDeclaration(Token* token)
        history->value == TYPE::NAME[TYPE::TTEXT]   ||
        history->value == TYPE::NAME[TYPE::TVOID]   )
     {
-        if(token->value == NAME::IDENTIFIER)
+        if(token->type == NAME::IDENTIFIER)
         {
             this->InsertBuildingNode(token, AST_DIRECTION::RIGHT);
             this->history = token;
+            return true;
         }
         else
         {
-            this->ThrowError("syntax error, unexpected token '" + token->value + "'", token->startPos);
+            this->ThrowError("unexpected token '" + token->value + "'", token->startPos);
         }
     }
 
@@ -75,15 +80,21 @@ void Parser::VariableDeclaration(Token* token)
         {
             this->InsertBuildingNode(token, AST_DIRECTION::RIGHT);
             this->history = token;
+            return true;
         }
-
-        if(token->value[0] == DELIMITERS::EOL)
+        else if(token->value[0] == DELIMITERS::EOL)
         {
             this->VariableDeclarationCommit();
+            return true;
+        }
+        else
+        {
+            this->ThrowError("unexpected token '" + token->value + "'", token->startPos);
         }
     }
-}
 
+    return false;
+}
 
 void Parser::VariableDeclarationCommit()
 {

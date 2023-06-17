@@ -9,6 +9,7 @@
 #pragma once
 
 #include <string>
+#include <cstring>
 #include <vector>
 #include "../Helpers/Tools.hpp"
 #include "../Helpers/Definition.hpp"
@@ -50,6 +51,6 @@ class Parser
         AstNode* FindLastNode(AstNode*, uint8_t );
 
     private:
-        void VariableDeclaration(Token* );
+        bool VariableDeclaration(Token* );
         void VariableDeclarationCommit();
 };

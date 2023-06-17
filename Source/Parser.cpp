@@ -50,7 +50,7 @@ void Parser::InsertBuildingNode(Token* token, uint8_t direction = 0)
     }
     else
     {
-        auto lastNode = this->FindLastNode(buildingNode->left, direction);
+        auto lastNode = this->FindLastNode(buildingNode, direction);
 
         if(direction == AST_DIRECTION::LEFT)
            lastNode->left = node;
@@ -79,9 +79,9 @@ AstNode* Parser::FindLastNode(AstNode* node, uint8_t direction)
     }
 }
 
-void Lexer::ThrowError(std::string msg, int position = 0)
+void Parser::ThrowError(std::string msg, int position = 0)
 {
-    Output::PrintError("Line: " + std::to_string(this->lineCounter) + ":" + std::to_string(position) +" | " + msg);
+    Output::PrintCustomizeError("Syntax Error: ", "Line: " + std::to_string(this->lexer->GetLineCounter()) + ":" + std::to_string(position) +" | " + msg);
     exit(EXIT_FAILURE);
 }
 

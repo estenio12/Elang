@@ -1,2 +1,2 @@
-var:number age = 35;	
+var:number age;	
 
