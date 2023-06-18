@@ -11,6 +11,7 @@
 #include <string>
 #include <cstring>
 #include <vector>
+#include <stack>
 #include "../Helpers/Tools.hpp"
 #include "../Helpers/Definition.hpp"
 #include "../Helpers/SymbolTable.hpp"
@@ -30,7 +31,7 @@ class Parser
     private:
         AstNode* buildingNode;
         Token* history;
-        std::vector<Token*> buffer;
+        std::stack<Token*> buffer;
         int currentBranch;
 
     public:

@@ -2,7 +2,6 @@
 
 bool Parser::VariableDeclaration(Token* token)
 {
-    // Output::Print("Debug: " + token->value);
     // # If history is null, is expected the variables declaration 
     if(history == nullptr)
     {
@@ -74,7 +73,7 @@ bool Parser::VariableDeclaration(Token* token)
     }
 
     // # After identifier token, is expected '=' or ';'
-    if(history->value == NAME::IDENTIFIER)
+    if(history->type == NAME::IDENTIFIER)
     {
         if(token->value[0] == DELIMITERS::ASSIGN)
         {
@@ -90,6 +89,42 @@ bool Parser::VariableDeclaration(Token* token)
         else
         {
             this->ThrowError("unexpected token '" + token->value + "'", token->startPos);
+        }
+    }
+
+    if(history->value == DELIMITERS::ASSIGN)
+    {
+        if(token->value[0] == DELIMITERS::OPEN_PARAM ||
+           token->type     == NAME::ATTRIBUTION      ||
+           token->type     == NAME::BOOLEAN          ||
+           token->type     == NAME::IDENTIFIER       ||
+           token->type     == NAME::STRING           ||
+           token->type     == NAME::CHARACTER        ||
+           token->type     == NAME::NUMBER           )
+        {
+            this->buffer.push_back(token);
+            this->history = token;
+            return true;
+        }
+        else
+        {
+            this->ThrowError("unexpected token '" + token->value + "'", token->startPos);
+        }
+    }
+
+    if(history->value[0] == DELIMITERS::OPEN_PARAM ||
+       history->type     == NAME::ATTRIBUTION      ||
+       history->type     == NAME::BOOLEAN          ||
+       history->type     == NAME::IDENTIFIER       ||
+       history->type     == NAME::STRING           ||
+       history->type     == NAME::CHARACTER        ||
+       history->type     == NAME::NUMBER           )
+    {
+        if(token->value == DELIMITERS::OPEN_PARAM)
+        {
+            this->buffer.push(token);
+            this->history = token;
+            return true;
         }
     }
 
