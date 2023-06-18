@@ -26,13 +26,16 @@ class Parser
         Lexer* lexer;
 
     private:
-        int* lineCounter;
-
-    private:
         AstNode* buildingNode;
         Token* history;
-        std::stack<Token*> buffer;
         int currentBranch;
+        int signatureMainBranch;
+
+    // # Arithmetic Variables
+    private:
+        AstNode* ArithmeticBuildingNode;
+        std::stack<Token*> buffer;
+
 
     public:
         Parser(Lexer* lexer);
@@ -46,12 +49,18 @@ class Parser
         void ResetState();
 
     private:
-        void BindOperation(Token* );
+        void IdentifyOperationType(Token* );
+        void AssignCurrentBranch(uint8_t );
         void InsertAstNode(std::string, AstNode* );
         void InsertBuildingNode(Token*, uint8_t );
         AstNode* FindLastNode(AstNode*, uint8_t );
+        void InsertBuffer(Token* );
+        Token* ConsumeNextTokenFromBuffer();
 
     private:
         bool VariableDeclaration(Token* );
         void VariableDeclarationCommit();
+
+    private:
+        bool ArithmeticOperation(Token* );
 };

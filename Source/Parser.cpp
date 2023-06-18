@@ -3,6 +3,7 @@
 Parser::Parser(Lexer* lexer):lexer(lexer)
 {
     this->currentBranch = BRANCH_IDENTIFIER::UNDEFINED;
+    this->signatureMainBranch = BRANCH_IDENTIFIER::UNDEFINED;
 }
 
 Parser::~Parser(){}
@@ -18,25 +19,35 @@ void Parser::Parse()
         switch(this->currentBranch)
         {
             case BRANCH_IDENTIFIER::UNDEFINED:
-                this->BindOperation(token);
+                this->IdentifyOperationType(token);
             break;
 
             case BRANCH_IDENTIFIER::VARIABLE_DECLARATION:
                 this->VariableDeclaration(token);
             break;
+
+            case BRANCH_IDENTIFIER::OPERATION:
+                this->ArithmeticOperation(token);
+            break;
         }
     }
 }
 
-void Parser::BindOperation(Token* token)
+void Parser::IdentifyOperationType(Token* token)
 {
     // # VARIABLE DECLARATION
     if(token->value == KEYWORDS::TVAR   ||
        token->value == KEYWORDS::TCONST)
     {
-        this->currentBranch = BRANCH_IDENTIFIER::VARIABLE_DECLARATION;
+        this->AssignCurrentBranch(BRANCH_IDENTIFIER::VARIABLE_DECLARATION);
         this->VariableDeclaration(token);
     }
+}
+
+void Parser::AssignCurrentBranch(uint8_t branchName)
+{
+    this->currentBranch = branchName;
+    this->signatureMainBranch = branchName;
 }
 
 void Parser::InsertBuildingNode(Token* token, uint8_t direction = 0)
@@ -96,6 +107,22 @@ void Parser::ResetState()
     this->history       = nullptr;
     this->buildingNode  = nullptr;
 }
+
+void Parser::InsertBuffer(Token* token)
+{
+    this->buffer.push(token);
+}
+
+Token* Parser::ConsumeNextTokenFromBuffer()
+{
+    auto token = this->buffer.top();
+    this->buffer.pop();
+    return token;
+}
+
+
+
+
 
 
 

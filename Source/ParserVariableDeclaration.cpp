@@ -79,6 +79,7 @@ bool Parser::VariableDeclaration(Token* token)
         {
             this->InsertBuildingNode(token, AST_DIRECTION::RIGHT);
             this->history = token;
+            this->currentBranch = BRANCH_IDENTIFIER::OPERATION;
             return true;
         }
         else if(token->value[0] == DELIMITERS::EOL)
@@ -89,42 +90,6 @@ bool Parser::VariableDeclaration(Token* token)
         else
         {
             this->ThrowError("unexpected token '" + token->value + "'", token->startPos);
-        }
-    }
-
-    if(history->value == DELIMITERS::ASSIGN)
-    {
-        if(token->value[0] == DELIMITERS::OPEN_PARAM ||
-           token->type     == NAME::ATTRIBUTION      ||
-           token->type     == NAME::BOOLEAN          ||
-           token->type     == NAME::IDENTIFIER       ||
-           token->type     == NAME::STRING           ||
-           token->type     == NAME::CHARACTER        ||
-           token->type     == NAME::NUMBER           )
-        {
-            this->buffer.push_back(token);
-            this->history = token;
-            return true;
-        }
-        else
-        {
-            this->ThrowError("unexpected token '" + token->value + "'", token->startPos);
-        }
-    }
-
-    if(history->value[0] == DELIMITERS::OPEN_PARAM ||
-       history->type     == NAME::ATTRIBUTION      ||
-       history->type     == NAME::BOOLEAN          ||
-       history->type     == NAME::IDENTIFIER       ||
-       history->type     == NAME::STRING           ||
-       history->type     == NAME::CHARACTER        ||
-       history->type     == NAME::NUMBER           )
-    {
-        if(token->value == DELIMITERS::OPEN_PARAM)
-        {
-            this->buffer.push(token);
-            this->history = token;
-            return true;
         }
     }
 
