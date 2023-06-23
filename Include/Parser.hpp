@@ -24,6 +24,7 @@ class Parser
     private:
         AST ast;
         Lexer* lexer;
+        Tools* tool;
 
     private:
         AstNode* buildingNode;
@@ -34,8 +35,11 @@ class Parser
     // # Arithmetic Variables
     private:
         AstNode* ArithmeticBuildingNode;
-        std::stack<Token*> buffer;
+        Token* buffer;
 
+        // # OpenParam  ++
+        // # CloseParam --
+        int relevance = 0;
 
     public:
         Parser(Lexer* lexer);
@@ -46,6 +50,7 @@ class Parser
 
     private:
         void ThrowError(std::string, int);
+        void ThrowError(Token* );
         void ResetState();
 
     private:
@@ -56,6 +61,8 @@ class Parser
         AstNode* FindLastNode(AstNode*, uint8_t );
         void InsertBuffer(Token* );
         Token* ConsumeNextTokenFromBuffer();
+        void AddRelevance();
+        void RemoveRelevance();
 
     private:
         bool VariableDeclaration(Token* );
@@ -63,4 +70,5 @@ class Parser
 
     private:
         bool ArithmeticOperation(Token* );
+        void ArithmeticCommit();
 };

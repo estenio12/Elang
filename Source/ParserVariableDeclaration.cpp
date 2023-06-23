@@ -2,6 +2,7 @@
 
 bool Parser::VariableDeclaration(Token* token)
 {
+    // Output::Print("Debug Tokens: " + token->value);
     // # If history is null, is expected the variables declaration 
     if(history == nullptr)
     {

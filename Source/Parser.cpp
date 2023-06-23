@@ -4,6 +4,8 @@ Parser::Parser(Lexer* lexer):lexer(lexer)
 {
     this->currentBranch = BRANCH_IDENTIFIER::UNDEFINED;
     this->signatureMainBranch = BRANCH_IDENTIFIER::UNDEFINED;
+    
+    this->tool = new Tools();
 }
 
 Parser::~Parser(){}
@@ -31,6 +33,9 @@ void Parser::Parse()
             break;
         }
     }
+
+    // # Debug
+    this->tool->PrintParseTree(this->buildingNode);
 }
 
 void Parser::IdentifyOperationType(Token* token)
@@ -96,6 +101,12 @@ void Parser::ThrowError(std::string msg, int position = 0)
     exit(EXIT_FAILURE);
 }
 
+void Parser::ThrowError(Token* token)
+{
+    Output::PrintCustomizeError("Syntax Error: ", "Line: " + std::to_string(this->lexer->GetLineCounter()) + ":" + std::to_string(token->startPos) +" | unexpected token '" +token->value + "'");
+    exit(EXIT_FAILURE);
+}
+
 void Parser::InsertAstNode(std::string branchName, AstNode* node)
 {
     this->ast.push_back(std::make_pair(branchName, node));
@@ -108,17 +119,16 @@ void Parser::ResetState()
     this->buildingNode  = nullptr;
 }
 
-void Parser::InsertBuffer(Token* token)
+void Parser::AddRelevance()
 {
-    this->buffer.push(token);
+    this->relevance++;
 }
 
-Token* Parser::ConsumeNextTokenFromBuffer()
+void Parser::RemoveRelevance()
 {
-    auto token = this->buffer.top();
-    this->buffer.pop();
-    return token;
+    this->relevance--;
 }
+
 
 
 
