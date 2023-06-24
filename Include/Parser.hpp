@@ -40,7 +40,7 @@ class Parser
 
         // # OpenParam  ++
         // # CloseParam --
-        int relevance = 0;
+        int paremCounter = 0;
 
     public:
         Parser(Lexer* lexer);
@@ -62,8 +62,8 @@ class Parser
         AstNode* FindLastNode(AstNode*, uint8_t );
         void InsertBuffer(Token* );
         Token* ConsumeNextTokenFromBuffer();
-        void AddRelevance();
-        void RemoveRelevance();
+        void AddParemCounter();
+        void RemoveParemCounter();
 
     private:
         bool VariableDeclaration(Token* );

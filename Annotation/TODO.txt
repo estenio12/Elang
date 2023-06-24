@@ -11,7 +11,7 @@
 	> [ OK ] 5 - Lexer support to attribution symbols;
 	> [ OK ] 6 - Lexer support to new keywords;
 	> [ TO DO ] 7 - Lexer ignore empty and commented lines;
-	> [ TO DO ] 8 - Add validation of duplicated identifier;
+	> [ TO DO ] 8 - Add duplicate identifier validation;
 
 >> To Fix:
 

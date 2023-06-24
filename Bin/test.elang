@@ -1,2 +1,2 @@
-var:number age = 10 + 15;	
+var:number age = 10 + 15 + idade / 10;	
 

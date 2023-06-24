@@ -4,10 +4,10 @@ bool Parser::ArithmeticOperation(Token* token)
 {
     if(token->value[0] == DELIMITERS::EOL)
     {
-        if(relevance > 0)
+        if(paremCounter > 0)
             this->ThrowError("The parentheses were opened, but never closed.", token->startPos);
 
-        if(relevance < 0)
+        if(paremCounter < 0)
             this->ThrowError("The parentheses were closed, but never opened.", token->startPos);
 
         auto lastNode = this->FindLastNode(buildingNode, AST_DIRECTION::RIGHT);
@@ -50,14 +50,7 @@ bool Parser::ArithmeticOperation(Token* token)
 
         if(token->value[0] == DELIMITERS::OPEN_PARAM)
         {
-            this->AddRelevance();
-            this->history = token;
-            return true;
-        }
-
-        if(token->value[0] == DELIMITERS::CLOSE_PARAM)
-        {
-            this->RemoveRelevance();
+            this->AddParemCounter();
             this->history = token;
             return true;
         }
