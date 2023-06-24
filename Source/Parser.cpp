@@ -28,7 +28,7 @@ void Parser::Parse()
                 this->VariableDeclaration(token);
             break;
 
-            case BRANCH_IDENTIFIER::OPERATION:
+            case BRANCH_IDENTIFIER::ARITHMETIC_OPERATION:
                 this->ArithmeticOperation(token);
             break;
         }
@@ -36,6 +36,7 @@ void Parser::Parse()
 
     // # Debug
     this->tool->PrintParseTree(this->buildingNode);
+    std::cout << "Debug Branch Name: " << this->ast[0].first << "\n";
 }
 
 void Parser::IdentifyOperationType(Token* token)
@@ -52,6 +53,7 @@ void Parser::IdentifyOperationType(Token* token)
 void Parser::AssignCurrentBranch(uint8_t branchName)
 {
     this->currentBranch = branchName;
+    this->oldOperation  = branchName;
     this->signatureMainBranch = branchName;
 }
 
@@ -115,6 +117,7 @@ void Parser::InsertAstNode(std::string branchName, AstNode* node)
 void Parser::ResetState()
 {
     this->currentBranch = BRANCH_IDENTIFIER::UNDEFINED;
+    this->oldOperation  = BRANCH_IDENTIFIER::UNDEFINED;
     this->history       = nullptr;
     this->buildingNode  = nullptr;
 }

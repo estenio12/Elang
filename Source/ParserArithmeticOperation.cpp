@@ -24,12 +24,14 @@ bool Parser::ArithmeticOperation(Token* token)
         {
             lastNode = this->ArithmeticBuildingNode;
             this->ArithmeticBuildingNode = nullptr;
+            this->ArithmeticCommit();
             return true;
         }
         else
         {
             lastNode->right = this->ArithmeticBuildingNode;
             this->ArithmeticBuildingNode = nullptr;
+            this->ArithmeticCommit();
             return true;
         }
 
@@ -128,6 +130,16 @@ void Parser::ArithmeticCommit()
 {
     if(this->buildingNode != nullptr)
     {
-        
+        switch (this->oldOperation)
+        {
+            case BRANCH_IDENTIFIER::VARIABLE_DECLARATION:
+                this->VariableDeclarationCommit();
+            break;
+            
+            default:
+                this->InsertAstNode(BRANCH_NAME::ARITHMETIC_OPERATION, this->buildingNode);
+                this->ResetState();
+            break;
+        }
     }
 }

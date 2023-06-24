@@ -22,13 +22,14 @@ using AST = std::vector<std::pair<std::string, AstNode*>>;
 namespace BRANCH_NAME
 {
     const static std::string VARIABLE_DECLARATION = "VARIABLE_DECLARATION";
+    const static std::string ARITHMETIC_OPERATION = "ARITHMETIC_OPERATION";
 }
 
 enum BRANCH_IDENTIFIER
 {
     UNDEFINED,
     VARIABLE_DECLARATION,
-    OPERATION
+    ARITHMETIC_OPERATION
 };
 
 enum AST_DIRECTION

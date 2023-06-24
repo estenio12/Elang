@@ -80,7 +80,7 @@ bool Parser::VariableDeclaration(Token* token)
         {
             this->InsertBuildingNode(token, AST_DIRECTION::RIGHT);
             this->history = token;
-            this->currentBranch = BRANCH_IDENTIFIER::OPERATION;
+            this->currentBranch = BRANCH_IDENTIFIER::ARITHMETIC_OPERATION;
             return true;
         }
         else if(token->value[0] == DELIMITERS::EOL)

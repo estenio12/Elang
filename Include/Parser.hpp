@@ -30,6 +30,7 @@ class Parser
         AstNode* buildingNode;
         Token* history;
         int currentBranch;
+        int oldOperation;
         int signatureMainBranch;
 
     // # Arithmetic Variables
