@@ -45,6 +45,7 @@ class Lexer
                         int endPos);
         std::string ConvertToString(char );
         void ThrowError(std::string, int);
+        std::string Sanitaze(std::string );
 
     private:
         bool IsDigit(char );

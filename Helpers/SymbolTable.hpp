@@ -64,6 +64,7 @@ namespace DELIMITERS
     static const char QUOTATION_MARKS     = '\"';
     static const char BACK_SLASH          = '/';
     static const char _EOF                = '\0';
+    static const char COMMENTARY          = '#';
 
     static const char SKIP_CHAR[] = {' ', '\n', '\b', '\t'};
 }

@@ -115,4 +115,24 @@ namespace Output
 
         #endif
     }
+
+    static void PrintDebug(std::string Message)
+    {
+        #if __linux
+            std::cout << WARNING_FLAG_MESSAGE << "Debug: ";
+            std::cout << STANDARD_FLAG_MESSAGE << Message << std::endl; 
+        #else
+
+            HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+            
+            // # Write Message flag in red color
+            SetConsoleTextAttribute(hConsole, 6);
+            std::cout << "Debug: ";
+
+            // # Write Message in white color
+            SetConsoleTextAttribute(hConsole, 7);
+            std::cout << Message << std::endl;
+
+        #endif
+    }
 };

@@ -120,6 +120,7 @@ void Parser::ResetState()
     this->oldOperation  = BRANCH_IDENTIFIER::UNDEFINED;
     this->history       = nullptr;
     this->buildingNode  = nullptr;
+    this->precedence    = 0;
 }
 
 void Parser::AddParemCounter()

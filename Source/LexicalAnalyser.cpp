@@ -16,7 +16,8 @@ Token* Lexer::GetNextToken()
 
 Token* Lexer::GetToken()
 {
-    if(this->tokenList.empty() || this->tokenList.size() <= 1) 
+    if((this->tokenList.empty() || this->tokenList.size() <= 2) && 
+        !this->fileHandler.eof()) 
     {  
         this->LoadLineFromFile();
     }
@@ -40,7 +41,11 @@ void Lexer::LoadLineFromFile()
         std::getline(this->fileHandler, line);
         this->lineCounter++;
 
-        this->Tokenize(line);
+        line = this->Sanitaze(line);
+
+        if(!this->fileHandler.eof() && line.empty()) this->LoadLineFromFile();
+
+        if(!line.empty()) this->Tokenize(line);
     }
     catch(const std::exception& e)
     {
@@ -399,6 +404,26 @@ std::string Lexer::ConvertToString(char target)
     nstring.push_back(target);
 
     return nstring;
+}
+
+std::string Lexer::Sanitaze(std::string line)
+{
+    bool stringUp = false;
+    std::string buffer;
+    
+    for(auto letter : line)
+    {
+        if(!stringUp && letter == DELIMITERS::COMMENTARY)
+        {
+            return buffer;
+        }
+        else
+        {
+            buffer.push_back(letter);
+        }
+    }
+
+    return buffer;
 }
 
 

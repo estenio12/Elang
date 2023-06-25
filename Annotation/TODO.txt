@@ -4,14 +4,14 @@
 
 >> To implementation: 
 
-	> [ OK ] 1 - Lexer support to char and text data;
-	> [ OK ] 2 - Lexer support to arithmetic symbols;
-	> [ OK ] 3 - Lexer support to comparison symbols;
-	> [ OK ] 4 - Lexer support to logical symbols;
-	> [ OK ] 5 - Lexer support to attribution symbols;
-	> [ OK ] 6 - Lexer support to new keywords;
-	> [ TO DO ] 7 - Lexer ignore empty and commented lines;
-	> [ TO DO ] 8 - Add duplicate identifier validation;
+	> [ OK ] 1 - Lexer: support to char and text data;
+	> [ OK ] 2 - Lexer: support to arithmetic symbols;
+	> [ OK ] 3 - Lexer: support to comparison symbols;
+	> [ OK ] 4 - Lexer: support to logical symbols;
+	> [ OK ] 5 - Lexer: support to attribution symbols;
+	> [ OK ] 6 - Lexer: support to new keywords;
+	> [ OK ] 7 - Lexer: ignore empty and commented lines;
+	> [ WORKING ] 8 - Parser: duplicate identifier validation and declaration;
 
 >> To Fix:
 
