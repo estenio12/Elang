@@ -37,7 +37,7 @@ class Parser
     private:
         AstNode* ArithmeticBuildingNode;
         Token* buffer;
-
+        int precedence = 0; 
         // # OpenParam  ++
         // # CloseParam --
         int paremCounter = 0;

@@ -21,8 +21,7 @@
 // # GRAMMAR
 
 <variable-declaration> ::= 
-	  var : <type> ;
-	| var : <type> <identifier> ;
+	  var : <type> <identifier> ;
 	| var : <type> <identifier> = <expression> ;
 	| var : <type> <identifier> = "bind of type data" ;
 	| var : <type> [ <digit> ] <identifier> ;

@@ -125,11 +125,13 @@ void Parser::ResetState()
 void Parser::AddParemCounter()
 {
     this->paremCounter++;
+    this->precedence++;
 }
 
 void Parser::RemoveParemCounter()
 {
     this->paremCounter--;
+    this->precedence--;
 }
 
 

@@ -2,42 +2,6 @@
 
 bool Parser::ArithmeticOperation(Token* token)
 {
-    if(token->value[0] == DELIMITERS::EOL)
-    {
-        if(paremCounter > 0)
-            this->ThrowError("The parentheses were opened, but never closed.", token->startPos);
-
-        if(paremCounter < 0)
-            this->ThrowError("The parentheses were closed, but never opened.", token->startPos);
-
-        auto lastNode = this->FindLastNode(buildingNode, AST_DIRECTION::RIGHT);
-
-        if(this->buffer != nullptr)
-        {
-            auto node = new AstNode(this->buffer, "", nullptr, nullptr);
-            auto lastNodeArithmentic = this->FindLastNode(this->ArithmeticBuildingNode, AST_DIRECTION::RIGHT);
-
-            lastNodeArithmentic->right = node;
-        }
-        
-        if(lastNode == nullptr)
-        {
-            lastNode = this->ArithmeticBuildingNode;
-            this->ArithmeticBuildingNode = nullptr;
-            this->ArithmeticCommit();
-            return true;
-        }
-        else
-        {
-            lastNode->right = this->ArithmeticBuildingNode;
-            this->ArithmeticBuildingNode = nullptr;
-            this->ArithmeticCommit();
-            return true;
-        }
-
-        this->ThrowError(token);
-    }
-
     if(history->value[0] == DELIMITERS::ASSIGN)
     {
         if(token->type == NAME::IDENTIFIER ||
@@ -72,8 +36,8 @@ bool Parser::ArithmeticOperation(Token* token)
            token->value == ARITHMETIC::SHIFTLEFT  ||
            token->value == ARITHMETIC::SHIFTRIGHT )
         {
-            auto node = new AstNode(token, "", nullptr, nullptr);
-            auto nodeLeft = new AstNode(buffer, "", nullptr, nullptr);
+            auto node = new AstNode(token, "", this->precedence, nullptr, nullptr);
+            auto nodeLeft = new AstNode(buffer, "", this->precedence, nullptr, nullptr);
             node->left = nodeLeft;
 
             // # Clear Buffer
@@ -95,6 +59,49 @@ bool Parser::ArithmeticOperation(Token* token)
 
             return true;
         }
+    
+        if(token->value[0] == DELIMITERS::CLOSE_PARAM)
+        {
+            this->history = token;
+            this->RemoveParemCounter();
+            return true;
+        }
+    
+        if(token->value[0] == DELIMITERS::EOL)
+        {
+            if(paremCounter > 0)
+                this->ThrowError("The parentheses were opened, but never closed.", token->startPos);
+
+            if(paremCounter < 0)
+                this->ThrowError("The parentheses were closed, but never opened.", token->startPos);
+
+            auto lastNode = this->FindLastNode(buildingNode, AST_DIRECTION::RIGHT);
+
+            if(this->buffer != nullptr)
+            {
+                auto node = new AstNode(this->buffer, "", this->precedence, nullptr, nullptr);
+                auto lastNodeArithmentic = this->FindLastNode(this->ArithmeticBuildingNode, AST_DIRECTION::RIGHT);
+
+                lastNodeArithmentic->right = node;
+            }
+            
+            if(lastNode == nullptr)
+            {
+                lastNode = this->ArithmeticBuildingNode;
+                this->ArithmeticBuildingNode = nullptr;
+                this->ArithmeticCommit();
+                return true;
+            }
+            else
+            {
+                lastNode->right = this->ArithmeticBuildingNode;
+                this->ArithmeticBuildingNode = nullptr;
+                this->ArithmeticCommit();
+                return true;
+            }
+
+            this->ThrowError(token);
+        }
     }
 
     if(history->value == ARITHMETIC::ADD ||
@@ -114,7 +121,34 @@ bool Parser::ArithmeticOperation(Token* token)
             this->history = token;
             return true;
         }
+
+        if(token->value[0] == DELIMITERS::OPEN_PARAM)
+        {
+            this->AddParemCounter();
+            this->history = token;
+            return true;
+        }
     }
+
+    if(history->value[0] == DELIMITERS::OPEN_PARAM)
+    {
+       if(token->type == NAME::IDENTIFIER ||
+          token->type == NAME::NUMBER)
+        {
+            this->buffer  = token;
+            this->history = token;
+            return true;
+        }
+
+        if(token->value[0] == DELIMITERS::OPEN_PARAM)
+        {
+            this->AddParemCounter();
+            this->history = token;
+            return true;
+        }
+    }
+
+    this->ThrowError(token);
 
     return false;
 }
