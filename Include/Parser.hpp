@@ -34,7 +34,6 @@ class Parser
         int currentBranch;
         int oldOperation;
         std::string expectedType = EXPECTED_TYPE::TUNDEFINED;
-        int signatureMainBranch;
         std::string currentScope = STANDARD_SCOPE_NAME::GLOBALSCOPE;
         int currentDeep = 0;
 

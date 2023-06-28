@@ -14,6 +14,9 @@
 	> [ OK ] 8 - Parser: duplicate identifier validation and declaration;
 	> [ OK ] 9 - Parser: Identify and accept others type value in assignment;
 	> [ OK ] 10 - Parser: Check that arithmetic operation is the same as expected by the declarator;
+	> [ TO DO ] 11 - Parser: Check that is constant variable;
+	> [ TO DO ] 12 - Parser: Refactoring;
+	> [ TO DO ] 13 - CodeGenerator: Generate the first target code;
 
 >> To Fix:
 

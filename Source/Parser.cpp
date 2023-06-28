@@ -3,7 +3,6 @@
 Parser::Parser(Lexer* lexer):lexer(lexer)
 {
     this->currentBranch = BRANCH_IDENTIFIER::UNDEFINED;
-    this->signatureMainBranch = BRANCH_IDENTIFIER::UNDEFINED;
     
     this->tool      = new Tools();
     this->IDTable = new IDDeclarationStorage();
@@ -55,7 +54,6 @@ void Parser::AssignCurrentBranch(uint8_t branchName)
 {
     this->currentBranch = branchName;
     this->oldOperation  = branchName;
-    this->signatureMainBranch = branchName;
 }
 
 void Parser::InsertBuildingNode(Token* token, uint8_t direction = 0)
@@ -119,6 +117,7 @@ void Parser::ResetState()
 {
     this->currentBranch = BRANCH_IDENTIFIER::UNDEFINED;
     this->oldOperation  = BRANCH_IDENTIFIER::UNDEFINED;
+    this->expectedType  = EXPECTED_TYPE::TUNDEFINED;
     this->history       = nullptr;
     this->buildingNode  = nullptr;
     this->precedence    = 0;
