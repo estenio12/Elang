@@ -35,8 +35,11 @@ void Parser::Parse()
     }
 
     // # Debug
-    std::cout << "Debug Branch Name: " << this->ast[0].first << "\n\n";
-    this->tool->PrintParseTree(this->ast[0].second);
+    for(auto debug : this->ast)
+    {
+        std::cout << "Debug Branch Name: " << debug.first << "\n\n";
+        this->tool->PrintParseTree(debug.second);
+    }
 }
 
 void Parser::IdentifyOperationType(Token* token)
@@ -121,6 +124,7 @@ void Parser::ResetState()
     this->history       = nullptr;
     this->buildingNode  = nullptr;
     this->precedence    = 0;
+    this->isConstant    = false;
 }
 
 void Parser::AddParemCounter()

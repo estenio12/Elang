@@ -36,6 +36,7 @@ class Parser
         std::string expectedType = EXPECTED_TYPE::TUNDEFINED;
         std::string currentScope = STANDARD_SCOPE_NAME::GLOBALSCOPE;
         int currentDeep = 0;
+        bool isConstant = false;
 
     // # Arithmetic Variables
     private:
@@ -76,5 +77,8 @@ class Parser
 
     private:
         bool ArithmeticOperation(Token* );
+        bool ArithmeticOperationCheckOpenParam(Token* );
+        bool ArithmeticOperationCheckType(Token* );
+        bool ArithmeticOperationCheckIdentifier(Token* );
         void ArithmeticCommit();
 };

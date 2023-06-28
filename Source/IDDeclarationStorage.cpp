@@ -38,8 +38,8 @@ IDModel* IDDeclarationStorage::FindObjectIdentifier(std::string name)
     return nullptr;
 }
 
-IDModel* IDDeclarationStorage::CreateRow(std::string name, std::string value, std::string type, 
-                                         std::string scopeName, int deep = 0)
+IDModel* IDDeclarationStorage::CreateRow(std::string name, std::string value, std::string type, std::string typeValue, 
+                                         std::string scopeName, int deep = 0, bool isConstant = false)
 {
     IDModel* row = new IDModel();
 
@@ -53,8 +53,9 @@ IDModel* IDDeclarationStorage::CreateRow(std::string name, std::string value, st
     row->name  = name;
     row->value = value;
     row->type  = type;
+    row->typeValue = typeValue;
     row->scopeName = scopeName;
-    row->deep  = deep;
+    row->deep      = deep;
 
     return row; 
 }

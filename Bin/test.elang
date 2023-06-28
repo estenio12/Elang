@@ -1,4 +1,6 @@
 # Teste de comentário
-var:text age = true;
+var:number num = 10;
+var:number tes = 20;
+var:number age = tes + num;
 
 

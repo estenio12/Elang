@@ -5,17 +5,22 @@ bool Parser::VariableDeclaration(Token* token)
     // # If history is null, is expected the variables declaration 
     if(history == nullptr)
     {
-        if(token->value == KEYWORDS::TVAR   ||
-           token->value == KEYWORDS::TCONST )
+        if(token->value == KEYWORDS::TVAR )
         {
             this->InsertBuildingNode(token, AST_DIRECTION::RIGHT);
             this->history = token;
             return true;
         }
-        else
+
+        if(token->value == KEYWORDS::TCONST )
         {
-            this->ThrowError("unexpected token '" + token->value + "'", token->startPos);
+            this->InsertBuildingNode(token, AST_DIRECTION::RIGHT);
+            this->isConstant = true;
+            this->history = token;
+            return true;
         }
+
+        this->ThrowError(token);
     }
 
     // # After variables declaration token, is expected the colon 
@@ -28,10 +33,8 @@ bool Parser::VariableDeclaration(Token* token)
             this->history = token;
             return true;
         }
-        else
-        {
-            this->ThrowError("unexpected token '" + token->value + "'", token->startPos);
-        }
+
+        this->ThrowError(token);
     }
 
     // # After colon token, is expected a type
@@ -48,10 +51,8 @@ bool Parser::VariableDeclaration(Token* token)
             this->expectedType = this->GetTypeVariableDeclaration(token);
             return true;
         }
-        else
-        {
-            this->ThrowError("unexpected token '" + token->value + "'", token->startPos);
-        }
+
+        this->ThrowError(token);
     }
 
     // # After type token, is expected an identifier 
@@ -64,22 +65,18 @@ bool Parser::VariableDeclaration(Token* token)
         if(token->type == NAME::IDENTIFIER)
         {
             if(this->IDTable->ExistIdentifier(token->value))
-            {
-                this->ThrowError("Duplicate variable declaration", token->startPos);
-            }
+               this->ThrowError("Duplicate variable declaration", token->startPos);
 
-            auto tempID = this->IDTable->CreateRow(token->value, token->value, token->type, 
-                                                   this->currentScope, this->currentDeep);
+            auto tempID = this->IDTable->CreateRow(token->value, token->value, token->type, this->expectedType,
+                                                   this->currentScope, this->currentDeep, this->isConstant);
             this->IDTable->InsertID(tempID);
 
             this->InsertBuildingNode(token, AST_DIRECTION::RIGHT);
             this->history = token;
             return true;
         }
-        else
-        {
-            this->ThrowError("unexpected token '" + token->value + "'", token->startPos);
-        }
+
+        this->ThrowError(token);
     }
 
     // # After identifier token, is expected '=' or ';'
@@ -92,15 +89,14 @@ bool Parser::VariableDeclaration(Token* token)
             this->currentBranch = BRANCH_IDENTIFIER::ARITHMETIC_OPERATION;
             return true;
         }
-        else if(token->value[0] == DELIMITERS::EOL)
+        
+        if(token->value[0] == DELIMITERS::EOL)
         {
             this->VariableDeclarationCommit();
             return true;
         }
-        else
-        {
-            this->ThrowError("unexpected token '" + token->value + "'", token->startPos);
-        }
+
+        this->ThrowError(token);
     }
 
     return false;
