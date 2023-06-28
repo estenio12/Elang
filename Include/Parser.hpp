@@ -17,6 +17,7 @@
 #include "../Helpers/SymbolTable.hpp"
 #include "../Include/Output.hpp"
 #include "../Include/LexicalAnalyser.hpp"
+#include "../Include/IDDeclarationStorage.hpp"
 #include "../Model/Ast.hpp"
 
 class Parser
@@ -25,6 +26,7 @@ class Parser
         AST ast;
         Lexer* lexer;
         Tools* tool;
+        IDDeclarationStorage* IDTable;
 
     private:
         AstNode* buildingNode;
@@ -32,6 +34,8 @@ class Parser
         int currentBranch;
         int oldOperation;
         int signatureMainBranch;
+        std::string currentScope = STANDARD_SCOPE_NAME::GLOBALSCOPE;
+        int currentDeep = 0;
 
     // # Arithmetic Variables
     private:

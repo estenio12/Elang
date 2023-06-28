@@ -1,5 +1,4 @@
 # Teste de comentário
-# Teste de comentário
-var:number age = (10 + 15) + (idade / 2);# Teste de comentário
+var:number age = true;
 
 

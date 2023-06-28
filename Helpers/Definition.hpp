@@ -25,6 +25,11 @@ namespace BRANCH_NAME
     const static std::string ARITHMETIC_OPERATION = "ARITHMETIC_OPERATION";
 }
 
+namespace STANDARD_SCOPE_NAME
+{
+    const static std::string GLOBALSCOPE = "GLOBALSCOPE";
+}
+
 enum BRANCH_IDENTIFIER
 {
     UNDEFINED,

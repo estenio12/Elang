@@ -4,13 +4,23 @@ bool Parser::ArithmeticOperation(Token* token)
 {
     if(history->value[0] == DELIMITERS::ASSIGN)
     {
-        if(token->type == NAME::IDENTIFIER ||
-           token->type == NAME::NUMBER)
+        if(token->type == NAME::IDENTIFIER)
+        {
+            if(!this->IDTable->ExistIdentifier(token->value))
+                this->ThrowError("Variable not declared in scope", token->startPos + 1);
+
+            this->buffer  = token;
+            this->history = token;
+            return true;
+        }
+
+        if(token->type == NAME::NUMBER)
         {
             this->buffer  = token;
             this->history = token;
             return true;
         }
+
 
         if(token->value[0] == DELIMITERS::OPEN_PARAM)
         {
@@ -82,7 +92,10 @@ bool Parser::ArithmeticOperation(Token* token)
                 auto node = new AstNode(this->buffer, "", this->precedence, nullptr, nullptr);
                 auto lastNodeArithmentic = this->FindLastNode(this->ArithmeticBuildingNode, AST_DIRECTION::RIGHT);
 
-                lastNodeArithmentic->right = node;
+                if(lastNodeArithmentic == nullptr)
+                    this->ArithmeticBuildingNode = node;
+                else
+                    lastNodeArithmentic->right = node;
             }
             
             if(lastNode == nullptr)
@@ -114,8 +127,17 @@ bool Parser::ArithmeticOperation(Token* token)
        history->value == ARITHMETIC::SHIFTLEFT  ||
        history->value == ARITHMETIC::SHIFTRIGHT )
     {
-        if(token->type == NAME::IDENTIFIER ||
-           token->type == NAME::NUMBER)
+        if(token->type == NAME::IDENTIFIER)
+        {
+            if(!this->IDTable->ExistIdentifier(token->value))
+                this->ThrowError("Variable not declared in scope", token->startPos + 1);
+
+            this->buffer  = token;
+            this->history = token;
+            return true;
+        }
+
+        if(token->type == NAME::NUMBER)
         {
             this->buffer  = token;
             this->history = token;
@@ -132,8 +154,17 @@ bool Parser::ArithmeticOperation(Token* token)
 
     if(history->value[0] == DELIMITERS::OPEN_PARAM)
     {
-       if(token->type == NAME::IDENTIFIER ||
-          token->type == NAME::NUMBER)
+       if(token->type == NAME::IDENTIFIER)
+        {
+            if(!this->IDTable->ExistIdentifier(token->value))
+                this->ThrowError("Variable not declared in scope", token->startPos + 1);
+
+            this->buffer  = token;
+            this->history = token;
+            return true;
+        }
+
+        if(token->type == NAME::NUMBER)
         {
             this->buffer  = token;
             this->history = token;

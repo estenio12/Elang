@@ -2,7 +2,6 @@
 
 bool Parser::VariableDeclaration(Token* token)
 {
-    // Output::Print("Debug Tokens: " + token->value);
     // # If history is null, is expected the variables declaration 
     if(history == nullptr)
     {
@@ -63,6 +62,15 @@ bool Parser::VariableDeclaration(Token* token)
     {
         if(token->type == NAME::IDENTIFIER)
         {
+            if(this->IDTable->ExistIdentifier(token->value))
+            {
+                this->ThrowError("Duplicate variable declaration", token->startPos);
+            }
+
+            auto tempID = this->IDTable->CreateRow(token->value, token->value, token->type, 
+                                                   this->currentScope, this->currentDeep);
+            this->IDTable->InsertID(tempID);
+
             this->InsertBuildingNode(token, AST_DIRECTION::RIGHT);
             this->history = token;
             return true;

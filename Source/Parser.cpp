@@ -5,7 +5,8 @@ Parser::Parser(Lexer* lexer):lexer(lexer)
     this->currentBranch = BRANCH_IDENTIFIER::UNDEFINED;
     this->signatureMainBranch = BRANCH_IDENTIFIER::UNDEFINED;
     
-    this->tool = new Tools();
+    this->tool      = new Tools();
+    this->IDTable = new IDDeclarationStorage();
 }
 
 Parser::~Parser(){}
