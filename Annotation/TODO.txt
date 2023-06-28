@@ -12,8 +12,8 @@
 	> [ OK ] 6 - Lexer: support to new keywords;
 	> [ OK ] 7 - Lexer: ignore empty and commented lines;
 	> [ OK ] 8 - Parser: duplicate identifier validation and declaration;
-	> [ TO DO ] 9 - Parser: Identify and accept others type value in assignment;
-	> [ TO DO ] 10 - Parser: Check that arithmetic operation is the same as expected by the declarator;
+	> [ OK ] 9 - Parser: Identify and accept others type value in assignment;
+	> [ OK ] 10 - Parser: Check that arithmetic operation is the same as expected by the declarator;
 
 >> To Fix:
 

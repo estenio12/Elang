@@ -33,6 +33,7 @@ class Parser
         Token* history;
         int currentBranch;
         int oldOperation;
+        std::string expectedType = EXPECTED_TYPE::TUNDEFINED;
         int signatureMainBranch;
         std::string currentScope = STANDARD_SCOPE_NAME::GLOBALSCOPE;
         int currentDeep = 0;
@@ -72,6 +73,7 @@ class Parser
     private:
         bool VariableDeclaration(Token* );
         void VariableDeclarationCommit();
+        std::string GetTypeVariableDeclaration(Token* );
 
     private:
         bool ArithmeticOperation(Token* );

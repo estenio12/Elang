@@ -44,7 +44,8 @@ bool Parser::VariableDeclaration(Token* token)
            token->value == TYPE::NAME[TYPE::TVOID]   )
         {
             this->InsertBuildingNode(token, AST_DIRECTION::RIGHT);
-            this->history = token;
+            this->history      = token;
+            this->expectedType = this->GetTypeVariableDeclaration(token);
             return true;
         }
         else
@@ -110,3 +111,16 @@ void Parser::VariableDeclarationCommit()
     this->InsertAstNode(BRANCH_NAME::VARIABLE_DECLARATION, this->buildingNode);
     this->ResetState();
 }
+
+std::string Parser::GetTypeVariableDeclaration(Token* token)
+{
+    if(token->value == TYPE::NAME[TYPE::TBOOL]) return EXPECTED_TYPE::TBOOLEAN;
+    if(token->value == TYPE::NAME[TYPE::TCHAR]) return EXPECTED_TYPE::TCHARACTER;
+    if(token->value == TYPE::NAME[TYPE::TNUMBER]) return EXPECTED_TYPE::TNUMBER;
+    if(token->value == TYPE::NAME[TYPE::TTEXT]) return EXPECTED_TYPE::TSTRING;
+    if(token->value == TYPE::NAME[TYPE::TVOID]) return EXPECTED_TYPE::TVOID;
+
+    Output::PrintCustomizeError("Compiler internal error: ", "No match type in variable declaration");
+    exit(EXIT_FAILURE);
+}
+

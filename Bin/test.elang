@@ -1,4 +1,4 @@
 # Teste de comentário
-var:number age = true;
+var:text age = true;
 
 

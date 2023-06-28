@@ -9,18 +9,34 @@ bool Parser::ArithmeticOperation(Token* token)
             if(!this->IDTable->ExistIdentifier(token->value))
                 this->ThrowError("Variable not declared in scope", token->startPos + 1);
 
+            auto getEntity = this->IDTable->FindObjectIdentifier(token->value);
+
+            if(getEntity == nullptr)
+            {
+                Output::PrintCustomizeError("Compiler internal error: ", "Object not found in IDTable");
+                exit(EXIT_FAILURE);
+            }
+
+            if(getEntity->type != this->expectedType)
+                this->ThrowError("Invalid conversion from " + token->type + " to " + this->expectedType + "", token->startPos + 1);
+
             this->buffer  = token;
             this->history = token;
             return true;
         }
 
-        if(token->type == NAME::NUMBER)
+        if(token->type == NAME::NUMBER ||
+           token->type == NAME::BOOLEAN ||
+           token->type == NAME::CHARACTER ||
+           token->type == NAME::STRING)
         {
+            if(token->type != this->expectedType)
+                this->ThrowError("Cannot implicitly convert type '" + token->type + "' to '" + this->expectedType + "'", token->startPos + 1);
+
             this->buffer  = token;
             this->history = token;
             return true;
         }
-
 
         if(token->value[0] == DELIMITERS::OPEN_PARAM)
         {
@@ -34,7 +50,10 @@ bool Parser::ArithmeticOperation(Token* token)
 
     if(history->value[0] == DELIMITERS::CLOSE_PARAM || 
        history->type == NAME::IDENTIFIER ||
-       history->type == NAME::NUMBER)
+       history->type == NAME::NUMBER ||
+       history->type == NAME::BOOLEAN ||
+       history->type == NAME::CHARACTER ||
+       history->type == NAME::STRING)
     {
         if(token->value == ARITHMETIC::ADD ||
            token->value == ARITHMETIC::SUB ||
@@ -132,13 +151,30 @@ bool Parser::ArithmeticOperation(Token* token)
             if(!this->IDTable->ExistIdentifier(token->value))
                 this->ThrowError("Variable not declared in scope", token->startPos + 1);
 
+            auto getEntity = this->IDTable->FindObjectIdentifier(token->value);
+
+            if(getEntity == nullptr)
+            {
+                Output::PrintCustomizeError("Compiler internal error: ", "Object not found in IDTable");
+                exit(EXIT_FAILURE);
+            }
+
+            if(getEntity->type != this->expectedType)
+                this->ThrowError("Invalid conversion from " + token->type + " to " + this->expectedType + "", token->startPos + 1);
+
             this->buffer  = token;
             this->history = token;
             return true;
         }
 
-        if(token->type == NAME::NUMBER)
+        if(token->type == NAME::NUMBER ||
+           token->type == NAME::BOOLEAN ||
+           token->type == NAME::CHARACTER ||
+           token->type == NAME::STRING)
         {
+            if(token->type != this->expectedType)
+                this->ThrowError("Cannot implicitly convert type '" + token->type + "' to '" + this->expectedType + "'", token->startPos + 1);
+
             this->buffer  = token;
             this->history = token;
             return true;
@@ -159,13 +195,30 @@ bool Parser::ArithmeticOperation(Token* token)
             if(!this->IDTable->ExistIdentifier(token->value))
                 this->ThrowError("Variable not declared in scope", token->startPos + 1);
 
+            auto getEntity = this->IDTable->FindObjectIdentifier(token->value);
+
+            if(getEntity == nullptr)
+            {
+                Output::PrintCustomizeError("Compiler internal error: ", "Object not found in IDTable");
+                exit(EXIT_FAILURE);
+            }
+
+            if(getEntity->type != this->expectedType)
+                this->ThrowError("Invalid conversion from " + token->type + " to " + this->expectedType + "", token->startPos + 1);
+
             this->buffer  = token;
             this->history = token;
             return true;
         }
 
-        if(token->type == NAME::NUMBER)
+        if(token->type == NAME::NUMBER ||
+           token->type == NAME::BOOLEAN ||
+           token->type == NAME::CHARACTER ||
+           token->type == NAME::STRING)
         {
+            if(token->type != this->expectedType)
+                this->ThrowError("Cannot implicitly convert type '" + token->type + "' to '" + this->expectedType + "'", token->startPos + 1);
+
             this->buffer  = token;
             this->history = token;
             return true;
