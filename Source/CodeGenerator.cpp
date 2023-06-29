@@ -36,6 +36,7 @@ void CodeGenerator::WriteOutputFile()
         this->fileHandle << item;
 
     this->fileHandle.close();
+    this->CodeStack.clear();
     Output::PrintSuccess("Successfully compiled!");
 }
 
