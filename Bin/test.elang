@@ -3,6 +3,6 @@ var:number t2;
 var:number t3;
 var:number t4;
 
-var:text meuNome;
-var:char sexo;
-var:bool ativo;
+var:text description;
+var:char letter;
+var:bool isActiveted;

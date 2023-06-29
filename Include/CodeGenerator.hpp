@@ -15,7 +15,7 @@
 #include <filesystem>
 #include "../Helpers/Definition.hpp"
 #include "../Helpers/SymbolTable.hpp"
-#include "../Helpers/TargetCodeDictonary.hpp"
+#include "../Helpers/TargetCodeDictionary.hpp"
 #include "../Include/Output.hpp"
 #include "../Include/IDDeclarationStorage.hpp"
 
