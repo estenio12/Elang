@@ -16,7 +16,7 @@
 	> [ OK ] 10 - Parser: Check that arithmetic operation is the same as expected by the declarator;
 	> [ OK ] 11 - Parser: Check that is constant variable;
 	> [ OK ] 12 - Parser: Refactoring;
-	> [ TO DO ] 13 - CodeGenerator: Generate the first target code;
+	> [ WORKING ] 13 - CodeGenerator: Generate the first target code;
 
 >> To Fix:
 

@@ -2,7 +2,7 @@
 // ## 
 // ## @author: Estenio Garcia
 // ## @copyright: (c) Allright reserved 
-// ## @License: MIT
+// ## @License: Apache 2.0
 // ## 
 // #######################################
 
