@@ -22,8 +22,8 @@
 class CodeGenerator
 {   
     private:
-        std::string OutputName  = "app.html";
-        std::fstream fileHandle;
+        std::string OutputName  = "app.js";
+        std::ofstream fileHandle;
 
     private:
         IDDeclarationStorage* IDTable;
@@ -38,7 +38,6 @@ class CodeGenerator
 
     private:
         void WriteOutputFile();
-        void CheckFileExist();
 
     private:
         void ThrowErro(std::string );

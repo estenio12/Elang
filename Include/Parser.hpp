@@ -19,6 +19,7 @@
 #include "../Include/LexicalAnalyser.hpp"
 #include "../Include/IDDeclarationStorage.hpp"
 #include "../Model/Ast.hpp"
+#include "../Include/CodeGenerator.hpp"
 
 class Parser
 {
@@ -27,6 +28,7 @@ class Parser
         Lexer* lexer;
         Tools* tool;
         IDDeclarationStorage* IDTable;
+        CodeGenerator* codegen;
 
     private:
         AstNode* buildingNode;

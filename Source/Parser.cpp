@@ -10,6 +10,7 @@ Parser::Parser(Lexer* lexer):lexer(lexer)
     
     this->tool    = new Tools();
     this->IDTable = new IDDeclarationStorage();
+    this->codegen = new CodeGenerator(this->IDTable);
 }
 
 Parser::~Parser(){}
@@ -22,7 +23,7 @@ void Parser::Parse()
 
         if(token == nullptr) break;
 
-        Output::PrintDebug(token->type + " | " + token->value);
+        // Output::PrintDebug(token->type + " | " + token->value);
 
         switch(this->currentBranch)
         {
@@ -46,6 +47,8 @@ void Parser::Parse()
         std::cout << "Debug Branch Name: " << debug.first << "\n\n";
         this->tool->PrintParseTree(debug.second);
     }
+
+    this->codegen->Generate(this->ast);
 }
 
 void Parser::IdentifyOperationType(Token* token)

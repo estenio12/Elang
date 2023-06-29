@@ -1,1 +1,8 @@
-var:number num;
+var:number t1;
+var:number t2;
+var:number t3;
+var:number t4;
+
+var:text meuNome;
+var:char sexo;
+var:bool ativo;

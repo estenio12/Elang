@@ -2,7 +2,7 @@
 
 CodeGenerator::CodeGenerator(IDDeclarationStorage* IDTable):IDTable(IDTable)
 {
-    this->fileHandle.open(this->OutputName, std::ios::out);
+    this->fileHandle.open(this->OutputName, std::ios::out | std::ios::ate);
 }
 
 CodeGenerator::~CodeGenerator(){}
@@ -30,17 +30,13 @@ std::string CodeGenerator::AddWhitespace(std::string value)
     return " " + value;
 }
 
-void CodeGenerator::CheckFileExist()
-{
-    auto path = std::filesystem::path(this->OutputName);
-    if(std::filesystem::exists(path)) std::filesystem::remove(path);
-}
-
 void CodeGenerator::WriteOutputFile()
 {
-    this->CheckFileExist();
+    for(auto item : this->CodeStack)
+        this->fileHandle << item;
 
-    // this->fileHandle.write();
+    this->fileHandle.close();
+    Output::PrintSuccess("Successfully compiled!");
 }
 
 
