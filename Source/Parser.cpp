@@ -3,8 +3,12 @@
 Parser::Parser(Lexer* lexer):lexer(lexer)
 {
     this->currentBranch = BRANCH_IDENTIFIER::UNDEFINED;
+    this->buildingNode  = nullptr;
+    this->history       = nullptr;
+    this->ArithmeticBuildingNode = nullptr;
+    this->buffer        = nullptr;
     
-    this->tool      = new Tools();
+    this->tool    = new Tools();
     this->IDTable = new IDDeclarationStorage();
 }
 
@@ -17,6 +21,8 @@ void Parser::Parse()
         auto token = this->lexer->GetNextToken();
 
         if(token == nullptr) break;
+
+        Output::PrintDebug(token->type + " | " + token->value);
 
         switch(this->currentBranch)
         {

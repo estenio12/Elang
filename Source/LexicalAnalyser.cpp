@@ -30,6 +30,7 @@ Token* Lexer::GetToken()
         return token;
     }
 
+    this->fileHandler.close();
     return nullptr;
 }
 

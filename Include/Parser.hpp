@@ -31,8 +31,8 @@ class Parser
     private:
         AstNode* buildingNode;
         Token* history;
-        int currentBranch;
-        int oldOperation;
+        int currentBranch = BRANCH_IDENTIFIER::UNDEFINED;
+        int oldOperation  = BRANCH_IDENTIFIER::UNDEFINED;
         std::string expectedType = EXPECTED_TYPE::TUNDEFINED;
         std::string currentScope = STANDARD_SCOPE_NAME::GLOBALSCOPE;
         int currentDeep = 0;
