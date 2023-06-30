@@ -70,6 +70,9 @@ bool Parser::ArithmeticOperation(Token* token)
                 else
                     lastNodeArithmentic->right = node;
             }
+           
+            // # Insert EOL token into tree
+            this->InsertArithmeticNode(token, AST_DIRECTION::RIGHT);
             
             if(lastNode == nullptr)
             {
@@ -186,7 +189,25 @@ bool Parser::ArithmeticOperationCheckIdentifier(Token* token)
     return false;
 }
 
+void Parser::InsertArithmeticNode(Token* token, int direction)
+{
+    auto node = new AstNode(token);
 
+    if(this->ArithmeticBuildingNode == nullptr)
+    {
+        this->ArithmeticBuildingNode = node;
+        this->history = token;
+    }
+    else
+    {
+        auto lastNode = this->FindLastNode(ArithmeticBuildingNode, direction);
+
+        if(direction == AST_DIRECTION::LEFT)
+           lastNode->left = node;
+        else
+           lastNode->right = node;
+    }
+}
 
 
 

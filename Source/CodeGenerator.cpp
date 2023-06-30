@@ -40,4 +40,9 @@ void CodeGenerator::WriteOutputFile()
     Output::PrintSuccess("Successfully compiled!");
 }
 
+std::string CodeGenerator::FormatString(std::string value)
+{
+    return "'" + value + "'";
+}
+
 

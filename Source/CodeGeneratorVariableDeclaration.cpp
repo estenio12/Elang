@@ -13,6 +13,8 @@ void CodeGenerator::VisitorVariableDeclaration(AstNode* node)
     }
     else
     {
+        Output::PrintDebug("Type: " + node->token->type );
+
         if(node->token->value == KEYWORDS::TVAR)
         {
             this->VariableDeclarationCodeStack.push_back(TARGET_CODE::T_VAR);
@@ -39,10 +41,32 @@ void CodeGenerator::VisitorVariableDeclaration(AstNode* node)
         if(node->token->type == NAME::IDENTIFIER)
         {
             this->VariableDeclarationCodeStack.push_back(this->AddWhitespace(node->token->value));
-            
-            if(node->right == nullptr)
-               this->VariableDeclarationCodeStack.push_back(TARGET_CODE::T_EOL);
-            
+            this->VisitorVariableDeclaration(node->right);
+        }
+
+        if(node->token->value[0] == DELIMITERS::ASSIGN)
+        {
+            this->VariableDeclarationCodeStack.push_back(TARGET_CODE::T_ASSING);
+            this->VisitorVariableDeclaration(node->right);
+        }
+
+        if(node->token->type == NAME::STRING ||
+           node->token->type == NAME::CHARACTER)
+        {
+            this->VariableDeclarationCodeStack.push_back(this->FormatString(node->token->value));
+            this->VisitorVariableDeclaration(node->right);
+        }
+
+        if(node->token->type == NAME::NUMBER  ||
+           node->token->type == NAME::BOOLEAN )
+        {
+            this->VariableDeclarationCodeStack.push_back(node->token->value);
+            this->VisitorVariableDeclaration(node->right);
+        }
+
+        if(node->token->value[0] == DELIMITERS::EOL)
+        {
+            this->VariableDeclarationCodeStack.push_back(TARGET_CODE::T_EOL);
             this->VisitorVariableDeclaration(node->right);
         }
     }

@@ -42,6 +42,7 @@ class CodeGenerator
     private:
         void ThrowErro(std::string );
         std::string AddWhitespace(std::string );
+        std::string FormatString(std::string );
 
     private:
         std::vector<std::string> VariableDeclarationCodeStack;

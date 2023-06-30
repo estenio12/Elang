@@ -14,15 +14,15 @@
 namespace NAME
 {
     static const std::string UNDEFINED   = "undefined";
-    static const std::string NUMBER      = "number";
-    static const std::string CHARACTER   = "character";
     static const std::string BUILDING    = "building";
     static const std::string KEYWORD     = "keyword";
+    static const std::string NUMBER      = "number";
+    static const std::string CHARACTER   = "character";
     static const std::string BOOLEAN     = "boolean";
+    static const std::string STRING      = "string";
     static const std::string TYPE        = "type";
     static const std::string IDENTIFIER  = "identifier";
     static const std::string DELIMITER   = "delimiter";
-    static const std::string STRING      = "string";
     static const std::string ARITHMETIC  = "arithmatic";
     static const std::string COMPARISON  = "comparison";
     static const std::string LOGICAL     = "logical";

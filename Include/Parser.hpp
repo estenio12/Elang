@@ -82,5 +82,6 @@ class Parser
         bool ArithmeticOperationCheckOpenParam(Token* );
         bool ArithmeticOperationCheckType(Token* );
         bool ArithmeticOperationCheckIdentifier(Token* );
+        void InsertArithmeticNode(Token*, int );
         void ArithmeticCommit();
 };

@@ -92,6 +92,8 @@ bool Parser::VariableDeclaration(Token* token)
         
         if(token->value[0] == DELIMITERS::EOL)
         {
+            this->InsertBuildingNode(token, AST_DIRECTION::RIGHT);
+            this->history = token;
             this->VariableDeclarationCommit();
             return true;
         }
