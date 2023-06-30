@@ -36,8 +36,7 @@ bool Lexer::IsDelimiter(char target)
        target == DELIMITERS::CLOSE_SQUAREBRACKET ||
        target == DELIMITERS::COMMA               ||
        target == DELIMITERS::APOSTROPHE          ||
-       target == DELIMITERS::QUOTATION_MARKS     ||
-       target == DELIMITERS::BACK_SLASH
+       target == DELIMITERS::QUOTATION_MARKS     
       )
     {
         return true;
@@ -189,8 +188,7 @@ Token* Lexer::BindDelimiters(std::string token)
        token[0] == DELIMITERS::CLOSE_SQUAREBRACKET ||
        token[0] == DELIMITERS::COMMA               ||
        token[0] == DELIMITERS::APOSTROPHE          ||
-       token[0] == DELIMITERS::QUOTATION_MARKS     ||
-       token[0] == DELIMITERS::BACK_SLASH
+       token[0] == DELIMITERS::QUOTATION_MARKS     
       )
     {
         return new Token(token, NAME::DELIMITER);

@@ -1,1 +1,1 @@
-var:bool t1 = true;
+var:number t1 = (10 + 2) * 5 / 2;

@@ -3,6 +3,8 @@
 CodeGenerator::CodeGenerator(IDDeclarationStorage* IDTable):IDTable(IDTable)
 {
     this->fileHandle.open(this->OutputName, std::ios::out | std::ios::ate);
+
+    this->tool = new Tools();
 }
 
 CodeGenerator::~CodeGenerator(){}
@@ -40,7 +42,7 @@ void CodeGenerator::WriteOutputFile()
     Output::PrintSuccess("Successfully compiled!");
 }
 
-std::string CodeGenerator::FormatString(std::string value)
+std::string CodeGenerator::ConvertToString(std::string value)
 {
     return "'" + value + "'";
 }

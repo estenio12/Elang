@@ -19,25 +19,26 @@ bool Parser::ArithmeticOperation(Token* token)
            token->value == ARITHMETIC::SHIFTLEFT  ||
            token->value == ARITHMETIC::SHIFTRIGHT )
         {
-            auto node = new AstNode(token, "", this->precedence, nullptr, nullptr);
-            auto nodeLeft = new AstNode(buffer, "", this->precedence, nullptr, nullptr);
-            node->left = nodeLeft;
+            // // # Push to list
+            // auto BuildNode = this->FindLastNode(this->ArithmeticBuildingNode, AST_DIRECTION::RIGHT);
 
-            // # Clear Buffer
-            buffer = nullptr;
+            // auto node = new AstNode(token, "", this->precedence, nullptr, nullptr, BuildNode);
+            // auto nodeLeft = new AstNode(buffer, "", this->precedence, nullptr, nullptr, BuildNode);
+            // node->left = nodeLeft;
 
-            // # Push to list
-            auto BuildNode = this->FindLastNode(this->ArithmeticBuildingNode, AST_DIRECTION::RIGHT);
+            // // # Clear Buffer
+            // buffer = nullptr;
 
-            if(BuildNode == nullptr)
-            {
-                this->ArithmeticBuildingNode = node;
-            }
-            else
-            {
-                BuildNode->right = node;
-            }
+            // if(BuildNode == nullptr)
+            // {
+            //     this->ArithmeticBuildingNode = node;
+            // }
+            // else
+            // {
+            //     BuildNode->right = node;
+            // }
 
+            this->InsertArithmeticNode(token, AST_DIRECTION::RIGHT);
             this->history = token;
 
             return true;
@@ -46,6 +47,7 @@ bool Parser::ArithmeticOperation(Token* token)
         if(token->value[0] == DELIMITERS::CLOSE_PARAM)
         {
             this->history = token;
+            this->InsertArithmeticNode(token, AST_DIRECTION::RIGHT);
             this->RemoveParemCounter();
             return true;
         }
@@ -58,39 +60,44 @@ bool Parser::ArithmeticOperation(Token* token)
             if(paremCounter < 0)
                 this->ThrowError("The parentheses were closed, but never opened.", token->startPos);
 
-            auto lastNode = this->FindLastNode(buildingNode, AST_DIRECTION::RIGHT);
-
-            if(this->buffer != nullptr)
-            {
-                auto node = new AstNode(this->buffer, "", this->precedence, nullptr, nullptr);
-                auto lastNodeArithmentic = this->FindLastNode(this->ArithmeticBuildingNode, AST_DIRECTION::RIGHT);
-
-                if(lastNodeArithmentic == nullptr)
-                    this->ArithmeticBuildingNode = node;
-                else
-                    lastNodeArithmentic->right = node;
-            }
-           
-            // # Insert EOL token into tree
             this->InsertArithmeticNode(token, AST_DIRECTION::RIGHT);
-            
-            if(lastNode == nullptr)
-            {
-                lastNode = this->ArithmeticBuildingNode;
-                this->ArithmeticBuildingNode = nullptr;
-                this->ArithmeticCommit();
-                return true;
-            }
-            else
-            {
-                lastNode->right = this->ArithmeticBuildingNode;
-                this->ArithmeticBuildingNode = nullptr;
-                this->ArithmeticCommit();
-                return true;
-            }
-
-            this->ThrowError(token);
+            this->ArithmeticCommit();
+            return true;
         }
+        //     auto lastNode = this->FindLastNode(buildingNode, AST_DIRECTION::RIGHT);
+
+        //     if(this->buffer != nullptr)
+        //     {
+        //         int precedence = (history->value[0] == DELIMITERS::CLOSE_PARAM) ? this->precedence + 1 : this->precedence; 
+        //         auto lastNodeArithmentic = this->FindLastNode(this->ArithmeticBuildingNode, AST_DIRECTION::RIGHT);
+        //         auto node = new AstNode(this->buffer, "", precedence, nullptr, nullptr, lastNodeArithmentic);
+
+        //         if(lastNodeArithmentic == nullptr)
+        //             this->ArithmeticBuildingNode = node;
+        //         else
+        //             lastNodeArithmentic->right = node;
+        //     }
+           
+        //     // # Insert EOL token into tree
+        //     this->InsertArithmeticNode(token, AST_DIRECTION::RIGHT);
+            
+        //     if(lastNode == nullptr)
+        //     {
+        //         lastNode = this->ArithmeticBuildingNode;
+        //         this->ArithmeticBuildingNode = nullptr;
+        //         this->ArithmeticCommit();
+        //         return true;
+        //     }
+        //     else
+        //     {
+        //         lastNode->right = this->ArithmeticBuildingNode;
+        //         this->ArithmeticBuildingNode = nullptr;
+        //         this->ArithmeticCommit();
+        //         return true;
+        //     }
+
+        //     this->ThrowError(token);
+        // }
     }
 
     if(history->value[0] == DELIMITERS::ASSIGN     ||
@@ -126,7 +133,12 @@ void Parser::ArithmeticCommit()
             break;
             
             default:
-                this->InsertAstNode(BRANCH_NAME::ARITHMETIC_OPERATION, this->buildingNode);
+                // this->InsertAstNode(BRANCH_NAME::ARITHMETIC_OPERATION, this->ArithmeticStack);
+                std::string build;
+                for(auto item : this->ArithmeticStack) build += item;
+                auto node = new AstNode(new Token(build, NAME::EXPRESSION));
+                this->ast.push_back(std::make_pair(BRANCH_NAME::ARITHMETIC_OPERATION, node));
+                this->ArithmeticStack.clear();
                 this->ResetState();
             break;
         }
@@ -138,6 +150,7 @@ bool Parser::ArithmeticOperationCheckOpenParam(Token* token)
     if(token->value[0] == DELIMITERS::OPEN_PARAM)
     {
         this->AddParemCounter();
+        this->InsertArithmeticNode(token, AST_DIRECTION::RIGHT);
         this->history = token;
         return true;
     }
@@ -155,7 +168,8 @@ bool Parser::ArithmeticOperationCheckType(Token* token)
         if(token->type != this->expectedType)
             this->ThrowError("Cannot implicitly convert type '" + token->type + "' to '" + this->expectedType + "'", token->startPos + 1);
 
-        this->buffer  = token;
+        // this->buffer  = token;
+        this->InsertArithmeticNode(token, AST_DIRECTION::RIGHT);
         this->history = token;
         return true;
     }
@@ -181,7 +195,8 @@ bool Parser::ArithmeticOperationCheckIdentifier(Token* token)
         if(getEntity->typeValue != this->expectedType)
            this->ThrowError("Cannot implicitly convert type '" + getEntity->typeValue + "' to '" + this->expectedType + "'", token->startPos + 1);
 
-        this->buffer  = token;
+        // this->buffer  = token;
+        this->InsertArithmeticNode(token, AST_DIRECTION::RIGHT);
         this->history = token;
         return true;
     }
@@ -191,22 +206,23 @@ bool Parser::ArithmeticOperationCheckIdentifier(Token* token)
 
 void Parser::InsertArithmeticNode(Token* token, int direction)
 {
-    auto node = new AstNode(token);
+    this->ArithmeticStack.push_back(token->value);
+    // auto node = new AstNode(token);
 
-    if(this->ArithmeticBuildingNode == nullptr)
-    {
-        this->ArithmeticBuildingNode = node;
-        this->history = token;
-    }
-    else
-    {
-        auto lastNode = this->FindLastNode(ArithmeticBuildingNode, direction);
+    // if(this->ArithmeticBuildingNode == nullptr)
+    // {
+    //     this->ArithmeticBuildingNode = node;
+    //     this->history = token;
+    // }
+    // else
+    // {
+    //     auto lastNode = this->FindLastNode(ArithmeticBuildingNode, direction);
 
-        if(direction == AST_DIRECTION::LEFT)
-           lastNode->left = node;
-        else
-           lastNode->right = node;
-    }
+    //     if(direction == AST_DIRECTION::LEFT)
+    //        lastNode->left = node;
+    //     else
+    //        lastNode->right = node;
+    // }
 }
 
 

@@ -78,6 +78,7 @@ class Parser
         std::string GetTypeVariableDeclaration(Token* );
 
     private:
+        std::vector<std::string> ArithmeticStack;
         bool ArithmeticOperation(Token* );
         bool ArithmeticOperationCheckOpenParam(Token* );
         bool ArithmeticOperationCheckType(Token* );

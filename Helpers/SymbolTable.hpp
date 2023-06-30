@@ -27,6 +27,7 @@ namespace NAME
     static const std::string COMPARISON  = "comparison";
     static const std::string LOGICAL     = "logical";
     static const std::string ATTRIBUTION = "attribution";
+    static const std::string EXPRESSION  = "expression";
 }
 
 namespace KEYWORDS

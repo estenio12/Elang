@@ -18,12 +18,13 @@ class AstNode
         Token* token;
         AstNode* right;
         AstNode* left;
+        AstNode* parent;
         int precedence;
 
     public:
-        AstNode(Token* token):token(token){right = nullptr; left = nullptr; precedence = 0;}
-        AstNode(Token* token, std::string syntax_name, int precedence, AstNode* right, AstNode* left)
-        :token(token),right(right),left(left),syntax_name(syntax_name), precedence(precedence){}
+        AstNode(Token* token):token(token){right = nullptr; left = nullptr; parent = nullptr; precedence = 0;}
+        AstNode(Token* token, std::string syntax_name, int precedence, AstNode* right, AstNode* left, AstNode* parent)
+        :token(token),right(right),left(left),syntax_name(syntax_name), precedence(precedence), parent(parent){}
         ~AstNode(){}
 
     public:
@@ -37,5 +38,10 @@ class AstNode
         { 
             if(left == nullptr) return false;
             return true; 
+        }
+
+        bool HasAnyNode()
+        {
+            return this->HasLeftNode() || this->HasRightNode();
         }
 };

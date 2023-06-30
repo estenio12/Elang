@@ -16,6 +16,7 @@
 #include "../Helpers/Definition.hpp"
 #include "../Helpers/SymbolTable.hpp"
 #include "../Helpers/TargetCodeDictionary.hpp"
+#include "../Helpers/Tools.hpp"
 #include "../Include/Output.hpp"
 #include "../Include/IDDeclarationStorage.hpp"
 
@@ -27,7 +28,9 @@ class CodeGenerator
 
     private:
         IDDeclarationStorage* IDTable;
+        Tools* tool;
         std::vector<std::string> CodeStack;
+        int oldOperation = BRANCH_IDENTIFIER::UNDEFINED;
 
     public:
         CodeGenerator(IDDeclarationStorage* );
@@ -42,7 +45,7 @@ class CodeGenerator
     private:
         void ThrowErro(std::string );
         std::string AddWhitespace(std::string );
-        std::string FormatString(std::string );
+        std::string ConvertToString(std::string );
 
     private:
         std::vector<std::string> VariableDeclarationCodeStack;
@@ -50,4 +53,9 @@ class CodeGenerator
         void GenerateVariableDeclaration(AstNode* );
         void VisitorVariableDeclaration(AstNode* );
         void CommitVariableDeclaration();
+
+    private:
+        std::vector<std::string> ArithmeticOperationCodeStack;
+        void VisitorArithmeticOperation(AstNode* );
+        void CommitArithmeticOperation();
 };

@@ -48,6 +48,7 @@ void Parser::Parse()
         this->tool->PrintParseTree(debug.second);
     }
 
+    // # Generate Target Code
     this->codegen->Generate(this->ast);
 }
 
@@ -80,6 +81,7 @@ void Parser::InsertBuildingNode(Token* token, uint8_t direction = 0)
     else
     {
         auto lastNode = this->FindLastNode(buildingNode, direction);
+        node->parent = lastNode;
 
         if(direction == AST_DIRECTION::LEFT)
            lastNode->left = node;
