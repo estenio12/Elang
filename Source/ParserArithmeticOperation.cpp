@@ -126,16 +126,19 @@ void Parser::ArithmeticCommit()
 {
     if(this->buildingNode != nullptr)
     {
-        switch (this->oldOperation)
+        std::string build;
+        for(auto item : this->ArithmeticStack) build += item;
+
+        switch(this->oldOperation)
         {
             case BRANCH_IDENTIFIER::VARIABLE_DECLARATION:
+                // auto node = new AstNode(new Token(build, NAME::EXPRESSION));
+                this->InsertBuildingNode(new Token(build, NAME::EXPRESSION), AST_DIRECTION::RIGHT);
                 this->VariableDeclarationCommit();
             break;
             
             default:
                 // this->InsertAstNode(BRANCH_NAME::ARITHMETIC_OPERATION, this->ArithmeticStack);
-                std::string build;
-                for(auto item : this->ArithmeticStack) build += item;
                 auto node = new AstNode(new Token(build, NAME::EXPRESSION));
                 this->ast.push_back(std::make_pair(BRANCH_NAME::ARITHMETIC_OPERATION, node));
                 this->ArithmeticStack.clear();
