@@ -6,7 +6,6 @@ Parser::Parser(Lexer* lexer):lexer(lexer)
     this->buildingNode  = nullptr;
     this->history       = nullptr;
     this->ArithmeticBuildingNode = nullptr;
-    this->buffer        = nullptr;
     
     this->tool    = new Tools();
     this->IDTable = new IDDeclarationStorage();
@@ -134,20 +133,17 @@ void Parser::ResetState()
     this->expectedType  = EXPECTED_TYPE::TUNDEFINED;
     this->history       = nullptr;
     this->buildingNode  = nullptr;
-    this->precedence    = 0;
     this->isConstant    = false;
 }
 
 void Parser::AddParemCounter()
 {
     this->paremCounter++;
-    this->precedence++;
 }
 
 void Parser::RemoveParemCounter()
 {
     this->paremCounter--;
-    this->precedence--;
 }
 
 

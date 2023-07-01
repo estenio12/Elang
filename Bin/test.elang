@@ -1,1 +1,6 @@
-const:number t1 = (10 + 2) * 5 / 2;
+var:number t1 = (10 + 8) * 5 / 2;
+
+fun:void sum(var:number n1, var:number n2)
+{
+    return n1 + n2;
+}

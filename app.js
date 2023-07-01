@@ -1,1 +1,1 @@
-const t1=(10+2)*5/2;console.log(t1);
+var t1=(10+8)*5/2;

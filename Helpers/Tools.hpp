@@ -48,7 +48,6 @@ class Tools
             {
                 std::cout << "Debug ParseTree | Deep: " << deepCount << "\n";
                 std::cout << "Debug ParseTree | Current Node: " << node->token->value << "\n";
-                std::cout << "Debug ParseTree | Precedence: " << node->precedence << "\n";
                 if(node->parent != nullptr)
                    std::cout << "Debug ParseTree | Parent: " << node->parent->token->value << "\n";
                 else

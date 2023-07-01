@@ -19,12 +19,11 @@ class AstNode
         AstNode* right;
         AstNode* left;
         AstNode* parent;
-        int precedence;
 
     public:
-        AstNode(Token* token):token(token){right = nullptr; left = nullptr; parent = nullptr; precedence = 0;}
+        AstNode(Token* token):token(token){right = nullptr; left = nullptr; parent = nullptr; }
         AstNode(Token* token, std::string syntax_name, int precedence, AstNode* right, AstNode* left, AstNode* parent)
-        :token(token),right(right),left(left),syntax_name(syntax_name), precedence(precedence), parent(parent){}
+        :token(token),right(right),left(left),syntax_name(syntax_name), parent(parent){}
         ~AstNode(){}
 
     public:
