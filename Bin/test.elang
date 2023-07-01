@@ -1,1 +1,1 @@
-var:number t1 = (10 + 2) * 5 / 2;
+const:number t1 = (10 + 2) * 5 / 2;
