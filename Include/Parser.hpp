@@ -94,4 +94,5 @@ class Parser
         bool BuildParameterList(Token* );
         void InsertParameterListNode(Token*, int);
         void BuildParameterListCommit();
+        void BuildParameterListCommitForFunction();
 };

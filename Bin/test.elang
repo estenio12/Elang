@@ -1,4 +1,4 @@
-var:number t1 = (10 + 8) * 5 / 2;
+var:number t1 = (10 + 8) * 5 / 12;
 
 fun:number sum(var:number n1, var:number n2)
     return n1 + n2;

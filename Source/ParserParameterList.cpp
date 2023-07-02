@@ -85,13 +85,12 @@ void Parser::BuildParameterListCommit()
     switch(this->observer)
     {
         case BRANCH_IDENTIFIER::FUNCTION_DECLARATION:
-            this->AssignCurrentBranch(BRANCH_IDENTIFIER::FUNCTION_DECLARATION);
-            auto functionIdentifier = this->IDFunTable->FindObjectIdentifier(this->currentScope, this->currentFunctionType);
-            functionIdentifier->paramList = this->parameterList;
+            this->BuildParameterListCommitForFunction();
         break;
         
         default:
             Output::PrintCustomizeError("Compiler internal error in build parameter list: ", "No observer found!");
+            exit(EXIT_FAILURE);
         break;
     }
 }
@@ -116,5 +115,23 @@ void Parser::InsertParameterListNode(Token* token, int direction)
     }
 }
 
+void Parser::BuildParameterListCommitForFunction()
+{
+    this->AssignCurrentBranch(BRANCH_IDENTIFIER::FUNCTION_DECLARATION);
+    
+    auto functionIdentifier = this->IDFunTable->FindObjectIdentifier(this->currentScope, this->currentFunctionType);
+    functionIdentifier->paramList = this->parameterList;
+    this->parameterList.clear();
+    
+    auto lastNode = this->FindLastNode(this->buildingNode, AST_DIRECTION::RIGHT);
+
+    if(lastNode == nullptr)
+    {
+        Output::PrintCustomizeError("Compiler internal error in build parameter list: ", "function declaration no found!");
+        exit(EXIT_FAILURE);
+    }
+    else
+        lastNode->right = this->ParameterListBuildingNode;
+}
 
 

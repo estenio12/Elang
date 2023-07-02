@@ -51,7 +51,8 @@ bool Parser::FunctionDeclaration(Token* token)
             auto tempID = this->IDFunTable->CreateRow(token->value, this->currentFunctionType);
 
             this->IDFunTable->InsertFunctionID(tempID);
-            this->history = token;
+            this->currentScope = token->value;
+            this->history      = token;
             return true;
         }
 
@@ -82,7 +83,7 @@ bool Parser::FunctionDeclaration(Token* token)
         }
         else
         {
-            this->AssignCurrentBranch(BRANCH_IDENTIFIER::BUILD_PARAMETER_LIST);
+            this->currentBranch = BRANCH_IDENTIFIER::BUILD_PARAMETER_LIST;
             this->BuildParameterList(token);
             return true;
         }

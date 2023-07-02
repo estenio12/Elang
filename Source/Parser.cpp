@@ -42,15 +42,19 @@ void Parser::Parse()
             case BRANCH_IDENTIFIER::FUNCTION_DECLARATION:
                 this->FunctionDeclaration(token);
             break;
+
+            case BRANCH_IDENTIFIER::BUILD_PARAMETER_LIST:
+                this->BuildParameterList(token);
+            break;
         }
     }
 
     // # Debug
-    for(auto debug : this->ast)
-    {
-        std::cout << "Debug Branch Name: " << debug.first << "\n\n";
-        this->tool->PrintParseTree(debug.second);
-    }
+    // for(auto debug : this->ast)
+    // {
+    //     std::cout << "Debug Branch Name: " << debug.first << "\n\n";
+    //     this->tool->PrintParseTree(debug.second);
+    // }
 
     // # Generate Target Code
     this->codegen->Generate(this->ast);
