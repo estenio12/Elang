@@ -35,10 +35,10 @@ bool Parser::ArithmeticOperation(Token* token)
     
         if(token->value[0] == DELIMITERS::EOL)
         {
-            if(paremCounter > 0)
+            if(ArithmeticParemCounter > 0)
                 this->ThrowError("The parentheses were opened, but never closed.", token->startPos);
 
-            if(paremCounter < 0)
+            if(ArithmeticParemCounter < 0)
                 this->ThrowError("The parentheses were closed, but never opened.", token->startPos);
 
             auto lastNode = this->FindLastNode(buildingNode, AST_DIRECTION::RIGHT);
@@ -50,14 +50,14 @@ bool Parser::ArithmeticOperation(Token* token)
             {
                 lastNode = this->ArithmeticBuildingNode;
                 this->ArithmeticBuildingNode = nullptr;
-                this->ArithmeticCommit();
+                this->ArithmeticOperationCommit();
                 return true;
             }
             else
             {
                 lastNode->right = this->ArithmeticBuildingNode;
                 this->ArithmeticBuildingNode = nullptr;
-                this->ArithmeticCommit();
+                this->ArithmeticOperationCommit();
                 return true;
             }
 
@@ -83,15 +83,14 @@ bool Parser::ArithmeticOperation(Token* token)
     }
 
     this->ThrowError(token);
-
     return false;
 }
 
-void Parser::ArithmeticCommit()
+void Parser::ArithmeticOperationCommit()
 {
     if(this->buildingNode != nullptr)
     {
-        switch(this->oldOperation)
+        switch(this->observer)
         {
             case BRANCH_IDENTIFIER::VARIABLE_DECLARATION:
                 this->VariableDeclarationCommit();
@@ -140,7 +139,7 @@ bool Parser::ArithmeticOperationCheckIdentifier(Token* token)
 {
     if(token->type == NAME::IDENTIFIER)
     {
-        if(!this->IDTable->ExistIdentifier(token->value))
+        if(!this->IDTable->ExistIdentifier(token->value, this->currentScope, this->currentDeep))
             this->ThrowError("Variable not declared in scope '" + token->value + "'", token->startPos + 1);
 
         auto getEntity = this->IDTable->FindObjectIdentifier(token->value);

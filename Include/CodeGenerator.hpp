@@ -58,4 +58,9 @@ class CodeGenerator
         std::vector<std::string> ArithmeticOperationCodeStack;
         void VisitorArithmeticOperation(AstNode* );
         void CommitArithmeticOperation();
+
+    private:
+        std::vector<std::string> FunctionDeclarationCodeStack;
+        void VisitorFunctionDeclaration();
+        void CommitFunctionDeclaration();
 };

@@ -13,6 +13,7 @@
 #include <iostream>
 
 #include "../Model/IDModel.hpp"
+#include "../Helpers/Definition.hpp"
 
 class IDDeclarationStorage
 {
@@ -28,7 +29,7 @@ class IDDeclarationStorage
 
     public:
         void InsertID(IDModel* row);
-        bool ExistIdentifier(std::string name);
+        bool ExistIdentifier(std::string name, std::string scopeName, int deep);
         IDModel* FindObjectIdentifier(std::string name);
         IDModel* CreateRow(std::string name, std::string value, std::string type, std::string typeValue, 
                            std::string scopeName, int deep, bool isConstant);

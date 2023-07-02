@@ -48,7 +48,7 @@ bool Parser::VariableDeclaration(Token* token)
         {
             this->InsertBuildingNode(token, AST_DIRECTION::RIGHT);
             this->history      = token;
-            this->expectedType = this->GetTypeVariableDeclaration(token);
+            this->expectedType = this->GetExpectedType(token);
             return true;
         }
 
@@ -64,7 +64,7 @@ bool Parser::VariableDeclaration(Token* token)
     {
         if(token->type == NAME::IDENTIFIER)
         {
-            if(this->IDTable->ExistIdentifier(token->value))
+            if(this->IDTable->ExistIdentifier(token->value, this->currentScope, this->currentDeep))
                this->ThrowError("Duplicate variable declaration", token->startPos);
 
             auto tempID = this->IDTable->CreateRow(token->value, token->value, token->type, this->expectedType,
@@ -101,6 +101,7 @@ bool Parser::VariableDeclaration(Token* token)
         this->ThrowError(token);
     }
 
+    this->ThrowError(token);
     return false;
 }
 
@@ -110,15 +111,5 @@ void Parser::VariableDeclarationCommit()
     this->ResetState();
 }
 
-std::string Parser::GetTypeVariableDeclaration(Token* token)
-{
-    if(token->value == TYPE::NAME[TYPE::TBOOL]) return EXPECTED_TYPE::TBOOLEAN;
-    if(token->value == TYPE::NAME[TYPE::TCHAR]) return EXPECTED_TYPE::TCHARACTER;
-    if(token->value == TYPE::NAME[TYPE::TNUMBER]) return EXPECTED_TYPE::TNUMBER;
-    if(token->value == TYPE::NAME[TYPE::TTEXT]) return EXPECTED_TYPE::TSTRING;
-    if(token->value == TYPE::NAME[TYPE::TVOID]) return EXPECTED_TYPE::TVOID;
 
-    Output::PrintCustomizeError("Compiler internal error: ", "No match type in variable declaration");
-    exit(EXIT_FAILURE);
-}
 

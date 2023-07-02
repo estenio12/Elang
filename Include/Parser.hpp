@@ -18,7 +18,9 @@
 #include "../Include/Output.hpp"
 #include "../Include/LexicalAnalyser.hpp"
 #include "../Include/IDDeclarationStorage.hpp"
+#include "../Include/IDFunctionDeclarationStorage.hpp"
 #include "../Model/Ast.hpp"
+#include "../Model/FunctionIDModel.hpp"
 #include "../Include/CodeGenerator.hpp"
 
 class Parser
@@ -28,24 +30,18 @@ class Parser
         Lexer* lexer;
         Tools* tool;
         IDDeclarationStorage* IDTable;
+        IDFunctionDeclarationStorage* IDFunTable;
         CodeGenerator* codegen;
 
     private:
         AstNode* buildingNode;
         Token* history;
         int currentBranch = BRANCH_IDENTIFIER::UNDEFINED;
-        int oldOperation  = BRANCH_IDENTIFIER::UNDEFINED;
+        int observer      = BRANCH_IDENTIFIER::UNDEFINED;
         std::string expectedType = EXPECTED_TYPE::TUNDEFINED;
         std::string currentScope = STANDARD_SCOPE_NAME::GLOBALSCOPE;
         int currentDeep = 0;
         bool isConstant = false;
-
-    // # Arithmetic Variables
-    private:
-        AstNode* ArithmeticBuildingNode;
-        // # OpenParam  ++
-        // # CloseParam --
-        int paremCounter = 0;
 
     public:
         Parser(Lexer* lexer);
@@ -65,22 +61,37 @@ class Parser
         void InsertAstNode(std::string, AstNode* );
         void InsertBuildingNode(Token*, uint8_t );
         AstNode* FindLastNode(AstNode*, uint8_t );
-        void InsertBuffer(Token* );
         Token* ConsumeNextTokenFromBuffer();
         void AddParemCounter();
         void RemoveParemCounter();
+        void AddDeepCounter();
+        void RemoveDeepCounter();
+        std::string GetExpectedType(Token* );
 
     private:
         bool VariableDeclaration(Token* );
         void VariableDeclarationCommit();
-        std::string GetTypeVariableDeclaration(Token* );
 
     private:
-        // std::vector<std::string> ArithmeticStack;
+        AstNode* ArithmeticBuildingNode;
+        int ArithmeticParemCounter = 0;
         bool ArithmeticOperation(Token* );
         bool ArithmeticOperationCheckOpenParam(Token* );
         bool ArithmeticOperationCheckType(Token* );
         bool ArithmeticOperationCheckIdentifier(Token* );
         void InsertArithmeticNode(Token*, int );
-        void ArithmeticCommit();
+        void ArithmeticOperationCommit();
+
+    private:
+        std::string currentFunctionType = EXPECTED_TYPE::TVOID;
+        bool FunctionDeclaration(Token* );
+        bool FunctionBodyDeclaration(Token* );
+        void FunctionDeclarationCommit();
+
+    private:
+        AstNode* ParameterListBuildingNode;
+        FunctionParameterList parameterList;
+        bool BuildParameterList(Token* );
+        void InsertParameterListNode(Token*, int);
+        void BuildParameterListCommit();
 };

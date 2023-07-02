@@ -12,11 +12,14 @@ void IDDeclarationStorage::InsertID(IDModel* row)
     if(row != nullptr) this->IDTable.push_back(row);
 }
 
-bool IDDeclarationStorage::ExistIdentifier(std::string name)
+bool IDDeclarationStorage::ExistIdentifier(std::string name, std::string scopeName, int deep)
 {
     for(auto item : this->IDTable)
     {
-        if(item->name == name)
+        if(item->name == name && 
+           item->deep <= deep &&
+           (item->scopeName == scopeName ||
+            item->scopeName == STANDARD_SCOPE_NAME::GLOBALSCOPE))
         {
             return true;
         }

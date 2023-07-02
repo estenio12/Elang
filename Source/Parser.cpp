@@ -7,9 +7,10 @@ Parser::Parser(Lexer* lexer):lexer(lexer)
     this->history       = nullptr;
     this->ArithmeticBuildingNode = nullptr;
     
-    this->tool    = new Tools();
-    this->IDTable = new IDDeclarationStorage();
-    this->codegen = new CodeGenerator(this->IDTable);
+    this->tool       = new Tools();
+    this->IDTable    = new IDDeclarationStorage();
+    this->IDFunTable = new IDFunctionDeclarationStorage();
+    this->codegen    = new CodeGenerator(this->IDTable);
 }
 
 Parser::~Parser(){}
@@ -37,6 +38,10 @@ void Parser::Parse()
             case BRANCH_IDENTIFIER::ARITHMETIC_OPERATION:
                 this->ArithmeticOperation(token);
             break;
+
+            case BRANCH_IDENTIFIER::FUNCTION_DECLARATION:
+                this->FunctionDeclaration(token);
+            break;
         }
     }
 
@@ -60,12 +65,19 @@ void Parser::IdentifyOperationType(Token* token)
         this->AssignCurrentBranch(BRANCH_IDENTIFIER::VARIABLE_DECLARATION);
         this->VariableDeclaration(token);
     }
+
+    // # FUNCTION DECLARATION
+    if(token->value == KEYWORDS::TFUN)
+    {
+        this->AssignCurrentBranch(BRANCH_IDENTIFIER::FUNCTION_DECLARATION);
+        this->FunctionDeclaration(token);
+    }
 }
 
 void Parser::AssignCurrentBranch(uint8_t branchName)
 {
     this->currentBranch = branchName;
-    this->oldOperation  = branchName;
+    this->observer  = branchName;
 }
 
 void Parser::InsertBuildingNode(Token* token, uint8_t direction = 0)
@@ -129,7 +141,7 @@ void Parser::InsertAstNode(std::string branchName, AstNode* node)
 void Parser::ResetState()
 {
     this->currentBranch = BRANCH_IDENTIFIER::UNDEFINED;
-    this->oldOperation  = BRANCH_IDENTIFIER::UNDEFINED;
+    this->observer      = BRANCH_IDENTIFIER::UNDEFINED;
     this->expectedType  = EXPECTED_TYPE::TUNDEFINED;
     this->history       = nullptr;
     this->buildingNode  = nullptr;
@@ -138,13 +150,40 @@ void Parser::ResetState()
 
 void Parser::AddParemCounter()
 {
-    this->paremCounter++;
+    this->ArithmeticParemCounter++;
 }
 
 void Parser::RemoveParemCounter()
 {
-    this->paremCounter--;
+    this->ArithmeticParemCounter--;
 }
+
+void Parser::AddDeepCounter()
+{
+    this->currentDeep++;
+}
+
+void Parser::RemoveDeepCounter()
+{
+    this->currentDeep--;
+}
+
+std::string Parser::GetExpectedType(Token* token)
+{
+    if(token->value == TYPE::NAME[TYPE::TBOOL]) return EXPECTED_TYPE::TBOOLEAN;
+    if(token->value == TYPE::NAME[TYPE::TCHAR]) return EXPECTED_TYPE::TCHARACTER;
+    if(token->value == TYPE::NAME[TYPE::TNUMBER]) return EXPECTED_TYPE::TNUMBER;
+    if(token->value == TYPE::NAME[TYPE::TTEXT]) return EXPECTED_TYPE::TSTRING;
+    if(token->value == TYPE::NAME[TYPE::TVOID]) return EXPECTED_TYPE::TVOID;
+
+    Output::PrintCustomizeError("Compiler internal error: ", "No match type in variable declaration");
+    exit(EXIT_FAILURE);
+}
+
+
+
+
+
 
 
 
