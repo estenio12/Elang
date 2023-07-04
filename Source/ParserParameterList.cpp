@@ -51,6 +51,15 @@ AstNode* Parser::BuildParameterList(Token* token)
         {
             this->parameterList.push_back(std::make_pair(this->history->value, token->value));
             this->history = token;
+            this->InsertParameterListNode(token, AST_DIRECTION::RIGHT);
+
+            // # Insert into IDTable
+            auto tempID = this->IDTable->CreateRow(token->value, token->value, token->type, 
+                                                   this->history->value, this->currentScope, 
+                                                   this->currentDeep, false);
+
+            this->IDTable->InsertID(tempID);
+
             return nullptr;
         }
 
@@ -107,5 +116,9 @@ void Parser::InsertParameterListNode(Token* token, int direction)
     }
 }
 
+void Parser::ResetParameterListBuildingNode()
+{
+    this->ParameterListBuildingNode = nullptr;
+}
 
 

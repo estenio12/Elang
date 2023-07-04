@@ -104,4 +104,5 @@ class Parser
         AstNode* BuildParameterList(Token* );
         void InsertParameterListNode(Token*, int);
         void BuildParameterListCommit();
+        void ResetParameterListBuildingNode();
 };

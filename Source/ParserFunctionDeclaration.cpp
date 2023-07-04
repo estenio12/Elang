@@ -6,6 +6,8 @@ AstNode* Parser::FunctionDeclaration(Token* token)
     {
         auto result = this->FunctionBodyDeclaration(token);
 
+        Output::PrintDebug("Entrei function body");
+
         if(result != nullptr)
         {
             this->FunctionDeclarationState = BRANCH_IDENTIFIER::UNDEFINED;
@@ -38,8 +40,7 @@ AstNode* Parser::FunctionDeclaration(Token* token)
             if(lastNode != nullptr)
             {
                 lastNode->right = result;
-                this->ResetFunctionDeclarationBodyBuildingNode();
-                return this->FunctionDeclarationBuildingNode;
+                this->ResetParameterListBuildingNode();
             }
             else
             {
@@ -114,6 +115,8 @@ AstNode* Parser::FunctionDeclaration(Token* token)
             this->AddParemCounter();
             this->InsertFunctionDeclarationNode(token, AST_DIRECTION::RIGHT);
             this->history = token;
+            this->FunctionDeclarationState = BRANCH_IDENTIFIER::BUILD_PARAMETER_LIST;
+            
             return nullptr;
         }
         
@@ -126,12 +129,6 @@ AstNode* Parser::FunctionDeclaration(Token* token)
         {
             this->AddDeepCounter();
             this->InsertFunctionDeclarationNode(token, AST_DIRECTION::RIGHT);
-            this->history = token;
-            return nullptr;
-        }
-        else
-        {
-            this->FunctionDeclarationState = BRANCH_IDENTIFIER::BUILD_PARAMETER_LIST;
             this->history = token;
             return nullptr;
         }
@@ -192,7 +189,10 @@ void Parser::ResetFunctionDeclarationBodyBuildingNode()
 
 AstNode* Parser::FunctionBodyDeclaration(Token* token)
 {
-    
+    if(token->value == KEYWORDS::TRETURN)
+    {
+        
+    }
 
     this->ThrowError(token);
     return nullptr;
