@@ -32,19 +32,11 @@ void Parser::Parse()
             break;
 
             case BRANCH_IDENTIFIER::VARIABLE_DECLARATION:
-                this->VariableDeclaration(token);
-            break;
-
-            case BRANCH_IDENTIFIER::ARITHMETIC_OPERATION:
-                this->ArithmeticOperation(token);
+                this->CommitEntity(BRANCH_NAME::VARIABLE_DECLARATION, this->VariableDeclaration(token));
             break;
 
             case BRANCH_IDENTIFIER::FUNCTION_DECLARATION:
-                this->FunctionDeclaration(token);
-            break;
-
-            case BRANCH_IDENTIFIER::BUILD_PARAMETER_LIST:
-                this->BuildParameterList(token);
+                this->CommitEntity(BRANCH_NAME::FUNCTION_DECLARATION, this->FunctionDeclaration(token));
             break;
         }
     }
@@ -78,31 +70,19 @@ void Parser::IdentifyOperationType(Token* token)
     }
 }
 
+void Parser::CommitEntity(std::string branch_name, AstNode* tree)
+{
+    if(tree != nullptr) 
+    {
+        this->InsertAstNode(branch_name, tree);
+        this->ResetState();
+    }
+}
+
 void Parser::AssignCurrentBranch(uint8_t branchName)
 {
     this->currentBranch = branchName;
     this->observer  = branchName;
-}
-
-void Parser::InsertBuildingNode(Token* token, uint8_t direction = 0)
-{
-    auto node = new AstNode(token);
-
-    if(this->buildingNode == nullptr)
-    {
-        this->buildingNode = node;
-        this->history = token;
-    }
-    else
-    {
-        auto lastNode = this->FindLastNode(buildingNode, direction);
-        node->parent = lastNode;
-
-        if(direction == AST_DIRECTION::LEFT)
-           lastNode->left = node;
-        else
-           lastNode->right = node;
-    }
 }
 
 AstNode* Parser::FindLastNode(AstNode* node, uint8_t direction)
@@ -145,11 +125,13 @@ void Parser::InsertAstNode(std::string branchName, AstNode* node)
 void Parser::ResetState()
 {
     this->currentBranch = BRANCH_IDENTIFIER::UNDEFINED;
-    this->observer      = BRANCH_IDENTIFIER::UNDEFINED;
     this->expectedType  = EXPECTED_TYPE::TUNDEFINED;
     this->history       = nullptr;
-    this->buildingNode  = nullptr;
     this->isConstant    = false;
+
+    // # Reset great entities
+    this->VariableDeclarationBuildingNode = nullptr;
+    this->FunctionDeclarationBuildingNode = nullptr;
 }
 
 void Parser::AddParemCounter()

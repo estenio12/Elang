@@ -59,7 +59,6 @@ class Parser
         void IdentifyOperationType(Token* );
         void AssignCurrentBranch(uint8_t );
         void InsertAstNode(std::string, AstNode* );
-        void InsertBuildingNode(Token*, uint8_t );
         AstNode* FindLastNode(AstNode*, uint8_t );
         Token* ConsumeNextTokenFromBuffer();
         void AddParemCounter();
@@ -67,32 +66,42 @@ class Parser
         void AddDeepCounter();
         void RemoveDeepCounter();
         std::string GetExpectedType(Token* );
+        void CommitEntity(std::string, AstNode* );
 
+    // # Main Entities
     private:
-        bool VariableDeclaration(Token* );
+        int VariableDeclarationDeclarationState = BRANCH_IDENTIFIER::UNDEFINED;
+        AstNode* VariableDeclarationBuildingNode = nullptr;
+        AstNode* VariableDeclaration(Token* );
+        void InsertVariableDeclarationNode(Token*, int );
         void VariableDeclarationCommit();
 
     private:
+        AstNode* FunctionDeclarationBuildingNode;
+        AstNode* FunctionDeclarationBodyBuildingNode;
+        std::string currentFunctionType = EXPECTED_TYPE::TVOID;
+        int FunctionDeclarationState = BRANCH_IDENTIFIER::UNDEFINED;
+        AstNode* FunctionDeclaration(Token* );
+        AstNode* FunctionBodyDeclaration(Token* );
+        void FunctionDeclarationReset();
+        void InsertFunctionDeclarationNode(Token*, int );
+        void ResetFunctionDeclarationBodyBuildingNode();
+
+    // # Functions Assistants
+    private:
         AstNode* ArithmeticBuildingNode;
+        AstNode* ArithmeticOperation(Token* );
         int ArithmeticParemCounter = 0;
-        bool ArithmeticOperation(Token* );
         bool ArithmeticOperationCheckOpenParam(Token* );
         bool ArithmeticOperationCheckType(Token* );
         bool ArithmeticOperationCheckIdentifier(Token* );
+        void ResetArithmeticBuildingNode();
         void InsertArithmeticNode(Token*, int );
-        void ArithmeticOperationCommit();
-
-    private:
-        std::string currentFunctionType = EXPECTED_TYPE::TVOID;
-        bool FunctionDeclaration(Token* );
-        bool FunctionBodyDeclaration(Token* );
-        void FunctionDeclarationCommit();
 
     private:
         AstNode* ParameterListBuildingNode;
         FunctionParameterList parameterList;
-        bool BuildParameterList(Token* );
+        AstNode* BuildParameterList(Token* );
         void InsertParameterListNode(Token*, int);
         void BuildParameterListCommit();
-        void BuildParameterListCommitForFunction();
 };

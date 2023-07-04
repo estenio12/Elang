@@ -1,23 +1,48 @@
 #include "../Include/Parser.hpp"
 
-bool Parser::VariableDeclaration(Token* token)
+AstNode* Parser::VariableDeclaration(Token* token)
 {
+    if(this->VariableDeclarationDeclarationState == BRANCH_IDENTIFIER::ARITHMETIC_OPERATION)
+    {
+        auto result = this->ArithmeticOperation(token);
+        
+        if(result != nullptr)
+        {
+            this->VariableDeclarationDeclarationState = BRANCH_IDENTIFIER::UNDEFINED;
+            auto lastNode = this->FindLastNode(this->VariableDeclarationBuildingNode, AST_DIRECTION::RIGHT);
+        
+            if(lastNode != nullptr)
+            {
+                lastNode->right = result;
+                this->ResetArithmeticBuildingNode();
+                return this->VariableDeclarationBuildingNode;
+            }
+            else
+            {
+                Output::PrintCustomizeError("Compiler internal error: ", "Variable declaration structure not found!");
+            }
+        }
+
+        return nullptr;
+    }
+
     // # If history is null, is expected the variables declaration 
     if(history == nullptr)
     {
         if(token->value == KEYWORDS::TVAR )
         {
-            this->InsertBuildingNode(token, AST_DIRECTION::RIGHT);
+            
+            this->InsertVariableDeclarationNode(token, AST_DIRECTION::RIGHT);
             this->history = token;
-            return true;
+            return nullptr;
         }
 
         if(token->value == KEYWORDS::TCONST )
         {
-            this->InsertBuildingNode(token, AST_DIRECTION::RIGHT);
+            this->InsertVariableDeclarationNode(token, AST_DIRECTION::RIGHT);
             this->isConstant = true;
             this->history = token;
-            return true;
+            return nullptr;
         }
 
         this->ThrowError(token);
@@ -29,9 +54,9 @@ bool Parser::VariableDeclaration(Token* token)
     {
         if(token->value[0] == DELIMITERS::COLON)
         {
-            this->InsertBuildingNode(token, AST_DIRECTION::RIGHT);
+            this->InsertVariableDeclarationNode(token, AST_DIRECTION::RIGHT);
             this->history = token;
-            return true;
+            return nullptr;
         }
 
         this->ThrowError(token);
@@ -46,10 +71,10 @@ bool Parser::VariableDeclaration(Token* token)
            token->value == TYPE::NAME[TYPE::TTEXT]   ||
            token->value == TYPE::NAME[TYPE::TVOID]   )
         {
-            this->InsertBuildingNode(token, AST_DIRECTION::RIGHT);
+            this->InsertVariableDeclarationNode(token, AST_DIRECTION::RIGHT);
             this->history      = token;
             this->expectedType = this->GetExpectedType(token);
-            return true;
+            return nullptr;
         }
 
         this->ThrowError(token);
@@ -71,9 +96,9 @@ bool Parser::VariableDeclaration(Token* token)
                                                    this->currentScope, this->currentDeep, this->isConstant);
             this->IDTable->InsertID(tempID);
 
-            this->InsertBuildingNode(token, AST_DIRECTION::RIGHT);
+            this->InsertVariableDeclarationNode(token, AST_DIRECTION::RIGHT);
             this->history = token;
-            return true;
+            return nullptr;
         }
 
         this->ThrowError(token);
@@ -84,32 +109,50 @@ bool Parser::VariableDeclaration(Token* token)
     {
         if(token->value[0] == DELIMITERS::ASSIGN)
         {
-            this->InsertBuildingNode(token, AST_DIRECTION::RIGHT);
+            this->InsertVariableDeclarationNode(token, AST_DIRECTION::RIGHT);
             this->history = token;
-            this->currentBranch = BRANCH_IDENTIFIER::ARITHMETIC_OPERATION;
-            return true;
+            this->VariableDeclarationDeclarationState = BRANCH_IDENTIFIER::ARITHMETIC_OPERATION;
+            return nullptr;
         }
         
         if(token->value[0] == DELIMITERS::EOL)
         {
-            this->InsertBuildingNode(token, AST_DIRECTION::RIGHT);
+            this->InsertVariableDeclarationNode(token, AST_DIRECTION::RIGHT);
             this->history = token;
             this->VariableDeclarationCommit();
-            return true;
+            return nullptr;
         }
 
         this->ThrowError(token);
     }
 
     this->ThrowError(token);
-    return false;
+    return nullptr;
 }
 
 void Parser::VariableDeclarationCommit()
 {
-    this->InsertAstNode(BRANCH_NAME::VARIABLE_DECLARATION, this->buildingNode);
+    this->InsertAstNode(BRANCH_NAME::VARIABLE_DECLARATION, this->VariableDeclarationBuildingNode);
     this->ResetState();
 }
 
+void Parser::InsertVariableDeclarationNode(Token* token, int direction)
+{
+    auto node = new AstNode(token);
 
+    if(VariableDeclarationBuildingNode == nullptr)
+    {
+        VariableDeclarationBuildingNode = node;
+    }
+    else
+    {
+        auto lastNode = this->FindLastNode(VariableDeclarationBuildingNode, direction);
+        node->parent = lastNode;
+
+        if(direction == AST_DIRECTION::LEFT)
+           lastNode->left = node;
+        else
+           lastNode->right = node;
+    }
+}
 

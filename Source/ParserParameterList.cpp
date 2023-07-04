@@ -1,6 +1,6 @@
 #include "../Include/Parser.hpp"
 
-bool Parser::BuildParameterList(Token* token)
+AstNode* Parser::BuildParameterList(Token* token)
 {
     if(history->value[0] == DELIMITERS::OPEN_PARAM ||
        history->value[0] == DELIMITERS::COMMA)
@@ -10,7 +10,7 @@ bool Parser::BuildParameterList(Token* token)
         {   
             this->InsertParameterListNode(token, AST_DIRECTION::RIGHT);
             this->history = token;
-            return true;
+            return nullptr;
         }
 
         this->ThrowError(token);
@@ -23,7 +23,7 @@ bool Parser::BuildParameterList(Token* token)
         {
             this->InsertParameterListNode(token, AST_DIRECTION::RIGHT);
             this->history = token;
-            return true;
+            return nullptr;
         }
 
         this->ThrowError(token);
@@ -38,7 +38,7 @@ bool Parser::BuildParameterList(Token* token)
         {
             this->InsertParameterListNode(token, AST_DIRECTION::RIGHT);
             this->history = token;
-            return true;
+            return nullptr;
         }
     }
 
@@ -51,7 +51,7 @@ bool Parser::BuildParameterList(Token* token)
         {
             this->parameterList.push_back(std::make_pair(this->history->value, token->value));
             this->history = token;
-            return true;
+            return nullptr;
         }
 
         this->ThrowError(token);
@@ -63,7 +63,7 @@ bool Parser::BuildParameterList(Token* token)
         {
             this->InsertParameterListNode(token, AST_DIRECTION::RIGHT);
             this->history = token;
-            return true;
+            return nullptr;
         }
 
         if(token->value[0] == DELIMITERS::CLOSE_PARAM)
@@ -72,27 +72,19 @@ bool Parser::BuildParameterList(Token* token)
             this->InsertParameterListNode(token, AST_DIRECTION::RIGHT);
             this->history = token;
             this->BuildParameterListCommit();
-            return true;
+            return ParameterListBuildingNode;
         }
     }
 
     this->ThrowError(token);
-    return false;
+    return nullptr;
 }
 
 void Parser::BuildParameterListCommit()
 {
-    switch(this->observer)
-    {
-        case BRANCH_IDENTIFIER::FUNCTION_DECLARATION:
-            this->BuildParameterListCommitForFunction();
-        break;
-        
-        default:
-            Output::PrintCustomizeError("Compiler internal error in build parameter list: ", "No observer found!");
-            exit(EXIT_FAILURE);
-        break;
-    }
+    auto functionIdentifier = this->IDFunTable->FindObjectIdentifier(this->currentScope, this->currentFunctionType);
+    functionIdentifier->paramList = this->parameterList;
+    this->parameterList.clear();
 }
 
 void Parser::InsertParameterListNode(Token* token, int direction)
@@ -115,23 +107,5 @@ void Parser::InsertParameterListNode(Token* token, int direction)
     }
 }
 
-void Parser::BuildParameterListCommitForFunction()
-{
-    this->AssignCurrentBranch(BRANCH_IDENTIFIER::FUNCTION_DECLARATION);
-    
-    auto functionIdentifier = this->IDFunTable->FindObjectIdentifier(this->currentScope, this->currentFunctionType);
-    functionIdentifier->paramList = this->parameterList;
-    this->parameterList.clear();
-    
-    auto lastNode = this->FindLastNode(this->buildingNode, AST_DIRECTION::RIGHT);
-
-    if(lastNode == nullptr)
-    {
-        Output::PrintCustomizeError("Compiler internal error in build parameter list: ", "function declaration no found!");
-        exit(EXIT_FAILURE);
-    }
-    else
-        lastNode->right = this->ParameterListBuildingNode;
-}
 
 
