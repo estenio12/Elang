@@ -6,8 +6,6 @@ AstNode* Parser::FunctionDeclaration(Token* token)
     {
         auto result = this->FunctionBodyDeclaration(token);
 
-        Output::PrintDebug("Entrei function body");
-
         if(result != nullptr)
         {
             this->FunctionDeclarationState = BRANCH_IDENTIFIER::UNDEFINED;
@@ -41,6 +39,7 @@ AstNode* Parser::FunctionDeclaration(Token* token)
             {
                 lastNode->right = result;
                 this->ResetParameterListBuildingNode();
+                this->FunctionDeclarationState = BRANCH_IDENTIFIER::FUNCTION_BODY;
             }
             else
             {
@@ -144,11 +143,6 @@ AstNode* Parser::FunctionDeclaration(Token* token)
             this->history = token;
             return this->FunctionDeclarationBuildingNode;
         }
-        else
-        {
-            this->FunctionDeclarationState = BRANCH_IDENTIFIER::FUNCTION_BODY;
-            return nullptr;
-        }
     }
 
     this->ThrowError(token);
@@ -182,6 +176,26 @@ void Parser::InsertFunctionDeclarationNode(Token* token, int direction)
     }
 }
 
+void Parser::InsertFunctionDeclarationBodyNode(Token* token, int direction)
+{
+    auto node = new AstNode(token);
+
+    if(FunctionDeclarationBodyBuildingNode == nullptr)
+    {
+        FunctionDeclarationBodyBuildingNode = node;
+    }
+    else
+    {
+        auto lastNode = this->FindLastNode(FunctionDeclarationBodyBuildingNode, direction);
+        node->parent = lastNode;
+
+        if(direction == AST_DIRECTION::LEFT)
+           lastNode->left = node;
+        else
+           lastNode->right = node;
+    }
+}
+
 void Parser::ResetFunctionDeclarationBodyBuildingNode()
 {
     this->FunctionDeclarationBodyBuildingNode = nullptr;
@@ -189,9 +203,46 @@ void Parser::ResetFunctionDeclarationBodyBuildingNode()
 
 AstNode* Parser::FunctionBodyDeclaration(Token* token)
 {
-    if(token->value == KEYWORDS::TRETURN)
+    if(this->FunctionDeclarationBodyState == BRANCH_IDENTIFIER::ARITHMETIC_OPERATION)
     {
+        auto result = this->ArithmeticOperation(token);
+
+        if(result != nullptr)
+        {
+            this->FunctionDeclarationBodyState = BRANCH_IDENTIFIER::UNDEFINED;
+            auto lastNode = this->FindLastNode(this->FunctionDeclarationBodyBuildingNode, AST_DIRECTION::RIGHT);
         
+            if(lastNode != nullptr)
+            {
+                lastNode->right = result;
+                this->ResetArithmeticBuildingNode();
+            }
+            else
+            {
+                Output::PrintCustomizeError("Compiler internal error: ", "Function declaration structure not found!");
+            } 
+        }
+
+        return nullptr;
+    }
+
+    if(history->value[0] == DELIMITERS::CLOSE_PARAM)
+    {
+        if(token->value == KEYWORDS::TRETURN)
+        {
+            this->InsertFunctionDeclarationBodyNode(token, AST_DIRECTION::RIGHT);
+            this->history = token;
+            return nullptr;
+        }
+        
+        this->ThrowError(token);
+    }
+
+    if(history->value == KEYWORDS::TRETURN)
+    {
+        this->FunctionDeclarationBodyState = BRANCH_IDENTIFIER::ARITHMETIC_OPERATION;
+        this->history = token;
+        return nullptr;
     }
 
     this->ThrowError(token);

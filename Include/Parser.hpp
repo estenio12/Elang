@@ -81,10 +81,12 @@ class Parser
         AstNode* FunctionDeclarationBodyBuildingNode;
         std::string currentFunctionType = EXPECTED_TYPE::TVOID;
         int FunctionDeclarationState = BRANCH_IDENTIFIER::UNDEFINED;
+        int FunctionDeclarationBodyState = BRANCH_IDENTIFIER::UNDEFINED;
         AstNode* FunctionDeclaration(Token* );
         AstNode* FunctionBodyDeclaration(Token* );
         void FunctionDeclarationReset();
         void InsertFunctionDeclarationNode(Token*, int );
+        void InsertFunctionDeclarationBodyNode(Token*, int );
         void ResetFunctionDeclarationBodyBuildingNode();
 
     // # Functions Assistants

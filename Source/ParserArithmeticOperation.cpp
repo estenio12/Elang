@@ -44,26 +44,6 @@ AstNode* Parser::ArithmeticOperation(Token* token)
             this->InsertArithmeticNode(token, AST_DIRECTION::RIGHT);
             
             return this->ArithmeticBuildingNode;
-            // auto lastNode = this->FindLastNode(buildingNode, AST_DIRECTION::RIGHT);
-
-            // // # Insert EOL token into tree
-            
-            // if(lastNode == nullptr)
-            // {
-            //     lastNode = this->ArithmeticBuildingNode;
-            //     this->ArithmeticBuildingNode = nullptr;
-            //     // this->ArithmeticOperationCommit();
-            //     return ArithmeticBuildingNode;
-            // }
-            // else
-            // {
-            //     lastNode->right = this->ArithmeticBuildingNode;
-            //     // this->ArithmeticBuildingNode = nullptr;
-            //     // this->ArithmeticOperationCommit();
-            //     return ArithmeticBuildingNode;
-            // }
-
-            // this->ThrowError(token);
         }
     }
 
