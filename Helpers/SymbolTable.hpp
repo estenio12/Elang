@@ -48,6 +48,7 @@ namespace KEYWORDS
     static const std::string TDO       = "do";
     static const std::string TIN       = "in";
     static const std::string TAT       = "at";
+    static const std::string TEND      = "end";
 }
 
 namespace DELIMITERS

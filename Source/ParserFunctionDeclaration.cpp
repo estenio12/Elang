@@ -205,7 +205,7 @@ AstNode* Parser::FunctionBodyDeclaration(Token* token)
 {
     if(this->FunctionDeclarationBodyState == BRANCH_IDENTIFIER::ARITHMETIC_OPERATION)
     {
-        auto result = this->ArithmeticOperation(token, this->currentFunctionType,this->FunctionCheckIDType);
+        auto result = this->ArithmeticOperation(token, this->currentFunctionType);
 
         if(result != nullptr)
         {
@@ -246,11 +246,14 @@ AstNode* Parser::FunctionBodyDeclaration(Token* token)
         return nullptr;
     }
 
-    Output::PrintDebug("History: " + this->history->value);
-
     if(history->value[0] == DELIMITERS::EOL)
     {
-
+        if(token->value == KEYWORDS::TEND)
+        {
+            this->RemoveDeepCounter();
+            this->history = token;
+            return this->FunctionDeclarationBodyBuildingNode;
+        }
     }
 
     this->ThrowError(token);

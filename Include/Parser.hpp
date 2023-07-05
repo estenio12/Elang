@@ -95,10 +95,10 @@ class Parser
         int ArithmeticParemCounter = 0;
         std::string ArithmeticExpectedType = EXPECTED_TYPE::TUNDEFINED;
         AstNode* ArithmeticBuildingNode;
-        AstNode* ArithmeticOperation(Token*, std::string, bool );
+        AstNode* ArithmeticOperation(Token*, std::string);
         bool ArithmeticOperationCheckOpenParam(Token* );
         bool ArithmeticOperationCheckType(Token* );
-        bool ArithmeticOperationCheckIdentifier(Token*, bool );
+        bool ArithmeticOperationCheckIdentifier(Token*);
         void ResetArithmeticBuildingNode();
         void InsertArithmeticNode(Token*, int );
 

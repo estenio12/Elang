@@ -1,6 +1,6 @@
 #include "../Include/Parser.hpp"
 
-AstNode* Parser::ArithmeticOperation(Token* token, std::string expectedType, bool CheckTypeOfIdentifiers = true)
+AstNode* Parser::ArithmeticOperation(Token* token, std::string expectedType)
 {
     this->ArithmeticExpectedType = expectedType;
     
@@ -44,6 +44,7 @@ AstNode* Parser::ArithmeticOperation(Token* token, std::string expectedType, boo
                 this->ThrowError("The parentheses were closed, but never opened.", token->startPos);
 
             this->InsertArithmeticNode(token, AST_DIRECTION::RIGHT);
+            this->history = token;
             
             return this->ArithmeticBuildingNode;
         }
@@ -61,7 +62,7 @@ AstNode* Parser::ArithmeticOperation(Token* token, std::string expectedType, boo
        history->value == ARITHMETIC::SHIFTLEFT  ||
        history->value == ARITHMETIC::SHIFTRIGHT )
     {
-        if(this->ArithmeticOperationCheckIdentifier(token, CheckTypeOfIdentifiers)) return nullptr;
+        if(this->ArithmeticOperationCheckIdentifier(token)) return nullptr;
         if(this->ArithmeticOperationCheckType(token)) return nullptr;
         if(this->ArithmeticOperationCheckOpenParam(token)) return nullptr;
     }
@@ -101,7 +102,7 @@ bool Parser::ArithmeticOperationCheckType(Token* token)
     return false;
 }
 
-bool Parser::ArithmeticOperationCheckIdentifier(Token* token, bool CheckTypeOfIdentifiers = true)
+bool Parser::ArithmeticOperationCheckIdentifier(Token* token)
 {
     if(token->type == NAME::IDENTIFIER)
     {

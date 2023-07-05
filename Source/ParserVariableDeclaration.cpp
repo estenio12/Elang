@@ -4,7 +4,7 @@ AstNode* Parser::VariableDeclaration(Token* token)
 {
     if(this->VariableDeclarationDeclarationState == BRANCH_IDENTIFIER::ARITHMETIC_OPERATION)
     {
-        auto result = this->ArithmeticOperation(token, this->expectedType, true);
+        auto result = this->ArithmeticOperation(token, this->expectedType);
         
         if(result != nullptr)
         {
