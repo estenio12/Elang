@@ -38,6 +38,7 @@ AstNode* Parser::BuildParameterList(Token* token)
         {
             this->InsertParameterListNode(token, AST_DIRECTION::RIGHT);
             this->history = token;
+            this->currentParameterType = this->GetExpectedType(token);
             return nullptr;
         }
     }
@@ -55,7 +56,7 @@ AstNode* Parser::BuildParameterList(Token* token)
 
             // # Insert into IDTable
             auto tempID = this->IDTable->CreateRow(token->value, token->value, token->type, 
-                                                   this->history->value, this->currentScope, 
+                                                   this->currentParameterType, this->currentScope, 
                                                    this->currentDeep, false);
 
             this->IDTable->InsertID(tempID);
@@ -72,6 +73,7 @@ AstNode* Parser::BuildParameterList(Token* token)
         {
             this->InsertParameterListNode(token, AST_DIRECTION::RIGHT);
             this->history = token;
+            this->ResetBuildParameterListStates();
             return nullptr;
         }
 
@@ -81,6 +83,8 @@ AstNode* Parser::BuildParameterList(Token* token)
             this->InsertParameterListNode(token, AST_DIRECTION::RIGHT);
             this->history = token;
             this->BuildParameterListCommit();
+            this->ResetBuildParameterListStates();
+            this->RemoveParemCounter();
             return ParameterListBuildingNode;
         }
     }
@@ -119,6 +123,11 @@ void Parser::InsertParameterListNode(Token* token, int direction)
 void Parser::ResetParameterListBuildingNode()
 {
     this->ParameterListBuildingNode = nullptr;
+}
+
+void Parser::ResetBuildParameterListStates()
+{
+    this->currentParameterType = EXPECTED_TYPE::TUNDEFINED;
 }
 
 

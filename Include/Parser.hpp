@@ -80,6 +80,7 @@ class Parser
         AstNode* FunctionDeclarationBuildingNode;
         AstNode* FunctionDeclarationBodyBuildingNode;
         std::string currentFunctionType = EXPECTED_TYPE::TVOID;
+        bool FunctionCheckIDType = true;
         int FunctionDeclarationState = BRANCH_IDENTIFIER::UNDEFINED;
         int FunctionDeclarationBodyState = BRANCH_IDENTIFIER::UNDEFINED;
         AstNode* FunctionDeclaration(Token* );
@@ -91,20 +92,23 @@ class Parser
 
     // # Functions Assistants
     private:
-        AstNode* ArithmeticBuildingNode;
-        AstNode* ArithmeticOperation(Token* );
         int ArithmeticParemCounter = 0;
+        std::string ArithmeticExpectedType = EXPECTED_TYPE::TUNDEFINED;
+        AstNode* ArithmeticBuildingNode;
+        AstNode* ArithmeticOperation(Token*, std::string, bool );
         bool ArithmeticOperationCheckOpenParam(Token* );
         bool ArithmeticOperationCheckType(Token* );
-        bool ArithmeticOperationCheckIdentifier(Token* );
+        bool ArithmeticOperationCheckIdentifier(Token*, bool );
         void ResetArithmeticBuildingNode();
         void InsertArithmeticNode(Token*, int );
 
     private:
+        std::string currentParameterType = EXPECTED_TYPE::TVOID;
         AstNode* ParameterListBuildingNode;
         FunctionParameterList parameterList;
         AstNode* BuildParameterList(Token* );
         void InsertParameterListNode(Token*, int);
         void BuildParameterListCommit();
         void ResetParameterListBuildingNode();
+        void ResetBuildParameterListStates();
 };

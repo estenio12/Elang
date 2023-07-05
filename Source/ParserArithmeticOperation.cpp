@@ -1,7 +1,9 @@
 #include "../Include/Parser.hpp"
 
-AstNode* Parser::ArithmeticOperation(Token* token)
+AstNode* Parser::ArithmeticOperation(Token* token, std::string expectedType, bool CheckTypeOfIdentifiers = true)
 {
+    this->ArithmeticExpectedType = expectedType;
+    
     if(history->value[0] == DELIMITERS::CLOSE_PARAM || 
        history->type == NAME::IDENTIFIER ||
        history->type == NAME::NUMBER     ||
@@ -59,7 +61,7 @@ AstNode* Parser::ArithmeticOperation(Token* token)
        history->value == ARITHMETIC::SHIFTLEFT  ||
        history->value == ARITHMETIC::SHIFTRIGHT )
     {
-        if(this->ArithmeticOperationCheckIdentifier(token)) return nullptr;
+        if(this->ArithmeticOperationCheckIdentifier(token, CheckTypeOfIdentifiers)) return nullptr;
         if(this->ArithmeticOperationCheckType(token)) return nullptr;
         if(this->ArithmeticOperationCheckOpenParam(token)) return nullptr;
     }
@@ -88,8 +90,8 @@ bool Parser::ArithmeticOperationCheckType(Token* token)
        token->type == NAME::CHARACTER ||
        token->type == NAME::STRING    )
     {
-        if(token->type != this->expectedType)
-           this->ThrowError("Cannot implicitly convert type '" + token->type + "' to '" + this->expectedType + "'", token->startPos + 1);
+        if(token->type != this->ArithmeticExpectedType)
+           this->ThrowError("Cannot implicitly convert type '" + token->type + "' to '" + this->ArithmeticExpectedType + "'", token->startPos + 1);
 
         this->InsertArithmeticNode(token, AST_DIRECTION::RIGHT);
         this->history = token;
@@ -99,7 +101,7 @@ bool Parser::ArithmeticOperationCheckType(Token* token)
     return false;
 }
 
-bool Parser::ArithmeticOperationCheckIdentifier(Token* token)
+bool Parser::ArithmeticOperationCheckIdentifier(Token* token, bool CheckTypeOfIdentifiers = true)
 {
     if(token->type == NAME::IDENTIFIER)
     {
@@ -114,8 +116,8 @@ bool Parser::ArithmeticOperationCheckIdentifier(Token* token)
             exit(EXIT_FAILURE);
         }
 
-        if(getEntity->typeValue != this->expectedType)
-           this->ThrowError("Cannot implicitly convert type '" + getEntity->typeValue + "' to '" + this->expectedType + "'", token->startPos + 1);
+        if(getEntity->typeValue != this->ArithmeticExpectedType)
+           this->ThrowError("Cannot implicitly convert type '" + getEntity->typeValue + "' to '" + this->ArithmeticExpectedType + "'", token->startPos + 1);
 
         this->InsertArithmeticNode(token, AST_DIRECTION::RIGHT);
         this->history = token;
