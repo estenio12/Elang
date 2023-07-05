@@ -42,11 +42,11 @@ void Parser::Parse()
     }
 
     // # Debug
-    // for(auto debug : this->ast)
-    // {
-    //     std::cout << "Debug Branch Name: " << debug.first << "\n\n";
-    //     this->tool->PrintParseTree(debug.second);
-    // }
+    for(auto debug : this->ast)
+    {
+        std::cout << "Debug Branch Name: " << debug.first << "\n\n";
+        this->tool->PrintParseTree(debug.second);
+    }
 
     // # Generate Target Code
     this->codegen->Generate(this->ast);

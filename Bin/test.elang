@@ -1,3 +1,4 @@
+#Teste comentário
 fun:number sum(var:number n1, var:number n2)
     return n1 + n2;
 end

@@ -2,9 +2,9 @@
 
 AstNode* Parser::FunctionDeclaration(Token* token)
 {
-    if(this->FunctionDeclarationState == BRANCH_IDENTIFIER::FUNCTION_BODY)
+    if(this->FunctionDeclarationState == BRANCH_IDENTIFIER::EXPRESSION)
     {
-        auto result = this->FunctionBodyDeclaration(token);
+        auto result = this->Statement(token);
 
         if(result != nullptr)
         {
@@ -14,7 +14,7 @@ AstNode* Parser::FunctionDeclaration(Token* token)
             if(lastNode != nullptr)
             {
                 lastNode->right = result;
-                this->ResetFunctionDeclarationBodyBuildingNode();
+                this->ResetStatementBuildingNode();
                 return this->FunctionDeclarationBuildingNode;
             }
             else
@@ -39,7 +39,7 @@ AstNode* Parser::FunctionDeclaration(Token* token)
             {
                 lastNode->right = result;
                 this->ResetParameterListBuildingNode();
-                this->FunctionDeclarationState = BRANCH_IDENTIFIER::FUNCTION_BODY;
+                this->FunctionDeclarationState = BRANCH_IDENTIFIER::EXPRESSION;
             }
             else
             {
@@ -99,6 +99,7 @@ AstNode* Parser::FunctionDeclaration(Token* token)
             auto tempID = this->IDFunTable->CreateRow(token->value, this->currentFunctionType);
 
             this->IDFunTable->InsertFunctionID(tempID);
+            this->InsertFunctionDeclarationNode(token, AST_DIRECTION::RIGHT);
             this->currentScope = token->value;
             this->history      = token;
             return nullptr;
@@ -174,90 +175,6 @@ void Parser::InsertFunctionDeclarationNode(Token* token, int direction)
         else
            lastNode->right = node;
     }
-}
-
-void Parser::InsertFunctionDeclarationBodyNode(Token* token, int direction)
-{
-    auto node = new AstNode(token);
-
-    if(FunctionDeclarationBodyBuildingNode == nullptr)
-    {
-        FunctionDeclarationBodyBuildingNode = node;
-    }
-    else
-    {
-        auto lastNode = this->FindLastNode(FunctionDeclarationBodyBuildingNode, direction);
-        node->parent = lastNode;
-
-        if(direction == AST_DIRECTION::LEFT)
-           lastNode->left = node;
-        else
-           lastNode->right = node;
-    }
-}
-
-void Parser::ResetFunctionDeclarationBodyBuildingNode()
-{
-    this->FunctionDeclarationBodyBuildingNode = nullptr;
-}
-
-AstNode* Parser::FunctionBodyDeclaration(Token* token)
-{
-    if(this->FunctionDeclarationBodyState == BRANCH_IDENTIFIER::ARITHMETIC_OPERATION)
-    {
-        auto result = this->ArithmeticOperation(token, this->currentFunctionType);
-
-        if(result != nullptr)
-        {
-            this->FunctionDeclarationBodyState = BRANCH_IDENTIFIER::UNDEFINED;
-            auto lastNode = this->FindLastNode(this->FunctionDeclarationBodyBuildingNode, AST_DIRECTION::RIGHT);
-        
-            if(lastNode != nullptr)
-            {
-                lastNode->right = result;
-                this->ResetArithmeticBuildingNode();
-            }
-            else
-            {
-                Output::PrintCustomizeError("Compiler internal error: ", "Function declaration structure not found!");
-            } 
-        }
-
-        return nullptr;
-    }
-
-    if(history->value[0] == DELIMITERS::CLOSE_PARAM)
-    {
-        if(token->value == KEYWORDS::TRETURN)
-        {
-            this->InsertFunctionDeclarationBodyNode(token, AST_DIRECTION::RIGHT);
-            this->history = token;
-            return nullptr;
-        }
-        
-        this->ThrowError(token);
-    }
-
-    if(history->value == KEYWORDS::TRETURN)
-    {
-
-        this->FunctionDeclarationBodyState = BRANCH_IDENTIFIER::ARITHMETIC_OPERATION;
-        this->history = token;
-        return nullptr;
-    }
-
-    if(history->value[0] == DELIMITERS::EOL)
-    {
-        if(token->value == KEYWORDS::TEND)
-        {
-            this->RemoveDeepCounter();
-            this->history = token;
-            return this->FunctionDeclarationBodyBuildingNode;
-        }
-    }
-
-    this->ThrowError(token);
-    return nullptr;
 }
 
 
