@@ -1,8 +1,8 @@
 #include "../Include/Parser.hpp"
 
-AstNode* Parser::ArithmeticOperation(Token* token, std::string expectedType)
+AstNode* Parser::Expression(Token* token, std::string expectedType)
 {
-    this->ArithmeticExpectedType = expectedType;
+    this->ExpressionExpectedType = expectedType;
     
     if(history->value[0] == DELIMITERS::CLOSE_PARAM || 
        history->type == NAME::IDENTIFIER ||
@@ -21,7 +21,7 @@ AstNode* Parser::ArithmeticOperation(Token* token, std::string expectedType)
            token->value == ARITHMETIC::SHIFTLEFT  ||
            token->value == ARITHMETIC::SHIFTRIGHT )
         {
-            this->InsertArithmeticNode(token, AST_DIRECTION::RIGHT);
+            this->InsertExpressionNode(token, AST_DIRECTION::RIGHT);
             this->history = token;
 
             return nullptr;
@@ -30,23 +30,23 @@ AstNode* Parser::ArithmeticOperation(Token* token, std::string expectedType)
         if(token->value[0] == DELIMITERS::CLOSE_PARAM)
         {
             this->history = token;
-            this->InsertArithmeticNode(token, AST_DIRECTION::RIGHT);
+            this->InsertExpressionNode(token, AST_DIRECTION::RIGHT);
             this->RemoveParemCounter();
             return nullptr;
         }
     
         if(token->value[0] == DELIMITERS::EOL)
         {
-            if(ArithmeticParemCounter > 0)
+            if(ExpressionParemCounter > 0)
                 this->ThrowError("The parentheses were opened, but never closed.", token->startPos);
 
-            if(ArithmeticParemCounter < 0)
+            if(ExpressionParemCounter < 0)
                 this->ThrowError("The parentheses were closed, but never opened.", token->startPos);
 
-            this->InsertArithmeticNode(token, AST_DIRECTION::RIGHT);
+            this->InsertExpressionNode(token, AST_DIRECTION::RIGHT);
             this->history = token;
             
-            return this->ArithmeticBuildingNode;
+            return this->ExpressionBuildingNode;
         }
     }
 
@@ -62,21 +62,21 @@ AstNode* Parser::ArithmeticOperation(Token* token, std::string expectedType)
        history->value == ARITHMETIC::SHIFTLEFT  ||
        history->value == ARITHMETIC::SHIFTRIGHT )
     {
-        if(this->ArithmeticOperationCheckIdentifier(token)) return nullptr;
-        if(this->ArithmeticOperationCheckType(token)) return nullptr;
-        if(this->ArithmeticOperationCheckOpenParam(token)) return nullptr;
+        if(this->ExpressionCheckIdentifier(token)) return nullptr;
+        if(this->ExpressionCheckType(token)) return nullptr;
+        if(this->ExpressionCheckOpenParam(token)) return nullptr;
     }
 
     this->ThrowError(token);
     return nullptr;
 }
 
-bool Parser::ArithmeticOperationCheckOpenParam(Token* token)
+bool Parser::ExpressionCheckOpenParam(Token* token)
 {
     if(token->value[0] == DELIMITERS::OPEN_PARAM)
     {
         this->AddParemCounter();
-        this->InsertArithmeticNode(token, AST_DIRECTION::RIGHT);
+        this->InsertExpressionNode(token, AST_DIRECTION::RIGHT);
         this->history = token;
         return true;
     }
@@ -84,17 +84,17 @@ bool Parser::ArithmeticOperationCheckOpenParam(Token* token)
     return false;
 }
 
-bool Parser::ArithmeticOperationCheckType(Token* token)
+bool Parser::ExpressionCheckType(Token* token)
 {
     if(token->type == NAME::NUMBER    ||
        token->type == NAME::BOOLEAN   ||
        token->type == NAME::CHARACTER ||
        token->type == NAME::STRING    )
     {
-        if(token->type != this->ArithmeticExpectedType)
-           this->ThrowError("Cannot implicitly convert type '" + token->type + "' to '" + this->ArithmeticExpectedType + "'", token->startPos + 1);
+        if(token->type != this->ExpressionExpectedType)
+           this->ThrowError("Cannot implicitly convert type '" + token->type + "' to '" + this->ExpressionExpectedType + "'", token->startPos + 1);
 
-        this->InsertArithmeticNode(token, AST_DIRECTION::RIGHT);
+        this->InsertExpressionNode(token, AST_DIRECTION::RIGHT);
         this->history = token;
         return true;
     }
@@ -102,7 +102,7 @@ bool Parser::ArithmeticOperationCheckType(Token* token)
     return false;
 }
 
-bool Parser::ArithmeticOperationCheckIdentifier(Token* token)
+bool Parser::ExpressionCheckIdentifier(Token* token)
 {
     if(token->type == NAME::IDENTIFIER)
     {
@@ -117,10 +117,10 @@ bool Parser::ArithmeticOperationCheckIdentifier(Token* token)
             exit(EXIT_FAILURE);
         }
 
-        if(getEntity->typeValue != this->ArithmeticExpectedType)
-           this->ThrowError("Cannot implicitly convert type '" + getEntity->typeValue + "' to '" + this->ArithmeticExpectedType + "'", token->startPos + 1);
+        if(getEntity->typeValue != this->ExpressionExpectedType)
+           this->ThrowError("Cannot implicitly convert type '" + getEntity->typeValue + "' to '" + this->ExpressionExpectedType + "'", token->startPos + 1);
 
-        this->InsertArithmeticNode(token, AST_DIRECTION::RIGHT);
+        this->InsertExpressionNode(token, AST_DIRECTION::RIGHT);
         this->history = token;
         return true;
     }
@@ -128,18 +128,18 @@ bool Parser::ArithmeticOperationCheckIdentifier(Token* token)
     return false;
 }
 
-void Parser::InsertArithmeticNode(Token* token, int direction)
+void Parser::InsertExpressionNode(Token* token, int direction)
 {
     auto node = new AstNode(token);
 
-    if(this->ArithmeticBuildingNode == nullptr)
+    if(this->ExpressionBuildingNode == nullptr)
     {
-        this->ArithmeticBuildingNode = node;
+        this->ExpressionBuildingNode = node;
         this->history = token;
     }
     else
     {
-        auto lastNode = this->FindLastNode(ArithmeticBuildingNode, direction);
+        auto lastNode = this->FindLastNode(ExpressionBuildingNode, direction);
         node->parent = lastNode;
 
         if(direction == AST_DIRECTION::LEFT)
@@ -149,17 +149,10 @@ void Parser::InsertArithmeticNode(Token* token, int direction)
     }
 }
 
-void Parser::ResetArithmeticBuildingNode()
+void Parser::ResetExpressionBuildingNode()
 {
-    this->ArithmeticBuildingNode = nullptr;
+    this->ExpressionBuildingNode = nullptr;
 }
-
-
-
-
-
-
-
 
 
 

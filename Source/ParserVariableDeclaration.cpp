@@ -2,9 +2,9 @@
 
 AstNode* Parser::VariableDeclaration(Token* token)
 {
-    if(this->VariableDeclarationDeclarationState == BRANCH_IDENTIFIER::ARITHMETIC_OPERATION)
+    if(this->VariableDeclarationDeclarationState == BRANCH_IDENTIFIER::EXPRESSION)
     {
-        auto result = this->ArithmeticOperation(token, this->expectedType);
+        auto result = this->Expression(token, this->expectedType);
         
         if(result != nullptr)
         {
@@ -14,7 +14,7 @@ AstNode* Parser::VariableDeclaration(Token* token)
             if(lastNode != nullptr)
             {
                 lastNode->right = result;
-                this->ResetArithmeticBuildingNode();
+                this->ResetExpressionBuildingNode();
                 return this->VariableDeclarationBuildingNode;
             }
             else
@@ -111,7 +111,7 @@ AstNode* Parser::VariableDeclaration(Token* token)
         {
             this->InsertVariableDeclarationNode(token, AST_DIRECTION::RIGHT);
             this->history = token;
-            this->VariableDeclarationDeclarationState = BRANCH_IDENTIFIER::ARITHMETIC_OPERATION;
+            this->VariableDeclarationDeclarationState = BRANCH_IDENTIFIER::EXPRESSION;
             return nullptr;
         }
         

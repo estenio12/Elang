@@ -93,15 +93,15 @@ class Parser
         void ResetStatementBuildingNode();
 
     private:
-        int ArithmeticParemCounter = 0;
-        std::string ArithmeticExpectedType = EXPECTED_TYPE::TUNDEFINED;
-        AstNode* ArithmeticBuildingNode;
-        AstNode* ArithmeticOperation(Token*, std::string);
-        bool ArithmeticOperationCheckOpenParam(Token* );
-        bool ArithmeticOperationCheckType(Token* );
-        bool ArithmeticOperationCheckIdentifier(Token*);
-        void ResetArithmeticBuildingNode();
-        void InsertArithmeticNode(Token*, int );
+        int ExpressionParemCounter = 0;
+        std::string ExpressionExpectedType = EXPECTED_TYPE::TUNDEFINED;
+        AstNode* ExpressionBuildingNode;
+        AstNode* Expression(Token*, std::string);
+        bool ExpressionCheckOpenParam(Token* );
+        bool ExpressionCheckType(Token* );
+        bool ExpressionCheckIdentifier(Token*);
+        void ResetExpressionBuildingNode();
+        void InsertExpressionNode(Token*, int );
 
     private:
         std::string currentParameterType = EXPECTED_TYPE::TVOID;

@@ -2,7 +2,7 @@
 
 AstNode* Parser::FunctionDeclaration(Token* token)
 {
-    if(this->FunctionDeclarationState == BRANCH_IDENTIFIER::EXPRESSION)
+    if(this->FunctionDeclarationState == BRANCH_IDENTIFIER::STATEMENT)
     {
         auto result = this->Statement(token);
 
@@ -39,7 +39,7 @@ AstNode* Parser::FunctionDeclaration(Token* token)
             {
                 lastNode->right = result;
                 this->ResetParameterListBuildingNode();
-                this->FunctionDeclarationState = BRANCH_IDENTIFIER::EXPRESSION;
+                this->FunctionDeclarationState = BRANCH_IDENTIFIER::STATEMENT;
             }
             else
             {

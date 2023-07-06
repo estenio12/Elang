@@ -1,4 +1,5 @@
-#Teste comentário
-fun:number sum(var:number n1, var:number n2)
-    return n1 + n2;
+var:number t10 = 35 + 35 - 5;
+
+fun:number sub(var:number n1, var:number n2)
+    return n1 - n2;
 end

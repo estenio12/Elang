@@ -2,9 +2,9 @@
 
 AstNode* Parser::Statement(Token* token)
 {
-    if(this->StatementState == BRANCH_IDENTIFIER::ARITHMETIC_OPERATION)
+    if(this->StatementState == BRANCH_IDENTIFIER::EXPRESSION)
     {
-        auto result = this->ArithmeticOperation(token, this->currentFunctionType);
+        auto result = this->Expression(token, this->currentFunctionType);
 
         if(result != nullptr)
         {
@@ -14,7 +14,7 @@ AstNode* Parser::Statement(Token* token)
             if(lastNode != nullptr)
             {
                 lastNode->right = result;
-                this->ResetArithmeticBuildingNode();
+                this->ResetExpressionBuildingNode();
             }
             else
             {
@@ -39,7 +39,7 @@ AstNode* Parser::Statement(Token* token)
 
     if(history->value == KEYWORDS::TRETURN)
     {
-        this->StatementState = BRANCH_IDENTIFIER::ARITHMETIC_OPERATION;
+        this->StatementState = BRANCH_IDENTIFIER::EXPRESSION;
         this->history = token;
         this->InsertStatementNode(token, AST_DIRECTION::RIGHT);
         return nullptr;

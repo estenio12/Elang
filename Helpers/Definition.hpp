@@ -22,7 +22,7 @@ using AST = std::vector<std::pair<std::string, AstNode*>>;
 namespace BRANCH_NAME
 {
     const static std::string VARIABLE_DECLARATION = "VARIABLE_DECLARATION";
-    const static std::string ARITHMETIC_OPERATION = "ARITHMETIC_OPERATION";
+    const static std::string EXPRESSION           = "EXPRESSION";
     const static std::string FUNCTION_DECLARATION = "FUNCTION_DECLARATION";
 }
 
@@ -45,10 +45,10 @@ enum BRANCH_IDENTIFIER
 {
     UNDEFINED,
     VARIABLE_DECLARATION,
-    ARITHMETIC_OPERATION,
+    EXPRESSION,
     FUNCTION_DECLARATION,
     BUILD_PARAMETER_LIST,
-    EXPRESSION,
+    STATEMENT,
 };
 
 enum AST_DIRECTION

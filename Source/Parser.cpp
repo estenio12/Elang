@@ -5,7 +5,7 @@ Parser::Parser(Lexer* lexer):lexer(lexer)
     this->currentBranch = BRANCH_IDENTIFIER::UNDEFINED;
     this->buildingNode  = nullptr;
     this->history       = nullptr;
-    this->ArithmeticBuildingNode = nullptr;
+    this->ExpressionBuildingNode = nullptr;
     
     this->tool       = new Tools();
     this->IDTable    = new IDDeclarationStorage();
@@ -136,12 +136,12 @@ void Parser::ResetState()
 
 void Parser::AddParemCounter()
 {
-    this->ArithmeticParemCounter++;
+    this->ExpressionParemCounter++;
 }
 
 void Parser::RemoveParemCounter()
 {
-    this->ArithmeticParemCounter--;
+    this->ExpressionParemCounter--;
 }
 
 void Parser::AddDeepCounter()
