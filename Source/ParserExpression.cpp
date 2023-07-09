@@ -3,7 +3,16 @@
 AstNode* Parser::Expression(Token* token, std::string expectedType)
 {
     this->ExpressionExpectedType = expectedType;
-    
+
+    if(history == nullptr)
+    {
+        if(this->ExpressionCheckIdentifier(token)) return nullptr;
+        if(this->ExpressionCheckType(token)) return nullptr;
+        if(this->ExpressionCheckOpenParam(token)) return nullptr;
+
+        this->ThrowError(token);
+    }
+
     if(history->value[0] == DELIMITERS::CLOSE_PARAM || 
        history->type == NAME::IDENTIFIER ||
        history->type == NAME::NUMBER     ||
@@ -50,8 +59,7 @@ AstNode* Parser::Expression(Token* token, std::string expectedType)
         }
     }
 
-    if(history->value[0] == DELIMITERS::ASSIGN     ||
-       history->value[0] == DELIMITERS::OPEN_PARAM ||
+    if(history->value[0] == DELIMITERS::OPEN_PARAM ||
        history->value == ARITHMETIC::ADD ||
        history->value == ARITHMETIC::SUB ||
        history->value == ARITHMETIC::DIV ||
@@ -135,7 +143,6 @@ void Parser::InsertExpressionNode(Token* token, int direction)
     if(this->ExpressionBuildingNode == nullptr)
     {
         this->ExpressionBuildingNode = node;
-        this->history = token;
     }
     else
     {

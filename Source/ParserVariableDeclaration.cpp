@@ -109,9 +109,10 @@ AstNode* Parser::VariableDeclaration(Token* token)
     {
         if(token->value[0] == DELIMITERS::ASSIGN)
         {
-            this->InsertVariableDeclarationNode(token, AST_DIRECTION::RIGHT);
-            this->history = token;
+            // this->InsertVariableDeclarationNode(token, AST_DIRECTION::RIGHT);
             this->VariableDeclarationDeclarationState = BRANCH_IDENTIFIER::EXPRESSION;
+            this->InsertExpressionNode(token, AST_DIRECTION::RIGHT);
+            this->history = nullptr;
             return nullptr;
         }
         

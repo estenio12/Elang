@@ -2,7 +2,7 @@
 
 AstNode* Parser::Statement(Token* token)
 {
-    if(this->StatementState == BRANCH_IDENTIFIER::EXPRESSION)
+    if(this->StatementState == BRANCH_IDENTIFIER::RETURN_EXPRESSION)
     {
         auto result = this->Expression(token, this->currentFunctionType);
 
@@ -12,47 +12,37 @@ AstNode* Parser::Statement(Token* token)
             auto lastNode = this->FindLastNode(this->StatementBuildingNode, AST_DIRECTION::RIGHT);
         
             if(lastNode != nullptr)
-            {
                 lastNode->right = result;
-                this->ResetExpressionBuildingNode();
-            }
             else
-            {
-                Output::PrintCustomizeError("Compiler internal error: ", "Function declaration structure not found!");
-            } 
+                this->StatementBuildingNode = result;
+
+            this->ResetExpressionBuildingNode();
+            this->history = nullptr;
         }
 
         return nullptr;
     }
 
-    if(history->value[0] == DELIMITERS::CLOSE_PARAM)
+    if(history == nullptr ||
+       history->value[0] == DELIMITERS::CLOSE_PARAM)
     {
         if(token->value == KEYWORDS::TRETURN)
         {
+            this->StatementState = BRANCH_IDENTIFIER::RETURN_EXPRESSION;
+            this->InsertExpressionNode(token, AST_DIRECTION::RIGHT);
+            this->history = nullptr;
+            return nullptr;         
+        }
+        
+        if(token->value == KEYWORDS::TEND)
+        {
             this->InsertStatementNode(token, AST_DIRECTION::RIGHT);
-            this->history = token;
-            return nullptr;
+            this->RemoveDeepCounter();
+            this->history = nullptr;
+            return this->StatementBuildingNode;
         }
         
         this->ThrowError(token);
-    }
-
-    if(history->value == KEYWORDS::TRETURN)
-    {
-        this->StatementState = BRANCH_IDENTIFIER::EXPRESSION;
-        this->history = token;
-        this->InsertStatementNode(token, AST_DIRECTION::RIGHT);
-        return nullptr;
-    }
-
-    if(history->value[0] == DELIMITERS::EOL)
-    {
-        if(token->value == KEYWORDS::TEND)
-        {
-            this->RemoveDeepCounter();
-            this->history = token;
-            return this->StatementBuildingNode;
-        }
     }
 
     this->ThrowError(token);
