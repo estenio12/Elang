@@ -52,15 +52,15 @@ class CodeGenerator
         std::string VariableDeclarationCurrentType;
         void GenerateVariableDeclaration(AstNode* );
         void VisitorVariableDeclaration(AstNode* );
-        void CommitVariableDeclaration();
+        void ResetVariableDeclaration();
 
     private:
-        std::vector<std::string> ArithmeticOperationCodeStack;
-        void VisitorArithmeticOperation(AstNode* );
-        void CommitArithmeticOperation();
+        std::vector<std::string> ExpressionCodeStack;
+        void VisitorExpression(AstNode* );
+        void ResetExpression();
 
     private:
         std::vector<std::string> FunctionDeclarationCodeStack;
         void VisitorFunctionDeclaration();
-        void CommitFunctionDeclaration();
+        void ResetFunctionDeclaration();
 };

@@ -9,7 +9,7 @@ void CodeGenerator::VisitorVariableDeclaration(AstNode* node)
 {
     if(node == nullptr)
     {
-        this->CommitVariableDeclaration();
+        this->ResetVariableDeclaration();
     }
     else
     {
@@ -46,7 +46,7 @@ void CodeGenerator::VisitorVariableDeclaration(AstNode* node)
         {
             this->VariableDeclarationCodeStack.push_back(TARGET_CODE::T_ASSING);
             this->oldOperation = BRANCH_IDENTIFIER::VARIABLE_DECLARATION;
-            this->VisitorArithmeticOperation(node->right);
+            this->VisitorExpression(node->right);
         }
 
         if(node->token->type == NAME::STRING ||
@@ -71,7 +71,7 @@ void CodeGenerator::VisitorVariableDeclaration(AstNode* node)
     }
 }
 
-void CodeGenerator::CommitVariableDeclaration()
+void CodeGenerator::ResetVariableDeclaration()
 {
     std::string build;
 
