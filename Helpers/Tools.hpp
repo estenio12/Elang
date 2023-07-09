@@ -56,6 +56,14 @@ class Tools
                 std::cout << "Debug ParseTree | hasNodeLeft: " << node->HasLeftNode() << "\n";
                 std::cout << "Debug ParseTree | hasNodeRight: " << node->HasRightNode() << "\n\n";
 
+                if(node->StatementList.size() > 0)
+                {
+                    for(auto item : node->StatementList)
+                        std::cout << "Debug ParseTree | StatementList: " << item.first << "\n\n";
+
+                    std::cout << "\n\n";
+                }
+
                 if(node->HasLeftNode())
                 {
                     std::cout << "Debug ParseTree | Deep: " << deepCount << "\n";

@@ -9,6 +9,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 #include "../Model/Token.hpp"
 
 class AstNode
@@ -19,6 +20,7 @@ class AstNode
         AstNode* right;
         AstNode* left;
         AstNode* parent;
+        std::vector<std::pair<std::string, AstNode*>> StatementList;
 
     public:
         AstNode(Token* token):token(token){right = nullptr; left = nullptr; parent = nullptr; }

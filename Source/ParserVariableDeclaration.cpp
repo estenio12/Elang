@@ -157,3 +157,9 @@ void Parser::InsertVariableDeclarationNode(Token* token, int direction)
     }
 }
 
+void Parser::ResetVariableDeclarationBuildingNode()
+{
+    this->VariableDeclarationBuildingNode = nullptr;
+}
+
+

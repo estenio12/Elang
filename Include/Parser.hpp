@@ -11,7 +11,7 @@
 #include <string>
 #include <cstring>
 #include <vector>
-#include <stack>
+#include <optional>
 #include "../Helpers/Tools.hpp"
 #include "../Helpers/Definition.hpp"
 #include "../Helpers/SymbolTable.hpp"
@@ -75,6 +75,7 @@ class Parser
         AstNode* VariableDeclaration(Token* );
         void InsertVariableDeclarationNode(Token*, int );
         void VariableDeclarationCommit();
+        void ResetVariableDeclarationBuildingNode();
 
     private:
         AstNode* FunctionDeclarationBuildingNode;
@@ -84,13 +85,14 @@ class Parser
         void FunctionDeclarationReset();
         void InsertFunctionDeclarationNode(Token*, int );
 
-    // # Functions Assistants
+    // # Assistants Methods
     private:
         int StatementState = BRANCH_IDENTIFIER::UNDEFINED;
-        AstNode* StatementBuildingNode;
-        AstNode* Statement(Token* );
+        const std::vector<std::pair<std::string, AstNode*>> ReturnEmptyStatementList;
+        std::vector<std::pair<std::string, AstNode*>> StatementList;
+        std::vector<std::pair<std::string, AstNode*>> Statement(Token* );
         void InsertStatementNode(Token*, int );
-        void ResetStatementBuildingNode();
+        void ResetStatementList();
 
     private:
         int ExpressionParemCounter = 0;

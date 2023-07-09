@@ -1,5 +1,18 @@
-var:number t10 = 35 + 35 - 5;
+var:number t10 = 35 + 35 - 15;
 
-fun:number sub(var:number n1, var:number n2)
-    return n1 - n2;
+fun:number sum(var:number n1, var:number n2)
+	var:number presoma = n1 + n2;
+	var:number t1 = n1 + n2;
+	var:number t2 = n1 + n2;
+	var:number t3 = n1 + n2;
+	var:number t4 = n1 + n2;
+	var:number t5 = n1 + n2;
+	var:number t6 = n1 + n2;
+	var:number t7 = n1 + n2;
+	var:number t8 = n1 + n2;
+    return presoma;
+end
+
+fun:number mul(var:number n1, var:number n2)
+	return n1 * n2;
 end

@@ -6,15 +6,15 @@ AstNode* Parser::FunctionDeclaration(Token* token)
     {
         auto result = this->Statement(token);
 
-        if(result != nullptr)
+        if(result.size() > 0)
         {
             this->FunctionDeclarationState = BRANCH_IDENTIFIER::UNDEFINED;
             auto lastNode = this->FindLastNode(this->FunctionDeclarationBuildingNode, AST_DIRECTION::RIGHT);
         
             if(lastNode != nullptr)
             {
-                lastNode->right = result;
-                this->ResetStatementBuildingNode();
+                lastNode->StatementList = std::move(result);
+                this->ResetStatementList();
                 return this->FunctionDeclarationBuildingNode;
             }
             else
