@@ -3,7 +3,6 @@
 CodeGenerator::CodeGenerator(IDDeclarationStorage* IDTable):IDTable(IDTable)
 {
     this->fileHandle.open(this->OutputName, std::ios::out | std::ios::ate);
-
     this->tool = new Tools();
 }
 
@@ -15,10 +14,13 @@ void CodeGenerator::Generate(AST ast)
     {
         // # Generate target code for variable declaration
         if(branch.first == BRANCH_NAME::VARIABLE_DECLARATION)
-           this->GenerateVariableDeclaration(branch.second);
+        {
+           auto chunk = this->GenerateVariableDeclaration(branch.second);
+           this->WriteChunkIntoFile(chunk);
+        }
     }
 
-    this->WriteOutputFile();
+    this->CloseFileHandler();
 }
 
 void CodeGenerator::ThrowErro(std::string message)
@@ -32,14 +34,14 @@ std::string CodeGenerator::AddWhitespace(std::string value)
     return " " + value;
 }
 
-void CodeGenerator::WriteOutputFile()
+void CodeGenerator::WriteChunkIntoFile(std::string chunk)
 {
-    for(auto item : this->CodeStack)
-        this->fileHandle << item;
+    this->fileHandle << chunk;
+}
 
+void CodeGenerator::CloseFileHandler()
+{
     this->fileHandle.close();
-    this->CodeStack.clear();
-    Output::PrintSuccess("Successfully compiled!");
 }
 
 std::string CodeGenerator::ConvertToString(std::string value)

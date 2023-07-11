@@ -31,6 +31,7 @@ class CodeGenerator
         Tools* tool;
         std::vector<std::string> CodeStack;
         int oldOperation = BRANCH_IDENTIFIER::UNDEFINED;
+        const std::string EMPTY = "";
 
     public:
         CodeGenerator(IDDeclarationStorage* );
@@ -40,7 +41,8 @@ class CodeGenerator
         void Generate(AST );
 
     private:
-        void WriteOutputFile();
+        void WriteChunkIntoFile(std::string );
+        void CloseFileHandler();
 
     private:
         void ThrowErro(std::string );
@@ -50,17 +52,17 @@ class CodeGenerator
     private:
         std::vector<std::string> VariableDeclarationCodeStack;
         std::string VariableDeclarationCurrentType;
-        void GenerateVariableDeclaration(AstNode* );
-        void VisitorVariableDeclaration(AstNode* );
-        void ResetVariableDeclaration();
+        std::string GenerateVariableDeclaration(AstNode* );
+        std::string VisitorVariableDeclaration(AstNode* );
+        std::string CommitVariableDeclaration();
 
     private:
         std::vector<std::string> ExpressionCodeStack;
-        void VisitorExpression(AstNode* );
-        void ResetExpression();
+        std::string VisitorExpression(AstNode* );
+        std::string CommitExpression();
 
     private:
         std::vector<std::string> FunctionDeclarationCodeStack;
         void VisitorFunctionDeclaration();
-        void ResetFunctionDeclaration();
+        void CommitFunctionDeclaration();
 };

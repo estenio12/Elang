@@ -1,87 +1,78 @@
 #include "../Include/CodeGenerator.hpp"
 
-void CodeGenerator::GenerateVariableDeclaration(AstNode* node)
+std::string CodeGenerator::GenerateVariableDeclaration(AstNode* node)
 {
-    if(node != nullptr) this->VisitorVariableDeclaration(node);
+    return this->VisitorVariableDeclaration(node);
 }
 
-void CodeGenerator::VisitorVariableDeclaration(AstNode* node)
+std::string CodeGenerator::VisitorVariableDeclaration(AstNode* node)
 {
-    if(node == nullptr)
+    if(node->token->value == KEYWORDS::TVAR)
     {
-        this->ResetVariableDeclaration();
+        this->VariableDeclarationCodeStack.push_back(TARGET_CODE::T_VAR);
+        return this->VisitorVariableDeclaration(node->right);
     }
-    else
+    
+    if(node->token->value == KEYWORDS::TCONST)
     {
-        if(node->token->value == KEYWORDS::TVAR)
-        {
-            this->VariableDeclarationCodeStack.push_back(TARGET_CODE::T_VAR);
-            this->VisitorVariableDeclaration(node->right);
-        }
-        
-        if(node->token->value == KEYWORDS::TCONST)
-        {
-            this->VariableDeclarationCodeStack.push_back(TARGET_CODE::T_CONST);
-            this->VisitorVariableDeclaration(node->right);
-        }
-
-        if(node->token->value[0] == DELIMITERS::COLON)
-        {
-            this->VisitorVariableDeclaration(node->right);
-        }
-        
-        if(node->token->type == NAME::TYPE)
-        {
-            this->VariableDeclarationCurrentType = node->token->value;
-            this->VisitorVariableDeclaration(node->right);
-        }
-
-        if(node->token->type == NAME::IDENTIFIER)
-        {
-            this->VariableDeclarationCodeStack.push_back(this->AddWhitespace(node->token->value));
-            this->VisitorVariableDeclaration(node->right);
-        }
-
-        if(node->token->value[0] == DELIMITERS::ASSIGN)
-        {
-            this->VariableDeclarationCodeStack.push_back(TARGET_CODE::T_ASSING);
-            this->oldOperation = BRANCH_IDENTIFIER::VARIABLE_DECLARATION;
-            this->VisitorExpression(node->right);
-        }
-
-        if(node->token->type == NAME::STRING ||
-           node->token->type == NAME::CHARACTER)
-        {
-            this->VariableDeclarationCodeStack.push_back(this->ConvertToString(node->token->value));
-            this->VisitorVariableDeclaration(node->right);
-        }
-
-        if(node->token->type == NAME::NUMBER  ||
-           node->token->type == NAME::BOOLEAN )
-        {
-            this->VariableDeclarationCodeStack.push_back(node->token->value);
-            this->VisitorVariableDeclaration(node->right);
-        }
-
-        if(node->token->value[0] == DELIMITERS::EOL)
-        {
-            this->VariableDeclarationCodeStack.push_back(TARGET_CODE::T_EOL);
-            this->VisitorVariableDeclaration(node->right);
-        }
+        this->VariableDeclarationCodeStack.push_back(TARGET_CODE::T_CONST);
+        return this->VisitorVariableDeclaration(node->right);
     }
+
+    if(node->token->value[0] == DELIMITERS::COLON)
+    {
+        return this->VisitorVariableDeclaration(node->right);
+    }
+    
+    if(node->token->type == NAME::TYPE)
+    {
+        this->VariableDeclarationCurrentType = node->token->value;
+        return this->VisitorVariableDeclaration(node->right);
+    }
+
+    if(node->token->type == NAME::IDENTIFIER)
+    {
+        this->VariableDeclarationCodeStack.push_back(this->AddWhitespace(node->token->value));
+        return this->VisitorVariableDeclaration(node->right);
+    }
+
+    if(node->token->value[0] == DELIMITERS::ASSIGN)
+    {
+        this->VariableDeclarationCodeStack.push_back(TARGET_CODE::T_ASSING);
+        auto expression = this->VisitorExpression(node->right);
+        this->VariableDeclarationCodeStack.push_back(expression);
+        return this->CommitVariableDeclaration();
+    }
+
+    if(node->token->type == NAME::STRING ||
+        node->token->type == NAME::CHARACTER)
+    {
+        this->VariableDeclarationCodeStack.push_back(this->ConvertToString(node->token->value));
+        return this->VisitorVariableDeclaration(node->right);
+    }
+
+    if(node->token->type == NAME::NUMBER  ||
+        node->token->type == NAME::BOOLEAN )
+    {
+        this->VariableDeclarationCodeStack.push_back(node->token->value);
+        return this->VisitorVariableDeclaration(node->right);
+    }
+
+    if(node->token->value[0] == DELIMITERS::EOL)
+    {
+        this->VariableDeclarationCodeStack.push_back(TARGET_CODE::T_EOL);
+        return this->CommitVariableDeclaration();
+    }
+
+    return EMPTY;
 }
 
-void CodeGenerator::ResetVariableDeclaration()
+std::string CodeGenerator::CommitVariableDeclaration()
 {
     std::string build;
-
-    for(auto item : this->VariableDeclarationCodeStack) 
-    {
-        build += item;
-    }
-
+    for(auto item : this->VariableDeclarationCodeStack) build += item;
     this->VariableDeclarationCodeStack.clear();
-    this->CodeStack.push_back(build);
+    return build;
 }
 
 
