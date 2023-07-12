@@ -20,7 +20,7 @@ namespace NAME
     static const std::string CHARACTER   = "character";
     static const std::string BOOLEAN     = "boolean";
     static const std::string STRING      = "string";
-    static const std::string TVOID        = "void";
+    static const std::string TVOID       = "void";
     static const std::string TYPE        = "type";
     static const std::string IDENTIFIER  = "identifier";
     static const std::string DELIMITER   = "delimiter";

@@ -18,6 +18,13 @@ void CodeGenerator::Generate(AST ast)
            auto chunk = this->GenerateVariableDeclaration(branch.second);
            this->WriteChunkIntoFile(chunk);
         }
+
+        // # Generate target code for variable declaration
+        if(branch.first == BRANCH_NAME::FUNCTION_DECLARATION)
+        {
+           auto chunk = this->GenerateFunctionDeclaration(branch.second);
+           this->WriteChunkIntoFile(chunk);
+        }
     }
 
     this->CloseFileHandler();

@@ -1,4 +1,4 @@
-var:number t10 = 35 + 14 - 25;
+var:number t10 = 35 + 10 - 25;
 
 fun:number sum(var:number n1, var:number n2)
 	var:number presoma = n1 + n2;

@@ -62,7 +62,13 @@ class CodeGenerator
         std::string CommitExpression();
 
     private:
+        std::vector<std::string> StatementCodeStack;
+        std::string VisitorStatement(AstNode* );
+        std::string CommitStatement();
+
+    private:
         std::vector<std::string> FunctionDeclarationCodeStack;
-        void VisitorFunctionDeclaration();
-        void CommitFunctionDeclaration();
+        std::string GenerateFunctionDeclaration(AstNode* );
+        std::string VisitorFunctionDeclaration(AstNode* );
+        std::string CommitFunctionDeclaration();
 };
