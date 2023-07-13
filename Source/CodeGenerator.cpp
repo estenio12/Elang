@@ -36,10 +36,10 @@ void CodeGenerator::ThrowErro(std::string message)
     exit(EXIT_FAILURE);
 }
 
-std::string CodeGenerator::AddWhitespace(std::string value)
-{
-    return " " + value;
-}
+// std::string CodeGenerator::AddWhitespace(std::string value)
+// {
+//     return " " + value;
+// }
 
 void CodeGenerator::WriteChunkIntoFile(std::string chunk)
 {

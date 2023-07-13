@@ -46,10 +46,11 @@ class CodeGenerator
 
     private:
         void ThrowErro(std::string );
-        std::string AddWhitespace(std::string );
+        // std::string AddWhitespace(std::string );
         std::string ConvertToString(std::string );
 
     private:
+        bool generateWithLet = false;
         std::vector<std::string> VariableDeclarationCodeStack;
         std::string VariableDeclarationCurrentType;
         std::string GenerateVariableDeclaration(AstNode* );
@@ -63,7 +64,7 @@ class CodeGenerator
 
     private:
         std::vector<std::string> StatementCodeStack;
-        std::string VisitorStatement(AstNode* );
+        std::string VisitorStatement(std::vector<std::pair<std::string, AstNode*>> );
         std::string CommitStatement();
 
     private:

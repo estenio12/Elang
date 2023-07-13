@@ -9,7 +9,8 @@ std::string CodeGenerator::VisitorVariableDeclaration(AstNode* node)
 {
     if(node->token->value == KEYWORDS::TVAR)
     {
-        this->VariableDeclarationCodeStack.push_back(TARGET_CODE::T_VAR);
+        std::string declaration = (this->generateWithLet) ? TARGET_CODE::T_LET : TARGET_CODE::T_VAR;
+        this->VariableDeclarationCodeStack.push_back(declaration);
         return this->VisitorVariableDeclaration(node->right);
     }
     
@@ -32,7 +33,7 @@ std::string CodeGenerator::VisitorVariableDeclaration(AstNode* node)
 
     if(node->token->type == NAME::IDENTIFIER)
     {
-        this->VariableDeclarationCodeStack.push_back(this->AddWhitespace(node->token->value));
+        this->VariableDeclarationCodeStack.push_back(node->token->value);
         return this->VisitorVariableDeclaration(node->right);
     }
 

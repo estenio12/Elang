@@ -23,7 +23,7 @@ std::string CodeGenerator::VisitorFunctionDeclaration(AstNode* node)
 
     if(node->token->type == NAME::IDENTIFIER)
     {
-        FunctionDeclarationCodeStack.push_back(this->AddWhitespace(node->token->value));
+        FunctionDeclarationCodeStack.push_back(node->token->value);
         return this->VisitorFunctionDeclaration(node->right);
     }
 
@@ -48,6 +48,7 @@ std::string CodeGenerator::VisitorFunctionDeclaration(AstNode* node)
     if(node->token->value[0] == DELIMITERS::CLOSE_PARAM)
     {
         FunctionDeclarationCodeStack.push_back(TARGET_CODE::T_CLOSE_PARAM);
+        FunctionDeclarationCodeStack.push_back(this->VisitorStatement(node->StatementList));
         // return this->VisitorFunctionDeclaration(node->right);
         return this->CommitFunctionDeclaration();
     }

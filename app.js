@@ -1,1 +1,1 @@
-var t10=35+10-25;function sum( n1, n2)function mul( n1, n2)
+var t10=35+10-25;function sum(n1,n2){return n1+n2;}function mul(n1,n2){return n1*n2;}
