@@ -32,6 +32,21 @@ std::vector<std::pair<std::string, AstNode*>> Parser::Statement(Token* token)
         return ReturnEmptyStatementList;
     }
 
+    if(this->StatementState == BRANCH_IDENTIFIER::ASSIGNMENT)
+    {
+        auto result = this->Assignment(token);
+
+        if(result != nullptr)
+        {
+            this->StatementState = BRANCH_IDENTIFIER::UNDEFINED;
+            this->StatementList.push_back(std::make_pair(BRANCH_NAME::ASSIGNMENT_EXPRESSION, result));
+            this->ResetAssignmentBuildNode();
+            this->history = nullptr;
+        }
+
+        return ReturnEmptyStatementList;
+    }
+
     if(history == nullptr ||
        history->value[0] == DELIMITERS::CLOSE_PARAM)
     {
@@ -60,6 +75,14 @@ std::vector<std::pair<std::string, AstNode*>> Parser::Statement(Token* token)
             return this->StatementList;
         }
         
+        if(token->type == NAME::IDENTIFIER)
+        {
+            this->StatementState = BRANCH_IDENTIFIER::ASSIGNMENT;
+            this->history = nullptr;
+            this->Statement(token);
+            return ReturnEmptyStatementList;      
+        }
+
         this->ThrowError(token);
     }
 

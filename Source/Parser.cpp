@@ -38,6 +38,10 @@ void Parser::Parse()
             case BRANCH_IDENTIFIER::FUNCTION_DECLARATION:
                 this->CommitEntity(BRANCH_NAME::FUNCTION_DECLARATION, this->FunctionDeclaration(token));
             break;
+
+            case BRANCH_IDENTIFIER::ASSIGNMENT:
+                this->CommitEntity(BRANCH_NAME::ASSIGNMENT_EXPRESSION, this->Assignment(token));
+            break;
         }
     }
 
@@ -67,6 +71,12 @@ void Parser::IdentifyOperationType(Token* token)
     {
         this->AssignCurrentBranch(BRANCH_IDENTIFIER::FUNCTION_DECLARATION);
         this->FunctionDeclaration(token);
+    }
+
+    if(token->type == NAME::IDENTIFIER)
+    {
+        this->AssignCurrentBranch(BRANCH_IDENTIFIER::ASSIGNMENT);
+        this->Assignment(token);
     }
 }
 
@@ -132,6 +142,7 @@ void Parser::ResetState()
     // # Reset great entities
     this->VariableDeclarationBuildingNode = nullptr;
     this->FunctionDeclarationBuildingNode = nullptr;
+    this->AssignmentBuildingNode          = nullptr;
 }
 
 void Parser::AddParemCounter()

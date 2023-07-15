@@ -1,9 +1,1 @@
-var:number t10 = 15 + 10 + 75;
-
-fun:number sum(var:number n1, var:number n2)
-	return n1 + n2;
-end
-
-fun:number mul(var:number n1, var:number n2)
-	return n1 * n2;
-end
+var:text t10 = "hello world";

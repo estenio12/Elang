@@ -121,4 +121,5 @@ class Parser
         AstNode* AssignmentBuildingNode;
         AstNode* Assignment(Token* );
         void InsertAssignmentBuildNode(Token*, int );
+        void ResetAssignmentBuildNode();
 };

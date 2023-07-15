@@ -2,19 +2,38 @@
 
 AstNode* Parser::Assignment(Token* token)
 {
-    if(this->AssignmentState == BRANCH_IDENTIFIER::ASSIGNMENT)
+    if(this->AssignmentState == BRANCH_IDENTIFIER::EXPRESSION)
     {
-        auto result = this->Expression(token, EXPECTED_TYPE::TUNDEFINED);
+        auto result = this->Expression(token, this->AssignmentExpectedType);
+    
+        if(result != nullptr)
+        {
+            this->AssignmentState = BRANCH_IDENTIFIER::UNDEFINED;
+            auto lastNode = this->FindLastNode(this->AssignmentBuildingNode, AST_DIRECTION::RIGHT);
+        
+            if(lastNode != nullptr)
+            {
+                lastNode->right = result;
+                this->ResetExpressionBuildingNode();
+                return this->AssignmentBuildingNode;
+            }
+            else
+            {
+                Output::PrintCustomizeError("Compiler internal error: ", "Assignment expression structure not found!");
+            }
+        }
+
+        return nullptr;
     }
 
     if(history == nullptr)
     {
         if(token->type == NAME::IDENTIFIER)
         {
-            if(!this->IDTable->ExistIdentifier(token->value, this->currentScope, this->currentDeep) ||
+            if(!this->IDTable->ExistIdentifier(token->value, this->currentScope, this->currentDeep) &&
                !this->IDFunTable->ExistIdentifier(token->value))
             {
-                this->ThrowError("Identifier undeclared in scope", token->endPos + 1);
+                this->ThrowError("Variable not declared in scope '" + token->value + "'", token->startPos + 1);
             }
 
             auto obj = this->IDTable->FindObjectIdentifier(token->value);
@@ -26,7 +45,7 @@ AstNode* Parser::Assignment(Token* token)
             }
             else
             {
-                this->AssignmentExpectedType = obj->type;
+                this->AssignmentExpectedType = obj->typeValue;
             }
 
             this->InsertAssignmentBuildNode(token, AST_DIRECTION::RIGHT);
@@ -42,8 +61,8 @@ AstNode* Parser::Assignment(Token* token)
         if(token->value[0] == DELIMITERS::ASSIGN)
         {
             this->InsertAssignmentBuildNode(token, AST_DIRECTION::RIGHT);
-            this->history = token;
-            this->AssignmentState = BRANCH_IDENTIFIER::ASSIGNMENT;
+            this->AssignmentState = BRANCH_IDENTIFIER::EXPRESSION;
+            this->history = nullptr;
             return nullptr;
         }
 
@@ -72,6 +91,11 @@ void Parser::InsertAssignmentBuildNode(Token* token, int direction)
         else
            lastNode->right = node;
     }
+}
+
+void Parser::ResetAssignmentBuildNode()
+{
+    this->AssignmentBuildingNode = nullptr;
 }
 
 

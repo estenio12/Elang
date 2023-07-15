@@ -46,7 +46,6 @@ class CodeGenerator
 
     private:
         void ThrowErro(std::string );
-        // std::string AddWhitespace(std::string );
         std::string ConvertToString(std::string );
 
     private:
@@ -72,4 +71,10 @@ class CodeGenerator
         std::string GenerateFunctionDeclaration(AstNode* );
         std::string VisitorFunctionDeclaration(AstNode* );
         std::string CommitFunctionDeclaration();
+
+    private:
+        std::vector<std::string> AssignmentExpressionCodeStack;
+        std::string GenerateAssignmentExpression(AstNode* );
+        std::string VisitorAssignmentExpression(AstNode* );
+        std::string CommitAssignmentExpression();
 };

@@ -1,1 +1,2 @@
-var t10=15+10+75;function sum(n1,n2){return n1+n2;}function mul(n1,n2){return n1*n2;}
+var t10='hello world';
+console.log(t10);

@@ -21,11 +21,12 @@ using AST = std::vector<std::pair<std::string, AstNode*>>;
 
 namespace BRANCH_NAME
 {
-    const static std::string VARIABLE_DECLARATION = "VARIABLE_DECLARATION";
-    const static std::string EXPRESSION           = "EXPRESSION";
-    const static std::string FUNCTION_DECLARATION = "FUNCTION_DECLARATION";
-    const static std::string END_STATEMENT        = "END_STATEMENT";
-    const static std::string RETURN_EXPRESSION    = "RETURN_EXPRESSION";
+    const static std::string VARIABLE_DECLARATION  = "VARIABLE_DECLARATION";
+    const static std::string EXPRESSION            = "EXPRESSION";
+    const static std::string FUNCTION_DECLARATION  = "FUNCTION_DECLARATION";
+    const static std::string END_STATEMENT         = "END_STATEMENT";
+    const static std::string RETURN_EXPRESSION     = "RETURN_EXPRESSION";
+    const static std::string ASSIGNMENT_EXPRESSION = "ASSIGNMENT_EXPRESSION";
 }
 
 namespace STANDARD_SCOPE_NAME

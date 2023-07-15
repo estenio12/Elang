@@ -14,7 +14,12 @@ std::string CodeGenerator::VisitorExpression(AstNode* node)
         return this->VisitorExpression(node->right); 
     }
 
-    this->ExpressionCodeStack.push_back(node->token->value);
+    if(node->token->type == NAME::STRING ||
+       node->token->type == NAME::CHARACTER)
+       this->ExpressionCodeStack.push_back(this->ConvertToString(node->token->value));
+    else
+       this->ExpressionCodeStack.push_back(node->token->value);
+
     return this->VisitorExpression(node->right);
 }
 

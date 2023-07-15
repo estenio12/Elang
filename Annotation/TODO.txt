@@ -18,7 +18,7 @@
 	> [ OK ] 12 - Parser: Refactoring;
 	> [ OK ] 13 - CodeGenerator: Generate the first target code;
 	> [ OK ] 14 - Full: support to function declaration;
-	> [ TO DO ] 15 - Full: support to assignment declaration;
+	> [ OK ] 15 - Full: support to assignment declaration;
 	> [ TO DO ] 16 - Full: support to function call;
 
 >> To Fix:

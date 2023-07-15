@@ -17,6 +17,8 @@ class IDModel
         std::string name;
         std::string value;
         std::string type;
+        /// @brief typeValue is type of value, exemple: t = 10 where 10 is number
+        /// then, type of value is number
         std::string typeValue;
         std::string scopeName;
         int deep = 0;

@@ -15,15 +15,22 @@ void CodeGenerator::Generate(AST ast)
         // # Generate target code for variable declaration
         if(branch.first == BRANCH_NAME::VARIABLE_DECLARATION)
         {
-           auto chunk = this->GenerateVariableDeclaration(branch.second);
-           this->WriteChunkIntoFile(chunk);
+            auto chunk = this->GenerateVariableDeclaration(branch.second);
+            this->WriteChunkIntoFile(chunk);
         }
 
         // # Generate target code for variable declaration
         if(branch.first == BRANCH_NAME::FUNCTION_DECLARATION)
         {
-           auto chunk = this->GenerateFunctionDeclaration(branch.second);
-           this->WriteChunkIntoFile(chunk);
+            auto chunk = this->GenerateFunctionDeclaration(branch.second);
+            this->WriteChunkIntoFile(chunk);
+        }
+
+        // # Generate target code for assignment expression
+        if(branch.first == BRANCH_NAME::ASSIGNMENT_EXPRESSION)
+        {
+            auto chunk = this->GenerateAssignmentExpression(branch.second);
+            this->WriteChunkIntoFile(chunk);
         }
     }
 
@@ -35,11 +42,6 @@ void CodeGenerator::ThrowErro(std::string message)
     Output::PrintCustomizeError("Code Generator error: ", message);
     exit(EXIT_FAILURE);
 }
-
-// std::string CodeGenerator::AddWhitespace(std::string value)
-// {
-//     return " " + value;
-// }
 
 void CodeGenerator::WriteChunkIntoFile(std::string chunk)
 {
