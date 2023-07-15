@@ -98,7 +98,7 @@ class Parser
         int ExpressionParemCounter = 0;
         std::string ExpressionExpectedType = EXPECTED_TYPE::TUNDEFINED;
         AstNode* ExpressionBuildingNode;
-        AstNode* Expression(Token*, std::string);
+        AstNode* Expression(Token*, std::string expectedType);
         bool ExpressionCheckOpenParam(Token* );
         bool ExpressionCheckType(Token* );
         bool ExpressionCheckIdentifier(Token*);
@@ -114,4 +114,11 @@ class Parser
         void BuildParameterListCommit();
         void ResetParameterListBuildingNode();
         void ResetBuildParameterListStates();
+
+    private:
+        int AssignmentState = BRANCH_IDENTIFIER::UNDEFINED;
+        std::string AssignmentExpectedType = EXPECTED_TYPE::TUNDEFINED;
+        AstNode* AssignmentBuildingNode;
+        AstNode* Assignment(Token* );
+        void InsertAssignmentBuildNode(Token*, int );
 };

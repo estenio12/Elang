@@ -39,6 +39,19 @@ FunctionIDModel* IDFunctionDeclarationStorage::FindObjectIdentifier(std::string 
     return nullptr;
 }
 
+FunctionIDModel* IDFunctionDeclarationStorage::FindObjectIdentifier(std::string name)
+{
+    for(auto item : this->IDTable)
+    {
+        if(item->name == name)
+        {
+            return item;
+        }
+    }
+
+    return nullptr;
+}
+
 FunctionIDModel* IDFunctionDeclarationStorage::CreateRow(std::string name, std::string type)
 {
     auto row = new FunctionIDModel(name, type);

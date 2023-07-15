@@ -31,5 +31,6 @@ class IDFunctionDeclarationStorage
         void InsertFunctionID(FunctionIDModel* row);
         bool ExistIdentifier(std::string name);
         FunctionIDModel* FindObjectIdentifier(std::string name, std::string type);
+        FunctionIDModel* FindObjectIdentifier(std::string name);
         FunctionIDModel* CreateRow(std::string name, std::string type);
 };
