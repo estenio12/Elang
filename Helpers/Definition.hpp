@@ -61,3 +61,11 @@ enum AST_DIRECTION
     LEFT,
     RIGHT
 };
+
+enum TYPE_ID
+{
+    VARIABLE_ASSIGNMENT,
+    CALL_FUNCTION,
+    NONE
+};
+

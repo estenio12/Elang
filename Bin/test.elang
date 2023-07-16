@@ -1,1 +1,10 @@
 var:text t10 = "hello world";
+
+fun:number mul(var:number value, var:number exp)
+	return value * exp;
+end
+
+#sum(10, 10);
+
+
+t10 = mul(10, 10) + 50;

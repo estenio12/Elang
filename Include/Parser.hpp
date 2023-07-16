@@ -67,6 +67,7 @@ class Parser
         void RemoveDeepCounter();
         std::string GetExpectedType(Token* );
         void CommitEntity(std::string, AstNode* );
+        int IdentifyTypeID(std::string name);
 
     // # Main Entities
     private:

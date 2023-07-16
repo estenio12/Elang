@@ -75,9 +75,35 @@ void Parser::IdentifyOperationType(Token* token)
 
     if(token->type == NAME::IDENTIFIER)
     {
-        this->AssignCurrentBranch(BRANCH_IDENTIFIER::ASSIGNMENT);
-        this->Assignment(token);
+        auto typeID = this->IdentifyTypeID(token->value);
+
+        switch(typeID)
+        {
+            case TYPE_ID::VARIABLE_ASSIGNMENT:
+                this->AssignCurrentBranch(BRANCH_IDENTIFIER::ASSIGNMENT);
+                this->Assignment(token);
+            break;
+
+            case TYPE_ID::CALL_FUNCTION:
+
+            break;
+        
+            default:
+                this->ThrowError("Identifier not declared in scope '" + token->value + "'", token->startPos + 1);
+            break;
+        }
     }
+}
+
+int Parser::IdentifyTypeID(std::string name)
+{
+    auto varId = this->IDTable->FindObjectIdentifier(name);
+    if(varId != nullptr) return TYPE_ID::VARIABLE_ASSIGNMENT;
+
+    auto funId = this->IDFunTable->FindObjectIdentifier(name);
+    if(funId != nullptr) return TYPE_ID::CALL_FUNCTION;
+
+    return TYPE_ID::NONE;
 }
 
 void Parser::CommitEntity(std::string branch_name, AstNode* tree)
