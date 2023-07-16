@@ -123,4 +123,17 @@ class Parser
         AstNode* Assignment(Token* );
         void InsertAssignmentBuildNode(Token*, int );
         void ResetAssignmentBuildNode();
+
+    private:
+        int CallFunctionState = BRANCH_IDENTIFIER::UNDEFINED;
+        AstNode* CallFunctionBuildingNode;
+        AstNode* CallFunction(Token* );
+        void InsertCallFunctionBuildNode(Token*, int );
+        void ResetCallFunctionBuildNode();
+
+    private:
+        AstNode* ArgumentListBuildingNode;
+        AstNode* ArgumentList(Token* );
+        void InsertArgumentListBuildNode(Token*, int );
+        void ResetArgumentListBuildNode();
 };
