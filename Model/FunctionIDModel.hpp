@@ -18,8 +18,8 @@ class FunctionIDModel
     public:
         std::string name;
         std::string type;
-        /// @param 1 = type
-        /// @param 2 = name
+        /// @param 1 type
+        /// @param 2 name
         FunctionParameterList paramList;
 
     public:

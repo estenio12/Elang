@@ -4,8 +4,8 @@ AstNode* Parser::ArgumentList(Token* token)
 {
     if(history == nullptr)
     {
-        
-        this->InsertExpressionNode(token, );
+        auto currentArgumentType = this->GetNextArgumentType();
+        // this->InsertExpressionNode(token, );
     }
 }
 
@@ -29,7 +29,36 @@ void Parser::InsertArgumentListBuildNode(Token* token, int direction)
     }
 }
 
+void Parser::IncrementArgumentIndex()
+{
+    this->ArgumentIndex++;
+}
+
 void Parser::ResetArgumentListBuildNode()
 {
     this->ArgumentListBuildingNode = nullptr;
+    this->ArgumentIndex = 0;
+    this->CurrentArgumentListFunctionName.clear();
 }
+
+std::string Parser::GetNextArgumentType()
+{
+    auto result = this->IDFunTable->FindObjectIdentifier(this->CurrentArgumentListFunctionName);
+
+    if(result == nullptr)
+    {
+        Output::PrintCustomizeError("Compiler internal error: ", "(In argumentList) Parameter list no found.");
+        exit(EXIT_FAILURE);
+    }
+
+    if(this->ArgumentIndex <= result->paramList.size())
+    {
+        auto type = result->paramList[this->ArgumentIndex].first;
+        this->IncrementArgumentIndex();
+        return type;
+    }
+
+    return this->EMPTY;
+}
+
+

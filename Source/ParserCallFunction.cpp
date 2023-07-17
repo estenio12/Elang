@@ -14,7 +14,7 @@ AstNode* Parser::CallFunction(Token* token)
                 return CallFunctionBuildingNode;
             }
         }
-
+        
         auto result = this->ArgumentList(token);
     
         if(result != nullptr)
@@ -43,6 +43,7 @@ AstNode* Parser::CallFunction(Token* token)
         {
             this->InsertCallFunctionBuildNode(token, AST_DIRECTION::RIGHT);
             this->history = token;
+            this->CurrentArgumentListFunctionName = token->value;
             return nullptr;
         }
     }

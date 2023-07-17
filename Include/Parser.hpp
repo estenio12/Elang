@@ -42,6 +42,7 @@ class Parser
         std::string currentScope = STANDARD_SCOPE_NAME::GLOBALSCOPE;
         int currentDeep = 0;
         bool isConstant = false;
+        const std::string EMPTY = "-1";
 
     public:
         Parser(Lexer* lexer);
@@ -132,8 +133,12 @@ class Parser
         void ResetCallFunctionBuildNode();
 
     private:
+        int ArgumentIndex = 0;
+        std::string CurrentArgumentListFunctionName;
         AstNode* ArgumentListBuildingNode;
         AstNode* ArgumentList(Token* );
+        std::string GetNextArgumentType();
         void InsertArgumentListBuildNode(Token*, int );
+        void IncrementArgumentIndex();
         void ResetArgumentListBuildNode();
 };
