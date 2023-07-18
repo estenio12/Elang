@@ -98,6 +98,8 @@ class Parser
 
     private:
         int ExpressionParemCounter = 0;
+        int ExpressionCommaCounter = 0;
+        int ExpressionCallFunctionCounter = 0;
         std::string ExpressionExpectedType = EXPECTED_TYPE::TUNDEFINED;
         AstNode* ExpressionBuildingNode;
         AstNode* Expression(Token*, std::string expectedType);
@@ -126,19 +128,14 @@ class Parser
         void ResetAssignmentBuildNode();
 
     private:
+        int ArgumentIndex = 0;
         int CallFunctionState = BRANCH_IDENTIFIER::UNDEFINED;
+        std::string CurrentArgumentExpectedType = EXPECTED_TYPE::TUNDEFINED;
+        std::string CurrentArgumentListFunctionName;
         AstNode* CallFunctionBuildingNode;
         AstNode* CallFunction(Token* );
         void InsertCallFunctionBuildNode(Token*, int );
         void ResetCallFunctionBuildNode();
-
-    private:
-        int ArgumentIndex = 0;
-        std::string CurrentArgumentListFunctionName;
-        AstNode* ArgumentListBuildingNode;
-        AstNode* ArgumentList(Token* );
-        std::string GetNextArgumentType();
-        void InsertArgumentListBuildNode(Token*, int );
         void IncrementArgumentIndex();
-        void ResetArgumentListBuildNode();
+        std::string GetNextArgumentType();
 };

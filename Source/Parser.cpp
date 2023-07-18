@@ -42,6 +42,10 @@ void Parser::Parse()
             case BRANCH_IDENTIFIER::ASSIGNMENT:
                 this->CommitEntity(BRANCH_NAME::ASSIGNMENT_EXPRESSION, this->Assignment(token));
             break;
+
+            case BRANCH_IDENTIFIER::CALL_FUNCTION:
+                this->CommitEntity(BRANCH_NAME::CALL_FUNCTION, this->CallFunction(token));
+            break;
         }
     }
 
@@ -73,19 +77,21 @@ void Parser::IdentifyOperationType(Token* token)
         this->FunctionDeclaration(token);
     }
 
+    // # ID operation identifier
     if(token->type == NAME::IDENTIFIER)
     {
         auto typeID = this->IdentifyTypeID(token->value);
 
         switch(typeID)
         {
-            case TYPE_ID::VARIABLE_ASSIGNMENT:
+            case TYPE_ID::_VARIABLE_ASSIGNMENT:
                 this->AssignCurrentBranch(BRANCH_IDENTIFIER::ASSIGNMENT);
                 this->Assignment(token);
             break;
 
-            case TYPE_ID::CALL_FUNCTION:
-
+            case TYPE_ID::_CALL_FUNCTION:
+                this->AssignCurrentBranch(BRANCH_IDENTIFIER::CALL_FUNCTION);
+                this->CallFunction(token);
             break;
         
             default:
@@ -98,12 +104,12 @@ void Parser::IdentifyOperationType(Token* token)
 int Parser::IdentifyTypeID(std::string name)
 {
     auto varId = this->IDTable->FindObjectIdentifier(name);
-    if(varId != nullptr) return TYPE_ID::VARIABLE_ASSIGNMENT;
+    if(varId != nullptr) return TYPE_ID::_VARIABLE_ASSIGNMENT;
 
     auto funId = this->IDFunTable->FindObjectIdentifier(name);
-    if(funId != nullptr) return TYPE_ID::CALL_FUNCTION;
+    if(funId != nullptr) return TYPE_ID::_CALL_FUNCTION;
 
-    return TYPE_ID::NONE;
+    return TYPE_ID::_NONE;
 }
 
 void Parser::CommitEntity(std::string branch_name, AstNode* tree)
@@ -169,6 +175,7 @@ void Parser::ResetState()
     this->VariableDeclarationBuildingNode = nullptr;
     this->FunctionDeclarationBuildingNode = nullptr;
     this->AssignmentBuildingNode          = nullptr;
+    this->ResetCallFunctionBuildNode();
 }
 
 void Parser::AddParemCounter()

@@ -27,6 +27,7 @@ namespace BRANCH_NAME
     const static std::string END_STATEMENT         = "END_STATEMENT";
     const static std::string RETURN_EXPRESSION     = "RETURN_EXPRESSION";
     const static std::string ASSIGNMENT_EXPRESSION = "ASSIGNMENT_EXPRESSION";
+    const static std::string CALL_FUNCTION         = "CALL_FUNCTION";
 }
 
 namespace STANDARD_SCOPE_NAME
@@ -65,8 +66,8 @@ enum AST_DIRECTION
 
 enum TYPE_ID
 {
-    VARIABLE_ASSIGNMENT,
-    CALL_FUNCTION,
-    NONE
+    _VARIABLE_ASSIGNMENT,
+    _CALL_FUNCTION,
+    _NONE
 };
 

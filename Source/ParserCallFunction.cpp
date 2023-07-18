@@ -2,20 +2,9 @@
 
 AstNode* Parser::CallFunction(Token* token)
 {
-    if(this->CallFunctionState == BRANCH_IDENTIFIER::CALL_FUNCTION)
+    if(this->CallFunctionState == BRANCH_IDENTIFIER::EXPRESSION)
     {
-        if(this->history == nullptr)
-        {
-            if(token->value[0] == DELIMITERS::CLOSE_PARAM)
-            {
-                this->CallFunctionState = BRANCH_IDENTIFIER::UNDEFINED;
-                this->InsertCallFunctionBuildNode(token, AST_DIRECTION::RIGHT);
-                this->history = nullptr;
-                return CallFunctionBuildingNode;
-            }
-        }
-        
-        auto result = this->ArgumentList(token);
+        auto result = this->Expression(token, this->CurrentArgumentExpectedType);
     
         if(result != nullptr)
         {
@@ -25,7 +14,7 @@ AstNode* Parser::CallFunction(Token* token)
             if(lastNode != nullptr)
             {
                 lastNode->right = result;
-                this->ResetArgumentListBuildNode();
+                this->ResetExpressionBuildingNode();
                 return this->CallFunctionBuildingNode;
             }
             else
@@ -35,29 +24,20 @@ AstNode* Parser::CallFunction(Token* token)
         }
 
         return nullptr;
-    }    
+    }
 
     if(history == nullptr)
     {
-        if(token->type == NAME::IDENTIFIER)
-        {
-            this->InsertCallFunctionBuildNode(token, AST_DIRECTION::RIGHT);
-            this->history = token;
-            this->CurrentArgumentListFunctionName = token->value;
-            return nullptr;
-        }
+        this->CallFunctionState = BRANCH_IDENTIFIER::EXPRESSION;
+        this->CurrentArgumentListFunctionName = token->value;
+        auto entity = this->IDFunTable->FindObjectIdentifier(token->value);
+        this->ExpressionCommaCounter = entity->paramList.size() - 1;
+        this->CurrentArgumentExpectedType = this->GetNextArgumentType();
+        return this->CallFunction(token);
     }
 
-    if(history->type == NAME::IDENTIFIER)
-    {
-        if(token->value[0] == DELIMITERS::OPEN_PARAM)
-        {
-            this->CallFunctionState = BRANCH_IDENTIFIER::CALL_FUNCTION;
-            this->InsertCallFunctionBuildNode(token, AST_DIRECTION::RIGHT);
-            this->history = nullptr;
-            return nullptr;
-        }
-    }
+    this->ThrowError(token);
+    return nullptr;
 }
 
 void Parser::InsertCallFunctionBuildNode(Token* token, int direction)
@@ -83,4 +63,36 @@ void Parser::InsertCallFunctionBuildNode(Token* token, int direction)
 void Parser::ResetCallFunctionBuildNode()
 {
     this->CallFunctionBuildingNode = nullptr;
+    this->CurrentArgumentListFunctionName.clear();
+    this->ArgumentIndex = 0;
 }
+
+std::string Parser::GetNextArgumentType()
+{
+    auto result = this->IDFunTable->FindObjectIdentifier(this->CurrentArgumentListFunctionName);
+
+    if(result == nullptr)
+    {
+        Output::PrintCustomizeError("Compiler internal error: ", "(In CallFunction) Parameter list no found.");
+        exit(EXIT_FAILURE);
+    }
+    
+    if(this->ArgumentIndex <= result->paramList.size())
+    {
+        auto type = result->paramList[this->ArgumentIndex].first;
+        this->IncrementArgumentIndex();
+        return type;
+    }
+
+    return this->EMPTY;
+}
+
+void Parser::IncrementArgumentIndex()
+{
+    this->ArgumentIndex++;
+}
+
+
+
+
+
