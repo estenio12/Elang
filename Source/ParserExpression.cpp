@@ -4,7 +4,8 @@ AstNode* Parser::Expression(Token* token, std::string expectedType)
 {
     this->ExpressionExpectedType = expectedType;
 
-    if(history == nullptr)
+    if(history == nullptr ||
+       history->value[0] == DELIMITERS::COMMA)
     {
         if(this->ExpressionCheckIdentifier(token)) return nullptr;
         if(this->ExpressionCheckType(token)) return nullptr;
@@ -52,10 +53,27 @@ AstNode* Parser::Expression(Token* token, std::string expectedType)
             if(ExpressionParemCounter < 0)
                 this->ThrowError("The parentheses were closed, but never opened.", token->startPos);
 
+            if(this->ExpressionCommaCounter > 0)
+                this->ThrowError("too few arguments to function.", token->startPos);
+
             this->InsertExpressionNode(token, AST_DIRECTION::RIGHT);
             this->history = token;
             
             return this->ExpressionBuildingNode;
+        }
+    
+        if(history->type == NAME::IDENTIFIER && history->isFunID == true)
+        {
+            if(this->ExpressionCheckOpenParam(token)) return nullptr;
+        }
+
+        if(token->value[0] == DELIMITERS::COMMA)
+        {
+            if(this->ExpressionCommaCounter <= 0) this->ThrowError(token);
+            this->DecrementExpressionCommaCounter();
+            this->InsertExpressionNode(token, AST_DIRECTION::RIGHT);
+            this->history = token;
+            return nullptr;
         }
     }
 
@@ -114,19 +132,40 @@ bool Parser::ExpressionCheckIdentifier(Token* token)
 {
     if(token->type == NAME::IDENTIFIER)
     {
-        if(!this->IDTable->ExistIdentifier(token->value, this->currentScope, this->currentDeep))
-            this->ThrowError("Variable not declared in scope '" + token->value + "'", token->startPos + 1);
-
-        auto getEntity = this->IDTable->FindObjectIdentifier(token->value);
-
-        if(getEntity == nullptr)
+        if(this->IDTable->ExistIdentifier(token->value, this->currentScope, this->currentDeep))
         {
-            Output::PrintCustomizeError("Compiler internal error: ", "Object not found in IDTable");
-            exit(EXIT_FAILURE);
-        }
+            auto getEntity = this->IDTable->FindObjectIdentifier(token->value);
 
-        if(getEntity->typeValue != this->ExpressionExpectedType)
-           this->ThrowError("Cannot implicitly convert type '" + getEntity->typeValue + "' to '" + this->ExpressionExpectedType + "'", token->startPos + 1);
+            if(getEntity == nullptr)
+            {
+                Output::PrintCustomizeError("Compiler internal error: ", "Object not found in IDTable");
+                exit(EXIT_FAILURE);
+            }
+
+            if(getEntity->typeValue != this->ExpressionExpectedType)
+               this->ThrowError("Cannot implicitly convert type '" + getEntity->typeValue + "' to '" + this->ExpressionExpectedType + "'", token->startPos + 1);
+        }
+        else if(this->IDFunTable->ExistIdentifier(token->value))
+        {
+            auto getEntity = this->IDFunTable->FindObjectIdentifier(token->value);
+
+            if(getEntity == nullptr)
+            {
+                Output::PrintCustomizeError("Compiler internal error: ", "Object not found in IDFunTable");
+                exit(EXIT_FAILURE);
+            }
+
+            this->IncrementExpressionCommaCounter(getEntity->paramList.size());
+
+            if(getEntity->type != this->ExpressionExpectedType)
+               this->ThrowError("Cannot implicitly convert type '" + getEntity->type + "' to '" + this->ExpressionExpectedType + "'", token->startPos + 1);
+
+            token->isFunID = true;
+        }
+        else
+        {
+            this->ThrowError("Identifier not declared in scope '" + token->value + "'", token->startPos + 1);
+        }
 
         this->InsertExpressionNode(token, AST_DIRECTION::RIGHT);
         this->history = token;
@@ -159,6 +198,17 @@ void Parser::InsertExpressionNode(Token* token, int direction)
 void Parser::ResetExpressionBuildingNode()
 {
     this->ExpressionBuildingNode = nullptr;
+}
+
+void Parser::IncrementExpressionCommaCounter(int value)
+{
+    value--;
+    this->ExpressionCommaCounter += value;
+}
+
+void Parser::DecrementExpressionCommaCounter()
+{
+    this->ExpressionCommaCounter--;
 }
 
 

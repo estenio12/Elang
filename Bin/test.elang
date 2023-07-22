@@ -4,13 +4,21 @@ fun:number mul(var:number value, var:number exp)
 	return value * exp;
 end
 
+fun:number sum(var:number value, var:number exp)
+	return value + exp;
+end
+
+fun:void print(var:number txt)
+
+end
+
 #sum(10, 10);
 
 
 #t10 = mul(10, 10) + 50;
 
-mul(sum((10 + 10), 10), 2);
+#var:number sg = mul+sum(2, 2);
+var:number sg = print();
 
-#call 0
 #op 0
 #comma 0

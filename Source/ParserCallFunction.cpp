@@ -2,41 +2,31 @@
 
 AstNode* Parser::CallFunction(Token* token)
 {
-    if(this->CallFunctionState == BRANCH_IDENTIFIER::EXPRESSION)
-    {
-        auto result = this->Expression(token, this->CurrentArgumentExpectedType);
-    
-        if(result != nullptr)
-        {
-            this->CallFunctionState = BRANCH_IDENTIFIER::UNDEFINED;
-            auto lastNode = this->FindLastNode(this->CallFunctionBuildingNode, AST_DIRECTION::RIGHT);
-        
-            if(lastNode != nullptr)
-            {
-                lastNode->right = result;
-                this->ResetExpressionBuildingNode();
-                return this->CallFunctionBuildingNode;
-            }
-            else
-            {
-                Output::PrintCustomizeError("Compiler internal error: ", "Call function structure not found!");
-            }
-        }
-
-        return nullptr;
-    }
-
     if(history == nullptr)
     {
-        this->CallFunctionState = BRANCH_IDENTIFIER::EXPRESSION;
-        this->CurrentArgumentListFunctionName = token->value;
-        auto entity = this->IDFunTable->FindObjectIdentifier(token->value);
-        this->ExpressionCommaCounter = entity->paramList.size() - 1;
-        this->CurrentArgumentExpectedType = this->GetNextArgumentType();
-        return this->CallFunction(token);
+        auto getEntity = this->IDFunTable->FindObjectIdentifier(token->value);
+        this->CurrentArgumentExpectedType = getEntity->type;
     }
 
-    this->ThrowError(token);
+    auto result = this->Expression(token, this->CurrentArgumentExpectedType);
+
+    if(result != nullptr)
+    {
+        // this->CallFunctionState = BRANCH_IDENTIFIER::UNDEFINED;
+        // auto lastNode = this->FindLastNode(this->CallFunctionBuildingNode, AST_DIRECTION::RIGHT);
+    
+        // if(lastNode != nullptr)
+        // {
+            this->CallFunctionBuildingNode = result;
+            this->ResetExpressionBuildingNode();
+            return this->CallFunctionBuildingNode;
+        // }
+        // else
+        // {
+        //     Output::PrintCustomizeError("Compiler internal error: ", "Call function structure not found!");
+        // }
+    }
+
     return nullptr;
 }
 

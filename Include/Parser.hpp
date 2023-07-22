@@ -99,7 +99,6 @@ class Parser
     private:
         int ExpressionParemCounter = 0;
         int ExpressionCommaCounter = 0;
-        int ExpressionCallFunctionCounter = 0;
         std::string ExpressionExpectedType = EXPECTED_TYPE::TUNDEFINED;
         AstNode* ExpressionBuildingNode;
         AstNode* Expression(Token*, std::string expectedType);
@@ -108,6 +107,8 @@ class Parser
         bool ExpressionCheckIdentifier(Token*);
         void ResetExpressionBuildingNode();
         void InsertExpressionNode(Token*, int );
+        void IncrementExpressionCommaCounter(int );
+        void DecrementExpressionCommaCounter();
 
     private:
         std::string currentParameterType = EXPECTED_TYPE::TVOID;

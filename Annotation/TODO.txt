@@ -25,3 +25,6 @@
 
 	> [ OK ] 1 - Fix the '=' delimiter recognized like the comparison;
 	> [ OK ] 2 - Fix the single number, identifier or char has joinned to single word or number;
+	> [ TO DO ] 3 - Function parameter does not recognize the others types.
+	> [ TO DO ] 4 - Call function in expression does not throw the correct error message in syntax error.
+	> [ TO DO ] 5 - Make call function validate type argument.

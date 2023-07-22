@@ -18,6 +18,7 @@ class Token
         long line    = 0;
         int startPos = 0;
         int endPos   = 0;
+        bool isFunID = false;
 
     public:
         Token(std::string value,
