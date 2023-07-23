@@ -31,10 +31,10 @@ AstNode* Parser::BuildParameterList(Token* token)
 
     if(history->value[0] == DELIMITERS::COLON)
     {
-        if(token->value == NAME::NUMBER    ||
-           token->value == NAME::BOOLEAN   ||
-           token->value == NAME::STRING    ||
-           token->value == NAME::CHARACTER )
+        if(token->value == TYPE::NAME[TYPE::TBOOL]   ||
+           token->value == TYPE::NAME[TYPE::TCHAR]   ||
+           token->value == TYPE::NAME[TYPE::TNUMBER] ||
+           token->value == TYPE::NAME[TYPE::TTEXT]   )
         {
             this->InsertParameterListNode(token, AST_DIRECTION::RIGHT);
             this->history = token;
@@ -43,10 +43,10 @@ AstNode* Parser::BuildParameterList(Token* token)
         }
     }
 
-    if(history->value == NAME::NUMBER    ||
-       history->value == NAME::BOOLEAN   ||
-       history->value == NAME::STRING    ||
-       history->value == NAME::CHARACTER )
+    if(history->value == TYPE::NAME[TYPE::TBOOL]   ||
+       history->value == TYPE::NAME[TYPE::TCHAR]   ||
+       history->value == TYPE::NAME[TYPE::TNUMBER] ||
+       history->value == TYPE::NAME[TYPE::TTEXT] )
     {
         if(token->type == NAME::IDENTIFIER)
         {

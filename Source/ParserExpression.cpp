@@ -21,6 +21,12 @@ AstNode* Parser::Expression(Token* token, std::string expectedType)
        history->type == NAME::CHARACTER  ||
        history->type == NAME::STRING)
     {
+        if(history->type == NAME::IDENTIFIER && history->isFunID == true)
+        {
+            if(this->ExpressionCheckOpenParam(token)) return nullptr;
+            this->ThrowError("expected '(' after the function identifier.", token->startPos + 1);
+        }
+
         if(token->value == ARITHMETIC::ADD ||
            token->value == ARITHMETIC::SUB ||
            token->value == ARITHMETIC::DIV ||
@@ -60,11 +66,6 @@ AstNode* Parser::Expression(Token* token, std::string expectedType)
             this->history = token;
             
             return this->ExpressionBuildingNode;
-        }
-    
-        if(history->type == NAME::IDENTIFIER && history->isFunID == true)
-        {
-            if(this->ExpressionCheckOpenParam(token)) return nullptr;
         }
 
         if(token->value[0] == DELIMITERS::COMMA)

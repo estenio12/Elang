@@ -12,19 +12,9 @@ AstNode* Parser::CallFunction(Token* token)
 
     if(result != nullptr)
     {
-        // this->CallFunctionState = BRANCH_IDENTIFIER::UNDEFINED;
-        // auto lastNode = this->FindLastNode(this->CallFunctionBuildingNode, AST_DIRECTION::RIGHT);
-    
-        // if(lastNode != nullptr)
-        // {
-            this->CallFunctionBuildingNode = result;
-            this->ResetExpressionBuildingNode();
-            return this->CallFunctionBuildingNode;
-        // }
-        // else
-        // {
-        //     Output::PrintCustomizeError("Compiler internal error: ", "Call function structure not found!");
-        // }
+        this->CallFunctionBuildingNode = result;
+        this->ResetExpressionBuildingNode();
+        return this->CallFunctionBuildingNode;
     }
 
     return nullptr;

@@ -72,12 +72,11 @@ AstNode* Parser::FunctionDeclaration(Token* token)
 
     if(history->value[0] == DELIMITERS::COLON)
     {
-        if(token->value == NAME::NUMBER    ||
-           token->value == NAME::STRING    ||
-           token->value == NAME::CHARACTER ||
-           token->value == NAME::TVOID     ||
-           token->value == NAME::BOOLEAN   ||
-           token->value == NAME::NUMBER    )
+        if(token->value == TYPE::NAME[TYPE::TBOOL]   ||
+           token->value == TYPE::NAME[TYPE::TCHAR]   ||
+           token->value == TYPE::NAME[TYPE::TNUMBER] ||
+           token->value == TYPE::NAME[TYPE::TTEXT]   ||
+           token->value == TYPE::NAME[TYPE::TVOID]   )
         {
             this->InsertFunctionDeclarationNode(token, AST_DIRECTION::RIGHT);
             this->history = token;
