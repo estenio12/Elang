@@ -59,7 +59,9 @@ void Lexer::Tokenize(std::string line)
     int startPos = 0;
     std::string current    = NAME::UNDEFINED;
     std::string buildToken = "";
-    
+
+    Output::PrintDebug("Tokenize: " + line);
+
     for(int i = 0; i < line.size(); i++)
     {
         if(current == NAME::UNDEFINED)
@@ -411,9 +413,14 @@ std::string Lexer::Sanitaze(std::string line)
 {
     bool stringUp = false;
     std::string buffer;
-    
+
     for(auto letter : line)
     {
+        if(letter == DELIMITERS::QUOTATION_MARKS)
+        {
+            stringUp = !stringUp;
+        }
+
         if(!stringUp && letter == DELIMITERS::COMMENTARY)
         {
             return buffer;

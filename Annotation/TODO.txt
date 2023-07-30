@@ -30,4 +30,4 @@
 	> [ WORKING ] 5 - Make call function validate the argument type.
 		> [ TO DO ] - Number type is ok, but, others type has problem yet.
 	> [ OK ] 6 - the void function validating type return.
-	> [ TO DO ] 7 - to do lexer ignore commentary command where inside string scope.
+	> [ OK ] 7 - to do lexer ignore commentary command where inside string scope.

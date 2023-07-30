@@ -1,0 +1,1 @@
+var t10='hello # world';function sum(n1,n2){return n1+n2;}function print(n1){return n1;}
