@@ -28,6 +28,19 @@ AstNode* Parser::FunctionDeclaration(Token* token)
 
     if(this->FunctionDeclarationState == BRANCH_IDENTIFIER::BUILD_PARAMETER_LIST)
     {
+        if(history->value[0] == DELIMITERS::OPEN_PARAM)
+        {
+            if(token->value[0] == DELIMITERS::CLOSE_PARAM)
+            {
+                this->AddDeepCounter();
+                this->RemoveParemCounter();
+                this->InsertFunctionDeclarationNode(token, AST_DIRECTION::RIGHT);
+                this->history = token;
+                this->FunctionDeclarationState = BRANCH_IDENTIFIER::STATEMENT;
+                return nullptr;
+            }
+        }
+
         auto result = this->BuildParameterList(token);
 
         if(result != nullptr)
@@ -122,16 +135,9 @@ AstNode* Parser::FunctionDeclaration(Token* token)
         this->ThrowError(token);
     }
 
-    if(history->value[0] == DELIMITERS::OPEN_PARAM)
-    {
-        if(token->value[0] == DELIMITERS::CLOSE_PARAM)
-        {
-            this->AddDeepCounter();
-            this->InsertFunctionDeclarationNode(token, AST_DIRECTION::RIGHT);
-            this->history = token;
-            return nullptr;
-        }
-    }
+    Output::PrintDebug("history: " + token->value);
+
+    
 
     if(history->value[0] == DELIMITERS::CLOSE_PARAM)
     {

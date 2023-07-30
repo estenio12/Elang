@@ -11,6 +11,7 @@ Parser::Parser(Lexer* lexer):lexer(lexer)
     this->IDTable    = new IDDeclarationStorage();
     this->IDFunTable = new IDFunctionDeclarationStorage();
     this->codegen    = new CodeGenerator(this->IDTable);
+    this->expressionFunctionStack = new CallStack();
 }
 
 Parser::~Parser(){}
@@ -181,11 +182,30 @@ void Parser::ResetState()
 void Parser::AddParemCounter()
 {
     this->ExpressionParemCounter++;
+
+    if(!this->expressionFunctionStack->IsEmpty())
+    {
+        auto entity = this->expressionFunctionStack->GetCurrentItem();
+        if(entity != nullptr) entity->parem_counter++;
+    }
 }
 
 void Parser::RemoveParemCounter()
 {
     this->ExpressionParemCounter--;
+
+    if(!this->expressionFunctionStack->IsEmpty())
+    {
+        auto entity = this->expressionFunctionStack->GetCurrentItem();
+
+        if(entity != nullptr)
+        {
+            if(this->expressionFunctionStack->RemoveParemCounter())
+            {
+                this->ExpressionExpectedType = this->expressionFunctionStack->ExpectedTypeHistory;
+            }
+        }
+    }
 }
 
 void Parser::AddDeepCounter()

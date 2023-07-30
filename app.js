@@ -1,1 +1,0 @@
-var t10='hello world';function print(txt){}

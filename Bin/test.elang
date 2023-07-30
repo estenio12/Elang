@@ -1,7 +1,16 @@
 var:text t10 = "hello world";
 
-fun:text print(var:number txt)
-
+fun:number sum(var:number n1, var:number n2)
+	return n1 + n2;
 end
 
-print(t10);
+fun:number print(var:number n1)
+	return n1;
+end
+
+fun:void foo()
+	return true;
+end
+
+sum(10, print(10));
+

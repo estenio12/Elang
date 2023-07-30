@@ -19,7 +19,7 @@
 	> [ OK ] 13 - CodeGenerator: Generate the first target code;
 	> [ OK ] 14 - Full: support to function declaration;
 	> [ OK ] 15 - Full: support to assignment declaration;
-	> [ WORKING ] 16 - Full: support to function call;
+	> [ WORKING ] 16 - Full: support to call function;
 
 >> To Fix:
 
@@ -27,6 +27,7 @@
 	> [ OK ] 2 - Fix the single number, identifier or char has joinned to single word or number;
 	> [ OK ] 3 - Function parameter does not recognize the others types.
 	> [ OK ] 4 - Call function in expression does not throw the correct error message in syntax error.
-	> [ TO DO ] 5 - Make call function validate the argument type.
-	> [ TO DO ] 6 - the void function validating type return.
+	> [ WORKING ] 5 - Make call function validate the argument type.
+		> [ TO DO ] - Number type is ok, but, others type has problem yet.
+	> [ OK ] 6 - the void function validating type return.
 	> [ TO DO ] 7 - to do lexer ignore commentary command where inside string scope.

@@ -21,6 +21,7 @@
 #include "../Include/IDFunctionDeclarationStorage.hpp"
 #include "../Model/Ast.hpp"
 #include "../Model/FunctionIDModel.hpp"
+#include "../Model/CallFunctionStackModel.hpp"
 #include "../Include/CodeGenerator.hpp"
 
 class Parser
@@ -32,6 +33,7 @@ class Parser
         IDDeclarationStorage* IDTable;
         IDFunctionDeclarationStorage* IDFunTable;
         CodeGenerator* codegen;
+        CallStack* expressionFunctionStack;
 
     private:
         AstNode* buildingNode;
@@ -103,12 +105,14 @@ class Parser
         AstNode* ExpressionBuildingNode;
         AstNode* Expression(Token*, std::string expectedType);
         bool ExpressionCheckOpenParam(Token* );
+        bool ExpressionCheckCloseParam(Token* );
         bool ExpressionCheckType(Token* );
         bool ExpressionCheckIdentifier(Token*);
         void ResetExpressionBuildingNode();
         void InsertExpressionNode(Token*, int );
         void IncrementExpressionCommaCounter(int );
         void DecrementExpressionCommaCounter();
+        CallStackModel* BuildCallStackModel(std::string ID, std::string type, int param_id, int parem_counter);
 
     private:
         std::string currentParameterType = EXPECTED_TYPE::TVOID;

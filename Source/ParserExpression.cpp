@@ -43,13 +43,7 @@ AstNode* Parser::Expression(Token* token, std::string expectedType)
             return nullptr;
         }
     
-        if(token->value[0] == DELIMITERS::CLOSE_PARAM)
-        {
-            this->history = token;
-            this->InsertExpressionNode(token, AST_DIRECTION::RIGHT);
-            this->RemoveParemCounter();
-            return nullptr;
-        }
+        if(this->ExpressionCheckCloseParam(token)) return nullptr;
     
         if(token->value[0] == DELIMITERS::EOL)
         {
@@ -92,10 +86,28 @@ AstNode* Parser::Expression(Token* token, std::string expectedType)
         if(this->ExpressionCheckIdentifier(token)) return nullptr;
         if(this->ExpressionCheckType(token)) return nullptr;
         if(this->ExpressionCheckOpenParam(token)) return nullptr;
+        
+        if(!this->expressionFunctionStack->IsEmpty())
+        {
+            if(this->ExpressionCheckCloseParam(token)) return nullptr;
+        } 
     }
 
     this->ThrowError(token);
     return nullptr;
+}
+
+bool Parser::ExpressionCheckCloseParam(Token* token)
+{
+    if(token->value[0] == DELIMITERS::CLOSE_PARAM)
+    {
+        this->history = token;
+        this->InsertExpressionNode(token, AST_DIRECTION::RIGHT);
+        this->RemoveParemCounter();
+        return true;
+    }
+
+    return false;
 }
 
 bool Parser::ExpressionCheckOpenParam(Token* token)
@@ -144,7 +156,7 @@ bool Parser::ExpressionCheckIdentifier(Token* token)
             }
 
             if(getEntity->typeValue != this->ExpressionExpectedType)
-               this->ThrowError("Cannot implicitly convert type '" + getEntity->typeValue + "' to '" + this->ExpressionExpectedType + "'", token->startPos + 1);
+               this->ThrowError("Cannot implicitly convert type '" + getEntity->typeValue + "' to '" + this->ExpressionExpectedType + "' | ( " + token->value + " )", token->startPos + 1);
         }
         else if(this->IDFunTable->ExistIdentifier(token->value))
         {
@@ -162,6 +174,11 @@ bool Parser::ExpressionCheckIdentifier(Token* token)
                this->ThrowError("Cannot implicitly convert type '" + getEntity->type + "' to '" + this->ExpressionExpectedType + "'", token->startPos + 1);
 
             token->isFunID = true;
+
+            auto stackItem = this->BuildCallStackModel(token->value, getEntity->paramList[0].first, 0, 0);
+            this->expressionFunctionStack->Insert(stackItem);
+            this->expressionFunctionStack->ExpectedTypeHistory = this->ExpressionExpectedType;
+            this->ExpressionExpectedType = getEntity->paramList[0].first;
         }
         else
         {
@@ -210,7 +227,29 @@ void Parser::IncrementExpressionCommaCounter(int value)
 void Parser::DecrementExpressionCommaCounter()
 {
     this->ExpressionCommaCounter--;
+
+    if(!this->expressionFunctionStack->IsEmpty())
+    {
+        auto entity = this->expressionFunctionStack->GetCurrentItem();
+
+        if(entity != nullptr)
+        {
+            entity->param_id++;
+            auto funAttr = this->IDFunTable->FindObjectIdentifier(entity->ID);
+
+            if(funAttr != nullptr)
+            {
+                entity->type = funAttr->paramList[entity->param_id].first;
+                this->ExpressionExpectedType = entity->type;
+            }
+            else
+                Output::PrintCustomizeError("Compiler internal error: ", "function no found in 'expression comma counter'");
+        }
+    }
 }
 
-
-
+CallStackModel* Parser::BuildCallStackModel(std::string ID, std::string type, int param_id, int parem_counter = 0)
+{
+    auto build = new CallStackModel(ID, type, param_id, parem_counter);
+    return build;
+}
