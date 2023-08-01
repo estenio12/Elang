@@ -19,7 +19,8 @@
 	> [ OK ] 13 - CodeGenerator: Generate the first target code;
 	> [ OK ] 14 - Full: support to function declaration;
 	> [ OK ] 15 - Full: support to assignment declaration;
-	> [ WORKING ] 16 - Full: support to call function;
+	> [ OK ] 16 - Full: support to call function;
+	> [ TO DO ] 17 - Full: support to STDIN and STDOUT;
 
 >> To Fix:
 

@@ -77,4 +77,7 @@ class CodeGenerator
         std::string GenerateAssignmentExpression(AstNode* );
         std::string VisitorAssignmentExpression(AstNode* );
         std::string CommitAssignmentExpression();
+
+    private:
+        std::string GenerateCallFunction(AstNode* );
 };

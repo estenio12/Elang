@@ -97,6 +97,7 @@ class Parser
         std::vector<std::pair<std::string, AstNode*>> Statement(Token* );
         void InsertStatementNode(Token*, int );
         void ResetStatementList();
+        int StatementTypeIdentifier(Token* );
 
     private:
         int ExpressionParemCounter = 0;

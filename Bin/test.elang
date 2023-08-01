@@ -5,7 +5,11 @@ fun:void print(var:text nome, var:number idade, var:char sexo)
 end
 
 fun:number sum(var:number n1, var:number n2)
+	print(t10, sum(10, 16), 'M');
 	return n1 + n2;
 end
 
 print(t10, sum(10, 16), 'M');
+
+var:number res = (sum(10, 10) + 85) / 2;
+

@@ -32,6 +32,13 @@ void CodeGenerator::Generate(AST ast)
             auto chunk = this->GenerateAssignmentExpression(branch.second);
             this->WriteChunkIntoFile(chunk);
         }
+
+        // # Generate target code for call function
+        if(branch.first == BRANCH_NAME::CALL_FUNCTION)
+        {
+            auto chunk = this->GenerateCallFunction(branch.second);
+            this->WriteChunkIntoFile(chunk);
+        }
     }
 
     this->CloseFileHandler();

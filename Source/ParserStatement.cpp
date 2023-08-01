@@ -17,6 +17,21 @@ std::vector<std::pair<std::string, AstNode*>> Parser::Statement(Token* token)
         return ReturnEmptyStatementList;
     }
 
+    if(this->StatementState == BRANCH_IDENTIFIER::CALL_FUNCTION)
+    {
+        auto result = this->CallFunction(token);
+
+        if(result != nullptr)
+        {
+            this->StatementState = BRANCH_IDENTIFIER::UNDEFINED;
+            this->StatementList.push_back(std::make_pair(BRANCH_NAME::CALL_FUNCTION, result));
+            this->ResetCallFunctionBuildNode();
+            this->history = nullptr;
+        }
+
+        return ReturnEmptyStatementList;
+    }
+
     if(this->StatementState == BRANCH_IDENTIFIER::VARIABLE_DECLARATION)
     {
         auto result = this->VariableDeclaration(token);
@@ -78,6 +93,7 @@ std::vector<std::pair<std::string, AstNode*>> Parser::Statement(Token* token)
         if(token->type == NAME::IDENTIFIER)
         {
             this->StatementState = BRANCH_IDENTIFIER::ASSIGNMENT;
+            this->StatementState = this->StatementTypeIdentifier(token);
             this->history = nullptr;
             this->Statement(token);
             return ReturnEmptyStatementList;      
@@ -99,5 +115,11 @@ void Parser::InsertStatementNode(Token* token, int direction)
 void Parser::ResetStatementList()
 {
     this->StatementList.clear();
+}
+
+int Parser::StatementTypeIdentifier(Token* token)
+{
+    if(this->IDFunTable->ExistIdentifier(token->value)) return BRANCH_IDENTIFIER::CALL_FUNCTION;
+    return BRANCH_IDENTIFIER::ASSIGNMENT;
 }
 

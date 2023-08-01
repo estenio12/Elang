@@ -16,6 +16,9 @@ std::string CodeGenerator::VisitorStatement(std::vector<std::pair<std::string, A
         if(item.first == BRANCH_NAME::ASSIGNMENT_EXPRESSION)
            this->StatementCodeStack.push_back(this->VisitorAssignmentExpression(item.second));
     
+        if(item.first == BRANCH_NAME::CALL_FUNCTION)
+           this->StatementCodeStack.push_back(this->GenerateCallFunction(item.second));
+    
         if(item.first == BRANCH_NAME::END_STATEMENT)
         {
             this->StatementCodeStack.push_back(TARGET_CODE::T_CLOSE_BRACE);
