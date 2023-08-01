@@ -27,7 +27,7 @@
 	> [ OK ] 2 - Fix the single number, identifier or char has joinned to single word or number;
 	> [ OK ] 3 - Function parameter does not recognize the others types.
 	> [ OK ] 4 - Call function in expression does not throw the correct error message in syntax error.
-	> [ WORKING ] 5 - Make call function validate the argument type.
-		> [ TO DO ] - Number type is ok, but, others type has problem yet.
+	> [ OK ] 5 - Make call function validate the argument type.
+		> [ OK ] 5.1 - Number type is ok, but, others type has problem yet.
 	> [ OK ] 6 - the void function validating type return.
-	> [ OK ] 7 - to do lexer ignore commentary command where inside string scope.
+	> [ OK ] 7 - Do lexer ignore the commentary command where inside the string scope.

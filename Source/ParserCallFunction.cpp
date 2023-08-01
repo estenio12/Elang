@@ -2,12 +2,6 @@
 
 AstNode* Parser::CallFunction(Token* token)
 {
-    if(history == nullptr)
-    {
-        auto getEntity = this->IDFunTable->FindObjectIdentifier(token->value);
-        this->CurrentArgumentExpectedType = getEntity->type;
-    }
-
     auto result = this->Expression(token, this->CurrentArgumentExpectedType);
 
     if(result != nullptr)

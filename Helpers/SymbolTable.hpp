@@ -17,9 +17,9 @@ namespace NAME
     static const std::string BUILDING    = "building";
     static const std::string KEYWORD     = "keyword";
     static const std::string NUMBER      = "number";
-    static const std::string CHARACTER   = "character";
+    static const std::string CHAR        = "char";
     static const std::string BOOLEAN     = "boolean";
-    static const std::string STRING      = "string";
+    static const std::string TEXT        = "text";
     static const std::string TVOID       = "void";
     static const std::string TYPE        = "type";
     static const std::string IDENTIFIER  = "identifier";

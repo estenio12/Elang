@@ -1,14 +1,11 @@
 var:text t10 = "hello # world";
 
+fun:void print(var:text nome, var:number idade, var:char sexo)
+	
+end
+
 fun:number sum(var:number n1, var:number n2)
 	return n1 + n2;
 end
 
-#teste de comentário
-
-fun:number print(var:number n1)
-	return n1;
-end
-
-sum(10, print(10));
-
+print(t10, sum(10, 16), 'M');

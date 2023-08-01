@@ -2,7 +2,11 @@
 
 AstNode* Parser::Expression(Token* token, std::string expectedType)
 {
-    this->ExpressionExpectedType = expectedType;
+    if(!this->ExpressionDoOnce) 
+    {
+        this->ExpressionExpectedType = expectedType;
+        this->ExpressionDoOnce = true;
+    }
 
     if(history == nullptr ||
        history->value[0] == DELIMITERS::COMMA)
@@ -18,8 +22,8 @@ AstNode* Parser::Expression(Token* token, std::string expectedType)
        history->type == NAME::IDENTIFIER ||
        history->type == NAME::NUMBER     ||
        history->type == NAME::BOOLEAN    ||
-       history->type == NAME::CHARACTER  ||
-       history->type == NAME::STRING)
+       history->type == NAME::CHAR  ||
+       history->type == NAME::TEXT)
     {
         if(history->type == NAME::IDENTIFIER && history->isFunID == true)
         {
@@ -127,8 +131,8 @@ bool Parser::ExpressionCheckType(Token* token)
 {
     if(token->type == NAME::NUMBER    ||
        token->type == NAME::BOOLEAN   ||
-       token->type == NAME::CHARACTER ||
-       token->type == NAME::STRING    )
+       token->type == NAME::CHAR ||
+       token->type == NAME::TEXT    )
     {
         if(token->type != this->ExpressionExpectedType)
            this->ThrowError("Cannot implicitly convert type '" + token->type + "' to '" + this->ExpressionExpectedType + "'", token->startPos + 1);
@@ -168,12 +172,12 @@ bool Parser::ExpressionCheckIdentifier(Token* token)
                 exit(EXIT_FAILURE);
             }
 
-            this->IncrementExpressionCommaCounter(getEntity->paramList.size());
-
-            if(getEntity->type != this->ExpressionExpectedType)
-               this->ThrowError("Cannot implicitly convert type '" + getEntity->type + "' to '" + this->ExpressionExpectedType + "'", token->startPos + 1);
+            if(this->ExpressionExpectedType != EXPECTED_TYPE::TUNDEFINED && getEntity->type != this->ExpressionExpectedType)
+               this->ThrowError("Cannot implicitly convert type '" + getEntity->type + "' to '" + this->ExpressionExpectedType + "' | ( " + token->value + " )", token->startPos + 1);
 
             token->isFunID = true;
+
+            this->IncrementExpressionCommaCounter(getEntity->paramList.size());
 
             auto stackItem = this->BuildCallStackModel(token->value, getEntity->paramList[0].first, 0, 0);
             this->expressionFunctionStack->Insert(stackItem);
@@ -216,6 +220,7 @@ void Parser::InsertExpressionNode(Token* token, int direction)
 void Parser::ResetExpressionBuildingNode()
 {
     this->ExpressionBuildingNode = nullptr;
+    this->ExpressionDoOnce       = false;
 }
 
 void Parser::IncrementExpressionCommaCounter(int value)

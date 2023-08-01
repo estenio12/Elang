@@ -45,8 +45,8 @@ std::string CodeGenerator::VisitorVariableDeclaration(AstNode* node)
         return this->CommitVariableDeclaration();
     }
 
-    if(node->token->type == NAME::STRING ||
-        node->token->type == NAME::CHARACTER)
+    if(node->token->type == NAME::TEXT ||
+        node->token->type == NAME::CHAR)
     {
         this->VariableDeclarationCodeStack.push_back(this->ConvertToString(node->token->value));
         return this->VisitorVariableDeclaration(node->right);

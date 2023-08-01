@@ -60,8 +60,6 @@ void Lexer::Tokenize(std::string line)
     std::string current    = NAME::UNDEFINED;
     std::string buildToken = "";
 
-    Output::PrintDebug("Tokenize: " + line);
-
     for(int i = 0; i < line.size(); i++)
     {
         if(current == NAME::UNDEFINED)
@@ -167,7 +165,7 @@ void Lexer::Tokenize(std::string line)
             {
                 if(line[i] == DELIMITERS::QUOTATION_MARKS)
                 {
-                    current = NAME::STRING;
+                    current = NAME::TEXT;
                     continue;
                 }
                 // # Check if char value
@@ -178,7 +176,7 @@ void Lexer::Tokenize(std::string line)
                     {
                         // # Build Token
                         this->BuildToken(this->ConvertToString(line[i + 1]),
-                                         NAME::CHARACTER, i + 1, i + 1);
+                                         NAME::CHAR, i + 1, i + 1);
                         i += 2;
                     }
                     else
@@ -326,7 +324,7 @@ void Lexer::Tokenize(std::string line)
             {
                 if(line[i] == DELIMITERS::QUOTATION_MARKS)
                 {
-                    current = NAME::STRING;
+                    current = NAME::TEXT;
                     continue;
                 }
                 // # Check if char value
@@ -337,7 +335,7 @@ void Lexer::Tokenize(std::string line)
                     {
                         // # Build Token
                         this->BuildToken(this->ConvertToString(line[i + 1]),
-                                         NAME::CHARACTER, i + 1, i + 1);
+                                         NAME::CHAR, i + 1, i + 1);
                         i += 2;
                     }
                     else
@@ -366,17 +364,17 @@ void Lexer::Tokenize(std::string line)
             }
         }
     
-        if(current == NAME::STRING)
+        if(current == NAME::TEXT)
         {
             if(line[i + 1] == DELIMITERS::_EOF &&
                line[i] != DELIMITERS::QUOTATION_MARKS)
             {
-                this->ThrowError("Syntax error in string declaration! The quotes open but never close.", i + 1);
+                this->ThrowError("Syntax error in text declaration! The quotes open but never close.", i + 1);
             }
 
             if(line[i] == DELIMITERS::QUOTATION_MARKS)
             {
-                this->BuildToken(buildToken, NAME::STRING, startPos, i + 1);
+                this->BuildToken(buildToken, NAME::TEXT, startPos, i + 1);
 
                 // # Reset
                 buildToken.clear();

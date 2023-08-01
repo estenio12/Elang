@@ -38,7 +38,7 @@ namespace STANDARD_SCOPE_NAME
 namespace EXPECTED_TYPE
 {
     const static std::string TUNDEFINED = "undefined";
-    const static std::string TSTRING    = "string";
+    const static std::string TTEXT      = "text";
     const static std::string TNUMBER    = "number";
     const static std::string TBOOLEAN   = "boolean";
     const static std::string TCHARACTER = "character";

@@ -223,7 +223,7 @@ std::string Parser::GetExpectedType(Token* token)
     if(token->value == TYPE::NAME[TYPE::TBOOL]) return EXPECTED_TYPE::TBOOLEAN;
     if(token->value == TYPE::NAME[TYPE::TCHAR]) return EXPECTED_TYPE::TCHARACTER;
     if(token->value == TYPE::NAME[TYPE::TNUMBER]) return EXPECTED_TYPE::TNUMBER;
-    if(token->value == TYPE::NAME[TYPE::TTEXT]) return EXPECTED_TYPE::TSTRING;
+    if(token->value == TYPE::NAME[TYPE::TTEXT]) return EXPECTED_TYPE::TTEXT;
     if(token->value == TYPE::NAME[TYPE::TVOID]) return EXPECTED_TYPE::TVOID;
 
     Output::PrintCustomizeError("Compiler internal error: ", "No match type in variable declaration");
