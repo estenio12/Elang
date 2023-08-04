@@ -11,5 +11,10 @@ end
 
 print(t10, sum(10, 16), 'M');
 
-var:number res = (sum(10, 10) + 85) / 2;
+var:number res = (sum(10, 10) + 85) != 2;
+
+if((10 + 10 != 25))
+
+	
+
 

@@ -20,7 +20,7 @@
 	> [ OK ] 14 - Full: support to function declaration;
 	> [ OK ] 15 - Full: support to assignment declaration;
 	> [ OK ] 16 - Full: support to call function;
-	> [ TO DO ] 17 - Full: support to conditions (if, elif, else);
+	> [ WORKING ] 17 - Full: support to conditions (if, elif, else);
 	> [ TO DO ] 18 - Full: support to loops (for, while);
 	> [ TO DO ] 19 - Full: support to IO (STDIN, STDOU);
 

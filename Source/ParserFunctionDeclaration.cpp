@@ -93,7 +93,7 @@ AstNode* Parser::FunctionDeclaration(Token* token)
         {
             this->InsertFunctionDeclarationNode(token, AST_DIRECTION::RIGHT);
             this->history = token;
-            this->currentFunctionType = this->GetExpectedType(token);
+            this->currentFunctionType = this->GetExpectedTypeByValue(token);
             return nullptr;
         }
 
@@ -134,10 +134,6 @@ AstNode* Parser::FunctionDeclaration(Token* token)
         
         this->ThrowError(token);
     }
-
-    Output::PrintDebug("history: " + token->value);
-
-    
 
     if(history->value[0] == DELIMITERS::CLOSE_PARAM)
     {

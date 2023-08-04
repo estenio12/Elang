@@ -47,6 +47,10 @@ void Parser::Parse()
             case BRANCH_IDENTIFIER::CALL_FUNCTION:
                 this->CommitEntity(BRANCH_NAME::CALL_FUNCTION, this->CallFunction(token));
             break;
+
+            case BRANCH_IDENTIFIER::CONDITION:
+                this->CommitEntity(BRANCH_NAME::CONDITION_DECLARATION, this->ConditionDeclaration(token));
+            break;
         }
     }
 
@@ -100,6 +104,13 @@ void Parser::IdentifyOperationType(Token* token)
             break;
         }
     }
+
+    // # CONDITION DECLARATION
+    if(token->value == KEYWORDS::TIF)
+    {
+        this->AssignCurrentBranch(BRANCH_IDENTIFIER::CONDITION);
+        this->ConditionDeclaration(token);
+    }
 }
 
 int Parser::IdentifyTypeID(std::string name)
@@ -117,6 +128,7 @@ void Parser::CommitEntity(std::string branch_name, AstNode* tree)
 {
     if(tree != nullptr) 
     {
+        Output::PrintDebug("Entrei commit");
         this->InsertAstNode(branch_name, tree);
         this->ResetState();
     }
@@ -177,6 +189,7 @@ void Parser::ResetState()
     this->FunctionDeclarationBuildingNode = nullptr;
     this->AssignmentBuildingNode          = nullptr;
     this->ResetCallFunctionBuildNode();
+    this->ResetConditionBuildNode();
 }
 
 void Parser::AddParemCounter()
@@ -218,13 +231,25 @@ void Parser::RemoveDeepCounter()
     this->currentDeep--;
 }
 
-std::string Parser::GetExpectedType(Token* token)
+std::string Parser::GetExpectedTypeByValue(Token* token)
 {
     if(token->value == TYPE::NAME[TYPE::TBOOL]) return EXPECTED_TYPE::TBOOLEAN;
     if(token->value == TYPE::NAME[TYPE::TCHAR]) return EXPECTED_TYPE::TCHARACTER;
     if(token->value == TYPE::NAME[TYPE::TNUMBER]) return EXPECTED_TYPE::TNUMBER;
     if(token->value == TYPE::NAME[TYPE::TTEXT]) return EXPECTED_TYPE::TTEXT;
     if(token->value == TYPE::NAME[TYPE::TVOID]) return EXPECTED_TYPE::TVOID;
+
+    Output::PrintCustomizeError("Compiler internal error: ", "No match type in variable declaration");
+    exit(EXIT_FAILURE);
+}
+
+std::string Parser::GetExpectedTypeByType(Token* token)
+{
+    if(token->type == TYPE::NAME[TYPE::TBOOL]) return EXPECTED_TYPE::TBOOLEAN;
+    if(token->type == TYPE::NAME[TYPE::TCHAR]) return EXPECTED_TYPE::TCHARACTER;
+    if(token->type == TYPE::NAME[TYPE::TNUMBER]) return EXPECTED_TYPE::TNUMBER;
+    if(token->type == TYPE::NAME[TYPE::TTEXT]) return EXPECTED_TYPE::TTEXT;
+    if(token->type == TYPE::NAME[TYPE::TVOID]) return EXPECTED_TYPE::TVOID;
 
     Output::PrintCustomizeError("Compiler internal error: ", "No match type in variable declaration");
     exit(EXIT_FAILURE);

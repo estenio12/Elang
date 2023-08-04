@@ -39,7 +39,13 @@ AstNode* Parser::Expression(Token* token, std::string expectedType)
            token->value == ARITHMETIC::AND ||
            token->value == ARITHMETIC::OR  ||
            token->value == ARITHMETIC::SHIFTLEFT  ||
-           token->value == ARITHMETIC::SHIFTRIGHT )
+           token->value == ARITHMETIC::SHIFTRIGHT ||
+           token->value == COMPARISON::DIFF       || 
+           token->value == COMPARISON::EQUALS     || 
+           token->value == COMPARISON::GREAT      || 
+           token->value == COMPARISON::LESS       || 
+           token->value == COMPARISON::GREATEQ    || 
+           token->value == COMPARISON::LESSEQ     )
         {
             this->InsertExpressionNode(token, AST_DIRECTION::RIGHT);
             this->history = token;
@@ -85,7 +91,13 @@ AstNode* Parser::Expression(Token* token, std::string expectedType)
        history->value == ARITHMETIC::AND ||
        history->value == ARITHMETIC::OR  ||
        history->value == ARITHMETIC::SHIFTLEFT  ||
-       history->value == ARITHMETIC::SHIFTRIGHT )
+       history->value == ARITHMETIC::SHIFTRIGHT ||
+       history->value == COMPARISON::DIFF       || 
+       history->value == COMPARISON::EQUALS     || 
+       history->value == COMPARISON::GREAT      || 
+       history->value == COMPARISON::LESS       || 
+       history->value == COMPARISON::GREATEQ    || 
+       history->value == COMPARISON::LESSEQ     )
     {
         if(this->ExpressionCheckIdentifier(token)) return nullptr;
         if(this->ExpressionCheckType(token)) return nullptr;

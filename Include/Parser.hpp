@@ -68,7 +68,8 @@ class Parser
         void RemoveParemCounter();
         void AddDeepCounter();
         void RemoveDeepCounter();
-        std::string GetExpectedType(Token* );
+        std::string GetExpectedTypeByValue(Token* );
+        std::string GetExpectedTypeByType(Token* );
         void CommitEntity(std::string, AstNode* );
         int IdentifyTypeID(std::string name);
 
@@ -145,4 +146,16 @@ class Parser
         void ResetCallFunctionBuildNode();
         void IncrementArgumentIndex();
         std::string GetNextArgumentType();
+
+    private:
+        int ConditionState = BRANCH_IDENTIFIER::UNDEFINED;
+        int ConditionSubState = BRANCH_IDENTIFIER::UNDEFINED;
+        int ConditionParamCounter = 0;
+        std::string ConditionTypeExpression = "";
+        AstNode* ConditionBuildNode;
+        AstNode* ConditionDeclaration(Token* );
+        void InsertConditionBuildNode(Token*, int);
+        void ResetConditionBuildNode();
+        void ConditionOpenParam();
+        void ConditionCloseParam();
 };

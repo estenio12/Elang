@@ -73,7 +73,7 @@ AstNode* Parser::VariableDeclaration(Token* token)
         {
             this->InsertVariableDeclarationNode(token, AST_DIRECTION::RIGHT);
             this->history      = token;
-            this->expectedType = this->GetExpectedType(token);
+            this->expectedType = this->GetExpectedTypeByValue(token);
             return nullptr;
         }
 

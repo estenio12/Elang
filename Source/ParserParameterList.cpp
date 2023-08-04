@@ -38,7 +38,7 @@ AstNode* Parser::BuildParameterList(Token* token)
         {
             this->InsertParameterListNode(token, AST_DIRECTION::RIGHT);
             this->history = token;
-            this->currentParameterType = this->GetExpectedType(token);
+            this->currentParameterType = this->GetExpectedTypeByValue(token);
             return nullptr;
         }
     }
