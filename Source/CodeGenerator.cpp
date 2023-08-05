@@ -39,6 +39,20 @@ void CodeGenerator::Generate(AST ast)
             auto chunk = this->GenerateCallFunction(branch.second);
             this->WriteChunkIntoFile(chunk);
         }
+
+        // # Generate target code for condition declaration
+        if(branch.first == BRANCH_NAME::CONDITION_DECLARATION)
+        {
+            auto chunk = this->GenerateConditionDeclaration(branch.second);
+            this->WriteChunkIntoFile(chunk);
+        }
+
+        // # Generate target code for close statement
+        if(branch.first == BRANCH_NAME::CLOSE_STATEMENT)
+        {
+            auto chunk = this->GenerateCloseStatement(branch.second);
+            this->WriteChunkIntoFile(chunk);
+        }
     }
 
     this->CloseFileHandler();

@@ -149,8 +149,8 @@ class Parser
 
     private:
         int ConditionState = BRANCH_IDENTIFIER::UNDEFINED;
-        int ConditionSubState = BRANCH_IDENTIFIER::UNDEFINED;
         int ConditionParamCounter = 0;
+        int ConditionStmtCounter = 0;
         std::string ConditionTypeExpression = "";
         AstNode* ConditionBuildNode;
         AstNode* ConditionDeclaration(Token* );
@@ -158,4 +158,9 @@ class Parser
         void ResetConditionBuildNode();
         void ConditionOpenParam();
         void ConditionCloseParam();
+        void AddConditionStmtCounter();
+        void RemoveConditionStmtCounter();
+
+    private:
+        AstNode* CloseStatment(Token* );
 };

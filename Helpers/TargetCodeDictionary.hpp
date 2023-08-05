@@ -24,4 +24,5 @@ namespace TARGET_CODE
     static const std::string T_OPEN_BRACE  = "{";
     static const std::string T_CLOSE_BRACE = "}";
     static const std::string T_RETURN      = "return ";
+    static const std::string T_IF          = "if";
 }

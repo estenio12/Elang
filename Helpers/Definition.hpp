@@ -29,6 +29,7 @@ namespace BRANCH_NAME
     const static std::string ASSIGNMENT_EXPRESSION = "ASSIGNMENT_EXPRESSION";
     const static std::string CALL_FUNCTION         = "CALL_FUNCTION";
     const static std::string CONDITION_DECLARATION = "CONDITION_DECLARATION";
+    const static std::string CLOSE_STATEMENT       = "CLOSE_STATEMENT";
 }
 
 namespace STANDARD_SCOPE_NAME
@@ -57,7 +58,8 @@ enum BRANCH_IDENTIFIER
     RETURN_EXPRESSION,
     ASSIGNMENT,
     CALL_FUNCTION,
-    CONDITION
+    CONDITION_DECLARATION,
+    CLOSE_STATEMENT
 };
 
 enum AST_DIRECTION

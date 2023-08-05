@@ -2,6 +2,11 @@
 
 std::string CodeGenerator::VisitorExpression(AstNode* node)
 {
+    if(node == nullptr)
+    {
+        return this->CommitExpression();
+    }
+
     if(node->token->value[0] == DELIMITERS::EOL)
     {
         this->ExpressionCodeStack.push_back(TARGET_CODE::T_EOL);

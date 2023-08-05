@@ -48,7 +48,7 @@ void Parser::Parse()
                 this->CommitEntity(BRANCH_NAME::CALL_FUNCTION, this->CallFunction(token));
             break;
 
-            case BRANCH_IDENTIFIER::CONDITION:
+            case BRANCH_IDENTIFIER::CONDITION_DECLARATION:
                 this->CommitEntity(BRANCH_NAME::CONDITION_DECLARATION, this->ConditionDeclaration(token));
             break;
         }
@@ -104,12 +104,18 @@ void Parser::IdentifyOperationType(Token* token)
             break;
         }
     }
-
+    
     // # CONDITION DECLARATION
     if(token->value == KEYWORDS::TIF)
     {
-        this->AssignCurrentBranch(BRANCH_IDENTIFIER::CONDITION);
+        this->AssignCurrentBranch(BRANCH_IDENTIFIER::CONDITION_DECLARATION);
         this->ConditionDeclaration(token);
+    }
+
+    // # CLOSE STATEMENT
+    if(token->value == KEYWORDS::TEND)
+    {
+        this->CommitEntity(BRANCH_NAME::CLOSE_STATEMENT, this->CloseStatment(token));
     }
 }
 
@@ -128,7 +134,6 @@ void Parser::CommitEntity(std::string branch_name, AstNode* tree)
 {
     if(tree != nullptr) 
     {
-        Output::PrintDebug("Entrei commit");
         this->InsertAstNode(branch_name, tree);
         this->ResetState();
     }
@@ -251,7 +256,7 @@ std::string Parser::GetExpectedTypeByType(Token* token)
     if(token->type == TYPE::NAME[TYPE::TTEXT]) return EXPECTED_TYPE::TTEXT;
     if(token->type == TYPE::NAME[TYPE::TVOID]) return EXPECTED_TYPE::TVOID;
 
-    Output::PrintCustomizeError("Compiler internal error: ", "No match type in variable declaration");
+    Output::PrintCustomizeError("Compiler internal error: ", "No match type in GetExpectedTypeByType");
     exit(EXIT_FAILURE);
 }
 

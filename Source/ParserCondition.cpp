@@ -31,19 +31,12 @@ AstNode* Parser::ConditionDeclaration(Token* token)
                Output::PrintCustomizeError("Compiler internal error: ", "Condition declaration empty tree");
 
             this->history = nullptr;
+            this->AddConditionStmtCounter();
             this->ResetExpressionBuildingNode();
-            this->ConditionState = BRANCH_IDENTIFIER::STATEMENT;
-            return nullptr;
+            return this->ConditionBuildNode;
         }
 
         return nullptr;
-    }
-
-    if(this->ConditionState == BRANCH_IDENTIFIER::STATEMENT)
-    {
-        return this->ConditionBuildNode;
-        // this->ThrowError(token);
-        // return nullptr;
     }
 
     if(history == nullptr)
@@ -63,7 +56,6 @@ AstNode* Parser::ConditionDeclaration(Token* token)
         if(token->value[0] == DELIMITERS::OPEN_PARAM)
         {
             this->ConditionState = BRANCH_IDENTIFIER::EXPRESSION;
-            this->InsertConditionBuildNode(token, AST_DIRECTION::RIGHT);
             this->history = token;
             return this->ConditionDeclaration(token);
         }
@@ -99,6 +91,7 @@ void Parser::ResetConditionBuildNode()
 {
     this->ConditionBuildNode = nullptr;
     this->ConditionTypeExpression.clear();
+    this->ConditionState = BRANCH_IDENTIFIER::UNDEFINED;
 }
 
 void Parser::ConditionOpenParam()
@@ -111,9 +104,19 @@ void Parser::ConditionCloseParam()
     this->ConditionParamCounter--;
 
     if(this->ConditionParamCounter < 0)
-    {
-        Output::PrintCustomizeError("Syntax error: " + std::to_string(this->lexer->GetLineCounter()), "The parameter open but never close.");
-    }
+       Output::PrintCustomizeError("Syntax error: " + std::to_string(this->lexer->GetLineCounter()), "The parameter open but never close.");
+}
+
+void Parser::AddConditionStmtCounter()
+{
+    this->ConditionStmtCounter++;
+    this->currentDeep++;
+}
+
+void Parser::RemoveConditionStmtCounter()
+{
+    this->ConditionStmtCounter--;
+    this->currentDeep--;
 }
 
 

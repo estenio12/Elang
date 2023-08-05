@@ -80,4 +80,14 @@ class CodeGenerator
 
     private:
         std::string GenerateCallFunction(AstNode* );
+
+    private:
+        std::vector<std::string> ConditionDeclarationCodeStack;
+        std::string GenerateConditionDeclaration(AstNode* );
+        std::string VisitorConditionDeclaration(AstNode* );
+        std::string CommitConditionDeclaration();
+
+    private:
+        std::string GenerateCloseStatement(AstNode* );
+
 };

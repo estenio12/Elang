@@ -148,7 +148,8 @@ Token* Lexer::BindKeyword(std::string token)
        token == KEYWORDS::TBREAK     ||
        token == KEYWORDS::TIF        ||
        token == KEYWORDS::TELSE      ||
-       token == KEYWORDS::TWHILE     
+       token == KEYWORDS::TWHILE     ||
+       token == KEYWORDS::TEND     
        )
     {
         return new Token(token, NAME::KEYWORD);
