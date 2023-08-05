@@ -2,10 +2,16 @@
 
 AstNode* Parser::CloseStatment(Token* token)
 {
-    if(this->ConditionStmtCounter > 0)
-       this->RemoveConditionStmtCounter();
+    if(token->value == KEYWORDS::TEND && 
+       this->ConditionStmtCounter > 0)
+    {
+        this->RemoveConditionStmtCounter();
+        return new AstNode(token);
+    }
 
-    return new AstNode(token);
+    this->ThrowError(token);
+
+    return nullptr;
 }
 
 

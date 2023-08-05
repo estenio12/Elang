@@ -117,13 +117,13 @@ void Parser::ConditionCloseParam()
 void Parser::AddConditionStmtCounter()
 {
     this->ConditionStmtCounter++;
-    this->currentDeep++;
+    this->AddDeepCounter();
 }
 
 void Parser::RemoveConditionStmtCounter()
 {
     this->ConditionStmtCounter--;
-    this->currentDeep--;
+    this->RemoveDeepCounter();
 }
 
 

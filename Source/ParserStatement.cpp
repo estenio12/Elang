@@ -62,6 +62,21 @@ std::vector<std::pair<std::string, AstNode*>> Parser::Statement(Token* token)
         return ReturnEmptyStatementList;
     }
 
+    if(this->StatementState == BRANCH_IDENTIFIER::CONDITION_DECLARATION)
+    {
+        auto result = this->ConditionDeclaration(token);
+
+        if(result != nullptr)
+        {
+            this->StatementState = BRANCH_IDENTIFIER::UNDEFINED;
+            this->StatementList.push_back(std::make_pair(BRANCH_NAME::CONDITION_DECLARATION, result));
+            this->ResetConditionBuildNode();
+            this->history = nullptr;
+        }
+
+        return ReturnEmptyStatementList;
+    }
+
     if(history == nullptr ||
        history->value[0] == DELIMITERS::CLOSE_PARAM)
     {
@@ -87,6 +102,13 @@ std::vector<std::pair<std::string, AstNode*>> Parser::Statement(Token* token)
             this->InsertStatementNode(token, AST_DIRECTION::RIGHT);
             this->RemoveDeepCounter();
             this->history = nullptr;
+
+            if(this->ConditionStmtCounter > 0) 
+            {
+                this->ConditionStmtCounter--;
+                return ReturnEmptyStatementList;
+            }
+
             return this->StatementList;
         }
         
@@ -99,9 +121,17 @@ std::vector<std::pair<std::string, AstNode*>> Parser::Statement(Token* token)
             return ReturnEmptyStatementList;      
         }
 
+        if(token->value == KEYWORDS::TIF)
+        {
+            this->StatementState = BRANCH_IDENTIFIER::CONDITION_DECLARATION;
+            this->history = nullptr;
+            this->Statement(token);
+            return ReturnEmptyStatementList;
+        }
+
         this->ThrowError(token);
     }
-
+    
     this->ThrowError(token);
     return ReturnEmptyStatementList;
 }

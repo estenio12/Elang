@@ -18,6 +18,9 @@ std::string CodeGenerator::VisitorStatement(std::vector<std::pair<std::string, A
     
         if(item.first == BRANCH_NAME::CALL_FUNCTION)
            this->StatementCodeStack.push_back(this->GenerateCallFunction(item.second));
+        
+        if(item.first == BRANCH_NAME::CONDITION_DECLARATION)
+           this->StatementCodeStack.push_back(this->GenerateConditionDeclaration(item.second));
     
         if(item.first == BRANCH_NAME::END_STATEMENT)
         {

@@ -1,1 +1,1 @@
-var t10='hello # world';function print(nome,idade,sexo){}function sum(n1,n2){print(t10,25,'M');return n1+n2;}var res=(sum(10,10)+85)!=2;if(10+10!=15){var idade=26;print(t10,sum(idade,10),'M');}else{print(t10,sum(10,16),'M');}
+var t=10;function dectl(){if(10>5){}

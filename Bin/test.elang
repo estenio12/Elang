@@ -1,19 +1,8 @@
-var:text t10 = "hello # world";
+var:number t = 10;
 
-fun:void print(var:text nome, var:number idade, var:char sexo)
-	
+fun:void dectl()
+	if(10 > 5)
+
+	end
 end
 
-fun:number sum(var:number n1, var:number n2)
-	print(t10, 25, 'M');
-	return n1 + n2;
-end
-
-var:number res = (sum(10, 10) + 85) != 2;
-
-if(10 + 10 != 15)
-	var:number idade = 26;
-	print(t10, sum(idade, 10), 'M');
-else
-	print(t10, sum(10, 16), 'M');
-end
