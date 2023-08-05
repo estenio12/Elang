@@ -160,6 +160,7 @@ class Parser
         void ConditionCloseParam();
         void AddConditionStmtCounter();
         void RemoveConditionStmtCounter();
+        AstNode* CheckCondition(Token* );
 
     private:
         AstNode* CloseStatment(Token* );

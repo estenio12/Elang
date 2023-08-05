@@ -1,1 +1,0 @@
-var t10='hello # world';function print(nome,idade,sexo){}function sum(n1,n2){print(t10,25,'M');return n1+n2;}var res=(sum(10,10)+85)!=2;if(10+10!=15){print(t10,sum(10,16),'M');}

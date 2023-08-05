@@ -48,19 +48,38 @@ AstNode* Parser::ConditionDeclaration(Token* token)
             return nullptr;
         }
 
+        if(token->value == KEYWORDS::TELSE)
+        {
+            this->InsertConditionBuildNode(token, AST_DIRECTION::RIGHT);
+            this->history = token;
+            return nullptr;
+        }
+
         this->ThrowError(token);
     }
 
     if(history->value == KEYWORDS::TIF)
     {
-        if(token->value[0] == DELIMITERS::OPEN_PARAM)
-        {
-            this->ConditionState = BRANCH_IDENTIFIER::EXPRESSION;
-            this->history = token;
-            return this->ConditionDeclaration(token);
-        }
+        return this->CheckCondition(token);
+    }
 
-        this->ThrowError(token);
+    if(history->value == KEYWORDS::TELSE)
+    {
+        this->RemoveConditionStmtCounter();
+        return this->CheckCondition(token);
+    }
+
+    this->ThrowError(token);
+    return nullptr;
+}
+
+AstNode* Parser::CheckCondition(Token* token)
+{
+    if(token->value[0] == DELIMITERS::OPEN_PARAM)
+    {
+        this->ConditionState = BRANCH_IDENTIFIER::EXPRESSION;
+        this->history = token;
+        return this->ConditionDeclaration(token);
     }
 
     this->ThrowError(token);

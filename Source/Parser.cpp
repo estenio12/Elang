@@ -105,8 +105,10 @@ void Parser::IdentifyOperationType(Token* token)
         }
     }
     
+    Output::PrintDebug(token->value + " | " + token->type);
     // # CONDITION DECLARATION
-    if(token->value == KEYWORDS::TIF)
+    if(token->value == KEYWORDS::TIF   ||
+       token->value == KEYWORDS::TELSE )
     {
         this->AssignCurrentBranch(BRANCH_IDENTIFIER::CONDITION_DECLARATION);
         this->ConditionDeclaration(token);
