@@ -105,13 +105,16 @@ void Parser::IdentifyOperationType(Token* token)
         }
     }
     
-    Output::PrintDebug(token->value + " | " + token->type);
     // # CONDITION DECLARATION
-    if(token->value == KEYWORDS::TIF   ||
-       token->value == KEYWORDS::TELSE )
+    if(token->value == KEYWORDS::TIF)
     {
         this->AssignCurrentBranch(BRANCH_IDENTIFIER::CONDITION_DECLARATION);
         this->ConditionDeclaration(token);
+    }
+
+    if(token->value == KEYWORDS::TELSE)
+    {
+        this->CommitEntity(BRANCH_NAME::CONDITION_DECLARATION, this->ConditionDeclaration(token));
     }
 
     // # CLOSE STATEMENT

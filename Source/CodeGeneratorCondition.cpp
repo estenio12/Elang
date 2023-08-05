@@ -16,6 +16,13 @@ std::string CodeGenerator::VisitorConditionDeclaration(AstNode* node)
             this->ConditionDeclarationCodeStack.push_back(result);
             return this->CommitConditionDeclaration();
         }
+
+        if(node->token->value == KEYWORDS::TELSE)
+        {
+            return TARGET_CODE::T_CLOSE_BRACE + 
+                   TARGET_CODE::T_ELSE +
+                   TARGET_CODE::T_OPEN_BRACE; 
+        }
     }
 
     return EMPTY;

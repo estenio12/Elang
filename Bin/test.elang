@@ -12,8 +12,8 @@ end
 var:number res = (sum(10, 10) + 85) != 2;
 
 if(10 + 10 != 15)
-	print(t10, sum(10, 16), 'M');
+	var:number idade = 26;
+	print(t10, sum(idade, 10), 'M');
 else
-	
+	print(t10, sum(10, 16), 'M');
 end
-

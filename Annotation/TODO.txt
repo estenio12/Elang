@@ -20,8 +20,8 @@
 	> [ OK ] 14 - Full: support to function declaration;
 	> [ OK ] 15 - Full: support to assignment declaration;
 	> [ OK ] 16 - Full: support to call function;
-	> [ WORKING ] 17 - Full: support to conditions (if - OK, elif, else);
-	> [ TO DO ] 18 - Full: support to loops (for, while);
+	> [ OK ] 17 - Full: support to conditions (if - OK, else - OK);
+	> [ TO DO ] 18 - Full: support to loop (while);
 	> [ TO DO ] 19 - Full: support to IO (STDIN, STDOU);
 
 >> To Fix:
@@ -34,3 +34,4 @@
 		> [ OK ] 5.1 - Number type is ok, but, others type has problem yet.
 	> [ OK ] 6 - the void function validating type return.
 	> [ OK ] 7 - Do lexer ignore the commentary command where inside the string scope.
+	> [ TO DO ] 8 - Check valid 'end' keyword
