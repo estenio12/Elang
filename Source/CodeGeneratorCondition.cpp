@@ -9,9 +9,14 @@ std::string CodeGenerator::VisitorConditionDeclaration(AstNode* node)
 {
     if(node != nullptr)
     {
-        if(node->token->value == KEYWORDS::TIF)
+        if(node->token->value == KEYWORDS::TIF    ||
+           node->token->value == KEYWORDS::TWHILE )
         {
-            this->ConditionDeclarationCodeStack.push_back(TARGET_CODE::T_IF);
+            if(node->token->value == KEYWORDS::TIF)
+                this->ConditionDeclarationCodeStack.push_back(TARGET_CODE::T_IF);
+            else
+                this->ConditionDeclarationCodeStack.push_back(TARGET_CODE::T_WHILE);
+
             auto result = this->VisitorExpression(node->right);
             this->ConditionDeclarationCodeStack.push_back(result);
             return this->CommitConditionDeclaration();

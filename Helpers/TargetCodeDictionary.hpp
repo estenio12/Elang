@@ -26,4 +26,5 @@ namespace TARGET_CODE
     static const std::string T_RETURN      = "return ";
     static const std::string T_IF          = "if";
     static const std::string T_ELSE        = "else";
+    static const std::string T_WHILE       = "while";
 }

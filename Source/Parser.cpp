@@ -106,7 +106,8 @@ void Parser::IdentifyOperationType(Token* token)
     }
     
     // # CONDITION DECLARATION
-    if(token->value == KEYWORDS::TIF)
+    if(token->value == KEYWORDS::TIF    ||
+       token->value == KEYWORDS::TWHILE )
     {
         this->AssignCurrentBranch(BRANCH_IDENTIFIER::CONDITION_DECLARATION);
         this->ConditionDeclaration(token);
@@ -255,17 +256,34 @@ std::string Parser::GetExpectedTypeByValue(Token* token)
 
 std::string Parser::GetExpectedTypeByType(Token* token)
 {
-    if(token->type == TYPE::NAME[TYPE::TBOOL]) return EXPECTED_TYPE::TBOOLEAN;
+    if(token->type == TYPE::NAME[TYPE::TBOOL] || token->type == NAME::BOOLEAN) 
+       return EXPECTED_TYPE::TBOOLEAN;
+
     if(token->type == TYPE::NAME[TYPE::TCHAR]) return EXPECTED_TYPE::TCHARACTER;
     if(token->type == TYPE::NAME[TYPE::TNUMBER]) return EXPECTED_TYPE::TNUMBER;
     if(token->type == TYPE::NAME[TYPE::TTEXT]) return EXPECTED_TYPE::TTEXT;
     if(token->type == TYPE::NAME[TYPE::TVOID]) return EXPECTED_TYPE::TVOID;
 
-    Output::PrintCustomizeError("Compiler internal error: ", "No match type in GetExpectedTypeByType");
+    if(token->type == NAME::IDENTIFIER)
+    {
+        auto result = this->GetExpectedTypeByID(token);
+        if(result != EMPTY) return result; 
+    }
+
+    Output::PrintCustomizeError("Compiler internal error: ", "No match type in GetExpectedTypeByType | " + token->type + " | " + token->value);
     exit(EXIT_FAILURE);
 }
 
+std::string Parser::GetExpectedTypeByID(Token* token)
+{
+    auto varId = this->IDTable->FindObjectIdentifier(token->value);
+    if(varId != nullptr) return varId->typeValue;
 
+    auto funId = this->IDFunTable->FindObjectIdentifier(token->value);
+    if(funId != nullptr) return funId->type;
+
+    return EMPTY;
+}
 
 
 

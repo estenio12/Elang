@@ -41,7 +41,8 @@ AstNode* Parser::ConditionDeclaration(Token* token)
 
     if(history == nullptr)
     {
-        if(token->value == KEYWORDS::TIF)
+        if(token->value == KEYWORDS::TIF    ||
+           token->value == KEYWORDS::TWHILE )
         {
             this->InsertConditionBuildNode(token, AST_DIRECTION::RIGHT);
             this->history = token;
@@ -58,7 +59,8 @@ AstNode* Parser::ConditionDeclaration(Token* token)
         this->ThrowError(token);
     }
 
-    if(history->value == KEYWORDS::TIF)
+    if(history->value == KEYWORDS::TIF    ||
+       history->value == KEYWORDS::TWHILE )
     {
         if(token->value[0] == DELIMITERS::OPEN_PARAM)
         {
