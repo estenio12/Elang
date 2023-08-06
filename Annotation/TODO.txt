@@ -34,4 +34,7 @@
 		> [ OK ] 5.1 - Number type is ok, but, others type has problem yet.
 	> [ OK ] 6 - the void function validating type return.
 	> [ OK ] 7 - Do lexer ignore the commentary command where inside the string scope.
-	> [ TO DO ] 8 - Check valid 'end' keyword
+	> [ OK ] 8 - Check valid 'end' keyword.
+	> [ TO DO ] 9 - Call function does not validate argument missing.
+	> [ TO DO ] 10 - Function declaration does not accept declaration without the paramenters.
+	> [ TO DO ] 11 - If you don't declare a variable on the first line, it won't compile.

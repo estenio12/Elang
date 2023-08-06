@@ -1,1 +1,1 @@
-var t=10;function dectl(){if(10>5){}
+var t=10;function dctl(r){if(10>5){if(10>5){}}}dctl();

@@ -1,8 +1,11 @@
 var:number t = 10;
 
-fun:void dectl()
+fun:void dctl(var:number r)
 	if(10 > 5)
-
+		if(10 > 5)
+		
+		end
 	end
 end
 
+dctl();

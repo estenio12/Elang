@@ -4,6 +4,7 @@ std::string CodeGenerator::VisitorStatement(std::vector<std::pair<std::string, A
 {
     this->StatementCodeStack.push_back(TARGET_CODE::T_OPEN_BRACE);
     this->generateWithLet = true;
+    int stmtCounter = 1;
 
     for(auto item : statementList)
     {
@@ -20,15 +21,26 @@ std::string CodeGenerator::VisitorStatement(std::vector<std::pair<std::string, A
            this->StatementCodeStack.push_back(this->GenerateCallFunction(item.second));
         
         if(item.first == BRANCH_NAME::CONDITION_DECLARATION)
+        {
            this->StatementCodeStack.push_back(this->GenerateConditionDeclaration(item.second));
+           stmtCounter++;
+        }
     
-        if(item.first == BRANCH_NAME::END_STATEMENT)
+        if(item.first == BRANCH_NAME::END_STATEMENT   ||
+           item.first == BRANCH_NAME::CLOSE_STATEMENT )
         {
             this->StatementCodeStack.push_back(TARGET_CODE::T_CLOSE_BRACE);
-            this->generateWithLet = false;
-            return this->CommitStatement();
+            stmtCounter--;
+
+            if(stmtCounter <= 0)
+            {
+               this->generateWithLet = false;
+               return this->CommitStatement();
+            }
         }
     }
+
+    Output::PrintDebug("StmtCount: " + std::to_string(stmtCounter));
 
     this->generateWithLet = false;
     return EMPTY;
