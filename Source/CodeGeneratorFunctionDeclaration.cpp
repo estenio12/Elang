@@ -9,7 +9,6 @@ std::string CodeGenerator::VisitorFunctionDeclaration(AstNode* node)
 {
     if(node->token->value == KEYWORDS::TFUN)
     {
-        FunctionDeclarationCodeStack.push_back(TARGET_CODE::T_FUN);
         return this->VisitorFunctionDeclaration(node->right);
     }
 
@@ -23,34 +22,16 @@ std::string CodeGenerator::VisitorFunctionDeclaration(AstNode* node)
 
     if(node->token->type == NAME::IDENTIFIER)
     {
-        FunctionDeclarationCodeStack.push_back(node->token->value);
-        return this->VisitorFunctionDeclaration(node->right);
-    }
-
-    if(node->token->value[0] == DELIMITERS::OPEN_PARAM)
-    {
-        FunctionDeclarationCodeStack.push_back(TARGET_CODE::T_OPEN_PARAM);
-        return this->VisitorFunctionDeclaration(node->right);
-    }
-
-    if(node->token->value == KEYWORDS::TVAR   ||
-       node->token->value == KEYWORDS::TCONST )
-    {
-        return this->VisitorFunctionDeclaration(node->right);
-    }
-
-    if(node->token->value[0] == DELIMITERS::COMMA)
-    {
-        FunctionDeclarationCodeStack.push_back(TARGET_CODE::T_COMMA);
-        return this->VisitorFunctionDeclaration(node->right);
-    }
-
-    if(node->token->value[0] == DELIMITERS::CLOSE_PARAM)
-    {
-        FunctionDeclarationCodeStack.push_back(TARGET_CODE::T_CLOSE_PARAM);
-        FunctionDeclarationCodeStack.push_back(this->VisitorStatement(node->StatementList));
-        // return this->VisitorFunctionDeclaration(node->right);
-        return this->CommitFunctionDeclaration();
+        std::string buildFunctionInterface = this->CreateFunctionInterface(node);
+        this->FunctionsInterfaces.push_back(buildFunctionInterface);
+        
+        std::string buildFunctionImplementation = this->CreateFunctionImplementationHeader(node);
+        auto lastNode = this->FindLastNode(node, AST_DIRECTION::RIGHT);
+        
+        buildFunctionImplementation += this->VisitorStatement(lastNode->StatementList);
+        this->FunctionsImplementations.push_back(buildFunctionImplementation);
+        
+        return EMPTY;
     }
 
     return EMPTY;

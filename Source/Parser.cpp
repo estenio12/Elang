@@ -10,7 +10,7 @@ Parser::Parser(Lexer* lexer):lexer(lexer)
     this->tool       = new Tools();
     this->IDTable    = new IDDeclarationStorage();
     this->IDFunTable = new IDFunctionDeclarationStorage();
-    this->codegen    = new CodeGenerator(this->IDTable);
+    this->codegen    = new CodeGenerator(this->IDTable, this->IDFunTable);
     this->expressionFunctionStack = new CallStack();
 }
 

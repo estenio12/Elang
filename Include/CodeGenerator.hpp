@@ -19,22 +19,27 @@
 #include "../Helpers/Tools.hpp"
 #include "../Include/Output.hpp"
 #include "../Include/IDDeclarationStorage.hpp"
+#include "../Include/IDFunctionDeclarationStorage.hpp"
 
 class CodeGenerator
 {   
     private:
-        std::string OutputName  = "app.js";
+        std::string OutputName  = "app.cpp";
         std::ofstream fileHandle;
 
     private:
         IDDeclarationStorage* IDTable;
+        IDFunctionDeclarationStorage* IDFunTable;
         Tools* tool;
-        std::vector<std::string> CodeStack;
-        int oldOperation = BRANCH_IDENTIFIER::UNDEFINED;
         const std::string EMPTY = "";
 
+    private:
+        std::vector<std::string> FunctionsInterfaces;
+        std::vector<std::string> FunctionsImplementations;
+        std::vector<std::string> RunnablePipeline;
+
     public:
-        CodeGenerator(IDDeclarationStorage* );
+        CodeGenerator(IDDeclarationStorage*, IDFunctionDeclarationStorage* );
         ~CodeGenerator();
 
     public:
@@ -43,10 +48,18 @@ class CodeGenerator
     private:
         void WriteChunkIntoFile(std::string );
         void CloseFileHandler();
+        void WriteInitContent();
+        void WriteFullApp();
 
     private:
         void ThrowErro(std::string );
         std::string ConvertToString(std::string );
+        std::string ConvertToChar(std::string );
+        std::string GetTargetType(std::string );
+        std::string CreateFunctionInterface(AstNode* );
+        std::string CreateFunctionImplementationHeader(AstNode* );
+        std::string ExtractParameters(std::string );
+        AstNode* FindLastNode(AstNode*, uint8_t );
 
     private:
         bool generateWithLet = false;

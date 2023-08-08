@@ -8,7 +8,7 @@ fun:void dctl(var:number r)
 	end
 end
 
-dctl();
+dctl(10);
 
 var:number c = 10;
 

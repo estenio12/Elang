@@ -1,1 +1,0 @@
-var t=10;function dctl(r){if(10>5){if(10>5){}}}dctl();var c=10;while(c>0){if(c==5){console.log("chegou na metade");}else{console.log("Não chegou na metade");}console.log("Counting: ", c);c=c-1;}

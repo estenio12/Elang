@@ -3,7 +3,6 @@
 std::string CodeGenerator::VisitorStatement(std::vector<std::pair<std::string, AstNode*>> statementList)
 {
     this->StatementCodeStack.push_back(TARGET_CODE::T_OPEN_BRACE);
-    this->generateWithLet = true;
     int stmtCounter = 1;
 
     for(auto item : statementList)
@@ -40,9 +39,6 @@ std::string CodeGenerator::VisitorStatement(std::vector<std::pair<std::string, A
         }
     }
 
-    Output::PrintDebug("StmtCount: " + std::to_string(stmtCounter));
-
-    this->generateWithLet = false;
     return EMPTY;
 }
 
