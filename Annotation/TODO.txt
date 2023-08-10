@@ -22,8 +22,8 @@
 	> [ OK ] 16 - Full: support to call function;
 	> [ OK ] 17 - Full: support to conditions (if - OK, else - OK);
 	> [ OK ] 18 - Full: support to loop while;
-	> [ TO DO ] 19 - Full: support to type cast;
-	> [ TO DO ] 20 - Full: support to IO (STDIN, STDOU);
+	> [ WORKING ] 19 - Full: support to type cast;
+	> [ WORKING ] 20 - Full: support to IO (STDIN, STDOU);
 
 >> To Fix:
 

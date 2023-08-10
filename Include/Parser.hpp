@@ -59,7 +59,7 @@ class Parser
         void ResetState();
 
     private:
-        void IdentifyOperationType(Token* );
+        bool IdentifyOperationType(Token* );
         void AssignCurrentBranch(uint8_t );
         void InsertAstNode(std::string, AstNode* );
         AstNode* FindLastNode(AstNode*, uint8_t );
@@ -141,6 +141,7 @@ class Parser
         int CallFunctionState = BRANCH_IDENTIFIER::UNDEFINED;
         std::string CurrentArgumentExpectedType = EXPECTED_TYPE::TUNDEFINED;
         std::string CurrentArgumentListFunctionName;
+        std::string CallFunctionNameOperation = BRANCH_NAME::CALL_FUNCTION;
         AstNode* CallFunctionBuildingNode;
         AstNode* CallFunction(Token* );
         void InsertCallFunctionBuildNode(Token*, int );

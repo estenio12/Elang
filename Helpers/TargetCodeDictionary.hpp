@@ -24,12 +24,8 @@ namespace FILE_CONTENT
 
 namespace TARGET_CODE
 {
-    static const std::string T_VAR         = "var ";
-    static const std::string T_LET         = "let ";
-    static const std::string T_CONST       = "const ";
     static const std::string T_ASSING      = "=";
     static const std::string T_EOL         = ";";
-    static const std::string T_FUN         = "function ";
     static const std::string T_OPEN_PARAM  = "(";
     static const std::string T_CLOSE_PARAM = ")";
     static const std::string T_COMMA       = ",";

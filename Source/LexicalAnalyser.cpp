@@ -64,6 +64,12 @@ void Lexer::Tokenize(std::string line)
     {
         if(current == NAME::UNDEFINED)
         {
+            if(this->IsMacro(line[i]))
+            {
+                this->macroFlag = true;
+                continue;
+            }
+
             if(this->IsAttribution(line[i]))
             {
                 if(line[i] == ATTRIBUTION::INCREMENT[0] &&
@@ -386,6 +392,7 @@ void Lexer::Tokenize(std::string line)
                 buildToken.push_back(line[i]);
             }
         }
+    
     }
 }
 

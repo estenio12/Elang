@@ -29,6 +29,9 @@ namespace NAME
     static const std::string LOGICAL     = "logical";
     static const std::string ATTRIBUTION = "attribution";
     static const std::string EXPRESSION  = "expression";
+    static const std::string MACRO       = "macro";
+    static const std::string CASTING     = "casting";
+    static const std::string IO_SYSTEM   = "io_system";
 }
 
 namespace KEYWORDS
@@ -61,6 +64,7 @@ namespace DELIMITERS
     static const char BACK_SLASH          = '/';
     static const char _EOF                = '\0';
     static const char COMMENTARY          = '#';
+    static const char MACRO               = '@';
 
     static const char SKIP_CHAR[] = {' ', '\n', '\b', '\t'};
 }
@@ -127,6 +131,13 @@ namespace ATTRIBUTION
 {
     static const std::string INCREMENT = "++";
     static const std::string DECREMENT = "--";
+}
+
+namespace SYSTEM_CALL
+{
+    static const std::string IO_INPUT  = "readline";
+    static const std::string IO_OUTPUT = "print";
+    static const std::string IO_SYSTEM = "system";
 }
 
 

@@ -45,7 +45,7 @@ void Parser::Parse()
             break;
 
             case BRANCH_IDENTIFIER::CALL_FUNCTION:
-                this->CommitEntity(BRANCH_NAME::CALL_FUNCTION, this->CallFunction(token));
+                this->CommitEntity(this->CallFunctionNameOperation, this->CallFunction(token));
             break;
 
             case BRANCH_IDENTIFIER::CONDITION_DECLARATION:
@@ -65,7 +65,7 @@ void Parser::Parse()
     this->codegen->Generate(this->ast);
 }
 
-void Parser::IdentifyOperationType(Token* token)
+bool Parser::IdentifyOperationType(Token* token)
 {
     // # VARIABLE DECLARATION
     if(token->value == KEYWORDS::TVAR   ||
@@ -73,6 +73,7 @@ void Parser::IdentifyOperationType(Token* token)
     {
         this->AssignCurrentBranch(BRANCH_IDENTIFIER::VARIABLE_DECLARATION);
         this->VariableDeclaration(token);
+        return true;
     }
 
     // # FUNCTION DECLARATION
@@ -80,10 +81,12 @@ void Parser::IdentifyOperationType(Token* token)
     {
         this->AssignCurrentBranch(BRANCH_IDENTIFIER::FUNCTION_DECLARATION);
         this->FunctionDeclaration(token);
+        return true;
     }
 
     // # ID operation identifier
-    if(token->type == NAME::IDENTIFIER)
+    if(token->type == NAME::IDENTIFIER ||
+       token->type == NAME::IO_SYSTEM  )
     {
         auto typeID = this->IdentifyTypeID(token->value);
 
@@ -95,6 +98,8 @@ void Parser::IdentifyOperationType(Token* token)
             break;
 
             case TYPE_ID::_CALL_FUNCTION:
+            case TYPE_ID::_IO_SYSTEM:
+            case TYPE_ID::_CASTING:
                 this->AssignCurrentBranch(BRANCH_IDENTIFIER::CALL_FUNCTION);
                 this->CallFunction(token);
             break;
@@ -103,6 +108,8 @@ void Parser::IdentifyOperationType(Token* token)
                 this->ThrowError("Identifier not declared in scope '" + token->value + "'", token->startPos + 1);
             break;
         }
+
+        return true;
     }
     
     // # CONDITION DECLARATION
@@ -111,18 +118,24 @@ void Parser::IdentifyOperationType(Token* token)
     {
         this->AssignCurrentBranch(BRANCH_IDENTIFIER::CONDITION_DECLARATION);
         this->ConditionDeclaration(token);
+        return true;
     }
 
     if(token->value == KEYWORDS::TELSE)
     {
         this->CommitEntity(BRANCH_NAME::CONDITION_DECLARATION, this->ConditionDeclaration(token));
+        return true;
     }
 
     // # CLOSE STATEMENT
     if(token->value == KEYWORDS::TEND)
     {
         this->CommitEntity(BRANCH_NAME::CLOSE_STATEMENT, this->CloseStatment(token));
+        return true;
     }
+
+    this->ThrowError(token);
+    return false;
 }
 
 int Parser::IdentifyTypeID(std::string name)
@@ -132,6 +145,13 @@ int Parser::IdentifyTypeID(std::string name)
 
     auto funId = this->IDFunTable->FindObjectIdentifier(name);
     if(funId != nullptr) return TYPE_ID::_CALL_FUNCTION;
+
+    if(name == SYSTEM_CALL::IO_INPUT  ||
+       name == SYSTEM_CALL::IO_OUTPUT ||
+       name == SYSTEM_CALL::IO_SYSTEM )
+    {
+        return TYPE_ID::_IO_SYSTEM;
+    }
 
     return TYPE_ID::_NONE;
 }

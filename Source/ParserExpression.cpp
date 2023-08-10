@@ -4,6 +4,12 @@ AstNode* Parser::Expression(Token* token, std::string expectedType)
 {
     if(!this->ExpressionDoOnce) 
     {
+        if(token->type == NAME::CASTING)
+        {
+            if(token->value != expectedType)
+               this->ThrowError("Cannot implicitly convert type '" + token->value + "' to '" + this->expectedType + "'", token->startPos + 1);
+        }
+
         this->ExpressionExpectedType = expectedType;
         this->ExpressionDoOnce = true;
     }
@@ -22,10 +28,14 @@ AstNode* Parser::Expression(Token* token, std::string expectedType)
        history->type == NAME::IDENTIFIER ||
        history->type == NAME::NUMBER     ||
        history->type == NAME::BOOLEAN    ||
-       history->type == NAME::CHAR  ||
-       history->type == NAME::TEXT)
+       history->type == NAME::CHAR       ||
+       history->type == NAME::TEXT       ||
+       history->type == NAME::IO_SYSTEM  ||
+       history->type == NAME::CASTING    )
     {
-        if(history->type == NAME::IDENTIFIER && history->isFunID == true)
+        if(history->type == NAME::IDENTIFIER && history->isFunID == true ||
+           history->type == NAME::IO_SYSTEM && history->isFunID == true  ||
+           history->type == NAME::CASTING && history->isFunID == true    )
         {
             if(this->ExpressionCheckOpenParam(token)) return nullptr;
             this->ThrowError("expected '(' after the function identifier.", token->startPos + 1);
@@ -141,9 +151,9 @@ bool Parser::ExpressionCheckOpenParam(Token* token)
 
 bool Parser::ExpressionCheckType(Token* token)
 {
-    if(token->type == NAME::NUMBER    ||
-       token->type == NAME::BOOLEAN   ||
-       token->type == NAME::CHAR ||
+    if(token->type == NAME::NUMBER  ||
+       token->type == NAME::BOOLEAN ||
+       token->type == NAME::CHAR    ||
        token->type == NAME::TEXT    )
     {
         if(token->type != this->ExpressionExpectedType)
@@ -159,7 +169,9 @@ bool Parser::ExpressionCheckType(Token* token)
 
 bool Parser::ExpressionCheckIdentifier(Token* token)
 {
-    if(token->type == NAME::IDENTIFIER)
+    if(token->type == NAME::IDENTIFIER ||
+       token->type == NAME::IO_SYSTEM  ||
+       token->type == NAME::CASTING    )
     {
         if(this->IDTable->ExistIdentifier(token->value, this->currentScope, this->currentDeep))
         {
@@ -195,6 +207,11 @@ bool Parser::ExpressionCheckIdentifier(Token* token)
             this->expressionFunctionStack->Insert(stackItem);
             this->expressionFunctionStack->ExpectedTypeHistory = this->ExpressionExpectedType;
             this->ExpressionExpectedType = getEntity->paramList[0].first;
+        }
+        else if(token->type == NAME::IO_SYSTEM ||
+                token->type == NAME::CASTING   )
+        {
+            token->isFunID = true;
         }
         else
         {

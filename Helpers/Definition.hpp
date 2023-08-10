@@ -30,6 +30,8 @@ namespace BRANCH_NAME
     const static std::string CALL_FUNCTION         = "CALL_FUNCTION";
     const static std::string CONDITION_DECLARATION = "CONDITION_DECLARATION";
     const static std::string CLOSE_STATEMENT       = "CLOSE_STATEMENT";
+    const static std::string IO_SYSTEM             = "IO_SYSTEM";
+    const static std::string CASTING               = "CASTING";
 }
 
 namespace STANDARD_SCOPE_NAME
@@ -72,6 +74,8 @@ enum TYPE_ID
 {
     _VARIABLE_ASSIGNMENT,
     _CALL_FUNCTION,
+    _IO_SYSTEM,
+    _CASTING,
     _NONE
 };
 
