@@ -12,6 +12,8 @@ Parser::Parser(Lexer* lexer):lexer(lexer)
     this->IDFunTable = new IDFunctionDeclarationStorage();
     this->codegen    = new CodeGenerator(this->IDTable, this->IDFunTable);
     this->expressionFunctionStack = new CallStack();
+
+    this->ElangLoadLibrary();
 }
 
 Parser::~Parser(){}
@@ -85,8 +87,7 @@ bool Parser::IdentifyOperationType(Token* token)
     }
 
     // # ID operation identifier
-    if(token->type == NAME::IDENTIFIER ||
-       token->type == NAME::IO_SYSTEM  )
+    if(token->type == NAME::IDENTIFIER)
     {
         auto typeID = this->IdentifyTypeID(token->value);
 
@@ -98,8 +99,6 @@ bool Parser::IdentifyOperationType(Token* token)
             break;
 
             case TYPE_ID::_CALL_FUNCTION:
-            case TYPE_ID::_IO_SYSTEM:
-            case TYPE_ID::_CASTING:
                 this->AssignCurrentBranch(BRANCH_IDENTIFIER::CALL_FUNCTION);
                 this->CallFunction(token);
             break;
@@ -145,13 +144,6 @@ int Parser::IdentifyTypeID(std::string name)
 
     auto funId = this->IDFunTable->FindObjectIdentifier(name);
     if(funId != nullptr) return TYPE_ID::_CALL_FUNCTION;
-
-    if(name == SYSTEM_CALL::IO_INPUT  ||
-       name == SYSTEM_CALL::IO_OUTPUT ||
-       name == SYSTEM_CALL::IO_SYSTEM )
-    {
-        return TYPE_ID::_IO_SYSTEM;
-    }
 
     return TYPE_ID::_NONE;
 }

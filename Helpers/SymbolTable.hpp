@@ -137,7 +137,7 @@ namespace SYSTEM_CALL
 {
     static const std::string IO_INPUT  = "readline";
     static const std::string IO_OUTPUT = "print";
-    static const std::string IO_SYSTEM = "system";
+    static const std::string IO_SYSTEM = "sysexec";
 }
 
 

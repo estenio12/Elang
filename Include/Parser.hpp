@@ -166,4 +166,10 @@ class Parser
 
     private:
         AstNode* CloseStatment(Token* );
+
+    private:
+        void ElangLoadLibrary();
+        void IO_Output();
+        void IO_Input();
+        void IO_System();
 };

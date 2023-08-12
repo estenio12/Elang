@@ -56,7 +56,6 @@ class Lexer
         bool IsComparison(char );
         bool IsLogical(char );
         bool IsAttribution(char );
-        bool IsMacro(char );
 
     private:
         Token* BindToken(std::string );
@@ -64,6 +63,4 @@ class Lexer
         Token* BindKeyword(std::string );
         Token* BindBoolean(std::string );
         Token* BindDelimiters(std::string );
-        Token* BindCasting(std::string );
-        Token* BindIOSystem(std::string );
 };

@@ -23,7 +23,7 @@
 	> [ OK ] 17 - Full: support to conditions (if - OK, else - OK);
 	> [ OK ] 18 - Full: support to loop while;
 	> [ WORKING ] 19 - Full: support to type cast;
-	> [ WORKING ] 20 - Full: support to IO (STDIN, STDOU);
+	> [ OK ] 20 - Full: support to IO (STDIN, STDOU);
 
 >> To Fix:
 
@@ -36,6 +36,9 @@
 	> [ OK ] 6 - the void function validating type return.
 	> [ OK ] 7 - Do lexer ignore the commentary command where inside the string scope.
 	> [ OK ] 8 - Check valid 'end' keyword.
-	> [ TO DO ] 9 - Call function does not validate argument missing.
-	> [ TO DO ] 10 - Function declaration does not accept declaration without the paramenters.
-	> [ TO DO ] 11 - If you don't declare a variable on the first line, it won't compile.
+	> [ TO DO ] 9 - Aphostrofe has been validating inside the string scope.
+	> [ TO DO ] 10 - Quotation Marks don't escape inside the string scope.  
+	> [ TO DO ] 11 - Call function does not validate argument missing.
+	> [ TO DO ] 12 - Function declaration does not accept declaration without the paramenters.
+	> [ TO DO ] 13 - If you don't declare a variable on the first line, it won't compile.
+	> [ TO DO ] 14 - In call function, when you does not put the semi-colon on final expression, his not return.

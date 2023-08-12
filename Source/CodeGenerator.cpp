@@ -111,6 +111,7 @@ void CodeGenerator::WriteFullApp()
     this->WriteChunkIntoFile(FILE_CONTENT::CLOSE_PROGRAM_RUNNABLE + "\n");
 
     // # Write function implementation
+    this->WriteChunkIntoFile(FILE_CONTENT::PROGRAM_IMPLEMENTATION);
     for(auto item : this->FunctionsImplementations)
         this->WriteChunkIntoFile(item);
     

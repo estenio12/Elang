@@ -100,28 +100,9 @@ bool Lexer::IsAttribution(char target)
     return false;
 }
 
-bool Lexer::IsMacro(char target)
-{
-    if(target == DELIMITERS::MACRO) return true;
-    return false;
-}
-
 Token* Lexer::BindToken(std::string token)
 {
     Token* tempToken;
-
-    if(this->macroFlag)
-    {
-        // # Check casting
-        tempToken = this->BindCasting(token);
-        if(tempToken != nullptr) return tempToken;
-
-        // # Check io system
-        tempToken = this->BindIOSystem(token);
-        if(tempToken != nullptr) return tempToken;
-
-        this->macroFlag = false;
-    }
 
     // # Check type
     tempToken = this->BindType(token);
@@ -205,35 +186,6 @@ Token* Lexer::BindDelimiters(std::string token)
       )
     {
         return new Token(token, NAME::DELIMITER);
-    }
-
-    return nullptr;
-}
-
-Token* Lexer::BindCasting(std::string token)
-{
-    if(token == TYPE::NAME[TYPE::TNUMBER] ||
-       token == TYPE::NAME[TYPE::TCHAR] ||
-       token == TYPE::NAME[TYPE::TVOID] ||
-       token == TYPE::NAME[TYPE::TBOOL] ||
-       token == TYPE::NAME[TYPE::TTEXT]
-      )
-    {
-        this->macroFlag = false;
-        return new Token(token, NAME::CASTING);
-    }
-
-    return nullptr;
-}
-
-Token* Lexer::BindIOSystem(std::string token)
-{
-    if(token == SYSTEM_CALL::IO_INPUT  ||
-       token == SYSTEM_CALL::IO_OUTPUT ||
-       token == SYSTEM_CALL::IO_SYSTEM )
-    {
-        this->macroFlag = false;
-        return new Token(token, NAME::IO_SYSTEM);
     }
 
     return nullptr;

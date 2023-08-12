@@ -1,3 +1,5 @@
-var:number c = 10;
+var:text t = readline("Digite algo: \n");
 
-var:number t = @number("100");
+print("Resposta: " + t);
+
+
