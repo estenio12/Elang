@@ -1,4 +1,4 @@
-var:text t = readline("Digite algo: \n");
+var:text t = readword("Digite algo: \n");
 
 print("Resposta: " + t);
 

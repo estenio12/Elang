@@ -135,7 +135,9 @@ namespace ATTRIBUTION
 
 namespace SYSTEM_CALL
 {
-    static const std::string IO_INPUT  = "readline";
+    static const std::string IO_READLINE  = "readline";
+    static const std::string IO_READWORD  = "readword";
+    static const std::string IO_READCHAR  = "readchar";
     static const std::string IO_OUTPUT = "print";
     static const std::string IO_SYSTEM = "sysexec";
 }

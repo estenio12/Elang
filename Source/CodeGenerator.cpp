@@ -90,6 +90,7 @@ void CodeGenerator::WriteInitContent()
     this->WriteChunkIntoFile(FILE_CONTENT::COMMENTARY + "\n");
     this->WriteChunkIntoFile(FILE_CONTENT::INCLUDES   + "\n");
     this->WriteChunkIntoFile(FILE_CONTENT::PROGRAM_INTERFACE);
+    this->ElangLoadLibrary();
 }
 
 void CodeGenerator::WriteFullApp()
@@ -111,7 +112,7 @@ void CodeGenerator::WriteFullApp()
     this->WriteChunkIntoFile(FILE_CONTENT::CLOSE_PROGRAM_RUNNABLE + "\n");
 
     // # Write function implementation
-    this->WriteChunkIntoFile(FILE_CONTENT::PROGRAM_IMPLEMENTATION);
+    // this->WriteChunkIntoFile(FILE_CONTENT::PROGRAM_IMPLEMENTATION);
     for(auto item : this->FunctionsImplementations)
         this->WriteChunkIntoFile(item);
     

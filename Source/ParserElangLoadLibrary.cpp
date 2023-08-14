@@ -9,9 +9,20 @@ void Parser::ElangLoadLibrary()
 
 void Parser::IO_Input()
 {
-    auto input = this->IDFunTable->CreateRow(SYSTEM_CALL::IO_INPUT, TYPE::NAME[TYPE::TTEXT]);
-    input->paramList.push_back(std::make_pair("text", "__param"));
-    this->IDFunTable->InsertFunctionID(input);
+    // #  READLINE
+    auto readline = this->IDFunTable->CreateRow(SYSTEM_CALL::IO_READLINE, TYPE::NAME[TYPE::TTEXT]);
+    readline->paramList.push_back(std::make_pair("text", "__param"));
+    this->IDFunTable->InsertFunctionID(readline);
+
+    // #  READWORD
+    auto readword = this->IDFunTable->CreateRow(SYSTEM_CALL::IO_READWORD, TYPE::NAME[TYPE::TTEXT]);
+    readword->paramList.push_back(std::make_pair("text", "__param"));
+    this->IDFunTable->InsertFunctionID(readword);
+    
+    // #  READCHAR
+    auto readchar = this->IDFunTable->CreateRow(SYSTEM_CALL::IO_READCHAR, NAME::CHAR);
+    readchar->paramList.push_back(std::make_pair("text", "__param"));
+    this->IDFunTable->InsertFunctionID(readchar);
 }
 
 void Parser::IO_Output()

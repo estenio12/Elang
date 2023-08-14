@@ -103,4 +103,10 @@ class CodeGenerator
     private:
         std::string GenerateCloseStatement(AstNode* );
 
+    private:
+        void ElangLoadLibrary();
+        void IO_Input();
+        void IO_Output();
+        void IO_System();
+
 };

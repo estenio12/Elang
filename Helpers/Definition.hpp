@@ -45,7 +45,7 @@ namespace EXPECTED_TYPE
     const static std::string TTEXT      = "text";
     const static std::string TNUMBER    = "number";
     const static std::string TBOOLEAN   = "boolean";
-    const static std::string TCHARACTER = "character";
+    const static std::string TCHARACTER = "char";
     const static std::string TVOID      = "void";
 }
 

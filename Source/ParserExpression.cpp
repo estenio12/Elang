@@ -4,12 +4,6 @@ AstNode* Parser::Expression(Token* token, std::string expectedType)
 {
     if(!this->ExpressionDoOnce) 
     {
-        if(token->type == NAME::CASTING)
-        {
-            if(token->value != expectedType)
-               this->ThrowError("Cannot implicitly convert type '" + token->value + "' to '" + this->expectedType + "'", token->startPos + 1);
-        }
-
         this->ExpressionExpectedType = expectedType;
         this->ExpressionDoOnce = true;
     }
@@ -156,6 +150,7 @@ bool Parser::ExpressionCheckType(Token* token)
        token->type == NAME::CHAR    ||
        token->type == NAME::TEXT    )
     {
+        
         if(token->type != this->ExpressionExpectedType)
            this->ThrowError("Cannot implicitly convert type '" + token->type + "' to '" + this->ExpressionExpectedType + "'", token->startPos + 1);
 
@@ -183,6 +178,7 @@ bool Parser::ExpressionCheckIdentifier(Token* token)
                 exit(EXIT_FAILURE);
             }
 
+            
             if(getEntity->typeValue != this->ExpressionExpectedType)
                this->ThrowError("Cannot implicitly convert type '" + getEntity->typeValue + "' to '" + this->ExpressionExpectedType + "' | ( " + token->value + " )", token->startPos + 1);
         }
