@@ -29,9 +29,6 @@ namespace NAME
     static const std::string LOGICAL     = "logical";
     static const std::string ATTRIBUTION = "attribution";
     static const std::string EXPRESSION  = "expression";
-    static const std::string MACRO       = "macro";
-    static const std::string CASTING     = "casting";
-    static const std::string IO_SYSTEM   = "io_system";
 }
 
 namespace KEYWORDS
@@ -138,8 +135,27 @@ namespace SYSTEM_CALL
     static const std::string IO_READLINE  = "readline";
     static const std::string IO_READWORD  = "readword";
     static const std::string IO_READCHAR  = "readchar";
-    static const std::string IO_OUTPUT = "print";
-    static const std::string IO_SYSTEM = "sysexec";
+    static const std::string IO_OUTPUT    = "print";
+    static const std::string IO_SYSTEM    = "sysexec";
+}
+
+namespace DATA_CONVERT
+{
+    static const std::string NUM_TO_TEXT = "numToText";
+    static const std::string NUM_TO_CHAR = "numToChar";
+    static const std::string NUM_TO_BOOL = "numToBool";
+    
+    static const std::string CHAR_TO_NUM  = "charToNum";
+    static const std::string CHAR_TO_TEXT = "charToText";
+    static const std::string CHAR_TO_BOOL = "charToBool";
+
+    static const std::string BOOL_TO_NUM  = "boolToNum";
+    static const std::string BOOL_TO_TEXT = "boolToText";
+    static const std::string BOOL_TO_CHAR = "boolToChar";
+    
+    static const std::string TEXT_TO_NUM  = "textToNum";
+    static const std::string TEXT_TO_CHAR = "textToBool";
+    static const std::string TEXT_TO_BOOL = "textToChar";
 }
 
 

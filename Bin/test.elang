@@ -1,5 +1,2 @@
-var:text t = readword("Digite algo: \n");
-
-print("Resposta: " + t);
-
+var:char test = 'g';
 

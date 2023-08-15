@@ -172,4 +172,11 @@ class Parser
         void IO_Output();
         void IO_Input();
         void IO_System();
+
+        // # Data Convert
+        void DataConvert();
+        void NumberConvert();
+        void CharacterConvert();
+        void BooleanConvert();
+        void TextConvert();
 };

@@ -28,16 +28,16 @@ void CodeGenerator::IO_Input()
 
 void CodeGenerator::IO_Output()
 {
-    std::string interface      = "void print(std::string);";
+    std::string printInterface = "void print(std::string);";
     std::string implementation = "void ProgramLoader::print(std::string __text__){std::cout<<__text__;}";
-    this->FunctionsInterfaces.push_back(interface);
+    this->FunctionsInterfaces.push_back(printInterface);
     this->FunctionsImplementations.push_back(implementation);
 }
 
 void CodeGenerator::IO_System()
 {
-    std::string interface      = "void sysexec(std::string);";
+    std::string sysexecInterface      = "void sysexec(std::string);";
     std::string implementation = "void ProgramLoader::sysexec(std::string __text__){system(__text__.c_str());}";
-    this->FunctionsInterfaces.push_back(interface);
+    this->FunctionsInterfaces.push_back(sysexecInterface);
     this->FunctionsImplementations.push_back(implementation);
 }
