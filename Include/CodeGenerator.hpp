@@ -108,6 +108,11 @@ class CodeGenerator
         void IO_Input();
         void IO_Output();
         void IO_System();
-        // void DataConvert();
 
+        // # Data Convert
+        void DataConvert();
+        void NumberConvert();
+        void CharacterConvert();
+        void BooleanConvert();
+        void TextConvert();
 };

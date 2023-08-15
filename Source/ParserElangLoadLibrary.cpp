@@ -55,11 +55,6 @@ void Parser::NumberConvert()
     numberToText->paramList.push_back(std::make_pair(NAME::NUMBER, "__param"));
     this->IDFunTable->InsertFunctionID(numberToText);
     
-    // # Number to Char
-    auto numberToChar = this->IDFunTable->CreateRow(DATA_CONVERT::NUM_TO_CHAR, NAME::CHAR);
-    numberToChar->paramList.push_back(std::make_pair(NAME::NUMBER, "__param"));
-    this->IDFunTable->InsertFunctionID(numberToChar);
-    
     // # Number to Bool
     auto numberToBool = this->IDFunTable->CreateRow(DATA_CONVERT::NUM_TO_BOOL, NAME::BOOLEAN);
     numberToBool->paramList.push_back(std::make_pair(NAME::NUMBER, "__param"));
@@ -113,11 +108,6 @@ void Parser::TextConvert()
     auto textToNumber = this->IDFunTable->CreateRow(DATA_CONVERT::TEXT_TO_NUM, NAME::NUMBER);
     textToNumber->paramList.push_back(std::make_pair(NAME::TEXT, "__param"));
     this->IDFunTable->InsertFunctionID(textToNumber);
-    
-    // # Text to Char
-    auto textToChar = this->IDFunTable->CreateRow(DATA_CONVERT::TEXT_TO_CHAR, NAME::CHAR);
-    textToChar->paramList.push_back(std::make_pair(NAME::TEXT, "__param"));
-    this->IDFunTable->InsertFunctionID(textToChar);
 }
 
 
