@@ -2,17 +2,6 @@
 
 AstNode* Parser::CallFunction(Token* token)
 {
-    if(token->type == NAME::IO_SYSTEM)
-    {
-        this->CurrentArgumentExpectedType = EXPECTED_TYPE::TTEXT;
-        this->CallFunctionNameOperation   = BRANCH_NAME::IO_SYSTEM;
-    }
-    else if(token->type == NAME::CASTING)
-    {
-        this->CurrentArgumentExpectedType = EXPECTED_TYPE::TUNDEFINED;
-        this->CallFunctionNameOperation   = BRANCH_NAME::CASTING;
-    }
-
     auto result = this->Expression(token, this->CurrentArgumentExpectedType);
 
     if(result != nullptr)

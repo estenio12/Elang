@@ -126,7 +126,7 @@ void CodeGenerator::WriteFullApp()
 std::string CodeGenerator::GetTargetType(std::string value)
 {
     if(value == TYPE::NAME[TYPE::TBOOL]) return TARGET_CODE::T_BOOL;
-    if(value == TYPE::NAME[TYPE::TNUMBER]) return TARGET_CODE::T_FLOAT;
+    if(value == TYPE::NAME[TYPE::TNUMBER]) return TARGET_CODE::T_DOUBLE;
     if(value == TYPE::NAME[TYPE::TCHAR]) return TARGET_CODE::T_CHAR;
     if(value == TYPE::NAME[TYPE::TTEXT]) return TARGET_CODE::T_STRING;
     if(value == TYPE::NAME[TYPE::TVOID]) return TARGET_CODE::T_VOID;

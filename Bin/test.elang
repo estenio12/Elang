@@ -1,2 +1,9 @@
-var:char test = 'g';
+var:number t = textToNumber("345");
 
+print(numberToText(t));
+
+fun:void cout(var:text txt)
+    print(txt);
+end
+
+cout("Hello World!");

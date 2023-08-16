@@ -19,9 +19,10 @@ std::string CodeGenerator::VisitorExpression(AstNode* node)
         return this->VisitorExpression(node->right); 
     }
 
-    if(node->token->type == NAME::TEXT ||
-       node->token->type == NAME::CHAR)
+    if(node->token->type == NAME::TEXT)
        this->ExpressionCodeStack.push_back(this->ConvertToString(node->token->value));
+    else if(node->token->type == NAME::CHAR)
+       this->ExpressionCodeStack.push_back(this->ConvertToChar(node->token->value));
     else
        this->ExpressionCodeStack.push_back(node->token->value);
 

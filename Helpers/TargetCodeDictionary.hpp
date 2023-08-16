@@ -37,7 +37,7 @@ namespace TARGET_CODE
     static const std::string T_WHILE       = "while";
 
     static const std::string T_BOOL       = "bool ";
-    static const std::string T_FLOAT      = "float ";
+    static const std::string T_DOUBLE     = "double ";
     static const std::string T_STRING     = "std::string ";
     static const std::string T_CHAR       = "char ";
     static const std::string T_VOID       = "void ";

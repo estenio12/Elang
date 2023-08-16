@@ -5,6 +5,7 @@ void CodeGenerator::ElangLoadLibrary()
     this->IO_Input();
     this->IO_Output();
     this->IO_System();
+    this->DataConvert();
 }
 
 void CodeGenerator::IO_Input()
@@ -111,7 +112,7 @@ void CodeGenerator::TextConvert()
     
     // # Text to Number
     std::string textToNumberInterface      = "double textToNumber(std::string __text__);";
-    std::string textToNumberImplementation = "double ProgramLoader::textToNumber(std::string __text__){try{return std::stold(__text__);}catch(exception& e){std::cerr<<\"DataConvertException: Text content is not valid to conversion.\n\"<<\"Content Error: \"<<__text__;exit(EXIT_FAILURE);}}";
+    std::string textToNumberImplementation = "double ProgramLoader::textToNumber(std::string __text__){try{return std::stold(__text__);}catch(...){std::cerr<<\"DataConvertException: Text content is not valid to conversion. | \"<<\"Content Error: \"<<__text__;exit(EXIT_FAILURE);}}";
     this->FunctionsInterfaces.push_back(textToNumberInterface);
     this->FunctionsImplementations.push_back(textToNumberImplementation);
 }
