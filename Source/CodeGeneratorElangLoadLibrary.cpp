@@ -53,14 +53,14 @@ void CodeGenerator::DataConvert()
 void CodeGenerator::NumberConvert()
 {
     // # Number to Text
-    std::string numToTextInterface      = "std::string numToText(double __num__);";
-    std::string numToTextImplementation = "std::string ProgramLoader::numToText(double __num__){return std::to_string(__num__);}";
+    std::string numToTextInterface      = "std::string numberToText(double __num__);";
+    std::string numToTextImplementation = "std::string ProgramLoader::numberToText(double __num__){return std::to_string(__num__);}";
     this->FunctionsInterfaces.push_back(numToTextInterface);
     this->FunctionsImplementations.push_back(numToTextImplementation);
 
     // # Number to Bool
-    std::string numToBoolInterface      = "bool numToBool(double __num__);";
-    std::string numToBoolImplementation = "bool ProgramLoader::numToBool(double __num__){return __num__ != 0;}";
+    std::string numToBoolInterface      = "bool numberToBool(double __num__);";
+    std::string numToBoolImplementation = "bool ProgramLoader::numberToBool(double __num__){return __num__ != 0;}";
     this->FunctionsInterfaces.push_back(numToBoolInterface);
     this->FunctionsImplementations.push_back(numToBoolImplementation);
 }
@@ -74,31 +74,46 @@ void CodeGenerator::CharacterConvert()
     this->FunctionsImplementations.push_back(charToTextImplementation);
     
     // # Char to Number
-    
+    std::string charToNumberInterface      = "double charToNumber(char __char__);";
+    std::string charToNumberImplementation = "double ProgramLoader::charToNumber(char __char__){return static_cast<double>(__char__) - 48;}";
+    this->FunctionsInterfaces.push_back(charToNumberInterface);
+    this->FunctionsImplementations.push_back(charToNumberImplementation);
     
     // # Char to Bool
-    
+    std::string charToBoolInterface      = "bool charToBool(char __char__);";
+    std::string charToBoolImplementation = "bool ProgramLoader::charToBool(char __char__){return __char__ != '0';}";
+    this->FunctionsInterfaces.push_back(charToBoolInterface);
+    this->FunctionsImplementations.push_back(charToBoolImplementation);
 }
 
 void CodeGenerator::BooleanConvert()
 {
     // # Boolean to Text
-    
+    std::string boolToTextInterface      = "std::string boolToText(bool __bool__);";
+    std::string boolToTextImplementation = "std::string ProgramLoader::boolToText(bool __bool__){std::string buffer;if(__bool__)buffer=\"true\";else buffer=\"false\";return buffer;}";
+    this->FunctionsInterfaces.push_back(boolToTextInterface);
+    this->FunctionsImplementations.push_back(boolToTextImplementation);
     
     // # Boolean to Number
-    
-    
-    // # Boolean to Char
-    
+    std::string boolToNumberInterface      = "double boolToNumber(bool __bool__);";
+    std::string boolToNumberImplementation = "double ProgramLoader::boolToNumber(bool __bool__){return __bool__;}";
+    this->FunctionsInterfaces.push_back(boolToNumberInterface);
+    this->FunctionsImplementations.push_back(boolToNumberImplementation);
 }
 
 void CodeGenerator::TextConvert()
 {
     // # Text to Boolean
-    
+    std::string textToBoolInterface      = "bool textToBool(std::string __text__);";
+    std::string textToBoolImplementation = "bool ProgramLoader::textToBool(std::string __text__){return __text__==\"true\"||__text__==\"TRUE\";}";
+    this->FunctionsInterfaces.push_back(textToBoolInterface);
+    this->FunctionsImplementations.push_back(textToBoolImplementation);
     
     // # Text to Number
-    
+    std::string textToNumberInterface      = "double textToNumber(std::string __text__);";
+    std::string textToNumberImplementation = "double ProgramLoader::textToNumber(std::string __text__){try{return std::stold(__text__);}catch(exception& e){std::cerr<<\"DataConvertException: Text content is not valid to conversion.\n\"<<\"Content Error: \"<<__text__;exit(EXIT_FAILURE);}}";
+    this->FunctionsInterfaces.push_back(textToNumberInterface);
+    this->FunctionsImplementations.push_back(textToNumberImplementation);
 }
 
 

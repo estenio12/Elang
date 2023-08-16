@@ -90,11 +90,6 @@ void Parser::BooleanConvert()
     auto boolToNumber = this->IDFunTable->CreateRow(DATA_CONVERT::BOOL_TO_NUM, NAME::NUMBER);
     boolToNumber->paramList.push_back(std::make_pair(NAME::BOOLEAN, "__param"));
     this->IDFunTable->InsertFunctionID(boolToNumber);
-    
-    // # Boolean to Char
-    auto boolToChar = this->IDFunTable->CreateRow(DATA_CONVERT::BOOL_TO_CHAR, NAME::CHAR);
-    boolToChar->paramList.push_back(std::make_pair(NAME::BOOLEAN, "__param"));
-    this->IDFunTable->InsertFunctionID(boolToChar);
 }
 
 void Parser::TextConvert()

@@ -141,19 +141,19 @@ namespace SYSTEM_CALL
 
 namespace DATA_CONVERT
 {
-    static const std::string NUM_TO_TEXT = "numToText";
-    static const std::string NUM_TO_CHAR = "numToChar";
-    static const std::string NUM_TO_BOOL = "numToBool";
+    static const std::string NUM_TO_TEXT = "numberToText";
+    static const std::string NUM_TO_CHAR = "numberToChar";
+    static const std::string NUM_TO_BOOL = "numberToBool";
     
-    static const std::string CHAR_TO_NUM  = "charToNum";
+    static const std::string CHAR_TO_NUM  = "charToNumber";
     static const std::string CHAR_TO_TEXT = "charToText";
     static const std::string CHAR_TO_BOOL = "charToBool";
 
-    static const std::string BOOL_TO_NUM  = "boolToNum";
+    static const std::string BOOL_TO_NUM  = "boolToNumber";
     static const std::string BOOL_TO_TEXT = "boolToText";
     static const std::string BOOL_TO_CHAR = "boolToChar";
     
-    static const std::string TEXT_TO_NUM  = "textToNum";
+    static const std::string TEXT_TO_NUM  = "textToNumber";
     static const std::string TEXT_TO_CHAR = "textToBool";
     static const std::string TEXT_TO_BOOL = "textToChar";
 }
