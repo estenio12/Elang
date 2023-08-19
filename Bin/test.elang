@@ -1,9 +1,3 @@
-var:number t = textToNumber("345");
+var:text t = "Hello \"to\" world!;
 
-print(numberToText(t));
-
-fun:void cout(var:text txt)
-    print(txt);
-end
-
-cout("Hello World!");
+print(t);

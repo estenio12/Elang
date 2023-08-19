@@ -372,7 +372,7 @@ void Lexer::Tokenize(std::string line)
                 this->ThrowError("Syntax error in text declaration! The quotes open but never close.", i + 1);
             }
 
-            if(line[i] == DELIMITERS::QUOTATION_MARKS)
+            if(line[i] == DELIMITERS::QUOTATION_MARKS && line[i - 1] != DELIMITERS::BACK_SLASH)
             {
                 this->BuildToken(buildToken, NAME::TEXT, startPos, i + 1);
 
