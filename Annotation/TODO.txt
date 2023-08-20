@@ -39,6 +39,6 @@
 	> [ OK ] 9 - Aphostrofe has been validating inside the string scope.
 	> [ OK ] 10 - Quotation Marks don't escape inside the string scope.  
 	> [ OK ] 11 - call function does not accept to be call without the paramenters.
-	> [ TO DO ] 12 - Call function does not validate argument missing.
+	> [ WORKING ] 12 - Call function does not validate argument missing.
 	> [ TO DO ] 13 - If you don't declare a variable on the first line, it won't compile.
 	> [ TO DO ] 14 - In call function, when you does not put the semi-colon on final expression, his not return.

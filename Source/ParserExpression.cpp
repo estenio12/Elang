@@ -205,7 +205,6 @@ bool Parser::ExpressionCheckIdentifier(Token* token)
         }
         else if(this->IDFunTable->ExistIdentifier(token->value))
         {
-            Output::PrintDebug(token->value);
             auto getEntity = this->IDFunTable->FindObjectIdentifier(token->value);
 
             if(getEntity == nullptr)

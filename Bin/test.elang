@@ -1,8 +1,9 @@
 var:text t = "Hello \"to\" world!";
 
-fun:number PI()
-	return 3.14159265;
-end
+fun:void cout(var:text txt)
+	print(txt);
+end	
 
-print(numberToText(PI()));
+var:number f = 25;
 
+cout();
