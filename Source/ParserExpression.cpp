@@ -2,6 +2,33 @@
 
 AstNode* Parser::Expression(Token* token, std::string expectedType)
 {
+    if(this->IsEmptyParameter)
+    {
+        if(this->history->type == NAME::IDENTIFIER)
+        {
+            if(token->value[0] == DELIMITERS::OPEN_PARAM)
+            {
+                this->InsertExpressionNode(token, AST_DIRECTION::RIGHT);
+                this->history = token;
+                return nullptr;
+            }
+        }
+
+        if(this->history->value[0] == DELIMITERS::OPEN_PARAM)
+        {
+            if(token->value[0] == DELIMITERS::CLOSE_PARAM)
+            {
+                this->InsertExpressionNode(token, AST_DIRECTION::RIGHT);
+                this->history = token;
+                this->IsEmptyParameter = false;
+                return nullptr;
+            }
+        }
+
+        this->ThrowError(token);
+        return nullptr;
+    }
+
     if(!this->ExpressionDoOnce) 
     {
         this->ExpressionExpectedType = expectedType;
@@ -178,6 +205,7 @@ bool Parser::ExpressionCheckIdentifier(Token* token)
         }
         else if(this->IDFunTable->ExistIdentifier(token->value))
         {
+            Output::PrintDebug(token->value);
             auto getEntity = this->IDFunTable->FindObjectIdentifier(token->value);
 
             if(getEntity == nullptr)
@@ -191,12 +219,19 @@ bool Parser::ExpressionCheckIdentifier(Token* token)
 
             token->isFunID = true;
 
-            this->IncrementExpressionCommaCounter(getEntity->paramList.size());
+            if(getEntity->paramList.size() > 0)
+            {
+                this->IncrementExpressionCommaCounter(getEntity->paramList.size());
 
-            auto stackItem = this->BuildCallStackModel(token->value, getEntity->paramList[0].first, 0, 0);
-            this->expressionFunctionStack->Insert(stackItem);
-            this->expressionFunctionStack->ExpectedTypeHistory = this->ExpressionExpectedType;
-            this->ExpressionExpectedType = getEntity->paramList[0].first;
+                auto stackItem = this->BuildCallStackModel(token->value, getEntity->paramList[0].first, 0, 0);
+                this->expressionFunctionStack->Insert(stackItem);
+                this->expressionFunctionStack->ExpectedTypeHistory = this->ExpressionExpectedType;
+                this->ExpressionExpectedType = getEntity->paramList[0].first;
+            }
+            else
+            {
+                this->IsEmptyParameter = true;
+            }
         }
         else
         {

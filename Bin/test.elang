@@ -1,3 +1,8 @@
-var:text t = "Hello \"to\" world!;
+var:text t = "Hello \"to\" world!";
 
-print(t);
+fun:number PI()
+	return 3.14159265;
+end
+
+print(numberToText(PI()));
+

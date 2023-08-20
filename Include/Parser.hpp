@@ -105,6 +105,7 @@ class Parser
         int ExpressionParemCounter = 0;
         int ExpressionCommaCounter = 0;
         bool ExpressionDoOnce = false;
+        bool IsEmptyParameter = false;
         std::string ExpressionExpectedType = EXPECTED_TYPE::TUNDEFINED;
         AstNode* ExpressionBuildingNode;
         AstNode* Expression(Token*, std::string expectedType);
