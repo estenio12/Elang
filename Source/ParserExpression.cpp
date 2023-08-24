@@ -55,7 +55,7 @@ AstNode* Parser::Expression(Token* token, std::string expectedType)
         if(history->type == NAME::IDENTIFIER && history->isFunID == true)
         {
             if(this->ExpressionCheckOpenParam(token)) return nullptr;
-            this->ThrowError("expected '(' after the function identifier.", token->startPos + 1);
+               this->ThrowError("expected '(' after the function identifier.", token->startPos + 1);
         }
 
         if(token->value == ARITHMETIC::ADD ||
@@ -129,6 +129,15 @@ AstNode* Parser::Expression(Token* token, std::string expectedType)
         if(this->ExpressionCheckIdentifier(token)) return nullptr;
         if(this->ExpressionCheckType(token)) return nullptr;
         if(this->ExpressionCheckOpenParam(token)) return nullptr;
+
+        if(history->value[0] == DELIMITERS::OPEN_PARAM && this->ExpressionSingleParameter)
+        {
+            if(this->ExpressionCheckIdentifier(token)) return nullptr;
+            if(this->ExpressionCheckType(token)) return nullptr;
+            if(this->ExpressionCheckOpenParam(token)) return nullptr;
+
+            this->ThrowError("The function ("+ this->ExpressionFunctionNameSingleParameter +") expect an argument!", token->startPos, token->line);
+        }
         
         if(!this->expressionFunctionStack->IsEmpty())
         {
@@ -199,8 +208,14 @@ bool Parser::ExpressionCheckIdentifier(Token* token)
                 exit(EXIT_FAILURE);
             }
 
-            
-            if(getEntity->typeValue != this->ExpressionExpectedType)
+            Output::PrintDebug("CheckID: " + getEntity->typeValue);
+
+            if(this->ExpressionSingleParameter)
+            {
+                if(getEntity->typeValue != this->ExpressionExpectedTypeSingleParameter)
+                   this->ThrowError("Cannot implicitly convert type '" + getEntity->typeValue + "' to '" + this->ExpressionExpectedTypeSingleParameter + "' | ( " + token->value + " )", token->startPos + 1);
+            }
+            else if(getEntity->typeValue != this->ExpressionExpectedType)
                this->ThrowError("Cannot implicitly convert type '" + getEntity->typeValue + "' to '" + this->ExpressionExpectedType + "' | ( " + token->value + " )", token->startPos + 1);
         }
         else if(this->IDFunTable->ExistIdentifier(token->value))
@@ -218,7 +233,7 @@ bool Parser::ExpressionCheckIdentifier(Token* token)
 
             token->isFunID = true;
 
-            if(getEntity->paramList.size() > 0)
+            if(getEntity->paramList.size() > 1)
             {
                 this->IncrementExpressionCommaCounter(getEntity->paramList.size());
 
@@ -226,6 +241,12 @@ bool Parser::ExpressionCheckIdentifier(Token* token)
                 this->expressionFunctionStack->Insert(stackItem);
                 this->expressionFunctionStack->ExpectedTypeHistory = this->ExpressionExpectedType;
                 this->ExpressionExpectedType = getEntity->paramList[0].first;
+            }
+            else if(getEntity->paramList.size() == 1)
+            {
+                this->ExpressionSingleParameter = true;
+                this->ExpressionExpectedTypeSingleParameter = getEntity->paramList[0].first;
+                this->ExpressionFunctionNameSingleParameter = getEntity->name;
             }
             else
             {

@@ -54,7 +54,7 @@ class Parser
         void Parse();
 
     private:
-        void ThrowError(std::string, int);
+        void ThrowError(std::string, int position, int line = -1);
         void ThrowError(Token* );
         void ResetState();
 
@@ -118,6 +118,9 @@ class Parser
         void IncrementExpressionCommaCounter(int );
         void DecrementExpressionCommaCounter();
         CallStackModel* BuildCallStackModel(std::string ID, std::string type, int param_id, int parem_counter);
+        bool ExpressionSingleParameter = false;
+        std::string ExpressionExpectedTypeSingleParameter = EXPECTED_TYPE::TUNDEFINED;
+        std::string ExpressionFunctionNameSingleParameter = "unamed";
 
     private:
         std::string currentParameterType = EXPECTED_TYPE::TVOID;
@@ -144,7 +147,7 @@ class Parser
         std::string CurrentArgumentListFunctionName;
         std::string CallFunctionNameOperation = BRANCH_NAME::CALL_FUNCTION;
         AstNode* CallFunctionBuildingNode;
-        AstNode* CallFunction(Token* );
+        AstNode* CallFunction(Token*);
         void InsertCallFunctionBuildNode(Token*, int );
         void ResetCallFunctionBuildNode();
         void IncrementArgumentIndex();

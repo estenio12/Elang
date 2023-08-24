@@ -49,6 +49,7 @@
 	  <expression>
 	| <identifier>
 	| <digit>
+	| <call-function>
 	| <identifier> <arithmetic> <identifier>
     | <identifier> <arithmetic> <digit>
     | <expression> <arithmetic> <digit>

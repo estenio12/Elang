@@ -6,4 +6,4 @@ end
 
 var:number f = 25;
 
-cout();
+cout(t);

@@ -183,15 +183,16 @@ AstNode* Parser::FindLastNode(AstNode* node, uint8_t direction)
     }
 }
 
-void Parser::ThrowError(std::string msg, int position = 0)
+void Parser::ThrowError(std::string msg, int position = 0, int line)
 {
-    Output::PrintCustomizeError("Syntax Error: ", "Line: " + std::to_string(this->lexer->GetLineCounter()) + ":" + std::to_string(position) +" | " + msg);
+    int currentLine = line == -1 ? this->lexer->GetLineCounter() : line;
+    Output::PrintCustomizeError("Syntax Error: ", "Line: " + std::to_string(currentLine) + ":" + std::to_string(position) +" | " + msg);
     exit(EXIT_FAILURE);
 }
 
 void Parser::ThrowError(Token* token)
 {
-    Output::PrintCustomizeError("Syntax Error: ", "Line: " + std::to_string(this->lexer->GetLineCounter()) + ":" + std::to_string(token->startPos) +" | unexpected token '" +token->value + "'");
+    Output::PrintCustomizeError("Syntax Error: ", "Line: " + std::to_string(token->line) + ":" + std::to_string(token->startPos) +" | unexpected token '" +token->value + "'");
     exit(EXIT_FAILURE);
 }
 
