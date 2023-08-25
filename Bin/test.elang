@@ -1,9 +1,24 @@
-var:text t = "Hello \"to\" world!";
 
-fun:void cout(var:text txt)
-	print(txt);
-end	
 
-var:number f = 25;
 
-cout(t);
+
+
+
+
+
+
+
+
+
+
+
+
+fun:number sum(var:number n1, var:number n2)
+	return n1 + n2;
+end
+
+
+
+print("Hello world!");
+
+#print("Hello world!");

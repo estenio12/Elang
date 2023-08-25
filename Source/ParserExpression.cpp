@@ -182,8 +182,12 @@ bool Parser::ExpressionCheckType(Token* token)
        token->type == NAME::CHAR    ||
        token->type == NAME::TEXT    )
     {
-        
-        if(token->type != this->ExpressionExpectedType)
+        if(this->ExpressionSingleParameter)
+        {
+            if(token->type != this->ExpressionExpectedTypeSingleParameter)
+                this->ThrowError("Cannot implicitly convert type '" + token->type + "' to '" + this->ExpressionExpectedTypeSingleParameter + "' | ( " + this->ExpressionFunctionNameSingleParameter + " )", token->startPos + 1);
+        }
+        else if(token->type != this->ExpressionExpectedType)
            this->ThrowError("Cannot implicitly convert type '" + token->type + "' to '" + this->ExpressionExpectedType + "'", token->startPos + 1);
 
         this->InsertExpressionNode(token, AST_DIRECTION::RIGHT);
@@ -207,8 +211,6 @@ bool Parser::ExpressionCheckIdentifier(Token* token)
                 Output::PrintCustomizeError("Compiler internal error: ", "Object not found in IDTable");
                 exit(EXIT_FAILURE);
             }
-
-            Output::PrintDebug("CheckID: " + getEntity->typeValue);
 
             if(this->ExpressionSingleParameter)
             {

@@ -230,6 +230,7 @@ void Parser::AddParemCounter()
 void Parser::RemoveParemCounter()
 {
     this->ExpressionParemCounter--;
+    this->ExpressionExpectedTypeSingleParameter = false;
 
     if(!this->expressionFunctionStack->IsEmpty())
     {
