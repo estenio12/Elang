@@ -50,9 +50,10 @@ class CodeGenerator
         void CloseFileHandler();
         void WriteInitContent();
         void WriteFullApp();
+        void DeleteBranch(AstNode* );
 
     private:
-        void ThrowErro(std::string );
+        void ThrowError(std::string );
         std::string ConvertToString(std::string );
         std::string ConvertToChar(std::string );
         std::string GetTargetType(std::string );

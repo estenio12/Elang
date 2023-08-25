@@ -53,13 +53,16 @@ void CodeGenerator::Generate(AST ast)
             auto chunk = this->GenerateCloseStatement(branch.second);
             this->RunnablePipeline.push_back(chunk);
         }
+
+        this->DeleteBranch(branch.second);
     }
 
+    ast.clear();
     this->WriteFullApp();
     this->CloseFileHandler();
 }
 
-void CodeGenerator::ThrowErro(std::string message)
+void CodeGenerator::ThrowError(std::string message)
 {
     Output::PrintCustomizeError("Code Generator error: ", message);
     exit(EXIT_FAILURE);
@@ -131,7 +134,7 @@ std::string CodeGenerator::GetTargetType(std::string value)
     if(value == TYPE::NAME[TYPE::TTEXT]) return TARGET_CODE::T_STRING;
     if(value == TYPE::NAME[TYPE::TVOID]) return TARGET_CODE::T_VOID;
 
-    this->ThrowErro("GetTargetType not found a valid type!");
+    this->ThrowError("GetTargetType not found a valid type!");
     return EMPTY;
 }
 
@@ -208,5 +211,18 @@ AstNode* CodeGenerator::FindLastNode(AstNode* node, uint8_t direction)
         return node;
     }
 }
+
+void CodeGenerator::DeleteBranch(AstNode* node)
+{
+    if(node != nullptr)
+    {
+        auto nextNode = node->right;
+        delete node;
+
+        this->DeleteBranch(nextNode);
+    }
+}
+
+
 
 

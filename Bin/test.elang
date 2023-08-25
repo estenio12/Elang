@@ -2,7 +2,7 @@
 print("Hello World!");
 
 fun:void process(var:text txt)
-	print(txt)
+	print(txt);
 end
 
 process("Testing");

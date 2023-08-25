@@ -81,6 +81,26 @@ namespace Output
         #endif
     }
 
+    static void PrintCustomSuccess(std::string flag, std::string Message)
+    {
+        #if __linux
+            std::cout << SUCCESS_FLAG_MESSAGE << flag;
+            std::cout << STANDARD_FLAG_MESSAGE << Message << std::endl; 
+        #else
+
+            HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+            
+            // # Write Message flag in red color
+            SetConsoleTextAttribute(hConsole, 2);
+            std::cout << flag;
+
+            // # Write Message in white color
+            SetConsoleTextAttribute(hConsole, 7);
+            std::cout << Message << std::endl;
+
+        #endif
+    }
+
     static void PrintWarning(std::string Message)
     {
         #if __linux
