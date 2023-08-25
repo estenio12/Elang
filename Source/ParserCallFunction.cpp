@@ -67,21 +67,6 @@ void Parser::IncrementArgumentIndex()
     this->ArgumentIndex++;
 }
 
-std::string Parser::GetCurrentArgumentType(Token* token)
-{
-    this->IsFistTimeCallFun = false;
-
-    if(this->IsFistTimeCallFun)
-    {
-        auto entity = this->IDFunTable->FindObjectIdentifier(token->value);
-
-        if(entity != nullptr)
-           return entity->paramList[0].first;
-    }
-
-    return this->CurrentArgumentExpectedType;
-}
-
 
 
 

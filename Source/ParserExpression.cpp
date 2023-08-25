@@ -145,6 +145,9 @@ AstNode* Parser::Expression(Token* token, std::string expectedType)
         } 
     }
 
+    if(this->IsKeyword(token))
+       this->ThrowError("Expect ';' before " + token->value , history->endPos + 2, history->line);
+
     this->ThrowError(token);
     return nullptr;
 }

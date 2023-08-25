@@ -299,7 +299,10 @@ std::string Parser::GetExpectedTypeByID(Token* token)
     return EMPTY;
 }
 
-
+bool Parser::IsKeyword(Token* token)
+{
+    return token->type == NAME::KEYWORD;
+}
 
 
 

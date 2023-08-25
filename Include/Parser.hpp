@@ -57,6 +57,7 @@ class Parser
         void ThrowError(std::string, int position, int line = -1);
         void ThrowError(Token* );
         void ResetState();
+        bool IsKeyword(Token* );
 
     private:
         bool IdentifyOperationType(Token* );
@@ -152,8 +153,6 @@ class Parser
         void ResetCallFunctionBuildNode();
         void IncrementArgumentIndex();
         std::string GetNextArgumentType();
-        bool IsFistTimeCallFun = true;
-        std::string GetCurrentArgumentType(Token*);
 
     private:
         int ConditionState = BRANCH_IDENTIFIER::UNDEFINED;

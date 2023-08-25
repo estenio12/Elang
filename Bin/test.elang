@@ -1,24 +1,8 @@
 
+print("Hello World!");
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-fun:number sum(var:number n1, var:number n2)
-	return n1 + n2;
+fun:void process(var:text txt)
+	print(txt)
 end
 
-
-
-print("Hello world!");
-
-#print("Hello world!");
+process("Testing");
