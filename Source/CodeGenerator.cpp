@@ -80,7 +80,7 @@ void CodeGenerator::CloseFileHandler()
 
 std::string CodeGenerator::ConvertToString(std::string value)
 {
-    return "\"" + value + "\"";
+    return "\"" + this->TransformSpecialCharacter(value) + "\"";
 }
 
 std::string CodeGenerator::ConvertToChar(std::string value)
@@ -223,6 +223,18 @@ void CodeGenerator::DeleteBranch(AstNode* node)
     }
 }
 
+std::string CodeGenerator::TransformSpecialCharacter(std::string content)
+{
+    for(int i = 0; i < content.length(); i++)
+    {
+        if(content[i] == '$' && content[i + 1] == '!')
+        {
+            content[i] = '\\';
+            content[i + 1] = 'n';
+        }
+    }
 
+    return content;
+}
 
 

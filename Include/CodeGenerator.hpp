@@ -51,6 +51,7 @@ class CodeGenerator
         void WriteInitContent();
         void WriteFullApp();
         void DeleteBranch(AstNode* );
+        std::string TransformSpecialCharacter(std::string );
 
     private:
         void ThrowError(std::string );

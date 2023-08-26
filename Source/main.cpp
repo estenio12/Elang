@@ -2,6 +2,8 @@
 #include <chrono>
 #include "../Include/Compiler.hpp"
 
+std::string GetOSName();
+
 int main(int argc, char** argv)
 {
     // # Start Time capture
@@ -24,7 +26,34 @@ int main(int argc, char** argv)
     double elapsed_seconds = duration.count() / 1000000.0;
 
     Output::PrintSuccess("Compile finished!");
+
+    #if __linux
+        Output::PrintCustomSuccess("Output File Name: ", "app");
+    #else 
+        Output::PrintCustomSuccess("Output File Name: ", "app.exe");
+    #endif
+
+    Output::PrintCustomSuccess("Target Platform: ", GetOSName());
     Output::PrintCustomSuccess("Time Compilation: ", std::to_string(elapsed_seconds) + " seconds");
 
     return EXIT_SUCCESS;
+}
+
+std::string GetOSName()
+{
+    #ifdef _WIN32
+    return "Windows 32-bit";
+    #elif _WIN64
+    return "Windows 64-bit";
+    #elif __APPLE__ || __MACH__
+    return "Mac OSX";
+    #elif __linux__
+    return "Linux";
+    #elif __FreeBSD__
+    return "FreeBSD";
+    #elif __unix || __unix__
+    return "Unix";
+    #else
+    return "Other";
+    #endif
 }

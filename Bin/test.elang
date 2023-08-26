@@ -1,5 +1,5 @@
 
-print("Hello World!");
+print("Hello $! World!");
 
 fun:void process(var:text txt)
 	print(txt);
