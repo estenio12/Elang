@@ -2,13 +2,51 @@
 
 AstNode* Parser::ConditionDeclaration(Token* token)
 {   
+    if(this->ConditionState == BRANCH_IDENTIFIER::FOR_STATEMENT)
+    {
+        if(history->value == KEYWORDS::TFOR)
+        {
+            if(token->value[0] == DELIMITERS::OPEN_PARAM)
+            {
+                this->InsertConditionBuildNode(token, AST_DIRECTION::RIGHT);
+                this->history = token;
+                return nullptr;
+            }
+
+            this->ThrowError(token);
+        }
+
+        if(history->value[0] == DELIMITERS::OPEN_PARAM)
+        {
+            if(token->value == KEYWORDS::TIN ||
+               token->value == KEYWORDS::TAT )
+            {
+                this->InsertConditionBuildNode(token, AST_DIRECTION::RIGHT);
+                this->history = nullptr;
+                this->ConditionState = BRANCH_IDENTIFIER::EXPRESSION;
+                this->ConditionOpenParam();
+                return nullptr;
+            }
+
+            this->ThrowError(token);
+        }
+
+        this->ThrowError(token);
+        return nullptr;
+    }
+
     if(this->ConditionState == BRANCH_IDENTIFIER::EXPRESSION)
     {
-        if(this->ConditionTypeExpression.empty() && token->value[0] != DELIMITERS::OPEN_PARAM)
+        if(this->ConditionTypeExpression.empty() && 
+           token->value[0] != DELIMITERS::OPEN_PARAM &&
+           !IsForStatement)
         {
            this->ConditionTypeExpression = this->GetExpectedTypeByType(token);
            this->ExpressionDoOnce = false;
         }
+
+        if(IsForStatement)
+           this->ConditionTypeExpression = NAME::NUMBER;
 
         if(token->value[0] == DELIMITERS::OPEN_PARAM)
            this->ConditionOpenParam();
@@ -41,6 +79,15 @@ AstNode* Parser::ConditionDeclaration(Token* token)
 
     if(history == nullptr)
     {
+        if(token->value == KEYWORDS::TFOR)
+        {
+            this->InsertConditionBuildNode(token, AST_DIRECTION::RIGHT);
+            this->history = token;
+            this->ConditionState = BRANCH_IDENTIFIER::FOR_STATEMENT;
+            this->IsForStatement = true;
+            return nullptr;   
+        }
+
         if(token->value == KEYWORDS::TIF    ||
            token->value == KEYWORDS::TWHILE )
         {

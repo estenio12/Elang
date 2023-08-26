@@ -57,11 +57,11 @@ void Parser::Parse()
     }
 
     // # Debug
-    // for(auto debug : this->ast)
-    // {
-    //     std::cout << "Debug Branch Name: " << debug.first << "\n\n";
-    //     this->tool->PrintParseTree(debug.second);
-    // }
+    for(auto debug : this->ast)
+    {
+        std::cout << "Debug Branch Name: " << debug.first << "\n\n";
+        this->tool->PrintParseTree(debug.second);
+    }
 
     // # Generate Target Code
     this->codegen->Generate(this->ast);
@@ -113,7 +113,8 @@ bool Parser::IdentifyOperationType(Token* token)
     
     // # CONDITION DECLARATION
     if(token->value == KEYWORDS::TIF    ||
-       token->value == KEYWORDS::TWHILE )
+       token->value == KEYWORDS::TWHILE ||
+       token->value == KEYWORDS::TFOR   )
     {
         this->AssignCurrentBranch(BRANCH_IDENTIFIER::CONDITION_DECLARATION);
         this->ConditionDeclaration(token);

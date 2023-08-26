@@ -191,7 +191,7 @@ bool Parser::ExpressionCheckType(Token* token)
                 this->ThrowError("Cannot implicitly convert type '" + token->type + "' to '" + this->ExpressionExpectedTypeSingleParameter + "' | ( " + this->ExpressionFunctionNameSingleParameter + " )", token->startPos + 1);
         }
         else if(token->type != this->ExpressionExpectedType)
-           this->ThrowError("Cannot implicitly convert type '" + token->type + "' to '" + this->ExpressionExpectedType + "'", token->startPos + 1);
+           this->ThrowError("Cannot implicitly convert type '" + token->type + "' to '" + this->ExpressionExpectedType + "'", token->startPos + 1, token->line);
 
         this->InsertExpressionNode(token, AST_DIRECTION::RIGHT);
         this->history = token;
@@ -221,7 +221,7 @@ bool Parser::ExpressionCheckIdentifier(Token* token)
                    this->ThrowError("Cannot implicitly convert type '" + getEntity->typeValue + "' to '" + this->ExpressionExpectedTypeSingleParameter + "' | ( " + token->value + " )", token->startPos + 1);
             }
             else if(getEntity->typeValue != this->ExpressionExpectedType)
-               this->ThrowError("Cannot implicitly convert type '" + getEntity->typeValue + "' to '" + this->ExpressionExpectedType + "' | ( " + token->value + " )", token->startPos + 1);
+               this->ThrowError("Cannot implicitly convert type '" + getEntity->typeValue + "' to '" + this->ExpressionExpectedType + "' | ( " + token->value + " )", token->startPos + 1, token->line);
         }
         else if(this->IDFunTable->ExistIdentifier(token->value))
         {

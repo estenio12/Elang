@@ -156,7 +156,9 @@ class Parser
 
     private:
         int ConditionState = BRANCH_IDENTIFIER::UNDEFINED;
+        int ConditionForState = BRANCH_IDENTIFIER::UNDEFINED;
         int ConditionParamCounter = 0;
+        bool IsForStatement = false;
         int ConditionStmtCounter = 0;
         std::string ConditionTypeExpression = "";
         AstNode* ConditionBuildNode;

@@ -141,16 +141,18 @@ Token* Lexer::BindType(std::string token)
 
 Token* Lexer::BindKeyword(std::string token)
 {
-    if(token == KEYWORDS::TVAR       ||
-       token == KEYWORDS::TCONST     ||
-       token == KEYWORDS::TFUN       ||
-       token == KEYWORDS::TRETURN    ||
-       token == KEYWORDS::TBREAK     ||
-       token == KEYWORDS::TIF        ||
-       token == KEYWORDS::TELSE      ||
-       token == KEYWORDS::TWHILE     ||
-       token == KEYWORDS::TEND     
-       )
+    if(token == KEYWORDS::TVAR    ||
+       token == KEYWORDS::TCONST  ||
+       token == KEYWORDS::TFUN    ||
+       token == KEYWORDS::TRETURN ||
+       token == KEYWORDS::TBREAK  ||
+       token == KEYWORDS::TIF     ||
+       token == KEYWORDS::TELSE   ||
+       token == KEYWORDS::TWHILE  ||
+       token == KEYWORDS::TEND    || 
+       token == KEYWORDS::TFOR    || 
+       token == KEYWORDS::TIN     || 
+       token == KEYWORDS::TAT     )
     {
         return new Token(token, NAME::KEYWORD);
     }

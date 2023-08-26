@@ -1,8 +1,6 @@
 
-print("Hello $! World!");
+#array:number tes = [10];
 
-fun:void process(var:text txt)
-	print(txt);
-end
+for(in 10)
 
-process("Testing");
+#end

@@ -121,7 +121,9 @@ std::vector<std::pair<std::string, AstNode*>> Parser::Statement(Token* token)
             return ReturnEmptyStatementList;      
         }
 
-        if(token->value == KEYWORDS::TIF)
+        if(token->value == KEYWORDS::TIF    ||
+           token->value == KEYWORDS::TWHILE ||
+           token->value == KEYWORDS::TFOR   )
         {
             this->StatementState = BRANCH_IDENTIFIER::CONDITION_DECLARATION;
             this->history = nullptr;
