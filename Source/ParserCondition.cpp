@@ -82,9 +82,10 @@ AstNode* Parser::ConditionDeclaration(Token* token)
         if(token->value == KEYWORDS::TFOR)
         {
             this->InsertConditionBuildNode(token, AST_DIRECTION::RIGHT);
-            this->history = token;
             this->ConditionState = BRANCH_IDENTIFIER::FOR_STATEMENT;
+            this->KeywordExpectedEnd = std::make_pair(token->value, token->line);
             this->IsForStatement = true;
+            this->history = token;
             return nullptr;   
         }
 
@@ -92,6 +93,7 @@ AstNode* Parser::ConditionDeclaration(Token* token)
            token->value == KEYWORDS::TWHILE )
         {
             this->InsertConditionBuildNode(token, AST_DIRECTION::RIGHT);
+            this->KeywordExpectedEnd = std::make_pair(token->value, token->line);
             this->history = token;
             return nullptr;
         }
@@ -147,7 +149,8 @@ void Parser::ResetConditionBuildNode()
 {
     this->ConditionBuildNode = nullptr;
     this->ConditionTypeExpression.clear();
-    this->ConditionState = BRANCH_IDENTIFIER::UNDEFINED;
+    this->ConditionState    = BRANCH_IDENTIFIER::UNDEFINED;
+    this->ConditionForState = BRANCH_IDENTIFIER::UNDEFINED;
 }
 
 void Parser::ConditionOpenParam()

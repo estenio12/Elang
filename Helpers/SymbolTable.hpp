@@ -45,6 +45,7 @@ namespace KEYWORDS
     static const std::string TIN     = "in";
     static const std::string TAT     = "at";
     static const std::string TFOR    = "for";
+    static const std::string TINDEX  = "index";
 }
 
 namespace DELIMITERS

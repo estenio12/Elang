@@ -211,17 +211,22 @@ bool Parser::ExpressionCheckIdentifier(Token* token)
 
             if(getEntity == nullptr)
             {
-                Output::PrintCustomizeError("Compiler internal error: ", "Object not found in IDTable");
-                exit(EXIT_FAILURE);
+                if(token->value != KEYWORDS::TINDEX)
+                {
+                    Output::PrintCustomizeError("Compiler internal error: ", "Object not found in IDTable");
+                    exit(EXIT_FAILURE);
+                }
             }
-
-            if(this->ExpressionSingleParameter)
+            else
             {
-                if(getEntity->typeValue != this->ExpressionExpectedTypeSingleParameter)
-                   this->ThrowError("Cannot implicitly convert type '" + getEntity->typeValue + "' to '" + this->ExpressionExpectedTypeSingleParameter + "' | ( " + token->value + " )", token->startPos + 1);
+                if(this->ExpressionSingleParameter)
+                {
+                    if(getEntity->typeValue != this->ExpressionExpectedTypeSingleParameter)
+                    this->ThrowError("Cannot implicitly convert type '" + getEntity->typeValue + "' to '" + this->ExpressionExpectedTypeSingleParameter + "' | ( " + token->value + " )", token->startPos + 1);
+                }
+                else if(getEntity->typeValue != this->ExpressionExpectedType)
+                    this->ThrowError("Cannot implicitly convert type '" + getEntity->typeValue + "' to '" + this->ExpressionExpectedType + "' | ( " + token->value + " )", token->startPos + 1, token->line);
             }
-            else if(getEntity->typeValue != this->ExpressionExpectedType)
-               this->ThrowError("Cannot implicitly convert type '" + getEntity->typeValue + "' to '" + this->ExpressionExpectedType + "' | ( " + token->value + " )", token->startPos + 1, token->line);
         }
         else if(this->IDFunTable->ExistIdentifier(token->value))
         {

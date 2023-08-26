@@ -24,7 +24,11 @@ void Parser::Parse()
     {
         auto token = this->lexer->GetNextToken();
 
-        if(token == nullptr) break;
+        if(token == nullptr) 
+        {
+            this->CheckOperation();
+            break;
+        }
 
         // Output::PrintDebug(token->type + " | " + token->value);
 
@@ -104,7 +108,7 @@ bool Parser::IdentifyOperationType(Token* token)
             break;
         
             default:
-                this->ThrowError("Identifier not declared in scope '" + token->value + "'", token->startPos + 1);
+                this->ThrowError("Identifier not declared in scope '" + token->value + "'", token->startPos + 1, -1);
             break;
         }
 
@@ -305,7 +309,14 @@ bool Parser::IsKeyword(Token* token)
     return token->type == NAME::KEYWORD;
 }
 
-
+void Parser::CheckOperation()
+{
+    if(this->currentDeep > 0)
+    {
+       Output::PrintCustomizeError("Syntax error: ", "Line: " + std::to_string(this->KeywordExpectedEnd.second) + ": '"+this->KeywordExpectedEnd.first + "' expect keyword 'end' in final statement");
+       exit(EXIT_FAILURE);
+    }
+}
 
 
 

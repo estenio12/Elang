@@ -112,6 +112,7 @@ AstNode* Parser::FunctionDeclaration(Token* token)
 
             this->IDFunTable->InsertFunctionID(tempID);
             this->InsertFunctionDeclarationNode(token, AST_DIRECTION::RIGHT);
+            this->KeywordExpectedEnd = std::make_pair(token->value, token->line);
             this->currentScope = token->value;
             this->history      = token;
             return nullptr;

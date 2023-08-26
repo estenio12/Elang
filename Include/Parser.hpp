@@ -45,6 +45,7 @@ class Parser
         int currentDeep = 0;
         bool isConstant = false;
         const std::string EMPTY = "-1";
+        std::pair<std::string, int> KeywordExpectedEnd;
 
     public:
         Parser(Lexer* lexer);
@@ -58,6 +59,7 @@ class Parser
         void ThrowError(Token* );
         void ResetState();
         bool IsKeyword(Token* );
+        void CheckOperation();
 
     private:
         bool IdentifyOperationType(Token* );
@@ -170,6 +172,7 @@ class Parser
         void AddConditionStmtCounter();
         void RemoveConditionStmtCounter();
         AstNode* CheckCondition(Token* );
+        
 
     private:
         AstNode* CloseStatment(Token* );

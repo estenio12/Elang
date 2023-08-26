@@ -1,6 +1,6 @@
 
 #array:number tes = [10];
 
-for(in 10)
+for(at 10)
 
-#end
+end
