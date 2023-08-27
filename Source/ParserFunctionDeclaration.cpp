@@ -108,7 +108,12 @@ AstNode* Parser::FunctionDeclaration(Token* token)
                this->IDFunTable->ExistIdentifier(token->value))
                this->ThrowError("Duplicate identifier in function declaration '" +token->value+ "'" , token->startPos);
             
+            if(token->value == KEYWORDS::TINDEX)   
+               this->ThrowError("'index' is a reserved keyword.", token->startPos);
+
             auto tempID = this->IDFunTable->CreateRow(token->value, this->currentFunctionType);
+
+            this->IDTableScope->InsertRow(token->value, this->currentFunctionType, token, ++this->currentDeep);
 
             this->IDFunTable->InsertFunctionID(tempID);
             this->InsertFunctionDeclarationNode(token, AST_DIRECTION::RIGHT);

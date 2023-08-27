@@ -102,6 +102,9 @@ std::vector<std::pair<std::string, AstNode*>> Parser::Statement(Token* token)
             this->InsertStatementNode(token, AST_DIRECTION::RIGHT);
             this->RemoveDeepCounter();
             this->history = nullptr;
+            
+            int GetID = this->IDTableScope->CloseScope();
+            this->IDTable->RemoveID(GetID);
 
             if(this->ConditionStmtCounter > 0) 
             {

@@ -15,7 +15,7 @@
 #include "../Model/IDModel.hpp"
 #include "../Helpers/Definition.hpp"
 
-class IDDeclarationStorage
+class IDStorage
 {
     private:
         std::vector<IDModel*> IDTable;
@@ -24,13 +24,15 @@ class IDDeclarationStorage
         int globalIdCounter = 0;
 
     public:
-        IDDeclarationStorage();
-        ~IDDeclarationStorage();
+        IDStorage();
+        ~IDStorage();
 
     public:
         void InsertID(IDModel* row);
         bool ExistIdentifier(std::string name, std::string scopeName, int deep);
         IDModel* FindObjectIdentifier(std::string name);
         IDModel* CreateRow(std::string name, std::string value, std::string type, std::string typeValue, 
-                           std::string scopeName, int deep, bool isConstant);
+                           std::string scopeName, int IDScopeTable, int deep, bool isConstant);
+        void RemoveID(int ID);
+        void PrintDebug();
 };

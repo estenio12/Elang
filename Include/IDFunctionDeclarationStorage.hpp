@@ -15,7 +15,7 @@
 #include "../Model/FunctionIDModel.hpp"
 #include "../Helpers/Definition.hpp"
 
-class IDFunctionDeclarationStorage
+class IDFunctionStorage
 {
     private:
         std::vector<FunctionIDModel*> IDTable;
@@ -24,8 +24,8 @@ class IDFunctionDeclarationStorage
         int globalIdCounter = 0;
 
     public:
-        IDFunctionDeclarationStorage();
-        ~IDFunctionDeclarationStorage();
+        IDFunctionStorage();
+        ~IDFunctionStorage();
 
     public:
         void InsertFunctionID(FunctionIDModel* row);

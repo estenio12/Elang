@@ -54,10 +54,12 @@ AstNode* Parser::BuildParameterList(Token* token)
             this->history = token;
             this->InsertParameterListNode(token, AST_DIRECTION::RIGHT);
 
+            int IDScope = this->IDTableScope->GetCurrentID();            
+
             // # Insert into IDTable
             auto tempID = this->IDTable->CreateRow(token->value, token->value, token->type, 
                                                    this->currentParameterType, this->currentScope, 
-                                                   this->currentDeep, false);
+                                                   IDScope, this->currentDeep, false);
 
             this->IDTable->InsertID(tempID);
 

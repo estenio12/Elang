@@ -8,10 +8,11 @@ Parser::Parser(Lexer* lexer):lexer(lexer)
     this->ExpressionBuildingNode = nullptr;
     
     this->tool       = new Tools();
-    this->IDTable    = new IDDeclarationStorage();
-    this->IDFunTable = new IDFunctionDeclarationStorage();
+    this->IDTable    = new IDStorage();
+    this->IDFunTable = new IDFunctionStorage();
     this->codegen    = new CodeGenerator(this->IDTable, this->IDFunTable);
     this->expressionFunctionStack = new CallStack();
+    this->IDTableScope = new ScopeTable();
 
     this->ElangLoadLibrary();
 }
@@ -311,9 +312,11 @@ bool Parser::IsKeyword(Token* token)
 
 void Parser::CheckOperation()
 {
-    if(this->currentDeep > 0)
+    auto entity = this->IDTableScope->GetCurrentScope();
+
+    if(entity != nullptr)
     {
-       Output::PrintCustomizeError("Syntax error: ", "Line: " + std::to_string(this->KeywordExpectedEnd.second) + ": '"+this->KeywordExpectedEnd.first + "' expect keyword 'end' in final statement");
+       Output::PrintCustomizeError("Syntax error: ", "Line: " + std::to_string(entity->token->line) + ": '"+ entity->name + "' expect keyword 'end' in final statement");
        exit(EXIT_FAILURE);
     }
 }

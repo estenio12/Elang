@@ -1,18 +1,18 @@
 #include "../Include/IDFunctionDeclarationStorage.hpp"
 
-IDFunctionDeclarationStorage::IDFunctionDeclarationStorage(){}
+IDFunctionStorage::IDFunctionStorage(){}
 
-IDFunctionDeclarationStorage::~IDFunctionDeclarationStorage()
+IDFunctionStorage::~IDFunctionStorage()
 {
     this->IDTable.clear();
 }
 
-void IDFunctionDeclarationStorage::InsertFunctionID(FunctionIDModel* row)
+void IDFunctionStorage::InsertFunctionID(FunctionIDModel* row)
 {
     if(row != nullptr) this->IDTable.push_back(row);
 }
 
-bool IDFunctionDeclarationStorage::ExistIdentifier(std::string name)
+bool IDFunctionStorage::ExistIdentifier(std::string name)
 {
     for(auto item : this->IDTable)
     {
@@ -25,7 +25,7 @@ bool IDFunctionDeclarationStorage::ExistIdentifier(std::string name)
     return false;
 }
 
-FunctionIDModel* IDFunctionDeclarationStorage::FindObjectIdentifier(std::string name, std::string type)
+FunctionIDModel* IDFunctionStorage::FindObjectIdentifier(std::string name, std::string type)
 {
     for(auto item : this->IDTable)
     {
@@ -39,7 +39,7 @@ FunctionIDModel* IDFunctionDeclarationStorage::FindObjectIdentifier(std::string 
     return nullptr;
 }
 
-FunctionIDModel* IDFunctionDeclarationStorage::FindObjectIdentifier(std::string name)
+FunctionIDModel* IDFunctionStorage::FindObjectIdentifier(std::string name)
 {
     for(auto item : this->IDTable)
     {
@@ -52,7 +52,7 @@ FunctionIDModel* IDFunctionDeclarationStorage::FindObjectIdentifier(std::string 
     return nullptr;
 }
 
-FunctionIDModel* IDFunctionDeclarationStorage::CreateRow(std::string name, std::string type)
+FunctionIDModel* IDFunctionStorage::CreateRow(std::string name, std::string type)
 {
     auto row = new FunctionIDModel(name, type);
 

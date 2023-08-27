@@ -188,7 +188,7 @@ bool Parser::ExpressionCheckType(Token* token)
         if(this->ExpressionSingleParameter)
         {
             if(token->type != this->ExpressionExpectedTypeSingleParameter)
-                this->ThrowError("Cannot implicitly convert type '" + token->type + "' to '" + this->ExpressionExpectedTypeSingleParameter + "' | ( " + this->ExpressionFunctionNameSingleParameter + " )", token->startPos + 1);
+               this->ThrowError("Cannot implicitly convert type '" + token->type + "' to '" + this->ExpressionExpectedTypeSingleParameter + "' | ( " + this->ExpressionFunctionNameSingleParameter + " )", token->startPos + 1);
         }
         else if(token->type != this->ExpressionExpectedType)
            this->ThrowError("Cannot implicitly convert type '" + token->type + "' to '" + this->ExpressionExpectedType + "'", token->startPos + 1, token->line);

@@ -28,8 +28,8 @@ class CodeGenerator
         std::ofstream fileHandle;
 
     private:
-        IDDeclarationStorage* IDTable;
-        IDFunctionDeclarationStorage* IDFunTable;
+        IDStorage* IDTable;
+        IDFunctionStorage* IDFunTable;
         Tools* tool;
         const std::string EMPTY = "";
 
@@ -39,7 +39,7 @@ class CodeGenerator
         std::vector<std::string> RunnablePipeline;
 
     public:
-        CodeGenerator(IDDeclarationStorage*, IDFunctionDeclarationStorage* );
+        CodeGenerator(IDStorage*, IDFunctionStorage* );
         ~CodeGenerator();
 
     public:

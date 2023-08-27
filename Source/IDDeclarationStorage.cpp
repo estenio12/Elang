@@ -1,23 +1,24 @@
 #include "../Include/IDDeclarationStorage.hpp"
 
-IDDeclarationStorage::IDDeclarationStorage(){}
+IDStorage::IDStorage(){}
 
-IDDeclarationStorage::~IDDeclarationStorage()
+IDStorage::~IDStorage()
 {
     this->IDTable.clear();
 }
 
-void IDDeclarationStorage::InsertID(IDModel* row)
+void IDStorage::InsertID(IDModel* row)
 {
     if(row != nullptr) this->IDTable.push_back(row);
 }
 
-bool IDDeclarationStorage::ExistIdentifier(std::string name, std::string scopeName, int deep)
+bool IDStorage::ExistIdentifier(std::string name, std::string scopeName, int deep)
 {
     for(auto item : this->IDTable)
     {
         if(item->name == name && 
            item->deep <= deep &&
+           item->isEnable     &&
            (item->scopeName == scopeName ||
             item->scopeName == STANDARD_SCOPE_NAME::GLOBALSCOPE))
         {
@@ -28,11 +29,11 @@ bool IDDeclarationStorage::ExistIdentifier(std::string name, std::string scopeNa
     return false;
 }
 
-IDModel* IDDeclarationStorage::FindObjectIdentifier(std::string name)
+IDModel* IDStorage::FindObjectIdentifier(std::string name)
 {
     for(auto item : this->IDTable)
     {
-        if(item->name == name)
+        if(item->name == name && item->isEnable)
         {
             return item;
         }
@@ -41,8 +42,8 @@ IDModel* IDDeclarationStorage::FindObjectIdentifier(std::string name)
     return nullptr;
 }
 
-IDModel* IDDeclarationStorage::CreateRow(std::string name, std::string value, std::string type, std::string typeValue, 
-                                         std::string scopeName, int deep = 0, bool isConstant = false)
+IDModel* IDStorage::CreateRow(std::string name, std::string value, std::string type, std::string typeValue, 
+                              std::string scopeName, int IDScopeTable, int deep = 0, bool isConstant = false)
 {
     IDModel* row = new IDModel();
 
@@ -59,6 +60,27 @@ IDModel* IDDeclarationStorage::CreateRow(std::string name, std::string value, st
     row->typeValue = typeValue;
     row->scopeName = scopeName;
     row->deep      = deep;
+    row->IDScopeTable = IDScopeTable; 
 
     return row; 
 }
+
+void IDStorage::RemoveID(int ID)
+{
+    for(int i = 0; i < this->IDTable.size(); i++)
+    {
+        if(this->IDTable[i]->IDScopeTable == ID)
+        {
+            this->IDTable[i]->isEnable = false;
+        }
+    }
+}
+
+void IDStorage::PrintDebug()
+{
+    for(int i = 0; i < this->IDTable.size(); i++)
+    {
+        std::cout << "Debug IDTable: " << this->IDTable[i]->name << " | " << this->IDTable[i]->IDScopeTable << "\n";
+    }
+}
+

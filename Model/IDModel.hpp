@@ -23,6 +23,8 @@ class IDModel
         std::string scopeName;
         int deep = 0;
         bool isConstant = false;
+        int IDScopeTable = 0;
+        bool isEnable = true;
 
     public:
         IDModel(){}
@@ -31,6 +33,7 @@ class IDModel
                 std::string type,
                 std::string typeValue,
                 std::string scopeName,
+                int IDScopeTable,
                 int deep = 0,
                 bool isConstant = false):
             name(name),
@@ -38,6 +41,7 @@ class IDModel
             typeValue(typeValue),
             type(type),
             scopeName(scopeName),
+            IDScopeTable(IDScopeTable),
             deep(deep),
             isConstant(isConstant){}
 };

@@ -22,6 +22,7 @@
 #include "../Model/Ast.hpp"
 #include "../Model/FunctionIDModel.hpp"
 #include "../Model/CallFunctionStackModel.hpp"
+#include "../Model/ScopeStack.hpp"
 #include "../Include/CodeGenerator.hpp"
 
 class Parser
@@ -30,10 +31,11 @@ class Parser
         AST ast;
         Lexer* lexer;
         Tools* tool;
-        IDDeclarationStorage* IDTable;
-        IDFunctionDeclarationStorage* IDFunTable;
+        IDStorage* IDTable;
+        IDFunctionStorage* IDFunTable;
         CodeGenerator* codegen;
         CallStack* expressionFunctionStack;
+        ScopeTable* IDTableScope;
 
     private:
         AstNode* buildingNode;

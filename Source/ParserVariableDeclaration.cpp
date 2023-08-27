@@ -92,8 +92,12 @@ AstNode* Parser::VariableDeclaration(Token* token)
             if(this->IDTable->ExistIdentifier(token->value, this->currentScope, this->currentDeep))
                this->ThrowError("Duplicate variable declaration", token->startPos);
 
+            if(token->value == KEYWORDS::TINDEX)   
+               this->ThrowError("'index' is a reserved keyword.", token->startPos);
+
+            int IDScope = this->IDTableScope->GetCurrentID();
             auto tempID = this->IDTable->CreateRow(token->value, token->value, token->type, this->expectedType,
-                                                   this->currentScope, this->currentDeep, this->isConstant);
+                                                   this->currentScope, IDScope, this->currentDeep, this->isConstant);
             this->IDTable->InsertID(tempID);
 
             this->InsertVariableDeclarationNode(token, AST_DIRECTION::RIGHT);

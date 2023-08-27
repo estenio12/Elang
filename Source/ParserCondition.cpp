@@ -81,6 +81,7 @@ AstNode* Parser::ConditionDeclaration(Token* token)
     {
         if(token->value == KEYWORDS::TFOR)
         {
+            this->IDTableScope->InsertRow(token->value, EMPTY, token, ++this->currentDeep);
             this->InsertConditionBuildNode(token, AST_DIRECTION::RIGHT);
             this->ConditionState = BRANCH_IDENTIFIER::FOR_STATEMENT;
             this->KeywordExpectedEnd = std::make_pair(token->value, token->line);
@@ -92,6 +93,7 @@ AstNode* Parser::ConditionDeclaration(Token* token)
         if(token->value == KEYWORDS::TIF    ||
            token->value == KEYWORDS::TWHILE )
         {
+            this->IDTableScope->InsertRow(token->value, EMPTY, token, ++this->currentDeep);
             this->InsertConditionBuildNode(token, AST_DIRECTION::RIGHT);
             this->KeywordExpectedEnd = std::make_pair(token->value, token->line);
             this->history = token;

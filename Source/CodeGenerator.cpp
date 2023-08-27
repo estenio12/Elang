@@ -1,6 +1,6 @@
 #include "../Include/CodeGenerator.hpp"
 
-CodeGenerator::CodeGenerator(IDDeclarationStorage* IDTable, IDFunctionDeclarationStorage* IDFunTable):IDTable(IDTable), IDFunTable(IDFunTable)
+CodeGenerator::CodeGenerator(IDStorage* IDTable, IDFunctionStorage* IDFunTable):IDTable(IDTable), IDFunTable(IDFunTable)
 {
     this->fileHandle.open(this->OutputName, std::ios::out | std::ios::ate);
     this->tool = new Tools();
