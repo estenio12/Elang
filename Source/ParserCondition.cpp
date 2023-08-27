@@ -9,6 +9,7 @@ AstNode* Parser::ConditionDeclaration(Token* token)
             if(token->value[0] == DELIMITERS::OPEN_PARAM)
             {
                 this->InsertConditionBuildNode(token, AST_DIRECTION::RIGHT);
+                this->ConditionOpenParam();
                 this->history = token;
                 return nullptr;
             }
@@ -24,7 +25,16 @@ AstNode* Parser::ConditionDeclaration(Token* token)
                 this->InsertConditionBuildNode(token, AST_DIRECTION::RIGHT);
                 this->history = nullptr;
                 this->ConditionState = BRANCH_IDENTIFIER::EXPRESSION;
-                this->ConditionOpenParam();
+
+                int IDScope = this->IDTableScope->GetCurrentID();            
+
+                // # Insert into IDTable
+                auto tempID = this->IDTable->CreateRow(KEYWORDS::TINDEX, "0", NAME::IDENTIFIER, 
+                                                       NAME::NUMBER, this->currentScope, 
+                                                       IDScope, this->currentDeep, false);
+
+                this->IDTable->InsertID(tempID);
+
                 return nullptr;
             }
 
@@ -53,8 +63,17 @@ AstNode* Parser::ConditionDeclaration(Token* token)
         
         if(token->value[0] == DELIMITERS::CLOSE_PARAM)
            this->ConditionCloseParam();
+
+        AstNode* result = nullptr;
         
-        auto result = this->Expression(token, this->ConditionTypeExpression);
+        if(token->value[0] == DELIMITERS::CLOSE_PARAM &&
+           this->ConditionParamCounter == 0 && 
+           IsForStatement)
+        {
+            result = this->ExpressionBuildingNode;
+        }   
+        else     
+            result = this->Expression(token, this->ConditionTypeExpression);
 
         if(result != nullptr || this->ConditionParamCounter == 0)
         {

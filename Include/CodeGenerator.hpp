@@ -100,6 +100,7 @@ class CodeGenerator
         std::vector<std::string> ConditionDeclarationCodeStack;
         std::string GenerateConditionDeclaration(AstNode* );
         std::string VisitorConditionDeclaration(AstNode* );
+        std::string VisitorForStatementConditionDeclaration(AstNode* );
         std::string CommitConditionDeclaration();
 
     private:

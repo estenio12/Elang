@@ -35,10 +35,15 @@ namespace TARGET_CODE
     static const std::string T_IF          = "if";
     static const std::string T_ELSE        = "else";
     static const std::string T_WHILE       = "while";
+    static const std::string T_FOR         = "for(double index=0;index";
 
     static const std::string T_BOOL       = "bool ";
     static const std::string T_DOUBLE     = "double ";
     static const std::string T_STRING     = "std::string ";
     static const std::string T_CHAR       = "char ";
     static const std::string T_VOID       = "void ";
+    
+    static const std::string T_IN         = "<";
+    static const std::string T_AT         = "<=";
+    static const std::string T_FOR_END    = ";index++)";
 }

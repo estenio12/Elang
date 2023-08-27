@@ -265,7 +265,12 @@ bool Parser::ExpressionCheckIdentifier(Token* token)
         }
         else
         {
-            this->ThrowError("Identifier not declared in scope '" + token->value + "'", token->startPos + 1);
+            if(token->value == KEYWORDS::TINDEX)
+            {
+                this->ThrowError("'index' is exclusive keyword to 'for-statement'.", token->startPos + 1, token->line);
+            }
+            else
+                this->ThrowError("Identifier not declared in scope '" + token->value + "'", token->startPos + 1);
         }
 
         this->InsertExpressionNode(token, AST_DIRECTION::RIGHT);
