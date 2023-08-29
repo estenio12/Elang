@@ -14,7 +14,5 @@ A sintax de elang foi inspirada em linguagens como Ruby, Kotlin e python. Buscan
 # Conhecendo o Compilador
 
 Verificando a versão do compilador:
-```bash
-./elangc --version
-```
-
+	./elangc --version
+```ruby:
