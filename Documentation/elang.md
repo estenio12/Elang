@@ -1,8 +1,8 @@
 ### O que é Elang
 
-Semelhando ao processo que o typescript faz, onde converte seu código typescript em javascript, elang converte seu código elang para C++.
+Semelhante ao processo que o typescript faz, onde converte seu código typescript em javascript, elang converte seu código elang para C++.
 
-A sintax de elang foi inspirada em linguagens como Ruby, Kotlin e python entre outros. Buscando ser o mais simples possível e mantendo uma boa ergonomia.
+A sintax de elang foi inspirada em linguagens como Ruby, Kotlin e python entre outras. Buscando ser o mais simples possível e mantendo uma boa ergonomia.
 
 ## Conhecendo o Compilador
 
