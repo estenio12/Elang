@@ -12,25 +12,32 @@
 	| <alpha>_<digit>
 
 <type> := 
-	  <number>
+	  <float>
+	| <int>
 	| <bool>
-	| <text>
 	| <char>
 	| <void>
 
 <variable-declaration> := 
-	  var : <type> <identifier> ;
-	| var : <type> <identifier> = <expression> ;
+	  var <identifier> : <type> ;
+	| var <identifier> : <type> = <expression> ;
+	| const <identifier> : <type> ;
+	| const <identifier> : <type> = <expression> ;
+	| array <identifier> : <type> ;
+	| array <identifier> : <type> = [<expression>] ;
+	| array <identifier> : <type> = [<expression> , <expression>] ;
 
 <function-declaration> :=
-	  fun : <type> <identifier> ( ) end
-	| fun : <type> <identifier> ( ) <statement> end
-	| fun : <type> <identifier> ( <parameter-list> ) end
-	| fun : <type> <identifier> ( <parameter-list> ) <statement> end
+	  fun  <identifier> ( ) : <type> end
+	| fun  <identifier> ( ) : <type> <statement> end
+	| fun  <identifier> ( <parameter-list> ) : <type> end
+	| fun  <identifier> ( <parameter-list> ) : <type> <statement> end
 
 <iteration-statement> := 
 	  while ( <expression> ) end
 	| while ( <expression> ) <statement> end
+	| for ( <for-declaration-statement> ) end
+	| for ( <for-declaration-statement> ) <for-statement> end
 
 <condition-statement> :=
 	  if ( <expression> ) end
@@ -43,7 +50,9 @@
 	| <parameter-declaration> , <parameter-declaration> 
 
 <parameter-declaration> := 
-	  var : <type> <identifier>
+	  var <identifier> : <type>
+	| const <identifier> : <type>
+	| array <identifier> : <type>
 
 <expression> := 
 	  <expression>
@@ -56,6 +65,8 @@
     | <expression> <arithmetic> <expression>
 	| ( <expression> )
 	| <call-function> <arithmetic> <expression>
+	| <postfix> 
+	| <prefix> 
 
 <statement> := 
 	  <variable-declaration>
@@ -63,6 +74,8 @@
 	| <iteration-statement>
 	| <condition-statement>
 	| <return-expression>
+	| <postfix> ;
+	| <prefix> ;
 
 <return-expression> := 
 	  return <expression> ;
@@ -70,9 +83,34 @@
 <call-function> := 
 	  <identifier> ( <expression> ) ;
 
+<for-statement> :=
+	  <statement> := 
+	  <variable-declaration>
+	| <call-function>
+	| <iteration-statement>
+	| <condition-statement>
+	| <return-expression>
+	| break ;
+	| continue ;
+	| <postfix> ;
+	| <prefix> ;
 
+<for-declaration-statement> :=
+	  <variable-declaration>
+	| <variable-declaration> <expression>
+	| <expression>
+	| <postfix> ;
+	| <prefix> ;
 
+<prefix> := 
+	  -- <identifier>
+	| -- <call-function>
+	| ++ <identifier>
+	| ++ <call-function>
 
-
-
+<postfix> := 
+	  <identifier> --
+	| <call-function> --
+	| <identifier> ++
+	| <call-function> ++
 
