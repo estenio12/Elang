@@ -81,15 +81,17 @@ void Lexer::LoadMoreToken()
     }
 }
 
+void Lexer::LoadFirstTokenPool()
+{
+    this->LoadMoreToken();
+}
+
 void Lexer::Tokenize(std::string line)
 {
     Output::PrintDebug(line);
 }
 
-void Lexer::LoadFirstTokenPool()
-{
-    this->LoadMoreToken();
-}
+
 
 
 
