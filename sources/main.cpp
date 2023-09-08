@@ -1,7 +1,11 @@
 #include <iostream>
 
-int main()
+#include "../headers/compiler.hpp"
+
+int main(int argc, char** argv)
 {
-    std::cout << "Hello world!\n";
+    auto compiler = new Compiler(argv[1]);
+    compiler->Run();
+
     return EXIT_SUCCESS;
 }

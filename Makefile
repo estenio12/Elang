@@ -1,3 +1,3 @@
-Compiling:	./sources/*.cpp  ./sources/generator/*.cpp ./sources/lexer/*.cpp ./sources/parser/*.cpp
-	g++ ./sources/*.cpp ./sources/generator/*.cpp ./sources/lexer/*.cpp ./sources/parser/*.cpp -std=c++17 -o ./bin/elc
-	./bin/elc ./test.elang
+Compiling:	./sources/*.cpp 
+	g++ ./sources/*.cpp -std=c++17 -o ./bin/elc
+	./bin/elc ./bin/test.elang

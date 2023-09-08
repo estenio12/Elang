@@ -7,7 +7,7 @@
 #pragma once
 
 #include <string>
-#include "./definitions/token-definition.hpp"
+#include "../definitions/token-definition.hpp"
 
 class Token
 {

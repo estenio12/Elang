@@ -20,92 +20,94 @@ enum TOKEN_TYPE
     LOGICAL
 };
 
-static const std::string KEYWORD[] 
+namespace TOKEN 
 {
-    "var",
-    "const",
-    "array",
-    "fun",
-    "for",
-    "while",
-    "end",
-    "if",
-    "else",
-    "return",
-    "break",
-    "continue"
-};
+    static const std::string KEYWORD[12] 
+    {
+        "var",
+        "const",
+        "array",
+        "fun",
+        "for",
+        "while",
+        "end",
+        "if",
+        "else",
+        "return",
+        "break",
+        "continue"
+    };
 
-static const std::string TYPE[] 
-{
-    "float",
-    "int",
-    "bool",
-    "char",
-    "void"
-};
+    static const std::string TYPE[5] 
+    {
+        "float",
+        "int",
+        "bool",
+        "char",
+        "void"
+    };
 
-static const std::string DELIMITER[] 
-{
-    ":",
-    ",",
-    "{",
-    "}",
-    "[",
-    "]",
-    "(",
-    ")",
-    "\"",
-    "\'",
-    "="
-};
+    static const std::string DELIMITER[11] 
+    {
+        ":",
+        ",",
+        "{",
+        "}",
+        "[",
+        "]",
+        "(",
+        ")",
+        "\"",
+        "\'",
+        "="
+    };
 
-static const std::string ARITHMETIC[] 
-{
-    "+",
-    "-",
-    "/",
-    "*",
-    "%",
-    "+=",
-    "-=",
-    "/=",
-    "*=",
-    "|",
-    "^",
-    "&",
-    ">>",
-    "<<"
-};
+    static const std::string ARITHMETIC[14] 
+    {
+        "+",
+        "-",
+        "/",
+        "*",
+        "%",
+        "+=",
+        "-=",
+        "/=",
+        "*=",
+        "|",
+        "^",
+        "&",
+        ">>",
+        "<<"
+    };
 
-static const std::string PREFIX[] 
-{
-    "++",
-    "--"
-};
+    static const std::string PREFIX[2] 
+    {
+        "++",
+        "--"
+    };
 
-static const std::string POSTFIX[] 
-{
-    "++",
-    "--"
-};
+    static const std::string POSTFIX[2] 
+    {
+        "++",
+        "--"
+    };
 
-static const char SKIP_CHARACTER[] 
-{
-    ' '
-};
+    static const char SKIP_CHARACTER[1] 
+    {
+        ' '
+    };
 
-static const std::string LOGICAL[] 
-{
-    ">",
-    "<",
-    "<=",
-    ">=",
-    "||",
-    "&&",
-    "!=",
-    "=="
-};
-
+    static const std::string LOGICAL[8] 
+    {
+        ">",
+        "<",
+        "<=",
+        ">=",
+        "||",
+        "&&",
+        "!=",
+        "=="
+    };
+}
 
 
