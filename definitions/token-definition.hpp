@@ -1,14 +1,16 @@
-///////////////////////////
-// @author: Estenio Garcia
-// @license: Apache 2.0
-// @copyright: all
-///////////////////////////
+// #######################################
+// ## 
+// ## @author: Estenio Garcia
+// ## @copyright: (c) Allright reserved 
+// ## @License: Apache 2.0
+// ## 
+// #######################################
 
 #pragma once
 
 #include <string>
 
-enum TOKEN_TYPE
+enum TOKEN_DEF
 {
     KEYWORD,
     TYPE,
@@ -22,6 +24,9 @@ enum TOKEN_TYPE
 
 namespace TOKEN 
 {
+    static const std::string IS_DIGIT = "0123456789.";
+    static const std::string IS_ALPHA = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLIMOPQRSTUVWXYZ_";
+
     static const std::string KEYWORD[12] 
     {
         "var",
@@ -92,9 +97,12 @@ namespace TOKEN
         "--"
     };
 
-    static const char SKIP_CHARACTER[1] 
+    static const char SKIP_CHARACTER[4] 
     {
-        ' '
+        ' ', 
+        '\t', 
+        '\r', 
+        '\n'
     };
 
     static const std::string LOGICAL[8] 

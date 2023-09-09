@@ -16,7 +16,7 @@ class Token
         int start_position = 0;
         int end_position   = 0;
         std::string value  = "";
-        TOKEN_TYPE type    = TOKEN_TYPE::IDENTIDIER;
+        TOKEN_DEF type    = TOKEN_DEF::IDENTIDIER;
 
     public:
         Token(){}
@@ -24,7 +24,7 @@ class Token
               int start_position = 0,
               int end_position   = 0,
               std::string value  = "",
-              TOKEN_TYPE type    = TOKEN_TYPE::IDENTIDIER):
+              TOKEN_DEF type    = TOKEN_DEF::IDENTIDIER):
               line(line),
               start_position(start_position),
               end_position(end_position),
