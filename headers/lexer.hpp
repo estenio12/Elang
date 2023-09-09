@@ -18,6 +18,14 @@
 class Lexer
 {
     private:
+        enum JOB_STATE
+        {
+            UNDEFINED,
+            BUILD_DIGIT,
+            BUILD_ALPHA_DIGIT
+        };
+
+    private:
         std::queue<Token*> tokenPool;
         std::ifstream fileHanler;
         std::string sourcePath;
@@ -39,12 +47,22 @@ class Lexer
     private:
         void LoadMoreToken();
         void LoadFileHandler();
-        void LoadFirstTokenPool();
         bool IsValidPath();
-        std::string RemoveCommentary(std::string line);
-        std::string ReadLine();
+        std::string Sanitaze(std::string line);
 
     private:
         void Tokenize(std::string line);
+        void CheckOutOfMemoryBuildToken(Token*);
 
+    private:
+        Token* BindToken(std::string chunk);
+
+    private:
+        bool IsDigit(char letter);
+        bool IsDigitFloat(std::string buffer);
+        bool IsAlphaNumetic(char letter);
+
+    private:
+        void BuildLiteralFloatToken(std::string value, int startpos, int endpos);
+        void BuildLiteralIntToken(std::string value, int startpos, int endpos);
 };

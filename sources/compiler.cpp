@@ -12,5 +12,10 @@ Compiler::~Compiler()
 
 void Compiler::Run()
 {
-    this->lexer->GetNextToken();
+    auto token = this->lexer->GetNextToken();
+
+    if(token != nullptr)
+        Output::PrintDebug("Run: " + token->value + " | " + std::to_string(token->type));
+    else
+        Output::PrintDebug("Is Null");
 }

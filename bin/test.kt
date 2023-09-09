@@ -1,0 +1,1 @@
+var contador: int = 10.5;

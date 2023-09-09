@@ -19,7 +19,6 @@ class Token
         TOKEN_DEF type    = TOKEN_DEF::IDENTIDIER;
 
     public:
-        Token(){}
         Token(int line           = 0,
               int start_position = 0,
               int end_position   = 0,

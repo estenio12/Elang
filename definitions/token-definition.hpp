@@ -19,7 +19,11 @@ enum TOKEN_DEF
     ARITHMETIC,
     PREFIX,
     POSTFIX,
-    LOGICAL
+    LOGICAL,
+    FLOAT_LITERAL,
+    INT_LITERAL,
+    CHAR_LITERAL,
+    BOOL_LITERAL
 };
 
 namespace TOKEN 
@@ -97,14 +101,6 @@ namespace TOKEN
         "--"
     };
 
-    static const char SKIP_CHARACTER[4] 
-    {
-        ' ', 
-        '\t', 
-        '\r', 
-        '\n'
-    };
-
     static const std::string LOGICAL[8] 
     {
         ">",
@@ -118,4 +114,11 @@ namespace TOKEN
     };
 }
 
+namespace SKIP_CHARACTER
+{
+    static const char WHITESPACE = ' ';
+    static const char TABULATION = '\t';
+    static const char RETURN     = '\r';
+    static const char NEWLINE    = '\n';
+}
 

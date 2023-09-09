@@ -1,7 +1,0 @@
-var contador: int = 10;
-
-fun sum(): int
-    return 10 + 10;
-end
-
-sum();
