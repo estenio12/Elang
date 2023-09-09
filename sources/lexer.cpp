@@ -137,7 +137,7 @@ void Lexer::Tokenize(std::string line)
             // if(IsAlphaNumetic(line[i]))
             //     current_job = JOB_STATE::BUILD_ALPHA_DIGIT;
 
-            startpos = i;
+            startpos = i + 1;
         }
 
         if(current_job == JOB_STATE::BUILD_DIGIT)
