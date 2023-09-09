@@ -10,7 +10,7 @@
 
 #include <string>
 
-enum TOKEN_DEF
+enum TYPE_TOKEN
 {
     T_KEYWORD,
     T_TYPE,

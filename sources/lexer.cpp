@@ -150,8 +150,7 @@ void Lexer::Tokenize(std::string line)
             {
                 int endpos = i;
 
-                auto token = this->BindToken(buffer, startpos, endpos);
-                this->tokenPool.push(token);
+                this->BindToken(buffer, startpos, endpos);
 
                 buffer.clear();
                 current_job = JOB_STATE::UNDEFINED;
@@ -164,9 +163,10 @@ void Lexer::Tokenize(std::string line)
     // Output::PrintDebug(line);
 }
 
-Token* Lexer::BindToken(std::string chunk, int startpos, int endpos)
+void Lexer::BindToken(std::string value, int startpos, int endpos)
 {
-    return nullptr;
+
+
 }
 
 void Lexer::BuildLiteralFloatToken(std::string value, int startpos, int endpos)
@@ -177,7 +177,7 @@ void Lexer::BuildLiteralFloatToken(std::string value, int startpos, int endpos)
         startpos,
         endpos,
         value,
-        TOKEN_DEF::T_FLOAT_LITERAL
+        TYPE_TOKEN::T_FLOAT_LITERAL
     );
 
     CheckOutOfMemoryBuildToken(token);
@@ -193,7 +193,7 @@ void Lexer::BuildLiteralIntToken(std::string value, int startpos, int endpos)
         startpos,
         endpos,
         value,
-        TOKEN_DEF::T_INT_LITERAL
+        TYPE_TOKEN::T_INT_LITERAL
     );
 
     CheckOutOfMemoryBuildToken(token);
@@ -201,4 +201,95 @@ void Lexer::BuildLiteralIntToken(std::string value, int startpos, int endpos)
     this->tokenPool.push(token);
 }
 
+void Lexer::BuildToken(std::string value, TYPE_TOKEN type, int startpos, int endpos)
+{
+    auto token = new Token
+    (
+        this->lineCounter,
+        startpos,
+        endpos,
+        value,
+        type
+    );
 
+    CheckOutOfMemoryBuildToken(token);
+
+    this->tokenPool.push(token);
+}
+
+bool Lexer::IsKeyword(std::string value)
+{
+    
+
+    return false;
+}
+
+bool Lexer::IsType(std::string value)
+{
+    
+
+    return false;
+}
+
+bool Lexer::IsDelimiter(std::string value)
+{
+    
+
+    return false;
+}
+
+bool Lexer::IsArithmetic(std::string value)
+{
+    
+
+    return false;
+}
+
+bool Lexer::IsPrefix(std::string value)
+{
+    
+
+    return false;
+}
+
+bool Lexer::IsPostfix(std::string value)
+{
+    
+
+    return false;
+}
+
+bool Lexer::IsLogical(std::string value)
+{
+    
+
+    return false;
+}
+
+bool Lexer::IsFloatLiteral(std::string value)
+{
+    
+
+    return false;
+}
+
+bool Lexer::IsIntLiteral(std::string value)
+{
+    
+
+    return false;
+}
+
+bool Lexer::IsCharLiteral(std::string value)
+{
+    
+
+    return false;
+}
+
+bool Lexer::IsBoolLiteral(std::string value)
+{
+    
+
+    return false;
+}

@@ -52,7 +52,7 @@ class Lexer
         void CheckOutOfMemoryBuildToken(Token*);
 
     private:
-        Token* BindToken(std::string chunk, int startpos, int endpos);
+        void BindToken(std::string value, int startpos, int endpos);
 
     private:
         bool IsDigit(char letter);
@@ -60,6 +60,20 @@ class Lexer
         bool IsAlphaNumetic(char letter);
 
     private:
+        void BuildToken(std::string value, TYPE_TOKEN type, int startpos, int endpos);
         void BuildLiteralFloatToken(std::string value, int startpos, int endpos);
         void BuildLiteralIntToken(std::string value, int startpos, int endpos);
+
+    private:
+        bool IsKeyword(std::string value);
+        bool IsType(std::string value);
+        bool IsDelimiter(std::string value);
+        bool IsArithmetic(std::string value);
+        bool IsPrefix(std::string value);
+        bool IsPostfix(std::string value);
+        bool IsLogical(std::string value);
+        bool IsFloatLiteral(std::string value);
+        bool IsIntLiteral(std::string value);
+        bool IsCharLiteral(std::string value);
+        bool IsBoolLiteral(std::string value);
 };
