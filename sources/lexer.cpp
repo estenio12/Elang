@@ -2,7 +2,7 @@
 
 Lexer::Lexer(std::string sourcePath):sourcePath(sourcePath)
 {
-    this->LoadFileHandler();
+    this->fileHanler.open(sourcePath);
 }
 
 Lexer::~Lexer(){}
@@ -24,12 +24,6 @@ Token* Lexer::GetNextToken()
     return nullptr;
 }
 
-bool Lexer::IsValidPath()
-{
-    if(this->sourcePath.empty()) return false;
-    return std::filesystem::exists(std::filesystem::path(this->sourcePath));
-}
-
 std::string Lexer::Sanitaze(std::string line)
 {
     bool stringUp = false;
@@ -39,7 +33,7 @@ std::string Lexer::Sanitaze(std::string line)
     for(auto letter : line)
     {
         // # check if is string scope
-        if(letter == TOKEN::DELIMITER[8][0])
+        if(letter == DELIMITER::T_QUOTATION_MARKS[0])
             stringUp = !stringUp;
 
         if(!stringUp && letter == COMMENTARY)
@@ -49,17 +43,6 @@ std::string Lexer::Sanitaze(std::string line)
     }
 
     return buffer;
-}
-
-void Lexer::LoadFileHandler()
-{
-    if(this->IsValidPath())
-        this->fileHanler.open(sourcePath);
-    else
-    {
-        Output::PrintCustomizeError("Fatal Error: ", "source file not found!");
-        exit(EXIT_FAILURE);
-    }
 }
 
 void Lexer::LoadMoreToken()
@@ -95,7 +78,7 @@ void Lexer::CheckOutOfMemoryBuildToken(Token* token)
 
 bool Lexer::IsDigit(char letter)
 {
-    for(auto item : TOKEN::IS_DIGIT)
+    for(auto item : TEMPLATE::IS_DIGIT)
         if(item == letter) return true;
 
     return false;
@@ -108,7 +91,7 @@ bool Lexer::IsDigitFloat(std::string buffer)
 
 bool Lexer::IsAlphaNumetic(char letter)
 {
-    for(auto item : TOKEN::IS_ALPHA)
+    for(auto item : TEMPLATE::IS_ALPHA)
         if(item == letter) return true;
 
     return false;
@@ -134,8 +117,8 @@ void Lexer::Tokenize(std::string line)
             if(IsDigit(line[i]))
                 current_job = JOB_STATE::BUILD_DIGIT;
             
-            // if(IsAlphaNumetic(line[i]))
-            //     current_job = JOB_STATE::BUILD_ALPHA_DIGIT;
+            if(IsAlphaNumetic(line[i]))
+                current_job = JOB_STATE::BUILD_ALPHA_DIGIT;
 
             startpos = i + 1;
         }
@@ -159,13 +142,29 @@ void Lexer::Tokenize(std::string line)
             }
         }
 
+        if(current_job == JOB_STATE::BUILD_ALPHA_DIGIT)
+        {
+            if(IsAlphaNumetic(line[i]))
+                buffer.push_back(line[i]);
+            else
+            {
+                int endpos = i;
+
+                auto token = this->BindToken(buffer, startpos, endpos);
+                this->tokenPool.push(token);
+
+                buffer.clear();
+                current_job = JOB_STATE::UNDEFINED;
+                i--;
+            }
+        }
     }
 
     // Output::PrintDebug(std::to_string(tokenPool.size()));
     // Output::PrintDebug(line);
 }
 
-Token* Lexer::BindToken(std::string chunk)
+Token* Lexer::BindToken(std::string chunk, int startpos, int endpos)
 {
     return nullptr;
 }
@@ -178,7 +177,7 @@ void Lexer::BuildLiteralFloatToken(std::string value, int startpos, int endpos)
         startpos,
         endpos,
         value,
-        TOKEN_DEF::FLOAT_LITERAL
+        TOKEN_DEF::T_FLOAT_LITERAL
     );
 
     CheckOutOfMemoryBuildToken(token);
@@ -194,7 +193,7 @@ void Lexer::BuildLiteralIntToken(std::string value, int startpos, int endpos)
         startpos,
         endpos,
         value,
-        TOKEN_DEF::INT_LITERAL
+        TOKEN_DEF::T_INT_LITERAL
     );
 
     CheckOutOfMemoryBuildToken(token);

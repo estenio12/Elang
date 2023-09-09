@@ -10,7 +10,6 @@
 
 #include <queue>
 #include <fstream>
-#include <filesystem>
 #include "../definitions/token-definition.hpp"
 #include "../models/token.hpp"
 #include "./output.hpp"
@@ -46,8 +45,6 @@ class Lexer
         
     private:
         void LoadMoreToken();
-        void LoadFileHandler();
-        bool IsValidPath();
         std::string Sanitaze(std::string line);
 
     private:
@@ -55,7 +52,7 @@ class Lexer
         void CheckOutOfMemoryBuildToken(Token*);
 
     private:
-        Token* BindToken(std::string chunk);
+        Token* BindToken(std::string chunk, int startpos, int endpos);
 
     private:
         bool IsDigit(char letter);

@@ -8,7 +8,9 @@
 
 #pragma once
 
+#include <filesystem>
 #include "./lexer.hpp"
+#include "output.hpp"
 
 class Compiler
 {
@@ -21,4 +23,7 @@ class Compiler
 
     public:
         void Run();
+
+    private:
+        bool IsNotValidPath(std::string sourcePath);
 };

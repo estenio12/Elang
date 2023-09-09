@@ -12,106 +12,106 @@
 
 enum TOKEN_DEF
 {
-    KEYWORD,
-    TYPE,
-    IDENTIDIER,
-    DELIMITER,
-    ARITHMETIC,
-    PREFIX,
-    POSTFIX,
-    LOGICAL,
-    FLOAT_LITERAL,
-    INT_LITERAL,
-    CHAR_LITERAL,
-    BOOL_LITERAL
+    T_KEYWORD,
+    T_TYPE,
+    T_IDENTIDIER,
+    T_DELIMITER,
+    T_ARITHMETIC,
+    T_PREFIX,
+    T_POSTFIX,
+    T_LOGICAL,
+    T_FLOAT_LITERAL,
+    T_INT_LITERAL,
+    T_CHAR_LITERAL,
+    T_BOOL_LITERAL
 };
 
-namespace TOKEN 
+namespace TEMPLATE
 {
     static const std::string IS_DIGIT = "0123456789.";
     static const std::string IS_ALPHA = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLIMOPQRSTUVWXYZ_";
+}
 
-    static const std::string KEYWORD[12] 
-    {
-        "var",
-        "const",
-        "array",
-        "fun",
-        "for",
-        "while",
-        "end",
-        "if",
-        "else",
-        "return",
-        "break",
-        "continue"
-    };
+namespace KEYWORD
+{
+    static const std::string T_VAR      = "var";
+    static const std::string T_CONST    = "const";
+    static const std::string T_ARRAY    = "array";
+    static const std::string T_FUN      = "fun";
+    static const std::string T_FOR      = "for";
+    static const std::string T_WHILE    = "while";
+    static const std::string T_END      = "end";
+    static const std::string T_IF       = "if";
+    static const std::string T_ELSE     = "else";
+    static const std::string T_RETURN   = "return";
+    static const std::string T_BREAK    = "break";
+    static const std::string T_CONTINUE = "continue";
+}
 
-    static const std::string TYPE[5] 
-    {
-        "float",
-        "int",
-        "bool",
-        "char",
-        "void"
-    };
+namespace TYPE
+{
+    static const std::string T_FLOAT = "float";
+    static const std::string T_INT   = "int";
+    static const std::string T_BOOL  = "bool";
+    static const std::string T_CHAR  = "char";
+    static const std::string T_VOID  = "void";
+}
 
-    static const std::string DELIMITER[11] 
-    {
-        ":",
-        ",",
-        "{",
-        "}",
-        "[",
-        "]",
-        "(",
-        ")",
-        "\"",
-        "\'",
-        "="
-    };
+namespace DELIMITER
+{
+    static const std::string T_COLON         = ":";
+    static const std::string T_COMMA         = ",";
+    static const std::string T_OPEN_BRACKET  = "{";
+    static const std::string T_CLOSE_BRACKET = "}";
+    static const std::string T_OPEN_BRANCE   = "[";
+    static const std::string T_CLOSE_BRACE   = "]";
+    static const std::string T_OPEN_PARAM    = "(";
+    static const std::string T_CLOSE_PARAM   = ")";
+    static const std::string T_QUOTATION_MARKS = "\"";
+    static const std::string T_APHOSTROFE      = "\'";
+    static const std::string T_ASSIGN          = "=";
+    static const std::string T_EOF             = ";";
+}
 
-    static const std::string ARITHMETIC[14] 
-    {
-        "+",
-        "-",
-        "/",
-        "*",
-        "%",
-        "+=",
-        "-=",
-        "/=",
-        "*=",
-        "|",
-        "^",
-        "&",
-        ">>",
-        "<<"
-    };
+namespace ARITHMETIC
+{
+    static const std::string T_PLUS        = "+";
+    static const std::string T_MINUS       = "-";
+    static const std::string T_DIV         = "/";
+    static const std::string T_MUL         = "*";
+    static const std::string T_MOD         = "%";
+    static const std::string T_PLUS_EQ     = "+=";
+    static const std::string T_MINUS_EQ    = "-=";
+    static const std::string T_DIV_EQ      = "/=";
+    static const std::string T_MUL_EQ      = "*=";
+    static const std::string T_OR          = "|";
+    static const std::string T_AND         = "&";
+    static const std::string T_SHIFT_RIGHT = ">>";
+    static const std::string T_SHIFT_LEFT  = "<<";
+}
 
-    static const std::string PREFIX[2] 
-    {
-        "++",
-        "--"
-    };
+namespace PREFIX
+{
+    static const std::string T_PLUS_PLUS   = "++";
+    static const std::string T_MINUS_MINUS = "--";
+}
 
-    static const std::string POSTFIX[2] 
-    {
-        "++",
-        "--"
-    };
+namespace POSTFIX
+{
+    static const std::string T_PLUS_PLUS   = "++";
+    static const std::string T_MINUS_MINUS = "--";
+}
 
-    static const std::string LOGICAL[8] 
-    {
-        ">",
-        "<",
-        "<=",
-        ">=",
-        "||",
-        "&&",
-        "!=",
-        "=="
-    };
+namespace LOGICAL 
+{
+    static const std::string T_GREAT_THEN    = ">";
+    static const std::string T_LESS_THEN     = "<";
+    static const std::string T_GREAT_THEN_EQ = "<=";
+    static const std::string T_LESS_THEN_EQ  = ">=";
+    static const std::string T_OR            = "||";
+    static const std::string T_AND           = "&&";
+    static const std::string T_DIFF          = "!=";
+    static const std::string T_EQUALS        = "==";
 }
 
 namespace SKIP_CHARACTER
