@@ -72,8 +72,5 @@ class Lexer
         bool IsPrefix(std::string value);
         bool IsPostfix(std::string value);
         bool IsLogical(std::string value);
-        bool IsFloatLiteral(std::string value);
-        bool IsIntLiteral(std::string value);
-        bool IsCharLiteral(std::string value);
         bool IsBoolLiteral(std::string value);
 };

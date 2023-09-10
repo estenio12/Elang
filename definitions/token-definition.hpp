@@ -23,13 +23,16 @@ enum TYPE_TOKEN
     T_FLOAT_LITERAL,
     T_INT_LITERAL,
     T_CHAR_LITERAL,
-    T_BOOL_LITERAL
+    T_BOOL_LITERAL,
+    T_STRING_LITERAL
 };
 
 namespace TEMPLATE
 {
     static const std::string IS_DIGIT = "0123456789.";
     static const std::string IS_ALPHA = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLIMOPQRSTUVWXYZ_";
+    static const std::string TRUE_LITERAL  = "true";
+    static const std::string FALSE_LITERAL = "false";
 }
 
 namespace KEYWORD

@@ -16,7 +16,7 @@ Token* Lexer::GetNextToken()
     {
         auto token = tokenPool.front();
         tokenPool.pop();
-
+        
         return token;
     }
 
@@ -158,15 +158,19 @@ void Lexer::Tokenize(std::string line)
             }
         }
     }
-
-    // Output::PrintDebug(std::to_string(tokenPool.size()));
-    // Output::PrintDebug(line);
 }
 
 void Lexer::BindToken(std::string value, int startpos, int endpos)
 {
-
-
+    if(IsKeyword(value)) this->BuildToken(value, TYPE_TOKEN::T_KEYWORD, startpos, endpos);
+    else if(IsType(value)) this->BuildToken(value, TYPE_TOKEN::T_TYPE, startpos, endpos);
+    else if(IsDelimiter(value)) this->BuildToken(value, TYPE_TOKEN::T_DELIMITER, startpos, endpos);
+    else if(IsArithmetic(value)) this->BuildToken(value, TYPE_TOKEN::T_ARITHMETIC, startpos, endpos);
+    else if(IsPrefix(value)) this->BuildToken(value, TYPE_TOKEN::T_PREFIX, startpos, endpos);
+    else if(IsPostfix(value)) this->BuildToken(value, TYPE_TOKEN::T_POSTFIX, startpos, endpos);
+    else if(IsLogical(value)) this->BuildToken(value, TYPE_TOKEN::T_LOGICAL, startpos, endpos);
+    else if(IsBoolLiteral(value)) this->BuildToken(value, TYPE_TOKEN::T_BOOL_LITERAL, startpos, endpos);
+    else this->BuildToken(value, TYPE_TOKEN::T_IDENTIDIER, startpos, endpos);
 }
 
 void Lexer::BuildLiteralFloatToken(std::string value, int startpos, int endpos)
@@ -219,77 +223,129 @@ void Lexer::BuildToken(std::string value, TYPE_TOKEN type, int startpos, int end
 
 bool Lexer::IsKeyword(std::string value)
 {
-    
+    if(value == KEYWORD::T_ARRAY    ||
+       value == KEYWORD::T_BREAK    ||
+       value == KEYWORD::T_CONST    ||
+       value == KEYWORD::T_CONTINUE ||
+       value == KEYWORD::T_ELSE     ||
+       value == KEYWORD::T_END      ||
+       value == KEYWORD::T_FOR      ||
+       value == KEYWORD::T_FUN      ||
+       value == KEYWORD::T_IF       ||
+       value == KEYWORD::T_RETURN   ||
+       value == KEYWORD::T_VAR      ||
+       value == KEYWORD::T_WHILE    )
+    {
+        return true;
+    }
 
     return false;
 }
 
 bool Lexer::IsType(std::string value)
 {
-    
+    if(value == TYPE::T_BOOL  ||
+       value == TYPE::T_CHAR  ||
+       value == TYPE::T_FLOAT ||
+       value == TYPE::T_INT   ||
+       value == TYPE::T_VOID  )
+    {
+        return true;
+    }
 
     return false;
 }
 
 bool Lexer::IsDelimiter(std::string value)
 {
-    
+    if(value == DELIMITER::T_COLON           ||
+       value == DELIMITER::T_COMMA           ||
+       value == DELIMITER::T_OPEN_BRACKET    ||
+       value == DELIMITER::T_CLOSE_BRACKET   ||
+       value == DELIMITER::T_OPEN_BRANCE     ||
+       value == DELIMITER::T_CLOSE_BRACE     ||
+       value == DELIMITER::T_OPEN_PARAM      ||
+       value == DELIMITER::T_CLOSE_PARAM     ||
+       value == DELIMITER::T_QUOTATION_MARKS ||
+       value == DELIMITER::T_APHOSTROFE      ||
+       value == DELIMITER::T_ASSIGN          ||
+       value == DELIMITER::T_EOF             )
+    {
+        return true;
+    }
 
     return false;
 }
 
 bool Lexer::IsArithmetic(std::string value)
 {
-    
+    if(value == ARITHMETIC::T_PLUS        ||
+       value == ARITHMETIC::T_MINUS       ||
+       value == ARITHMETIC::T_DIV         ||
+       value == ARITHMETIC::T_MUL         ||
+       value == ARITHMETIC::T_MOD         ||
+       value == ARITHMETIC::T_PLUS_EQ     ||
+       value == ARITHMETIC::T_MINUS_EQ    ||
+       value == ARITHMETIC::T_DIV_EQ      ||
+       value == ARITHMETIC::T_MUL_EQ      ||
+       value == ARITHMETIC::T_OR          ||
+       value == ARITHMETIC::T_AND         ||
+       value == ARITHMETIC::T_SHIFT_RIGHT ||
+       value == ARITHMETIC::T_SHIFT_LEFT  )
+    {
+        return true;
+    }
 
     return false;
 }
 
 bool Lexer::IsPrefix(std::string value)
 {
-    
+    if(value == PREFIX::T_PLUS_PLUS    ||
+       value == PREFIX::T_MINUS_MINUS    )
+    {
+        return true;
+    }
 
     return false;
 }
 
 bool Lexer::IsPostfix(std::string value)
 {
-    
+    if(value == POSTFIX::T_PLUS_PLUS    ||
+       value == POSTFIX::T_MINUS_MINUS    )
+    {
+        return true;
+    }
 
     return false;
 }
 
 bool Lexer::IsLogical(std::string value)
 {
-    
+    if(value == LOGICAL::T_GREAT_THEN    ||
+       value == LOGICAL::T_LESS_THEN     ||
+       value == LOGICAL::T_GREAT_THEN_EQ ||
+       value == LOGICAL::T_LESS_THEN_EQ  ||
+       value == LOGICAL::T_OR            ||
+       value == LOGICAL::T_AND           ||
+       value == LOGICAL::T_DIFF          ||
+       value == LOGICAL::T_EQUALS        )
+    {
+        return true;
+    }
 
-    return false;
-}
-
-bool Lexer::IsFloatLiteral(std::string value)
-{
-    
-
-    return false;
-}
-
-bool Lexer::IsIntLiteral(std::string value)
-{
-    
-
-    return false;
-}
-
-bool Lexer::IsCharLiteral(std::string value)
-{
-    
 
     return false;
 }
 
 bool Lexer::IsBoolLiteral(std::string value)
 {
-    
+    if(value == TEMPLATE::TRUE_LITERAL    ||
+       value == TEMPLATE::FALSE_LITERAL   )
+    {
+        return true;
+    }
 
     return false;
 }
