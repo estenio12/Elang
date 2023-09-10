@@ -10,12 +10,14 @@
 
 #include <filesystem>
 #include "./lexer.hpp"
+#include "../helpers/debug-tokens.hpp"
 #include "output.hpp"
 
 class Compiler
 {
     private:
         Lexer* lexer;
+        DebugToken* debug;
 
     public:
         Compiler(std::string sourcePath);

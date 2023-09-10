@@ -58,6 +58,11 @@ class Lexer
         bool IsDigit(char letter);
         bool IsDigitFloat(std::string buffer);
         bool IsAlphaNumetic(char letter);
+        bool IsDelimiter(std::string value);
+        bool IsSelfIncrementation(std::string value);
+        int IsArithmetic(std::string value);
+        int IsLogical(std::string value);
+        TYPE_TOKEN GetTypeSelfIncrementation();
 
     private:
         void BuildToken(std::string value, TYPE_TOKEN type, int startpos, int endpos);
@@ -65,12 +70,10 @@ class Lexer
         void BuildLiteralIntToken(std::string value, int startpos, int endpos);
 
     private:
-        bool IsKeyword(std::string value);
-        bool IsType(std::string value);
-        bool IsDelimiter(std::string value);
-        bool IsArithmetic(std::string value);
-        bool IsPrefix(std::string value);
-        bool IsPostfix(std::string value);
-        bool IsLogical(std::string value);
-        bool IsBoolLiteral(std::string value);
+        bool IsKeywordToken(std::string value);
+        bool IsTypeToken(std::string value);
+        bool IsDelimiterToken(std::string value);
+        bool IsArithmeticToken(std::string value);
+        bool IsLogicalToken(std::string value);
+        bool IsBoolLiteralToken(std::string value);
 };

@@ -9,6 +9,7 @@ Compiler::Compiler(std::string sourcePath)
     }
 
     this->lexer = new Lexer(sourcePath);
+    this->debug = new DebugToken();
 }
 
 Compiler::~Compiler()
@@ -30,6 +31,6 @@ void Compiler::Run()
 
         if(token == nullptr) break;
 
-        std::cout << "Debug: " << token->value << " | " << token->type << " | " << token->startpos << " | " << token->endpos << "\n";
+        debug->printToken(token);
     }
 }

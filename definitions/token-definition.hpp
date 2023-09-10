@@ -84,23 +84,17 @@ namespace ARITHMETIC
     static const std::string T_DIV         = "/";
     static const std::string T_MUL         = "*";
     static const std::string T_MOD         = "%";
+    static const std::string T_OR          = "|";
+    static const std::string T_AND         = "&";
     static const std::string T_PLUS_EQ     = "+=";
     static const std::string T_MINUS_EQ    = "-=";
     static const std::string T_DIV_EQ      = "/=";
     static const std::string T_MUL_EQ      = "*=";
-    static const std::string T_OR          = "|";
-    static const std::string T_AND         = "&";
     static const std::string T_SHIFT_RIGHT = ">>";
     static const std::string T_SHIFT_LEFT  = "<<";
 }
 
-namespace PREFIX
-{
-    static const std::string T_PLUS_PLUS   = "++";
-    static const std::string T_MINUS_MINUS = "--";
-}
-
-namespace POSTFIX
+namespace SELF_INCREMENTATION
 {
     static const std::string T_PLUS_PLUS   = "++";
     static const std::string T_MINUS_MINUS = "--";

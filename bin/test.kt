@@ -1,1 +1,1 @@
-var contador: int = 10.5;
+var contador: int = 10 + 20;

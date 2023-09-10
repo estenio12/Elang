@@ -114,6 +114,76 @@ void Lexer::Tokenize(std::string line)
         
         if(current_job == JOB_STATE::UNDEFINED)
         {
+            if(IsDelimiter({line[i], line[i + 1]}))
+            {
+                int endpos = i + 1;
+                BuildToken({line[i]}, TYPE_TOKEN::T_DELIMITER, startpos, endpos);
+                buffer.clear();
+                // startpos = i + 1;
+                continue;
+            }
+
+            if(IsSelfIncrementation({line[i], line[i + 1]}))
+            {
+                int endpos = i + 1;
+                this->BuildToken({line[i], line[i + 1]}, GetTypeSelfIncrementation(), startpos, endpos);
+                buffer.clear();
+                // # If self increment or decrement symbol use the two character, then, 'i' counter will jump the next character.
+                i++;
+                startpos += 2;
+                continue;
+            }
+
+            auto arithmetic = IsArithmetic({line[i], line[i + 1]});
+            if(arithmetic != 0)
+            {
+                int endpos = i + 1;
+                std::string tempToken;
+
+                if(arithmetic == 1)
+                    tempToken = {line[i]};
+                else
+                    tempToken = {line[i], line[i + 1]};
+
+                this->BuildToken(tempToken, TYPE_TOKEN::T_ARITHMETIC, startpos, endpos);
+                buffer.clear();
+                startpos = i + 1;
+
+                if(arithmetic == 2)
+                {
+                    // # If arithmetic symbol use the two character, then, 'i' counter will jump the next character.
+                    i++;
+                    startpos++;
+                }
+
+                continue;
+            }
+
+            auto logical = IsLogical({line[i], line[i + 1]});
+            if(logical != 0)
+            {
+                int endpos = i + 1;
+                std::string tempToken;
+
+                if(logical == 1)
+                    tempToken = {line[i]};
+                else
+                    tempToken = {line[i], line[i + 1]};
+
+                this->BuildToken(tempToken, TYPE_TOKEN::T_LOGICAL, startpos, endpos);
+                buffer.clear();
+                startpos = i + 1;
+
+                if(logical == 2)
+                {
+                    // # If logical symbol use the two character, then, 'i' counter will jump the next character.
+                    i++;
+                    startpos++;
+                }
+
+                continue;
+            }
+
             if(IsDigit(line[i]))
                 current_job = JOB_STATE::BUILD_DIGIT;
             
@@ -148,7 +218,7 @@ void Lexer::Tokenize(std::string line)
                 buffer.push_back(line[i]);
             else
             {
-                int endpos = i;
+                int endpos = i + 1;
 
                 this->BindToken(buffer, startpos, endpos);
 
@@ -162,14 +232,12 @@ void Lexer::Tokenize(std::string line)
 
 void Lexer::BindToken(std::string value, int startpos, int endpos)
 {
-    if(IsKeyword(value)) this->BuildToken(value, TYPE_TOKEN::T_KEYWORD, startpos, endpos);
-    else if(IsType(value)) this->BuildToken(value, TYPE_TOKEN::T_TYPE, startpos, endpos);
-    else if(IsDelimiter(value)) this->BuildToken(value, TYPE_TOKEN::T_DELIMITER, startpos, endpos);
-    else if(IsArithmetic(value)) this->BuildToken(value, TYPE_TOKEN::T_ARITHMETIC, startpos, endpos);
-    else if(IsPrefix(value)) this->BuildToken(value, TYPE_TOKEN::T_PREFIX, startpos, endpos);
-    else if(IsPostfix(value)) this->BuildToken(value, TYPE_TOKEN::T_POSTFIX, startpos, endpos);
-    else if(IsLogical(value)) this->BuildToken(value, TYPE_TOKEN::T_LOGICAL, startpos, endpos);
-    else if(IsBoolLiteral(value)) this->BuildToken(value, TYPE_TOKEN::T_BOOL_LITERAL, startpos, endpos);
+    if(IsKeywordToken(value)) this->BuildToken(value, TYPE_TOKEN::T_KEYWORD, startpos, endpos);
+    else if(IsTypeToken(value)) this->BuildToken(value, TYPE_TOKEN::T_TYPE, startpos, endpos);
+    else if(IsDelimiterToken(value)) this->BuildToken(value, TYPE_TOKEN::T_DELIMITER, startpos, endpos);
+    else if(IsArithmeticToken(value)) this->BuildToken(value, TYPE_TOKEN::T_ARITHMETIC, startpos, endpos);
+    else if(IsLogicalToken(value)) this->BuildToken(value, TYPE_TOKEN::T_LOGICAL, startpos, endpos);
+    else if(IsBoolLiteralToken(value)) this->BuildToken(value, TYPE_TOKEN::T_BOOL_LITERAL, startpos, endpos);
     else this->BuildToken(value, TYPE_TOKEN::T_IDENTIDIER, startpos, endpos);
 }
 
@@ -221,7 +289,7 @@ void Lexer::BuildToken(std::string value, TYPE_TOKEN type, int startpos, int end
     this->tokenPool.push(token);
 }
 
-bool Lexer::IsKeyword(std::string value)
+bool Lexer::IsKeywordToken(std::string value)
 {
     if(value == KEYWORD::T_ARRAY    ||
        value == KEYWORD::T_BREAK    ||
@@ -242,7 +310,7 @@ bool Lexer::IsKeyword(std::string value)
     return false;
 }
 
-bool Lexer::IsType(std::string value)
+bool Lexer::IsTypeToken(std::string value)
 {
     if(value == TYPE::T_BOOL   ||
        value == TYPE::T_CHAR   ||
@@ -257,7 +325,7 @@ bool Lexer::IsType(std::string value)
     return false;
 }
 
-bool Lexer::IsDelimiter(std::string value)
+bool Lexer::IsDelimiterToken(std::string value)
 {
     if(value == DELIMITER::T_COLON           ||
        value == DELIMITER::T_COMMA           ||
@@ -278,7 +346,7 @@ bool Lexer::IsDelimiter(std::string value)
     return false;
 }
 
-bool Lexer::IsArithmetic(std::string value)
+bool Lexer::IsArithmeticToken(std::string value)
 {
     if(value == ARITHMETIC::T_PLUS        ||
        value == ARITHMETIC::T_MINUS       ||
@@ -300,29 +368,7 @@ bool Lexer::IsArithmetic(std::string value)
     return false;
 }
 
-bool Lexer::IsPrefix(std::string value)
-{
-    if(value == PREFIX::T_PLUS_PLUS    ||
-       value == PREFIX::T_MINUS_MINUS    )
-    {
-        return true;
-    }
-
-    return false;
-}
-
-bool Lexer::IsPostfix(std::string value)
-{
-    if(value == POSTFIX::T_PLUS_PLUS    ||
-       value == POSTFIX::T_MINUS_MINUS    )
-    {
-        return true;
-    }
-
-    return false;
-}
-
-bool Lexer::IsLogical(std::string value)
+bool Lexer::IsLogicalToken(std::string value)
 {
     if(value == LOGICAL::T_GREAT_THEN    ||
        value == LOGICAL::T_LESS_THEN     ||
@@ -340,7 +386,7 @@ bool Lexer::IsLogical(std::string value)
     return false;
 }
 
-bool Lexer::IsBoolLiteral(std::string value)
+bool Lexer::IsBoolLiteralToken(std::string value)
 {
     if(value == TEMPLATE::TRUE_LITERAL    ||
        value == TEMPLATE::FALSE_LITERAL   )
@@ -350,3 +396,119 @@ bool Lexer::IsBoolLiteral(std::string value)
 
     return false;
 }
+
+bool Lexer::IsDelimiter(std::string value)
+{
+    if(value != LOGICAL::T_EQUALS) 
+    {
+        value.pop_back();
+    }
+
+    if(value == DELIMITER::T_COLON           ||
+       value == DELIMITER::T_COMMA           ||
+       value == DELIMITER::T_OPEN_BRACKET    ||
+       value == DELIMITER::T_CLOSE_BRACKET   ||
+       value == DELIMITER::T_OPEN_BRANCE     ||
+       value == DELIMITER::T_CLOSE_BRACE     ||
+       value == DELIMITER::T_OPEN_PARAM      ||
+       value == DELIMITER::T_CLOSE_PARAM     ||
+       value == DELIMITER::T_QUOTATION_MARKS ||
+       value == DELIMITER::T_APHOSTROFE      ||
+       value == DELIMITER::T_ASSIGN          ||
+       value == DELIMITER::T_EOF             )
+    {
+        return true;
+    }
+
+    return false;
+}
+
+int Lexer::IsArithmetic(std::string value)
+{
+    if(value[1] != ARITHMETIC::T_PLUS_EQ[1]     &&
+       value[1] != ARITHMETIC::T_SHIFT_LEFT[1]  &&
+       value[1] != ARITHMETIC::T_SHIFT_RIGHT[1] &&
+       value != LOGICAL::T_OR                   &&
+       value != LOGICAL::T_AND                  ) 
+    {
+        value.pop_back();
+    }
+
+    if(value == ARITHMETIC::T_PLUS        ||
+       value == ARITHMETIC::T_MINUS       ||
+       value == ARITHMETIC::T_DIV         ||
+       value == ARITHMETIC::T_MUL         ||
+       value == ARITHMETIC::T_MOD         ||
+       value == ARITHMETIC::T_OR          ||
+       value == ARITHMETIC::T_AND         )
+    {
+        return 1;
+    }
+
+    if(value == ARITHMETIC::T_PLUS_EQ     ||
+       value == ARITHMETIC::T_MINUS_EQ    ||
+       value == ARITHMETIC::T_DIV_EQ      ||
+       value == ARITHMETIC::T_MUL_EQ      ||
+       value == ARITHMETIC::T_SHIFT_RIGHT ||
+       value == ARITHMETIC::T_SHIFT_LEFT  )
+    {
+        return 2;
+    }
+
+    return 0;
+}
+
+TYPE_TOKEN Lexer::GetTypeSelfIncrementation()
+{
+    auto token = this->tokenPool.back();
+
+    if(token != nullptr && 
+      (token->type == TYPE_TOKEN::T_IDENTIDIER  || 
+       token->value == DELIMITER::T_CLOSE_PARAM )
+      )
+    {
+        return TYPE_TOKEN::T_POSTFIX;
+    }
+
+    return TYPE_TOKEN::T_PREFIX;
+}
+
+bool Lexer::IsSelfIncrementation(std::string value)
+{
+    if(value == SELF_INCREMENTATION::T_MINUS_MINUS ||
+       value == SELF_INCREMENTATION::T_PLUS_PLUS   )
+    {
+        return true;
+    }
+
+    return false;
+}
+
+int Lexer::IsLogical(std::string value)
+{
+    if(value[1] != LOGICAL::T_GREAT_THEN_EQ[1] &&
+       value[1] != LOGICAL::T_OR[1]            &&
+       value[1] != LOGICAL::T_AND[1]           ) 
+    {
+        value.pop_back();
+    }
+
+    if(value == LOGICAL::T_GREAT_THEN ||
+       value == LOGICAL::T_LESS_THEN  )
+    {
+        return 1;
+    }
+
+    if(value == LOGICAL::T_GREAT_THEN_EQ ||
+       value == LOGICAL::T_LESS_THEN_EQ  ||
+       value == LOGICAL::T_OR            ||
+       value == LOGICAL::T_AND           ||
+       value == LOGICAL::T_DIFF          ||
+       value == LOGICAL::T_EQUALS        )
+    {
+        return 2;
+    }
+
+    return 0;
+}
+
