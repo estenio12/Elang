@@ -53,11 +53,12 @@ namespace KEYWORD
 
 namespace TYPE
 {
-    static const std::string T_FLOAT = "float";
-    static const std::string T_INT   = "int";
-    static const std::string T_BOOL  = "bool";
-    static const std::string T_CHAR  = "char";
-    static const std::string T_VOID  = "void";
+    static const std::string T_FLOAT  = "float";
+    static const std::string T_INT    = "int";
+    static const std::string T_BOOL   = "bool";
+    static const std::string T_CHAR   = "char";
+    static const std::string T_VOID   = "void";
+    static const std::string T_STRING = "string";
 }
 
 namespace DELIMITER

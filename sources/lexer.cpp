@@ -244,11 +244,12 @@ bool Lexer::IsKeyword(std::string value)
 
 bool Lexer::IsType(std::string value)
 {
-    if(value == TYPE::T_BOOL  ||
-       value == TYPE::T_CHAR  ||
-       value == TYPE::T_FLOAT ||
-       value == TYPE::T_INT   ||
-       value == TYPE::T_VOID  )
+    if(value == TYPE::T_BOOL   ||
+       value == TYPE::T_CHAR   ||
+       value == TYPE::T_FLOAT  ||
+       value == TYPE::T_INT    ||
+       value == TYPE::T_STRING ||
+       value == TYPE::T_VOID   )
     {
         return true;
     }
