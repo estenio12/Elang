@@ -100,10 +100,9 @@ bool Lexer::IsAlphaNumetic(char letter)
 void Lexer::Tokenize(std::string line)
 {
     std::string buffer;
-    int startpos = 0;
     int current_job = JOB_STATE::UNDEFINED;
 
-    for(int i = 0; i < line.size(); i++)
+    for(int i = 0, k = 1; i < line.size(); i++)
     {
         if(line[i] == SKIP_CHARACTER::TABULATION ||
            line[i] == SKIP_CHARACTER::RETURN     ||
@@ -116,45 +115,44 @@ void Lexer::Tokenize(std::string line)
         {
             if(IsDelimiter({line[i], line[i + 1]}))
             {
-                int endpos = i + 1;
+                int startpos = i + 1;
+                int endpos   = i + 1;
                 BuildToken({line[i]}, TYPE_TOKEN::T_DELIMITER, startpos, endpos);
                 buffer.clear();
-                // startpos = i + 1;
                 continue;
             }
 
             if(IsSelfIncrementation({line[i], line[i + 1]}))
             {
-                int endpos = i + 1;
+                int startpos = i + 1;
+                int endpos   = i + 2;
                 this->BuildToken({line[i], line[i + 1]}, GetTypeSelfIncrementation(), startpos, endpos);
                 buffer.clear();
                 // # If self increment or decrement symbol use the two character, then, 'i' counter will jump the next character.
                 i++;
-                startpos += 2;
                 continue;
             }
 
             auto arithmetic = IsArithmetic({line[i], line[i + 1]});
             if(arithmetic != 0)
             {
-                int endpos = i + 1;
+                int startpos = i + 1;
+                int endpos   = i + 1;
                 std::string tempToken;
 
                 if(arithmetic == 1)
                     tempToken = {line[i]};
                 else
+                {
                     tempToken = {line[i], line[i + 1]};
+                    endpos++;
+                }
 
                 this->BuildToken(tempToken, TYPE_TOKEN::T_ARITHMETIC, startpos, endpos);
                 buffer.clear();
-                startpos = i + 1;
 
-                if(arithmetic == 2)
-                {
-                    // # If arithmetic symbol use the two character, then, 'i' counter will jump the next character.
-                    i++;
-                    startpos++;
-                }
+                // # If arithmetic symbol use the two character, then, 'i' counter will jump the next character.
+                if(arithmetic == 2) i++;
 
                 continue;
             }
@@ -162,35 +160,36 @@ void Lexer::Tokenize(std::string line)
             auto logical = IsLogical({line[i], line[i + 1]});
             if(logical != 0)
             {
-                int endpos = i + 1;
+                int startpos = i + 1;
+                int endpos   = i + 1;
                 std::string tempToken;
 
                 if(logical == 1)
                     tempToken = {line[i]};
                 else
+                {
                     tempToken = {line[i], line[i + 1]};
+                    endpos++;
+                }
 
                 this->BuildToken(tempToken, TYPE_TOKEN::T_LOGICAL, startpos, endpos);
                 buffer.clear();
-                startpos = i + 1;
 
-                if(logical == 2)
-                {
-                    // # If logical symbol use the two character, then, 'i' counter will jump the next character.
-                    i++;
-                    startpos++;
-                }
+                // # If logical symbol use the two character, then, 'i' counter will jump the next character.
+                if(logical == 2) i++;
 
                 continue;
             }
 
             if(IsDigit(line[i]))
+            {
                 current_job = JOB_STATE::BUILD_DIGIT;
+            }
             
             if(IsAlphaNumetic(line[i]))
+            {
                 current_job = JOB_STATE::BUILD_ALPHA_DIGIT;
-
-            startpos = i + 1;
+            }
         }
 
         if(current_job == JOB_STATE::BUILD_DIGIT)
@@ -199,7 +198,8 @@ void Lexer::Tokenize(std::string line)
                 buffer.push_back(line[i]);
             else
             {
-                int endpos = i;
+                int startpos = i - (buffer.size() - 1);
+                int endpos   = i;
 
                 if(IsDigitFloat(buffer))
                     this->BuildLiteralFloatToken(buffer, startpos, endpos);
@@ -208,23 +208,28 @@ void Lexer::Tokenize(std::string line)
 
                 buffer.clear();
                 current_job = JOB_STATE::UNDEFINED;
-                i--;
+
+                if(line[i] != SKIP_CHARACTER::WHITESPACE) i--;
             }
         }
 
         if(current_job == JOB_STATE::BUILD_ALPHA_DIGIT)
         {
             if(IsAlphaNumetic(line[i]))
+            {
                 buffer.push_back(line[i]);
+            }
             else
             {
-                int endpos = i + 1;
+                int startpos = i - (buffer.size() - 1);
+                int endpos   = i;
 
                 this->BindToken(buffer, startpos, endpos);
 
                 buffer.clear();
                 current_job = JOB_STATE::UNDEFINED;
-                i--;
+
+                if(line[i] != SKIP_CHARACTER::WHITESPACE) i--;
             }
         }
     }
@@ -337,7 +342,6 @@ bool Lexer::IsDelimiterToken(std::string value)
        value == DELIMITER::T_CLOSE_PARAM     ||
        value == DELIMITER::T_QUOTATION_MARKS ||
        value == DELIMITER::T_APHOSTROFE      ||
-       value == DELIMITER::T_ASSIGN          ||
        value == DELIMITER::T_EOF             )
     {
         return true;
@@ -399,10 +403,8 @@ bool Lexer::IsBoolLiteralToken(std::string value)
 
 bool Lexer::IsDelimiter(std::string value)
 {
-    if(value != LOGICAL::T_EQUALS) 
-    {
-        value.pop_back();
-    }
+    // # DELIMITER NOT HAVE MORE THE ONE CHARACTER
+    if(value.size() > 1) value.pop_back();
 
     if(value == DELIMITER::T_COLON           ||
        value == DELIMITER::T_COMMA           ||
@@ -414,7 +416,6 @@ bool Lexer::IsDelimiter(std::string value)
        value == DELIMITER::T_CLOSE_PARAM     ||
        value == DELIMITER::T_QUOTATION_MARKS ||
        value == DELIMITER::T_APHOSTROFE      ||
-       value == DELIMITER::T_ASSIGN          ||
        value == DELIMITER::T_EOF             )
     {
         return true;
@@ -434,13 +435,14 @@ int Lexer::IsArithmetic(std::string value)
         value.pop_back();
     }
 
-    if(value == ARITHMETIC::T_PLUS        ||
-       value == ARITHMETIC::T_MINUS       ||
-       value == ARITHMETIC::T_DIV         ||
-       value == ARITHMETIC::T_MUL         ||
-       value == ARITHMETIC::T_MOD         ||
-       value == ARITHMETIC::T_OR          ||
-       value == ARITHMETIC::T_AND         )
+    if(value == ARITHMETIC::T_PLUS   ||
+       value == ARITHMETIC::T_MINUS  ||
+       value == ARITHMETIC::T_DIV    ||
+       value == ARITHMETIC::T_MUL    ||
+       value == ARITHMETIC::T_MOD    ||
+       value == ARITHMETIC::T_OR     ||
+       value == ARITHMETIC::T_ASSIGN ||
+       value == ARITHMETIC::T_AND    )
     {
         return 1;
     }

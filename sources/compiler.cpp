@@ -31,6 +31,6 @@ void Compiler::Run()
 
         if(token == nullptr) break;
 
-        debug->printToken(token);
+        // debug->printToken(token);
     }
 }

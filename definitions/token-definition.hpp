@@ -73,12 +73,12 @@ namespace DELIMITER
     static const std::string T_CLOSE_PARAM   = ")";
     static const std::string T_QUOTATION_MARKS = "\"";
     static const std::string T_APHOSTROFE      = "\'";
-    static const std::string T_ASSIGN          = "=";
     static const std::string T_EOF             = ";";
 }
 
 namespace ARITHMETIC
 {
+    static const std::string T_ASSIGN      = "=";
     static const std::string T_PLUS        = "+";
     static const std::string T_MINUS       = "-";
     static const std::string T_DIV         = "/";
