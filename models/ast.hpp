@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include <queue>
+#include <vector>
 #include "./models/token.hpp"
 
 enum BRANCH_TYPE
@@ -44,7 +44,7 @@ class AstBranch
 class Ast
 {
     public:
-        std::queue<AstBranch*> tree;
+        std::vector<AstBranch*> tree;
 
     public:
         Ast(){}
@@ -52,11 +52,16 @@ class Ast
 
     public:
         void AddNode(AstBranch* branch) { this->tree.push(branch); }
-        AstBranch* GetBranch() 
+        AstBranch* ConsumeBranch() 
         { 
-            auto tmpBranch = tree.front();
-            tree.pop();
-            return tmpBranch;
+            if(tree.size() > 0)
+            {
+                auto tmpBranch = tree[0];
+                tree.erase(tree.begin(), tree.begin() + 1);
+                return tmpBranch;
+            }
+
+            return nullptr;
         }
 
 };

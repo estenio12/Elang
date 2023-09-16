@@ -403,7 +403,7 @@ bool Lexer::IsBoolLiteralToken(std::string value)
 
 bool Lexer::IsDelimiter(std::string value)
 {
-    // # DELIMITER NOT HAVE MORE THE ONE CHARACTER
+    // # IN CURRENT VERSION OF COMPILER, DELIMITER DOES NOT HAVE MORE THE ONE CHARACTER
     if(value.size() > 1) value.pop_back();
 
     if(value == DELIMITER::T_COLON           ||
