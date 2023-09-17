@@ -8,10 +8,15 @@
 
 #pragma once
 
+#include "../headers/lexer.hpp"
+
 class Parser
 {
     public:
-        Parser();
+        Lexer* lexer;
+
+    public:
+        Parser(Lexer* lexer;);
         ~Parser();
 
     public:

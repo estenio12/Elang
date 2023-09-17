@@ -1,11 +1,11 @@
-
-
-## Annotation
-
->> To implementation: 
-
-	
-
->> To Fix:
-
-	
+variable-declaration:
+{
+    step = 1;
+    
+    step 1 = espero identifier
+    step 2 = espero separador
+    step 3 = espero um tipo
+    step 4 = EOF ou =
+    step 5 = if step 4 is '=' then expression
+    step 6 = EOF
+}

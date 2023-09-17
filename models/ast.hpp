@@ -14,37 +14,33 @@
 enum BRANCH_TYPE
 {
     UNDEFINED,
-    VARIABLE_DECLARATION,
-    FUNCTION_DECLARATION
+    VARIABLE_DECLARATION
 };
 
 class AstNode
 {
     public:
-        Token* token;
-        AstNode* left;
-        AstNode* right;
+        BRANCH_TYPE kind = BRANCH_TYPE::UNDEFINED;
 
     public:
         AstNode(){}
         ~AstNode(){}
 };
 
-class AstBranch
+class VariableDeclaraion : public AstNode
 {
-    public:
-        BRANCH_TYPE BranchName;
-        AstNode* BranchNode;
-
-    public:
-        AstBranch(){}
-        ~AstBranch(){}
+    kind = BRANCH_TYPE::VARIABLE_DECLARATION;
+    std::string name;
+    std::string type;
+    std::string scopeName = "GLOBAL";
+    int deep = 0;
+    bool isConstant = false;
 };
 
 class Ast
 {
     public:
-        std::vector<AstBranch*> tree;
+        std::vector<AstNode*> tree;
 
     public:
         Ast(){}
