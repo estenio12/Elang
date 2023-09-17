@@ -1,1 +1,1 @@
-var contador: int;
+const idade: int;

@@ -9,7 +9,7 @@
 #pragma once
 
 #include <vector>
-#include "./models/token.hpp"
+#include "../models/token.hpp"
 
 enum BRANCH_TYPE
 {
@@ -27,27 +27,49 @@ class AstNode
         ~AstNode(){}
 };
 
-class VariableDeclaraion : public AstNode
+class VariableDeclaration : public AstNode
 {
-    kind = BRANCH_TYPE::VARIABLE_DECLARATION;
-    std::string name;
-    std::string type;
-    std::string scopeName = "GLOBAL";
-    int deep = 0;
-    bool isConstant = false;
+    public:
+        std::string name;
+        std::string type;
+        std::string scopeName = "GLOBAL";
+        int deep = 0;
+        bool isConstant = false;
+        bool isArray    = false;
+
+    public:
+        VariableDeclaration()
+        {
+            kind = BRANCH_TYPE::VARIABLE_DECLARATION;
+        }
+
+        ~VariableDeclaration(){}
+};
+
+class AstBranch
+{
+    public:
+        BRANCH_TYPE TYPE = BRANCH_TYPE::UNDEFINED;
+
+    public:
+        class VariableDeclaration* branch_variable_declaration;
+
+    public:
+        AstBranch(){}
+        ~AstBranch(){}
 };
 
 class Ast
 {
     public:
-        std::vector<AstNode*> tree;
+        std::vector<AstBranch*> tree;
 
     public:
         Ast(){}
         ~Ast(){}
 
     public:
-        void AddNode(AstBranch* branch) { this->tree.push(branch); }
+        void AddNode(AstBranch* branch) { this->tree.push_back(branch); }
         AstBranch* ConsumeBranch() 
         { 
             if(tree.size() > 0)

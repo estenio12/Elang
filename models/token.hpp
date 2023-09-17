@@ -12,7 +12,7 @@
 class Token
 {
     public:
-        int line           = 0;
+        int line     = 0;
         int startpos = 0;
         int endpos   = 0;
         std::string value  = "";

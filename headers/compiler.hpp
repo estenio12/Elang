@@ -9,15 +9,15 @@
 #pragma once
 
 #include <filesystem>
-#include "./lexer.hpp"
-#include "../helpers/debug-tokens.hpp"
+#include "lexer.hpp"
 #include "output.hpp"
+#include "parser.hpp"
 
 class Compiler
 {
     private:
         Lexer* lexer;
-        DebugToken* debug;
+        Parser* parser;
 
     public:
         Compiler(std::string sourcePath);

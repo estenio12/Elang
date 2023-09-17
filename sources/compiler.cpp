@@ -8,8 +8,8 @@ Compiler::Compiler(std::string sourcePath)
         exit(EXIT_FAILURE);
     }
 
-    this->lexer = new Lexer(sourcePath);
-    this->debug = new DebugToken();
+    this->lexer  = new Lexer(sourcePath);
+    this->parser = new Parser(lexer);
 }
 
 Compiler::~Compiler()
@@ -25,12 +25,5 @@ bool Compiler::IsNotValidPath(std::string sourcePath)
 
 void Compiler::Run()
 {
-    while(true)
-    {
-        auto token = this->lexer->GetNextToken();
-
-        if(token == nullptr) break;
-
-        // debug->printToken(token);
-    }
+    this->parser->Parse();
 }
