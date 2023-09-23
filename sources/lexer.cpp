@@ -363,6 +363,7 @@ bool Lexer::IsArithmeticToken(std::string value)
        value == ARITHMETIC::T_MUL_EQ      ||
        value == ARITHMETIC::T_OR          ||
        value == ARITHMETIC::T_AND         ||
+       value == ARITHMETIC::T_POW         ||
        value == ARITHMETIC::T_SHIFT_RIGHT ||
        value == ARITHMETIC::T_SHIFT_LEFT  )
     {

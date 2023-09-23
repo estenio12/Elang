@@ -86,6 +86,7 @@ namespace ARITHMETIC
     static const std::string T_MOD         = "%";
     static const std::string T_OR          = "|";
     static const std::string T_AND         = "&";
+    static const std::string T_POW         = "^";
     static const std::string T_PLUS_EQ     = "+=";
     static const std::string T_MINUS_EQ    = "-=";
     static const std::string T_DIV_EQ      = "/=";

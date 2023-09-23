@@ -56,5 +56,6 @@ class Parser
         Expression* BuildExpression();
         BinaryOperation* ParserExpression(Tokens* tokenList, uint8_t minPrecedence);
         BinaryOperation* ParserPrimary(Tokens* tokenList);
+        uint8_t GetPrecedenceValue(Token*);
 
 };
