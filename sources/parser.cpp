@@ -49,7 +49,7 @@ void Parser::ExpectType(TYPE_TOKEN expected, std::string message)
     auto token = this->lexer->GetNextToken();
 
     if(token != nullptr && token->type != expected)
-        this->ThrowError(token, "Unexpected token");
+        this->ThrowError(token, message);
 
     delete token;
 }
@@ -59,7 +59,7 @@ void Parser::ExpectValue(std::string expected, std::string message)
     auto token = this->lexer->GetNextToken();
 
     if(token != nullptr && token->value != expected)
-        this->ThrowError(token, "Unexpected token");
+        this->ThrowError(token, message);
 
     delete token;
 }

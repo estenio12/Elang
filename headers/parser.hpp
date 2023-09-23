@@ -8,8 +8,10 @@
 
 #pragma once
 
+#include <cstdint>
 #include "lexer.hpp"
 #include "../models/ast.hpp"
+#include "../models/expression.hpp"
 #include "../definitions/token-definition.hpp"
 #include "../helpers/debug-compiler.hpp"
 
@@ -49,4 +51,10 @@ class Parser
 
     private:
         AstBranch* BuildVariableDeclaration(Token*);
+
+    private:
+        Expression* BuildExpression();
+        BinaryOperation* ParserExpression(Tokens* tokenList, uint8_t minPrecedence);
+        BinaryOperation* ParserPrimary(Tokens* tokenList);
+
 };

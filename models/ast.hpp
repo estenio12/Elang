@@ -14,7 +14,8 @@
 enum BRANCH_TYPE
 {
     UNDEFINED,
-    VARIABLE_DECLARATION
+    VARIABLE_DECLARATION,
+    EXPRESSION
 };
 
 class AstNode
@@ -27,6 +28,34 @@ class AstNode
         ~AstNode(){}
 };
 
+class BinaryOperation
+{
+    public:
+        Token* token;
+        BinaryOperation* left;
+        BinaryOperation* right;
+
+    public:
+        BinaryOperation(BinaryOperation* left, Token* token, BinaryOperation* right):
+        token(token), left(left), right(right){}
+        ~BinaryOperation(){}
+};
+
+class Expression : public AstNode
+{
+    public:
+        bool IsLiteralOperation = false;
+        BinaryOperation* operation;
+
+    public:
+        Expression()
+        {
+            kind = BRANCH_TYPE::EXPRESSION;
+        }
+
+        ~Expression(){}
+};
+
 class VariableDeclaration : public AstNode
 {
     public:
@@ -36,6 +65,7 @@ class VariableDeclaration : public AstNode
         int deep = 0;
         bool isConstant = false;
         bool isArray    = false;
+        Expression* expression = nullptr;
 
     public:
         VariableDeclaration()

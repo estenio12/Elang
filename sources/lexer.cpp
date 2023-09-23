@@ -416,6 +416,7 @@ bool Lexer::IsDelimiter(std::string value)
        value == DELIMITER::T_CLOSE_PARAM     ||
        value == DELIMITER::T_QUOTATION_MARKS ||
        value == DELIMITER::T_APHOSTROFE      ||
+       value == DELIMITER::T_ASSIGN          ||
        value == DELIMITER::T_EOF             )
     {
         return true;
@@ -441,7 +442,6 @@ int Lexer::IsArithmetic(std::string value)
        value == ARITHMETIC::T_MUL    ||
        value == ARITHMETIC::T_MOD    ||
        value == ARITHMETIC::T_OR     ||
-       value == ARITHMETIC::T_ASSIGN ||
        value == ARITHMETIC::T_AND    )
     {
         return 1;
