@@ -58,12 +58,30 @@ AstBranch* Parser::BuildVariableDeclaration(Token* token)
             variable->type = t_type->value;
         else
             this->ThrowError(t_type, "It's expected an type after seperator.");
-
-        delete t_type;
     }
 
-    // # Consume syntax ';'
-    this->ExpectValue(DELIMITER::T_EOF, "Expected the ';' or '=' after type declaration");
+    // # Get ';' or '='token
+    auto t_bridge_token = this->lexer->GetNextToken();
+
+    if(t_bridge_token == nullptr)
+    {
+        ThrowError(t_type, "Expected the ';' or '=' after type declaration");
+    }
+    else if(t_bridge_token->value == DELIMITER::T_ASSIGN)
+    {
+        variable->expression = BuildExpression();
+    }
+    else if(t_bridge_token->value == DELIMITER::T_EOF)
+    {
+        delete t_bridge_token;
+    }
+    else
+    {
+        ThrowError(t_type, "Expected the ';' or '=' after type declaration");
+    }
+
+    // # Free from memory
+    delete t_type;
 
     auto branch = new AstBranch();
     branch->branch_variable_declaration = variable;

@@ -3,8 +3,24 @@
 Expression* Parser::BuildExpression()
 {
     auto expression = new Expression();
+    auto tokenList  = new Tokens();
 
-    return nullptr;
+    while(true)
+    {
+        auto token = this->lexer->GetNextToken();
+
+        if(token == nullptr) 
+        {
+            Output::PrintCustomizeError("Line: " + std::to_string(lexer->lineCounter) + " | Syntax error: ", "the source code end abruptly without the terminate keyword ';'!");
+            exit(EXIT_FAILURE);
+        }
+        else if(token->value == DELIMITER::T_EOF) break;
+        else tokenList->AddToken(token);
+    }
+
+    expression->operation = ParserExpression(tokenList, 0);
+
+    return expression;
 }
 
 BinaryOperation* Parser::ParserExpression(Tokens* tokenList, uint8_t minPrecedence = 0)

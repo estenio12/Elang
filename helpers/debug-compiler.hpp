@@ -42,6 +42,27 @@ class DebugCompiler
         }
 
     private:
+        void printBinaryOperation(BinaryOperation* node, std::string origin, int space)
+        {
+            if(node != nullptr)
+            {
+                if(origin == "right") 
+                    for(int i = 0; i < space; i++) std::cout << "\t";
+
+                std::cout << origin << ": " << node->token->value << "\n";
+
+                printBinaryOperation(node->left, "left", --space);
+                printBinaryOperation(node->right, "right", ++space);
+            }
+        }
+
+        void printExpression(Expression* expression)
+        {
+            Output::PrintDebug("Print Expression:");
+            std::cout << "IsLiteralOperation: " << (expression->IsLiteralOperation ? "true" : "false") << "\n";
+            printBinaryOperation(expression->operation, "root", 1);
+        }
+
         void printVariableDeclaration(VariableDeclaration* node)
         {
             std::cout << "DEBUG BRANCH: " << "VARIABLE DECLARATION" << "\n";
@@ -51,6 +72,9 @@ class DebugCompiler
             std::cout << "deep........: " << node->deep << "\n";
             std::cout << "is constant.: " << (node->isConstant ? "true" : "false") << "\n";
             std::cout << "is array....: " << (node->isArray ? "true" : "false") << "\n";
+
+            if(node->expression != nullptr)
+                printExpression(node->expression);
         }
 
     public:
