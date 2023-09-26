@@ -1,11 +1,11 @@
 #include "../headers/parser.hpp"
 
-BRANCH_TYPE Parser::BindOperation(Token* token)
+EBRANCH_TYPE Parser::BindOperation(Token* token)
 {
-    if(IsVariableDeclaration(token)) return BRANCH_TYPE::VARIABLE_DECLARATION;
+    if(IsVariableDeclaration(token)) return EBRANCH_TYPE::VARIABLE_DECLARATION;
 
     this->ThrowError(token, "Unexpected token");
-    return BRANCH_TYPE::UNDEFINED;
+    return EBRANCH_TYPE::UNDEFINED;
 }
 
 // # Checkers
@@ -85,7 +85,7 @@ AstBranch* Parser::BuildVariableDeclaration(Token* token)
 
     auto branch = new AstBranch();
     branch->branch_variable_declaration = variable;
-    branch->TYPE = BRANCH_TYPE::VARIABLE_DECLARATION;
+    branch->TYPE = EBRANCH_TYPE::VARIABLE_DECLARATION;
 
     return branch;
 }

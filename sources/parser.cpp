@@ -19,7 +19,7 @@ void Parser::Parse()
 
         switch(operation)
         {
-            case BRANCH_TYPE::VARIABLE_DECLARATION:
+            case EBRANCH_TYPE::VARIABLE_DECLARATION:
                 PushToAst(this->BuildVariableDeclaration(token));
             break;
             

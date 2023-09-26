@@ -29,7 +29,7 @@ class Parser
         void Parse();
 
     private:    
-        BRANCH_TYPE BindOperation(Token*);
+        EBRANCH_TYPE BindOperation(Token*);
         void ExpectType(TYPE_TOKEN, std::string message);
         void ExpectValue(std::string, std::string message);
         void ThrowError(Token*, std::string message);
@@ -54,8 +54,8 @@ class Parser
 
     private:
         Expression* BuildExpression();
-        BinaryOperation* ParserExpression(Tokens* tokenList, uint8_t minPrecedence);
-        BinaryOperation* ParserPrimary(Tokens* tokenList);
+        BinaryOperation* ParserExpression(Tokens* tokenList, Expression* expr, uint8_t minPrecedence);
+        BinaryOperation* ParserPrimary(Tokens* tokenList, Expression* expr);
         uint8_t GetPrecedenceValue(Token*);
 
 };

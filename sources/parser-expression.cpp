@@ -23,29 +23,29 @@ Expression* Parser::BuildExpression()
     return expression;
 }
 
-BinaryOperation* Parser::ParserExpression(Tokens* tokenList, uint8_t minPrecedence = 0)
+BinaryOperation* Parser::ParserExpression(Tokens* tokenList, Expression* expr, uint8_t minPrecedence = 0)
 {
-    auto left = ParserPrimary(tokenList);
+    auto left = ParserPrimary(tokenList, expr);
 
     while(tokenList->GetSize() > 0 && 
           tokenList->GetFirstData()->type == TYPE_TOKEN::T_ARITHMETIC &&
           GetPrecedenceValue(tokenList->GetFirstData()) >= minPrecedence)
     {
-        auto tokenOperator  = tokenList->Shift();
-        auto right = ParserExpression(tokenList, GetPrecedenceValue(tokenOperator) + 1);
+        auto tokenOperator = tokenList->Shift();
+        auto right = ParserExpression(tokenList, expr, GetPrecedenceValue(tokenOperator) + 1);
         left       = new BinaryOperation(left, tokenOperator, right);
     }
 
     return left;
 }
 
-BinaryOperation* Parser::ParserPrimary(Tokens* tokenList)
+BinaryOperation* Parser::ParserPrimary(Tokens* tokenList, Expression* expr)
 {
     auto token = tokenList->Shift();
 
     if(token->value == DELIMITER::T_OPEN_PARAM)
     {
-        auto expression = ParserExpression(tokenList);
+        auto expression = ParserExpression(tokenList, expr);
 
         this->ExpectValue(tokenList->Shift()->value, "Expected closing paratheses");
 
@@ -56,6 +56,16 @@ BinaryOperation* Parser::ParserPrimary(Tokens* tokenList)
             token->type == TYPE_TOKEN::T_IDENTIDIER     ||
             token->type == TYPE_TOKEN::T_STRING_LITERAL )
     {
+        if(token->type == TYPE_TOKEN::T_STRING_LITERAL)
+            expr->IsConcatenation = true;
+
+        if(token->type == TYPE_TOKEN::T_IDENTIDIER)
+        {
+            expr->IsLiteralOperation = false;
+
+            // # Check identifier
+        }
+            
         return new BinaryOperation(nullptr, token, nullptr);
     }
 

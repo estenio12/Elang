@@ -89,6 +89,6 @@ class DebugCompiler
         
         void PrintAstBranch(AstBranch* node)
         {
-            if(node->TYPE == BRANCH_TYPE::VARIABLE_DECLARATION) printVariableDeclaration(node->branch_variable_declaration);
+            if(node->TYPE == EBRANCH_TYPE::VARIABLE_DECLARATION) printVariableDeclaration(node->branch_variable_declaration);
         }
 };

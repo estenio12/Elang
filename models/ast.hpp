@@ -11,7 +11,7 @@
 #include <vector>
 #include "../models/token.hpp"
 
-enum BRANCH_TYPE
+enum EBRANCH_TYPE
 {
     UNDEFINED,
     VARIABLE_DECLARATION,
@@ -21,7 +21,7 @@ enum BRANCH_TYPE
 class AstNode
 {
     public:
-        BRANCH_TYPE kind = BRANCH_TYPE::UNDEFINED;
+        EBRANCH_TYPE kind = EBRANCH_TYPE::UNDEFINED;
 
     public:
         AstNode(){}
@@ -44,13 +44,14 @@ class BinaryOperation
 class Expression : public AstNode
 {
     public:
-        bool IsLiteralOperation = false;
+        bool IsLiteralOperation = true;
+        bool IsConcatenation    = false;
         BinaryOperation* operation;
 
     public:
         Expression()
         {
-            kind = BRANCH_TYPE::EXPRESSION;
+            kind = EBRANCH_TYPE::EXPRESSION;
         }
 
         ~Expression(){}
@@ -70,7 +71,7 @@ class VariableDeclaration : public AstNode
     public:
         VariableDeclaration()
         {
-            kind = BRANCH_TYPE::VARIABLE_DECLARATION;
+            kind = EBRANCH_TYPE::VARIABLE_DECLARATION;
         }
 
         ~VariableDeclaration(){}
@@ -79,7 +80,7 @@ class VariableDeclaration : public AstNode
 class AstBranch
 {
     public:
-        BRANCH_TYPE TYPE = BRANCH_TYPE::UNDEFINED;
+        EBRANCH_TYPE TYPE = EBRANCH_TYPE::UNDEFINED;
 
     public:
         class VariableDeclaration* branch_variable_declaration;
