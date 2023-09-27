@@ -1,6 +1,6 @@
 #include "../headers/parser.hpp"
 
-Parser::Parser(Lexer* lexer):lexer(lexer)
+Parser::Parser(Lexer* lexer, SymbolTable* symbolTable, Ast* ast):lexer(lexer), symbolTable(symbolTable), ast(ast)
 {
     debug = new DebugCompiler();
 }
@@ -32,9 +32,8 @@ void Parser::Parse()
 
 void Parser::ThrowError(Token* token, std::string message)
 {
-    std::string lineError = std::to_string(token->line) + ":" + std::to_string(token->startpos);
-    Output::PrintCustomizeError("Syntax Error: ", message + " '" + token->value + "'");
-    Output::PrintCustomizeError("line: ", lineError);
+    std::string lineError = "Line: " + std::to_string(token->line) + ", Col: " + std::to_string(token->startpos);
+    Output::PrintCustomizeError("Syntax Error (" + lineError + "): ", message + " '" + token->value + "'");
     exit(EXIT_FAILURE);
 }
 
@@ -66,9 +65,30 @@ void Parser::ExpectValue(std::string expected, std::string message)
 
 void Parser::PushToAst(AstBranch* node)
 {
-    debug->PrintAstBranch(node);
+    InsertIdentifierIntoSymbolTable(node);
+    this->ast->AddNode(node);
+    // debug->PrintAstBranch(node);
 }
 
+void Parser::InsertIdentifierIntoSymbolTable(AstBranch* node)
+{
+    if(node != nullptr && node->TYPE == EBRANCH_TYPE::VARIABLE_DECLARATION)
+    {
+        auto variable = node->branch_variable_declaration;
+
+        auto NewID = new IdentifierModel
+        (
+            variable->name, 
+            variable->type, 
+            variable->scopeName, 
+            variable->deep
+        );
+
+        this->CheckMemoryAllocated(NewID);
+
+        this->symbolTable->InsertIdentifier(NewID);
+    }
+}
 
 
 

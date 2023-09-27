@@ -12,6 +12,7 @@
 #include "lexer.hpp"
 #include "../models/ast.hpp"
 #include "../models/expression.hpp"
+#include "../models/symbol-table.hpp"
 #include "../definitions/token-definition.hpp"
 #include "../helpers/debug-compiler.hpp"
 
@@ -20,9 +21,16 @@ class Parser
     public:
         Lexer* lexer;
         DebugCompiler* debug;
+        SymbolTable* symbolTable;
+        Ast* ast;
 
     public:
-        Parser(Lexer* lexer);
+        const std::string GLOBAL_SCOPE = "GLOBAL"; 
+        std::string currentScope = GLOBAL_SCOPE;
+        int currentDeep = 0;
+
+    public:
+        Parser(Lexer* lexer, SymbolTable*, Ast*);
         ~Parser();
 
     public:
@@ -35,6 +43,7 @@ class Parser
         void ThrowError(Token*, std::string message);
         void ThrowInternalError(std::string message);
         void PushToAst(AstBranch* node);
+        void InsertIdentifierIntoSymbolTable(AstBranch*);
 
     private:
         template<class T> void CheckMemoryAllocated(T entity)

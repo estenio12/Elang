@@ -13,11 +13,15 @@
 #include "output.hpp"
 #include "parser.hpp"
 
+#include "../models/symbol-table.hpp"
+
 class Compiler
 {
     private:
         Lexer* lexer;
         Parser* parser;
+        SymbolTable* symbolTable;
+        Ast* ast;
 
     public:
         Compiler(std::string sourcePath);

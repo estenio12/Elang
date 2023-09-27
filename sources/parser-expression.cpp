@@ -18,7 +18,7 @@ Expression* Parser::BuildExpression()
         else tokenList->AddToken(token);
     }
 
-    expression->operation = ParserExpression(tokenList, 0);
+    expression->operation = ParserExpression(tokenList, expression, 0);
 
     return expression;
 }
@@ -64,6 +64,8 @@ BinaryOperation* Parser::ParserPrimary(Tokens* tokenList, Expression* expr)
             expr->IsLiteralOperation = false;
 
             // # Check identifier
+            if(!this->symbolTable->Exists(token->value, this->currentScope, currentDeep))
+                this->ThrowError(token, "Identifier not declarad in scope");
         }
             
         return new BinaryOperation(nullptr, token, nullptr);

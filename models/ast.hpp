@@ -74,7 +74,34 @@ class VariableDeclaration : public AstNode
             kind = EBRANCH_TYPE::VARIABLE_DECLARATION;
         }
 
-        ~VariableDeclaration(){}
+        VariableDeclaration(VariableDeclaration* origin)
+        {
+            kind = EBRANCH_TYPE::VARIABLE_DECLARATION;
+            operator=(origin);
+        }
+
+        ~VariableDeclaration()
+        {
+            delete expression;
+        }
+
+    public:
+        bool IsInitialized(){ return this->expression != nullptr; }
+        VariableDeclaration* operator=(const VariableDeclaration* origin)
+        {
+            if(this != origin)
+            {
+                this->name       = origin->name;
+                this->type       = origin->type;
+                this->scopeName  = origin->scopeName;
+                this->deep       = origin->deep;
+                this->isConstant = origin->isConstant;
+                this->isArray    = origin->isArray;
+                this->expression = origin->expression;
+            }
+
+            return this;
+        }
 };
 
 class AstBranch
@@ -97,7 +124,10 @@ class Ast
 
     public:
         Ast(){}
-        ~Ast(){}
+        ~Ast()
+        {
+            tree.clear();
+        }
 
     public:
         void AddNode(AstBranch* branch) { this->tree.push_back(branch); }
