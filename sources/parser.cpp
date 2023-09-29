@@ -22,6 +22,10 @@ void Parser::Parse()
             case EBRANCH_TYPE::VARIABLE_DECLARATION:
                 PushToAst(this->BuildVariableDeclaration(token));
             break;
+
+            case EBRANCH_TYPE::FUNCTION_DECLARATION:
+                PushToAst(this->BuildFunctionDeclaration(token));
+            break;
             
             default:
                 ThrowInternalError("Parser operation not implemented!");
@@ -65,7 +69,6 @@ void Parser::ExpectValue(std::string expected, std::string message)
 
 void Parser::PushToAst(AstBranch* node)
 {
-    InsertIdentifierIntoSymbolTable(node);
     this->ast->AddNode(node);
     // debug->PrintAstBranch(node);
 }

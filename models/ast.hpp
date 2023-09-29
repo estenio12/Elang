@@ -15,7 +15,8 @@ enum EBRANCH_TYPE
 {
     UNDEFINED,
     VARIABLE_DECLARATION,
-    EXPRESSION
+    EXPRESSION,
+    FUNCTION_DECLARATION
 };
 
 class AstNode
@@ -102,6 +103,55 @@ class VariableDeclaration : public AstNode
 
             return this;
         }
+};
+
+class ParameterDeclaration
+{
+    public:
+        std::string name;
+        std::string type;
+
+    public:
+        ParameterDeclaration(){}
+        ~ParameterDeclaration(){}
+};
+
+class FunctionDeclaration
+{
+    public:
+        std::string name;
+        std::string type;
+        std::vector<ParameterDeclaration*> parameterList;
+
+    public:
+        std::vector<VariableDeclaration*> listBodyLocalVariableDeclaration;
+
+    public:
+        FunctionDeclaration(){}
+        ~FunctionDeclaration(){}
+
+    public:
+        bool IsFunctionEmpty()
+        {
+            return listBodyLocalVariableDeclaration.size() <= 0;
+        }
+
+        bool IsExistParameter(std::string name)
+        {
+            for(auto item : parameterList)
+                if(item->name == name) return true;
+            
+            return false;
+        }
+
+        ParameterDeclaration* GetParameterByName(std::string name)
+        {
+            for(auto item : parameterList) 
+                if(item->name == name) return item;
+                
+            return nullptr;
+        }
+
 };
 
 class AstBranch

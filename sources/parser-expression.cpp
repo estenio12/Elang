@@ -11,7 +11,7 @@ Expression* Parser::BuildExpression()
 
         if(token == nullptr) 
         {
-            Output::PrintCustomizeError("Line: " + std::to_string(lexer->lineCounter) + " | Syntax error: ", "the source code end abruptly without the terminate keyword ';'!");
+            Output::PrintCustomizeError("Line: " + std::to_string(lexer->lineCounter) + " | Syntax error: ", "missing ';' at the end of the expression");
             exit(EXIT_FAILURE);
         }
         else if(token->value == DELIMITER::T_EOF) break;

@@ -3,6 +3,7 @@
 EBRANCH_TYPE Parser::BindOperation(Token* token)
 {
     if(IsVariableDeclaration(token)) return EBRANCH_TYPE::VARIABLE_DECLARATION;
+    if(IsFunctionDeclaration(token)) return EBRANCH_TYPE::FUNCTION_DECLARATION;
 
     this->ThrowError(token, "Unexpected token");
     return EBRANCH_TYPE::UNDEFINED;
@@ -11,13 +12,18 @@ EBRANCH_TYPE Parser::BindOperation(Token* token)
 // # Checkers
 bool Parser::IsVariableDeclaration(Token* token)
 {
-    if(token->value == KEYWORD::T_ARRAY ||
-       token->value == KEYWORD::T_VAR   ||
+    if(token->value == KEYWORD::T_VAR   ||
        token->value == KEYWORD::T_CONST )
     {
         return true;
     }
 
+    return false;
+}
+
+bool Parser::IsFunctionDeclaration(Token* token)
+{
+    if(token->value == KEYWORD::T_FUN) return true;
     return false;
 }
 
@@ -87,10 +93,16 @@ AstBranch* Parser::BuildVariableDeclaration(Token* token)
     branch->branch_variable_declaration = variable;
     branch->TYPE = EBRANCH_TYPE::VARIABLE_DECLARATION;
 
+    this->InsertIdentifierIntoSymbolTable(branch);
+
     return branch;
 }
 
-
+AstBranch* Parser::BuildFunctionDeclaration(Token* token)
+{
+    
+    return nullptr;
+}
 
 
 

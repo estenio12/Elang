@@ -1,1 +1,5 @@
 const idade: int = 10;
+
+fun sum(n1: int, n2: int)
+	
+end
