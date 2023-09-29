@@ -100,8 +100,40 @@ AstBranch* Parser::BuildVariableDeclaration(Token* token)
 
 AstBranch* Parser::BuildFunctionDeclaration(Token* token)
 {
+    auto function = new FunctionDeclaration();
+    auto funModel = new FunctionIdenfierModel();
+
+    // # KEYWORD 'fun' from memory
+    delete token;
+
+    this->CheckMemoryAllocated(function);
+
+    auto t_fun_id = this->lexer->GetNextToken();
+
+    if(t_fun_id != nullptr)
+    {
+        if(this->symbolTable->ExistsIdentifier(t_fun_id->value, this->currentScope, this->currentDeep) ||
+           this->symbolTable->ExistsFunctionIdentifier(t_fun_id->value))
+            ThrowError(t_fun_id, "duplicated identifier");
+
+        funModel->name = t_fun_id->value;
+    }
+    else
+        this->ThrowError(t_fun_id, "An identifier was expected after the keyword 'fun'");
+
+    this->ExpectValue(DELIMITER::T_OPEN_PARAM, "Expected open parenthesis after identifier.");
+
     
-    return nullptr;
+
+    // # Insert into symbol table, now everybody know that function exists
+    this->symbolTable->InsertFunctionIdentifier(funModel);
+
+    // # Finishing
+    auto branch = new AstBranch();
+    branch->branch_function_declaration = function;
+    branch->TYPE = EBRANCH_TYPE::FUNCTION_DECLARATION;
+
+    return branch;
 }
 
 

@@ -64,7 +64,7 @@ BinaryOperation* Parser::ParserPrimary(Tokens* tokenList, Expression* expr)
             expr->IsLiteralOperation = false;
 
             // # Check identifier
-            if(!this->symbolTable->Exists(token->value, this->currentScope, currentDeep))
+            if(!this->symbolTable->ExistsIdentifier(token->value, this->currentScope, currentDeep))
                 this->ThrowError(token, "Identifier not declarad in scope");
         }
             

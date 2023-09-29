@@ -148,7 +148,7 @@ class FunctionDeclaration
         {
             for(auto item : parameterList) 
                 if(item->name == name) return item;
-                
+
             return nullptr;
         }
 
@@ -160,7 +160,8 @@ class AstBranch
         EBRANCH_TYPE TYPE = EBRANCH_TYPE::UNDEFINED;
 
     public:
-        class VariableDeclaration* branch_variable_declaration;
+        class VariableDeclaration* branch_variable_declaration = nullptr;
+        class FunctionDeclaration* branch_function_declaration = nullptr;
 
     public:
         AstBranch(){}

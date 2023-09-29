@@ -25,17 +25,31 @@ class IdentifierModel
         ~IdentifierModel(){}
 };
 
+class FunctionIdenfierModel
+{
+    public:
+        std::string name;
+        std::string type;
+        std::vector<ParameterDeclaration*> parameterList;
+
+    public:
+        FunctionIdenfierModel(){}
+        ~FunctionIdenfierModel(){}
+};
+
 class SymbolTable
 {
     private:
         std::vector<IdentifierModel*> IDTable;
+        std::vector<FunctionIdenfierModel*> IDFunTable;
 
     public:
         SymbolTable(){}
         ~SymbolTable(){}
 
+    // # Variable Declaration
     public:
-        bool Exists(std::string name, std::string scopeName, int deep)
+        bool ExistsIdentifier(std::string name, std::string scopeName, int deep)
         {
             for(auto entity : IDTable)
             {
@@ -63,6 +77,26 @@ class SymbolTable
                     return entity;
                 }
             }
+
+            return nullptr;
+        }
+
+    // # Function Declaration
+    public:
+        bool ExistsFunctionIdentifier(std::string name)
+        {
+            for(auto entity : IDFunTable)
+                if(entity->name == name) return true;
+
+            return false;
+        }
+
+        void InsertFunctionIdentifier(FunctionIdenfierModel* ID) { if(ID != nullptr) IDFunTable.push_back(ID); }
+
+        FunctionIdenfierModel* GetFunctionIdentifier(std::string name)
+        {
+            for(auto entity : IDFunTable)
+                if(entity->name == name) return entity;
 
             return nullptr;
         }

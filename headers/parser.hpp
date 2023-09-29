@@ -39,7 +39,7 @@ class Parser
     private:    
         EBRANCH_TYPE BindOperation(Token*);
         void ExpectType(TYPE_TOKEN, std::string message);
-        void ExpectValue(std::string, std::string message);
+        void ExpectValue(std::string expected, std::string message);
         void ThrowError(Token*, std::string message);
         void ThrowInternalError(std::string message);
         void PushToAst(AstBranch* node);
