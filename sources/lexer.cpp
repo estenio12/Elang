@@ -89,9 +89,17 @@ bool Lexer::IsDigitFloat(std::string buffer)
     return buffer.find('.') != std::string::npos;
 }
 
-bool Lexer::IsAlphaNumetic(char letter)
+bool Lexer::IsAlpha(char letter)
 {
     for(auto item : TEMPLATE::IS_ALPHA)
+        if(item == letter) return true;
+
+    return false;
+}
+
+bool Lexer::IsAlphaNumetic(char letter)
+{
+    for(auto item : TEMPLATE::IS_ALPHA_NUMERIC)
         if(item == letter) return true;
 
     return false;
@@ -181,12 +189,14 @@ void Lexer::Tokenize(std::string line)
                 continue;
             }
 
+            // std::cout << "Debug: " << IsDigit(line[i]) << " | " << line[i] << " | " << true << "\n";
             if(IsDigit(line[i]))
             {
+                // Output::PrintDebug("Entrei");
                 current_job = JOB_STATE::BUILD_DIGIT;
             }
             
-            if(IsAlphaNumetic(line[i]))
+            if(IsAlpha(line[i]))
             {
                 current_job = JOB_STATE::BUILD_ALPHA_DIGIT;
             }

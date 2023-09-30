@@ -109,7 +109,7 @@ class ParameterDeclaration
 {
     public:
         std::string name;
-        std::string type;
+        TYPE_TOKEN type;
 
     public:
         ParameterDeclaration(){}
@@ -122,7 +122,6 @@ class FunctionDeclaration : public AstNode
         std::string name;
         std::string type;
         std::vector<ParameterDeclaration*> parameterList;
-        bool IsDeclared = true;
 
     public:
         std::vector<VariableDeclaration*> listBodyLocalVariableDeclaration;
@@ -137,7 +136,7 @@ class FunctionDeclaration : public AstNode
             return listBodyLocalVariableDeclaration.size() <= 0;
         }
 
-        bool IsExistParameter(std::string name)
+        bool ExistsParameter(std::string name)
         {
             for(auto item : parameterList)
                 if(item->name == name) return true;

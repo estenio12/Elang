@@ -29,10 +29,11 @@ enum TYPE_TOKEN
 
 namespace TEMPLATE
 {
-    static const std::string IS_DIGIT = "0123456789.";
-    static const std::string IS_ALPHA = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLIMOPQRSTUVWXYZ_";
-    static const std::string TRUE_LITERAL  = "true";
-    static const std::string FALSE_LITERAL = "false";
+    static const std::string IS_DIGIT         = "0123456789.";
+    static const std::string IS_ALPHA         = "_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLIMOPQRSTUVWXYZ";
+    static const std::string IS_ALPHA_NUMERIC = "_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLIMOPQRSTUVWXYZ0123456789";
+    static const std::string TRUE_LITERAL     = "true";
+    static const std::string FALSE_LITERAL    = "false";
 }
 
 namespace KEYWORD

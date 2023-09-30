@@ -57,6 +57,7 @@ class Lexer
     private:
         bool IsDigit(char letter);
         bool IsDigitFloat(std::string buffer);
+        bool IsAlpha(char letter);
         bool IsAlphaNumetic(char letter);
         bool IsDelimiter(std::string value);
         bool IsSelfIncrementation(std::string value);

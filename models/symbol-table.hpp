@@ -31,6 +31,7 @@ class FunctionIdenfierModel
         std::string name;
         std::string type;
         std::vector<ParameterDeclaration*> parameterList;
+        bool IsDeclared = true;
 
     public:
         FunctionIdenfierModel(){}
@@ -46,6 +47,16 @@ class SymbolTable
     public:
         SymbolTable(){}
         ~SymbolTable(){}
+
+    private:
+        int FindIndexFunTable(std::string FunName)
+        {
+            for(int index = 0; index < IDFunTable.size(); index++)
+                if(IDFunTable[index]->name == FunName) return index;
+
+            Output::PrintCustomizeError("Compiler internal error (in Symbol Table): ", "Function index not found");
+            exit(EXIT_FAILURE);
+        }
 
     // # Variable Declaration
     public:
@@ -91,13 +102,23 @@ class SymbolTable
             return false;
         }
 
-        void InsertFunctionIdentifier(FunctionIdenfierModel* ID) { if(ID != nullptr) IDFunTable.push_back(ID); }
-
         FunctionIdenfierModel* GetFunctionIdentifier(std::string name)
         {
             for(auto entity : IDFunTable)
                 if(entity->name == name) return entity;
 
             return nullptr;
+        }
+
+        void InsertFunctionIdentifier(FunctionIdenfierModel* ID) 
+        { 
+            if(ID != nullptr) 
+            {
+                if(ExistsFunctionIdentifier(ID->name) && 
+                   GetFunctionIdentifier(ID->name)->IsDeclared == false)
+                    this->IDFunTable[FindIndexFunTable(ID->name)] = ID;
+                else
+                    IDFunTable.push_back(ID);
+            } 
         }
 };

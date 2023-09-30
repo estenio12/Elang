@@ -103,20 +103,26 @@ AstBranch* Parser::BuildFunctionDeclaration(Token* token)
     auto function = new FunctionDeclaration();
     auto funModel = new FunctionIdenfierModel();
 
+    this->CheckMemoryAllocated(function);
+    this->CheckMemoryAllocated(funModel);
+
     // # KEYWORD 'fun' from memory
     delete token;
 
-    this->CheckMemoryAllocated(function);
-
+    // # Make identifier validations
     auto t_fun_id = this->lexer->GetNextToken();
 
     if(t_fun_id != nullptr)
     {
         if(this->symbolTable->ExistsIdentifier(t_fun_id->value, this->currentScope, this->currentDeep) ||
-           this->symbolTable->ExistsFunctionIdentifier(t_fun_id->value))
+           this->symbolTable->ExistsFunctionIdentifier(t_fun_id->value) &&
+           this->symbolTable->GetFunctionIdentifier(t_fun_id->value)->IsDeclared == true)
             ThrowError(t_fun_id, "duplicated identifier");
 
         funModel->name = t_fun_id->value;
+        function->name = t_fun_id->value;
+
+        delete t_fun_id;
     }
     else
         this->ThrowError(t_fun_id, "An identifier was expected after the keyword 'fun'");
@@ -126,37 +132,51 @@ AstBranch* Parser::BuildFunctionDeclaration(Token* token)
     // # Read parameters
     while(true)
     {
-        auto init_token = this->lexer->GetNextToken();
-
-        if(init_token == nullptr)
-        {
-            Output::PrintError("Line: " + std::to_string(lexer->lineCounter) + " Unexpected the source code end");
-            exit(EXIT_FAILURE);
-        } 
-
-        if(init_token->value == DELIMITER::T_CLOSE_PARAM) 
-        {
-            delete init_token;
-            break;
-        }
-
-        // # expect keyword var
-        this->ExpectValue(init_token, "Expected a keyword 'var' to parameter declaration");
-
-        // # expect identifier
+        // # Get identifier
         auto id_token = this->lexer->GetNextToken();
 
-        if(id_token->type == TYPE_TOKEN::T_IDENTIDIER)
+        if(id_token->value == DELIMITER::T_CLOSE_PARAM) 
         {
-            this->ExpectValue(lexer->GetNextToken(), "Expect separator ':' after identifier ");
+            delete id_token;
+            break;
+        }
+        else if(id_token->type == TYPE_TOKEN::T_IDENTIDIER)
+        {
+            // # consume ':'
+            this->ExpectValue(DELIMITER::T_COLON, "Expect separator ':' after identifier ");
 
-            // # Get type token
+            // # Get type
             auto type_token = this->lexer->GetNextToken();
+
+            auto param = new ParameterDeclaration();
+            param->name = id_token->value;
+            param->type = type_token->type;
+
+            funModel->parameterList.push_back(param);
+            function->parameterList.push_back(param);
+
+            // # Free tokens from memory
+            delete id_token;
+            delete type_token;
         }
         else
-            ThrowError(id_token, "expected identifier after declaration");
+            ThrowError(id_token, "Unexpected token here");
+
+        // # Check if next token is comma or close parentheses
+        auto next_token = this->lexer->GetNextToken();
+
+        if(next_token->value == DELIMITER::T_CLOSE_PARAM)
+        {
+            delete next_token;
+            break;
+        }
+        else if(next_token->value == DELIMITER::T_COMMA)
+            continue;
+        else
+            this->ThrowError(next_token, "Expect ',' or ')' after parameter declaration");
     }
 
+    // # Read Function Body
 
     // # Insert into symbol table, now everybody know that function exists
     this->symbolTable->InsertFunctionIdentifier(funModel);
