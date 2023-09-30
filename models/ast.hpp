@@ -116,12 +116,13 @@ class ParameterDeclaration
         ~ParameterDeclaration(){}
 };
 
-class FunctionDeclaration
+class FunctionDeclaration : public AstNode
 {
     public:
         std::string name;
         std::string type;
         std::vector<ParameterDeclaration*> parameterList;
+        bool IsDeclared = true;
 
     public:
         std::vector<VariableDeclaration*> listBodyLocalVariableDeclaration;
@@ -193,5 +194,4 @@ class Ast
 
             return nullptr;
         }
-
 };

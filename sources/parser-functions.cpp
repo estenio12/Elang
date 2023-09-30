@@ -123,7 +123,40 @@ AstBranch* Parser::BuildFunctionDeclaration(Token* token)
 
     this->ExpectValue(DELIMITER::T_OPEN_PARAM, "Expected open parenthesis after identifier.");
 
-    
+    // # Read parameters
+    while(true)
+    {
+        auto init_token = this->lexer->GetNextToken();
+
+        if(init_token == nullptr)
+        {
+            Output::PrintError("Line: " + std::to_string(lexer->lineCounter) + " Unexpected the source code end");
+            exit(EXIT_FAILURE);
+        } 
+
+        if(init_token->value == DELIMITER::T_CLOSE_PARAM) 
+        {
+            delete init_token;
+            break;
+        }
+
+        // # expect keyword var
+        this->ExpectValue(init_token, "Expected a keyword 'var' to parameter declaration");
+
+        // # expect identifier
+        auto id_token = this->lexer->GetNextToken();
+
+        if(id_token->type == TYPE_TOKEN::T_IDENTIDIER)
+        {
+            this->ExpectValue(lexer->GetNextToken(), "Expect separator ':' after identifier ");
+
+            // # Get type token
+            auto type_token = this->lexer->GetNextToken();
+        }
+        else
+            ThrowError(id_token, "expected identifier after declaration");
+    }
+
 
     // # Insert into symbol table, now everybody know that function exists
     this->symbolTable->InsertFunctionIdentifier(funModel);
