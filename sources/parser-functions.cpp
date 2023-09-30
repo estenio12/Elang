@@ -135,9 +135,22 @@ AstBranch* Parser::BuildFunctionDeclaration(Token* token)
         // # Get identifier
         auto id_token = this->lexer->GetNextToken();
 
+        // # check type after the parentheses
         if(id_token->value == DELIMITER::T_CLOSE_PARAM) 
         {
             delete id_token;
+
+            this->ExpectValue(DELIMITER::T_COLON, "Expect separate after close parentheses");
+
+            // # Get Type
+            auto t_type = this->lexer->GetNextToken();
+
+            if(t_type->type == TYPE_TOKEN::T_TYPE)
+                function->type = t_type->value;
+            else
+                this->ThrowError(t_type, "It's expected an type after seperator.");
+
+            delete t_type;
             break;
         }
         else if(id_token->type == TYPE_TOKEN::T_IDENTIDIER)
@@ -147,6 +160,9 @@ AstBranch* Parser::BuildFunctionDeclaration(Token* token)
 
             // # Get type
             auto type_token = this->lexer->GetNextToken();
+
+            if(type_token->type != TYPE_TOKEN::T_TYPE)
+                this->ThrowError(type_token, "It's expected an type after seperator.");
 
             auto param = new ParameterDeclaration();
             param->name = id_token->value;
@@ -168,6 +184,18 @@ AstBranch* Parser::BuildFunctionDeclaration(Token* token)
         if(next_token->value == DELIMITER::T_CLOSE_PARAM)
         {
             delete next_token;
+
+            this->ExpectValue(DELIMITER::T_COLON, "Expect separate after close parentheses");
+
+            // # Get Type
+            auto t_type = this->lexer->GetNextToken();
+
+            if(t_type->type == TYPE_TOKEN::T_TYPE)
+                function->type = t_type->value;
+            else
+                this->ThrowError(t_type, "It's expected an type after seperator.");
+
+            delete t_type;
             break;
         }
         else if(next_token->value == DELIMITER::T_COMMA)
@@ -177,6 +205,7 @@ AstBranch* Parser::BuildFunctionDeclaration(Token* token)
     }
 
     // # Read Function Body
+    this->currentScope = function->name;
 
     // # Insert into symbol table, now everybody know that function exists
     this->symbolTable->InsertFunctionIdentifier(funModel);
