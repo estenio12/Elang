@@ -25,9 +25,10 @@ class Parser
         Ast* ast;
 
     private:
+        const int GLOBAL_DEEP          = 0; 
         const std::string GLOBAL_SCOPE = "GLOBAL"; 
-        std::string currentScope = GLOBAL_SCOPE;
-        int currentDeep = 0;
+        std::string currentScope       = GLOBAL_SCOPE;
+        int currentDeep                = 0;
 
     private:
         int lineHistory = 0;

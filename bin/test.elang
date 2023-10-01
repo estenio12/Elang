@@ -1,4 +1,5 @@
 const idade: int = 10;
 
-fun sum(n1: int, n2: int): 
-
+fun sum(n1: int, n2: int): int
+	var t1: int = 10;
+end

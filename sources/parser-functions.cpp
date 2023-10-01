@@ -56,7 +56,7 @@ AstBranch* Parser::BuildVariableDeclaration(Token* token)
     }
 
     // # Consume syntax ':'
-    this->ExpectValue(DELIMITER::T_COLON, "It's expected the seperator '" +DELIMITER::T_COLON+ "'");
+    this->ExpectValue(DELIMITER::T_COLON, "It's expected the '" +DELIMITER::T_COLON+ "' after identifier");
 
     // # Get Type
     auto t_type = this->GetNextToken("It's expected an type after seperator.");
@@ -189,10 +189,11 @@ AstBranch* Parser::BuildFunctionDeclaration(Token* token)
             // # Get Type
             auto t_type = this->GetNextToken("It's expected an type after seperator.");
 
-            if(t_type->type == TYPE_TOKEN::T_TYPE)
-                function->type = t_type->value;
-            else
+            if(t_type->type != TYPE_TOKEN::T_TYPE)
                 this->ThrowError(t_type, "It's expected an type after seperator.");
+
+            function->type = t_type->value;
+            funModel->type = t_type->value;
 
             delete t_type;
             break;
@@ -206,13 +207,41 @@ AstBranch* Parser::BuildFunctionDeclaration(Token* token)
     // # Read Function Body
     this->currentScope = function->name;
     this->currentDeep++;
+    int endStatmetCount = 1;
 
-    // # TODO
+    while(endStatmetCount > 0)
+    {
+        auto stmt_token = this->GetNextToken("Expected 'end' keyword to close function statement");
+
+        if(stmt_token->value == KEYWORD::T_END) 
+        {
+            delete stmt_token;
+            endStatmetCount--;
+            continue;
+        }
+
+        auto operation = this->BindOperation(stmt_token);
+
+        switch(operation)
+        {
+            case EBRANCH_TYPE::VARIABLE_DECLARATION:
+                function->listBodyLocalVariableDeclaration.push_back(BuildVariableDeclaration(stmt_token)->branch_variable_declaration);
+            break;
+
+            default:
+                ThrowError(stmt_token, "Unexpected token ");
+            break;
+        }
+    }
+
+    // # Reset stats
+    this->currentScope = GLOBAL_SCOPE;
+    this->currentDeep  = GLOBAL_DEEP;
 
     // # Insert into symbol table, now everybody know that function exists
     this->symbolTable->InsertFunctionIdentifier(funModel);
 
-    // # Finishing
+    // # Complete Task
     auto branch = new AstBranch();
     branch->branch_function_declaration = function;
     branch->TYPE = EBRANCH_TYPE::FUNCTION_DECLARATION;
