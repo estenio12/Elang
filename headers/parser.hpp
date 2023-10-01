@@ -44,6 +44,7 @@ class Parser
         void ThrowInternalError(std::string message);
         void PushToAst(AstBranch* node);
         void InsertIdentifierIntoSymbolTable(AstBranch*);
+        Token* GetNextToken(std::string msg);
 
     private:
         template<class T> void CheckMemoryAllocated(T entity)

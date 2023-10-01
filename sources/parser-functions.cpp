@@ -109,46 +109,42 @@ AstBranch* Parser::BuildFunctionDeclaration(Token* token)
     // # KEYWORD 'fun' from memory
     delete token;
 
-    // # Make identifier validations
-    auto t_fun_id = this->lexer->GetNextToken();
+    // # Function identifier validations
+    auto t_fun_id = this->GetNextToken("An identifier was expected after the keyword 'fun'");
 
-    if(t_fun_id != nullptr)
-    {
-        if(this->symbolTable->ExistsIdentifier(t_fun_id->value, this->currentScope, this->currentDeep) ||
-           this->symbolTable->ExistsFunctionIdentifier(t_fun_id->value) &&
-           this->symbolTable->GetFunctionIdentifier(t_fun_id->value)->IsDeclared == true)
-            ThrowError(t_fun_id, "duplicated identifier");
+    if(this->symbolTable->ExistsIdentifier(t_fun_id->value, this->currentScope, this->currentDeep) ||
+       this->symbolTable->ExistsFunctionIdentifier(t_fun_id->value) &&
+       this->symbolTable->GetFunctionIdentifier(t_fun_id->value)->IsDeclared == true)
+        ThrowError(t_fun_id, "duplicated identifier");
 
-        funModel->name = t_fun_id->value;
-        function->name = t_fun_id->value;
+    funModel->name = t_fun_id->value;
+    function->name = t_fun_id->value;
 
-        delete t_fun_id;
-    }
-    else
-        this->ThrowError(t_fun_id, "An identifier was expected after the keyword 'fun'");
+    delete t_fun_id;
 
+    // # Consume opening parenthesis 
     this->ExpectValue(DELIMITER::T_OPEN_PARAM, "Expected open parenthesis after identifier.");
 
     // # Read parameters
     while(true)
     {
-        // # Get identifier
-        auto id_token = this->lexer->GetNextToken();
+        // # Get parameters identifier
+        auto id_token = this->GetNextToken("Expected a parameter identifier here");
 
-        // # check type after the parentheses
+        // # check type after closing parenthesis
         if(id_token->value == DELIMITER::T_CLOSE_PARAM) 
         {
             delete id_token;
 
-            this->ExpectValue(DELIMITER::T_COLON, "Expect separate after close parentheses");
+            this->ExpectValue(DELIMITER::T_COLON, "Expect a ':' after closing parenthesis");
 
             // # Get Type
-            auto t_type = this->lexer->GetNextToken();
+            auto t_type = this->GetNextToken("It's expected an type after seperator.");
 
             if(t_type->type == TYPE_TOKEN::T_TYPE)
                 function->type = t_type->value;
             else
-                this->ThrowError(t_type, "It's expected an type after seperator.");
+                this->ThrowError(t_type, "It's expected an function return type here");
 
             delete t_type;
             break;
@@ -159,7 +155,7 @@ AstBranch* Parser::BuildFunctionDeclaration(Token* token)
             this->ExpectValue(DELIMITER::T_COLON, "Expect separator ':' after identifier ");
 
             // # Get type
-            auto type_token = this->lexer->GetNextToken();
+            auto type_token = this->GetNextToken("It's expected an type after seperator.");
 
             if(type_token->type != TYPE_TOKEN::T_TYPE)
                 this->ThrowError(type_token, "It's expected an type after seperator.");
@@ -179,7 +175,7 @@ AstBranch* Parser::BuildFunctionDeclaration(Token* token)
             ThrowError(id_token, "Unexpected token here");
 
         // # Check if next token is comma or close parentheses
-        auto next_token = this->lexer->GetNextToken();
+        auto next_token = this->GetNextToken("Expect ',' or ')' after parameter declaration");
 
         if(next_token->value == DELIMITER::T_CLOSE_PARAM)
         {
@@ -188,7 +184,7 @@ AstBranch* Parser::BuildFunctionDeclaration(Token* token)
             this->ExpectValue(DELIMITER::T_COLON, "Expect separate after close parentheses");
 
             // # Get Type
-            auto t_type = this->lexer->GetNextToken();
+            auto t_type = this->GetNextToken("It's expected an type after seperator.");
 
             if(t_type->type == TYPE_TOKEN::T_TYPE)
                 function->type = t_type->value;

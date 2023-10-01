@@ -93,6 +93,27 @@ void Parser::InsertIdentifierIntoSymbolTable(AstBranch* node)
     }
 }
 
+Token* Parser::GetNextToken(std::string msg)
+{
+    std::string header = "Syntax Error (Line: "+std::to_string(this->lexer->lineCounter)+"): ";
+    if(msg.empty()) msg = "the source code ends abruptly before closing compilaion";
+    auto token = this->lexer->GetNextToken();
+
+    if(token == nullptr) 
+    {
+        Output::PrintCustomizeError(header, msg);
+        exit(EXIT_FAILURE);
+    }
+
+    return token;
+}
+
+
+
+
+
+
+
 
 
 

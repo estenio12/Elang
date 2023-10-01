@@ -110,7 +110,7 @@ void Lexer::Tokenize(std::string line)
     std::string buffer;
     int current_job = JOB_STATE::UNDEFINED;
 
-    for(int i = 0, k = 1; i < line.size(); i++)
+    for(int i = 0; i < line.size(); i++)
     {
         if(line[i] == SKIP_CHARACTER::TABULATION ||
            line[i] == SKIP_CHARACTER::RETURN     ||
@@ -189,7 +189,6 @@ void Lexer::Tokenize(std::string line)
                 continue;
             }
 
-            // std::cout << "Debug: " << IsDigit(line[i]) << " | " << line[i] << " | " << true << "\n";
             if(IsDigit(line[i]))
             {
                 // Output::PrintDebug("Entrei");
@@ -241,6 +240,18 @@ void Lexer::Tokenize(std::string line)
 
                 if(line[i] != SKIP_CHARACTER::WHITESPACE) i--;
             }
+        }
+
+        // # Check if next character is end of string '\0' and buffer has content to tokenize
+        if(line[i + 1] == '\0' && buffer.length() > 0)
+        {
+            int startpos = i - (buffer.size() - 2);
+            int endpos   = i + 1;
+
+            this->BindToken(buffer, startpos, endpos);
+
+            buffer.clear();
+            current_job = JOB_STATE::UNDEFINED;
         }
     }
 }
