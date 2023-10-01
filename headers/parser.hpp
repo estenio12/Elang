@@ -18,16 +18,19 @@
 
 class Parser
 {
-    public:
+    private:
         Lexer* lexer;
         DebugCompiler* debug;
         SymbolTable* symbolTable;
         Ast* ast;
 
-    public:
+    private:
         const std::string GLOBAL_SCOPE = "GLOBAL"; 
         std::string currentScope = GLOBAL_SCOPE;
         int currentDeep = 0;
+
+    private:
+        int lineHistory = 0;
 
     public:
         Parser(Lexer* lexer, SymbolTable*, Ast*);

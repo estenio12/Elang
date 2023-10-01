@@ -31,8 +31,11 @@ bool Parser::IsFunctionDeclaration(Token* token)
 AstBranch* Parser::BuildVariableDeclaration(Token* token)
 {
     auto variable = new VariableDeclaration();
+
     this->CheckMemoryAllocated<VariableDeclaration*>(variable);
 
+    variable->deep       = this->currentDeep;
+    variable->scopeName  = this->currentScope;
     variable->isArray    = token->value == KEYWORD::T_ARRAY;
     variable->isConstant = token->value == KEYWORD::T_CONST;
 
@@ -40,14 +43,14 @@ AstBranch* Parser::BuildVariableDeclaration(Token* token)
     delete token;
 
     // # Get Identifier
-    auto t_identifier = this->lexer->GetNextToken();
+    auto t_identifier = this->GetNextToken("It's expected an identifier");
 
     if(t_identifier != nullptr)
     {
         if(t_identifier->type == TYPE_TOKEN::T_IDENTIDIER)
             variable->name = t_identifier->value;
         else
-            this->ThrowError(t_identifier, "It's expected an idenifier");
+            this->ThrowError(t_identifier, "It's expected an identifier");
 
         delete t_identifier;
     }
@@ -56,7 +59,7 @@ AstBranch* Parser::BuildVariableDeclaration(Token* token)
     this->ExpectValue(DELIMITER::T_COLON, "It's expected the seperator '" +DELIMITER::T_COLON+ "'");
 
     // # Get Type
-    auto t_type = this->lexer->GetNextToken();
+    auto t_type = this->GetNextToken("It's expected an type after seperator.");
 
     if(t_type != nullptr)
     {
@@ -67,7 +70,7 @@ AstBranch* Parser::BuildVariableDeclaration(Token* token)
     }
 
     // # Get ';' or '='token
-    auto t_bridge_token = this->lexer->GetNextToken();
+    auto t_bridge_token = this->GetNextToken("Expected the ';' or '=' after type declaration");
 
     if(t_bridge_token == nullptr)
     {
@@ -202,6 +205,9 @@ AstBranch* Parser::BuildFunctionDeclaration(Token* token)
 
     // # Read Function Body
     this->currentScope = function->name;
+    this->currentDeep++;
+
+    // # TODO
 
     // # Insert into symbol table, now everybody know that function exists
     this->symbolTable->InsertFunctionIdentifier(funModel);
