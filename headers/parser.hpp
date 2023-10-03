@@ -63,10 +63,16 @@ class Parser
     private:
         bool IsVariableDeclaration(Token*);
         bool IsFunctionDeclaration(Token*);
+        bool IsReturnExpression(Token*);
+        bool IsCallFunction(Token*);
 
     private:
         AstBranch* BuildVariableDeclaration(Token*);
         AstBranch* BuildFunctionDeclaration(Token*);
+        AstBranch* BuildCallFunction(Token*);
+
+    private:
+        ReturnExpression* BuildReturnExpression(Token*);
 
     private:
         Expression* BuildExpression();

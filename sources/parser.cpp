@@ -5,7 +5,10 @@ Parser::Parser(Lexer* lexer, SymbolTable* symbolTable, Ast* ast):lexer(lexer), s
     debug = new DebugCompiler();
 }
 
-Parser::~Parser(){}
+Parser::~Parser()
+{
+    delete this->debug;
+}
 
 void Parser::Parse()
 {
@@ -37,7 +40,8 @@ void Parser::Parse()
 void Parser::ThrowError(Token* token, std::string message)
 {
     std::string lineError = "Line: " + std::to_string(token->line) + ", Col: " + std::to_string(token->startpos);
-    Output::PrintCustomizeError("Syntax Error (" + lineError + "): ", message + " | '" + token->value + "'");
+    Output::PrintCustomizeError("Syntax Error (" + lineError + "): ", message + " '" + token->value + "'");
+    delete token;
     exit(EXIT_FAILURE);
 }
 

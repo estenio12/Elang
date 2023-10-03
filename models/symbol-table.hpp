@@ -10,6 +10,7 @@
 
 #include <vector>
 #include "../models/ast.hpp"
+#include "../helpers/mem-tools.hpp"
 
 class IdentifierModel
 {
@@ -35,7 +36,10 @@ class FunctionIdenfierModel
 
     public:
         FunctionIdenfierModel(){}
-        ~FunctionIdenfierModel(){}
+        ~FunctionIdenfierModel()
+        {
+            MemTools::FreeVectorFromMemory(parameterList);
+        }
 };
 
 class SymbolTable
@@ -46,7 +50,11 @@ class SymbolTable
 
     public:
         SymbolTable(){}
-        ~SymbolTable(){}
+        ~SymbolTable()
+        {
+            MemTools::FreeVectorFromMemory(IDTable);
+            MemTools::FreeVectorFromMemory(IDFunTable);
+        }
 
     private:
         int FindIndexFunTable(std::string FunName)

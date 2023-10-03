@@ -4,6 +4,8 @@ EBRANCH_TYPE Parser::BindOperation(Token* token)
 {
     if(IsVariableDeclaration(token)) return EBRANCH_TYPE::VARIABLE_DECLARATION;
     if(IsFunctionDeclaration(token)) return EBRANCH_TYPE::FUNCTION_DECLARATION;
+    if(IsReturnExpression(token)) return EBRANCH_TYPE::RETURN_EXPRESSION;
+    if(IsCallFunction(token)) return EBRANCH_TYPE::CALL_FUNCTION;
 
     this->ThrowError(token, "Unexpected token");
     return EBRANCH_TYPE::UNDEFINED;
@@ -27,6 +29,17 @@ bool Parser::IsFunctionDeclaration(Token* token)
     return false;
 }
 
+bool Parser::IsReturnExpression(Token* token)
+{
+    if(token->value == KEYWORD::T_RETURN) return true;
+    return false;
+}
+
+bool Parser::IsCallFunction(Token* token)
+{
+    return this->symbolTable->ExistsFunctionIdentifier(token->value);
+}
+
 // # Builders
 AstBranch* Parser::BuildVariableDeclaration(Token* token)
 {
@@ -40,7 +53,7 @@ AstBranch* Parser::BuildVariableDeclaration(Token* token)
     variable->isConstant = token->value == KEYWORD::T_CONST;
 
     // # Free token from memory
-    delete token;
+    MemTools::FreeObjectFromMemory(token);
 
     // # Get Identifier
     auto t_identifier = this->GetNextToken("It's expected an identifier");
@@ -52,7 +65,7 @@ AstBranch* Parser::BuildVariableDeclaration(Token* token)
         else
             this->ThrowError(t_identifier, "It's expected an identifier");
 
-        delete t_identifier;
+        MemTools::FreeObjectFromMemory(t_identifier);
     }
 
     // # Consume syntax ':'
@@ -82,7 +95,7 @@ AstBranch* Parser::BuildVariableDeclaration(Token* token)
     }
     else if(t_bridge_token->value == DELIMITER::T_EOF)
     {
-        delete t_bridge_token;
+        MemTools::FreeObjectFromMemory(t_bridge_token);
     }
     else
     {
@@ -90,7 +103,7 @@ AstBranch* Parser::BuildVariableDeclaration(Token* token)
     }
 
     // # Free from memory
-    delete t_type;
+    MemTools::FreeObjectFromMemory(t_type);
 
     auto branch = new AstBranch();
     branch->branch_variable_declaration = variable;
@@ -109,8 +122,13 @@ AstBranch* Parser::BuildFunctionDeclaration(Token* token)
     this->CheckMemoryAllocated(function);
     this->CheckMemoryAllocated(funModel);
 
+    // # Set states
+    this->currentScope = function->name;
+    this->currentDeep++;
+    int endStatmetCount = 1;
+
     // # KEYWORD 'fun' from memory
-    delete token;
+    MemTools::FreeObjectFromMemory(token);
 
     // # Function identifier validations
     auto t_fun_id = this->GetNextToken("An identifier was expected after the keyword 'fun'");
@@ -123,7 +141,7 @@ AstBranch* Parser::BuildFunctionDeclaration(Token* token)
     funModel->name = t_fun_id->value;
     function->name = t_fun_id->value;
 
-    delete t_fun_id;
+    MemTools::FreeObjectFromMemory(t_fun_id);
 
     // # Consume opening parenthesis 
     this->ExpectValue(DELIMITER::T_OPEN_PARAM, "Expected open parenthesis after identifier.");
@@ -137,7 +155,7 @@ AstBranch* Parser::BuildFunctionDeclaration(Token* token)
         // # check type after closing parenthesis
         if(id_token->value == DELIMITER::T_CLOSE_PARAM) 
         {
-            delete id_token;
+            MemTools::FreeObjectFromMemory(id_token);
 
             this->ExpectValue(DELIMITER::T_COLON, "Expect a ':' after closing parenthesis");
 
@@ -149,7 +167,7 @@ AstBranch* Parser::BuildFunctionDeclaration(Token* token)
             else
                 this->ThrowError(t_type, "It's expected an function return type here");
 
-            delete t_type;
+            MemTools::FreeObjectFromMemory(t_type);
             break;
         }
         else if(id_token->type == TYPE_TOKEN::T_IDENTIDIER)
@@ -170,9 +188,20 @@ AstBranch* Parser::BuildFunctionDeclaration(Token* token)
             funModel->parameterList.push_back(param);
             function->parameterList.push_back(param);
 
+            // # Insert into symbol table
+            auto id_model = new IdentifierModel
+            (
+                id_token->value,
+                type_token->value,
+                this->currentScope,
+                this->currentDeep
+            );
+
+            this->symbolTable->InsertIdentifier(id_model);
+
             // # Free tokens from memory
-            delete id_token;
-            delete type_token;
+            MemTools::FreeObjectFromMemory(id_token);
+            MemTools::FreeObjectFromMemory(type_token);
         }
         else
             ThrowError(id_token, "Unexpected token here");
@@ -182,7 +211,7 @@ AstBranch* Parser::BuildFunctionDeclaration(Token* token)
 
         if(next_token->value == DELIMITER::T_CLOSE_PARAM)
         {
-            delete next_token;
+            MemTools::FreeObjectFromMemory(next_token);
 
             this->ExpectValue(DELIMITER::T_COLON, "Expect separate after close parentheses");
 
@@ -195,7 +224,7 @@ AstBranch* Parser::BuildFunctionDeclaration(Token* token)
             function->type = t_type->value;
             funModel->type = t_type->value;
 
-            delete t_type;
+            MemTools::FreeObjectFromMemory(t_type);
             break;
         }
         else if(next_token->value == DELIMITER::T_COMMA)
@@ -205,17 +234,13 @@ AstBranch* Parser::BuildFunctionDeclaration(Token* token)
     }
 
     // # Read Function Body
-    this->currentScope = function->name;
-    this->currentDeep++;
-    int endStatmetCount = 1;
-
     while(endStatmetCount > 0)
     {
         auto stmt_token = this->GetNextToken("Expected 'end' keyword to close function statement");
 
         if(stmt_token->value == KEYWORD::T_END) 
         {
-            delete stmt_token;
+            MemTools::FreeObjectFromMemory(stmt_token);
             endStatmetCount--;
             continue;
         }
@@ -226,6 +251,10 @@ AstBranch* Parser::BuildFunctionDeclaration(Token* token)
         {
             case EBRANCH_TYPE::VARIABLE_DECLARATION:
                 function->listBodyLocalVariableDeclaration.push_back(BuildVariableDeclaration(stmt_token)->branch_variable_declaration);
+            break;
+
+            case EBRANCH_TYPE::RETURN_EXPRESSION:
+                function->listBodyLocalReturnExpression.push_back(BuildReturnExpression(stmt_token));
             break;
 
             default:
@@ -249,9 +278,43 @@ AstBranch* Parser::BuildFunctionDeclaration(Token* token)
     return branch;
 }
 
+ReturnExpression* Parser::BuildReturnExpression(Token* token)
+{
+    auto return_expression = new ReturnExpression();
 
+    // # Free from memory
+    MemTools::FreeObjectFromMemory(token);
 
+    return_expression->expression = BuildExpression();
 
+    return return_expression;
+}
+
+AstBranch* Parser::BuildCallFunction(Token* token)
+{
+    auto call_function = new CallFunction();
+    auto fun_data = this->symbolTable->GetFunctionIdentifier(token->value);
+    
+    MemTools::FreeObjectFromMemory(token);
+
+    // # build meta-data
+    call_function->name = fun_data->name;
+    call_function->type = fun_data->type;
+
+    this->ExpectValue(DELIMITER::T_OPEN_PARAM, "Expected opening parenthesis");
+
+    // # build argument list
+    while(true)
+    {
+
+    }
+
+    // # Build branch
+    auto branch = new AstBranch();
+    branch->branch_call_function_declaration = call_function;
+    branch->TYPE = EBRANCH_TYPE::CALL_FUNCTION;
+    return branch;
+}
 
 
 

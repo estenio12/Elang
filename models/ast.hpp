@@ -10,13 +10,16 @@
 
 #include <vector>
 #include "../models/token.hpp"
+#include "../helpers/mem-tools.hpp"
 
 enum EBRANCH_TYPE
 {
     UNDEFINED,
     VARIABLE_DECLARATION,
     EXPRESSION,
-    FUNCTION_DECLARATION
+    FUNCTION_DECLARATION,
+    CALL_FUNCTION,
+    RETURN_EXPRESSION
 };
 
 class AstNode
@@ -105,6 +108,39 @@ class VariableDeclaration : public AstNode
         }
 };
 
+class CallFunction : public AstNode
+{
+    public:
+        std::string name;
+        std::string type;
+        std::vector<Expression*> ArgumetList;
+
+    public:
+        CallFunction()
+        {
+            this->kind = EBRANCH_TYPE::CALL_FUNCTION;
+        }
+
+        ~CallFunction()
+        {
+            MemTools::FreeVectorFromMemory(ArgumetList);
+        }
+
+};
+
+class ReturnExpression : public AstNode
+{
+    public:
+        Expression* expression;
+
+    public:
+        ReturnExpression(){this->kind = RETURN_EXPRESSION;}
+        ~ReturnExpression()
+        {
+            delete expression;
+        }
+};
+
 class ParameterDeclaration
 {
     public:
@@ -125,15 +161,30 @@ class FunctionDeclaration : public AstNode
 
     public:
         std::vector<VariableDeclaration*> listBodyLocalVariableDeclaration;
+        std::vector<ReturnExpression*> listBodyLocalReturnExpression;
+        std::vector<CallFunction*> listBodyLocalCallFunction;
 
     public:
-        FunctionDeclaration(){}
-        ~FunctionDeclaration(){}
+        FunctionDeclaration()
+        {
+            this->kind = EBRANCH_TYPE::FUNCTION_DECLARATION;
+        }
+
+        ~FunctionDeclaration()
+        {
+            MemTools::FreeVectorFromMemory(parameterList);
+            MemTools::FreeVectorFromMemory(listBodyLocalVariableDeclaration);
+            MemTools::FreeVectorFromMemory(listBodyLocalReturnExpression);
+            MemTools::FreeVectorFromMemory(listBodyLocalCallFunction);
+        }
 
     public:
         bool IsFunctionEmpty()
         {
-            return listBodyLocalVariableDeclaration.size() <= 0;
+            return listBodyLocalVariableDeclaration.empty() && 
+                   listBodyLocalReturnExpression.empty() && 
+                   listBodyLocalCallFunction.empty() 
+                   ;
         }
 
         bool ExistsParameter(std::string name)
@@ -162,10 +213,16 @@ class AstBranch
     public:
         class VariableDeclaration* branch_variable_declaration = nullptr;
         class FunctionDeclaration* branch_function_declaration = nullptr;
+        class CallFunction* branch_call_function_declaration   = nullptr;
 
     public:
         AstBranch(){}
-        ~AstBranch(){}
+        ~AstBranch()
+        {
+            MemTools::FreeObjectFromMemory(branch_variable_declaration);
+            MemTools::FreeObjectFromMemory(branch_function_declaration);
+            MemTools::FreeObjectFromMemory(branch_call_function_declaration);
+        }
 };
 
 class Ast
@@ -177,7 +234,7 @@ class Ast
         Ast(){}
         ~Ast()
         {
-            tree.clear();
+            MemTools::FreeVectorFromMemory(tree);
         }
 
     public:
