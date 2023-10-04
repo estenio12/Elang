@@ -32,6 +32,7 @@ void Parser::Parse()
 
             case EBRANCH_TYPE::CALL_FUNCTION:
                 PushToAst(this->BuildCallFunction(token));
+                this->ExpectValue(DELIMITER::T_EOF, "Expected ';' after the called function ");
             break;
             
             default:
@@ -45,7 +46,7 @@ void Parser::ThrowError(Token* token, std::string message)
 {
     std::string lineError = "Line: " + std::to_string(token->line) + ", Col: " + std::to_string(token->startpos);
     Output::PrintCustomizeError("Syntax Error (" + lineError + "): ", message + " '" + token->value + "'");
-    delete token;
+    MemTools::FreeObjectFromMemory(token);
     exit(EXIT_FAILURE);
 }
 

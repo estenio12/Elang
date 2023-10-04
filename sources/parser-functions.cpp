@@ -257,6 +257,11 @@ AstBranch* Parser::BuildFunctionDeclaration(Token* token)
                 function->listBodyLocalReturnExpression.push_back(BuildReturnExpression(stmt_token));
             break;
 
+            case EBRANCH_TYPE::CALL_FUNCTION:
+                function->listBodyLocalCallFunction.push_back(BuildCallFunction(token)->branch_call_function_declaration);
+                this->ExpectValue(DELIMITER::T_EOF, "Expected ';' after the called function ");
+            break;
+
             default:
                 ThrowError(stmt_token, "Unexpected token ");
             break;
@@ -308,18 +313,16 @@ AstBranch* Parser::BuildCallFunction(Token* token)
 
     if(param_readed > 0)
     {
-        while(true)
+        while(param_readed > 0)
         {
             auto expr = BuildExpression();            
             call_function->InsertArgument(expr);
             param_readed--;
 
-            if(param_readed > 0)
-                this->ExpectValue(DELIMITER::T_COMMA, "Too few arguments to function '" + fun_data->name + "'. This function expect " + std::to_string(fun_data->parameterList.size()) + " arguments");
-            else
+            if(expr->TerminateWithCloseParenthesis && param_readed > 0)
             {
-                this->ExpectValue(DELIMITER::T_CLOSE_PARAM, "Expect closing parenthesis");                
-                break;
+                Output::PrintCustomizeError("Syntax error (Line: "+std::to_string(lineHistory)+"): ", "Too few arguments to function '" + fun_data->name + "'. This function expect " + std::to_string(fun_data->parameterList.size()) + " arguments");
+                exit(EXIT_FAILURE);
             }
         }
     }

@@ -4,22 +4,33 @@ Expression* Parser::BuildExpression()
 {
     auto expression = new Expression();
     auto tokenList  = new Tokens();
+    auto parenOpen  = false;
+    auto closeWithParenthesis  = false;
 
     while(true)
     {
         auto token = this->lexer->GetNextToken();
+
+        if(token->value == DELIMITER::T_OPEN_PARAM) parenOpen = true;
 
         if(token == nullptr) 
         {
             Output::PrintCustomizeError("Line: " + std::to_string(lexer->lineCounter) + " | Syntax error: ", "missing ';' at the end of the expression");
             exit(EXIT_FAILURE);
         }
-        else if(token->value == DELIMITER::T_EOF || token->value == DELIMITER::T_COMMA) 
+        else if(token->value == DELIMITER::T_EOF   || 
+                token->value == DELIMITER::T_COMMA ||
+                token->value == DELIMITER::T_CLOSE_PARAM && parenOpen == false
+                ) 
+        {
+            closeWithParenthesis = token->value == DELIMITER::T_CLOSE_PARAM && parenOpen == false;
             break;
+        }
         else tokenList->AddToken(token);
     }
 
     expression->operation = ParserExpression(tokenList, expression, 0);
+    expression->TerminateWithCloseParenthesis = closeWithParenthesis;
 
     return expression;
 }

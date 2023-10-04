@@ -50,6 +50,7 @@ class Expression : public AstNode
     public:
         bool IsLiteralOperation = true;
         bool IsConcatenation    = false;
+        bool TerminateWithCloseParenthesis = false;
         BinaryOperation* operation;
 
     public:
