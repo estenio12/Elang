@@ -29,6 +29,10 @@ void Parser::Parse()
             case EBRANCH_TYPE::FUNCTION_DECLARATION:
                 PushToAst(this->BuildFunctionDeclaration(token));
             break;
+
+            case EBRANCH_TYPE::CALL_FUNCTION:
+                PushToAst(this->BuildCallFunction(token));
+            break;
             
             default:
                 ThrowInternalError("Parser operation not implemented!");
@@ -67,6 +71,12 @@ void Parser::ExpectValue(std::string expected, std::string message)
 
     if(token != nullptr && token->value != expected)
         this->ThrowError(token, message);
+
+    if(token == nullptr)
+    {
+        Output::PrintCustomizeError("Line: " + std::to_string(lexer->lineCounter) + " | Syntax error: ", message);
+        exit(EXIT_FAILURE);
+    }
 
     delete token;
 }

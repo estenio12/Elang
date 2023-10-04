@@ -125,6 +125,12 @@ class CallFunction : public AstNode
         {
             MemTools::FreeVectorFromMemory(ArgumetList);
         }
+    
+    public:
+        void InsertArgument(Expression* expr)
+        {
+            this->ArgumetList.push_back(expr);
+        }
 
 };
 

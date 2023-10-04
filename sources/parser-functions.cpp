@@ -304,10 +304,27 @@ AstBranch* Parser::BuildCallFunction(Token* token)
     this->ExpectValue(DELIMITER::T_OPEN_PARAM, "Expected opening parenthesis");
 
     // # build argument list
-    while(true)
-    {
+    int param_readed = fun_data->parameterList.size();
 
+    if(param_readed > 0)
+    {
+        while(true)
+        {
+            auto expr = BuildExpression();            
+            call_function->InsertArgument(expr);
+            param_readed--;
+
+            if(param_readed > 0)
+                this->ExpectValue(DELIMITER::T_COMMA, "Too few arguments to function '" + fun_data->name + "'. This function expect " + std::to_string(fun_data->parameterList.size()) + " arguments");
+            else
+            {
+                this->ExpectValue(DELIMITER::T_CLOSE_PARAM, "Expect closing parenthesis");                
+                break;
+            }
+        }
     }
+    else
+        this->ExpectValue(DELIMITER::T_CLOSE_PARAM, "Expect closing parenthesis.");
 
     // # Build branch
     auto branch = new AstBranch();

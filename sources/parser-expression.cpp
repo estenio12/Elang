@@ -14,7 +14,8 @@ Expression* Parser::BuildExpression()
             Output::PrintCustomizeError("Line: " + std::to_string(lexer->lineCounter) + " | Syntax error: ", "missing ';' at the end of the expression");
             exit(EXIT_FAILURE);
         }
-        else if(token->value == DELIMITER::T_EOF) break;
+        else if(token->value == DELIMITER::T_EOF || token->value == DELIMITER::T_COMMA) 
+            break;
         else tokenList->AddToken(token);
     }
 
