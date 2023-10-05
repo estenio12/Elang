@@ -311,17 +311,28 @@ AstBranch* Parser::BuildCallFunction(Token* token)
     // # build argument list
     int param_readed = fun_data->parameterList.size();
 
+    // # standard messages
+    std::string few_arg_header_msg = "Syntax error (Line: "+std::to_string(lineHistory)+"): "; 
+    std::string few_arg_error_msg  = "Too few arguments to function '" + fun_data->name + "'. This function expect " + std::to_string(fun_data->parameterList.size()) + " arguments";
+
     if(param_readed > 0)
     {
         while(param_readed > 0)
         {
-            auto expr = BuildExpression();            
+            auto expr = BuildExpression();       
+
+            if(expr == nullptr && param_readed > 0)
+            {
+                Output::PrintCustomizeError(few_arg_header_msg, few_arg_error_msg);
+                exit(EXIT_FAILURE);
+            }
+
             call_function->InsertArgument(expr);
             param_readed--;
 
             if(expr->TerminateWithCloseParenthesis && param_readed > 0)
             {
-                Output::PrintCustomizeError("Syntax error (Line: "+std::to_string(lineHistory)+"): ", "Too few arguments to function '" + fun_data->name + "'. This function expect " + std::to_string(fun_data->parameterList.size()) + " arguments");
+                Output::PrintCustomizeError(few_arg_header_msg, few_arg_error_msg);
                 exit(EXIT_FAILURE);
             }
         }

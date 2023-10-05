@@ -9,7 +9,7 @@ Expression* Parser::BuildExpression()
 
     while(true)
     {
-        auto token = this->lexer->GetNextToken();
+        auto token = this->GetNextToken("");
 
         if(token->value == DELIMITER::T_OPEN_PARAM) parenOpen = true;
 
@@ -28,6 +28,9 @@ Expression* Parser::BuildExpression()
         }
         else tokenList->AddToken(token);
     }
+
+    // # Was request a new expression, but not have, then, will return nullptr for sinalize this.
+    if(tokenList->GetSize() <= 0) return nullptr;
 
     expression->operation = ParserExpression(tokenList, expression, 0);
     expression->TerminateWithCloseParenthesis = closeWithParenthesis;

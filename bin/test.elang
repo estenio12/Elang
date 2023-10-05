@@ -1,8 +1,8 @@
-const idade: int = 10;
+const idade: int = 10 + 10 * 12;
 
 fun sum(n1: int, n2: int): int
 	var t1: int = 10;
 	return n1 + n2;
 end
 
-sum(10 + 10 - 5);
+sum(10 + 10 - 5, 76);
