@@ -20,8 +20,7 @@ Expression* Parser::BuildExpression()
         }
         else if(token->value == DELIMITER::T_EOF   || 
                 token->value == DELIMITER::T_COMMA ||
-                token->value == DELIMITER::T_CLOSE_PARAM && parenOpen == false
-                ) 
+                token->value == DELIMITER::T_CLOSE_PARAM && parenOpen == false) 
         {
             closeWithParenthesis = token->value == DELIMITER::T_CLOSE_PARAM && parenOpen == false;
             break;
@@ -79,7 +78,18 @@ BinaryOperation* Parser::ParserPrimary(Tokens* tokenList, Expression* expr)
             expr->IsLiteralOperation = false;
 
             // # Check identifier
-            if(!this->symbolTable->ExistsIdentifier(token->value, this->currentScope, currentDeep))
+            if(this->symbolTable->ExistsIdentifier(token->value, this->currentScope, currentDeep))
+            {
+                return new BinaryOperation(nullptr, token, nullptr);
+            }
+            else if(this->symbolTable->ExistsFunctionIdentifier(token->value))
+            {
+                auto nexpr = new BinaryOperation(nullptr, nullptr, nullptr);
+                nexpr->IsCallFuncion = true;
+                nexpr->call_function = this->BuildCallFunction(token)->branch_call_function_declaration;
+                return nexpr;
+            }
+            else
                 this->ThrowError(token, "Identifier not declarad in scope");
         }
             

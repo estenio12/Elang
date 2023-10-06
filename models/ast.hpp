@@ -35,9 +35,13 @@ class AstNode
 class BinaryOperation
 {
     public:
+        bool IsCallFuncion = false;
+
+    public:
         Token* token;
         BinaryOperation* left;
         BinaryOperation* right;
+        class CallFunction* call_function;
 
     public:
         BinaryOperation(BinaryOperation* left, Token* token, BinaryOperation* right):
