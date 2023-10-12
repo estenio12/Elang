@@ -9,6 +9,8 @@
 #pragma once
 
 #include <cstdint>
+#include <functional>
+#include <chrono>
 #include "lexer.hpp"
 #include "../models/ast.hpp"
 #include "../models/expression.hpp"
@@ -49,6 +51,7 @@ class Parser
         void PushToAst(AstBranch* node);
         void InsertIdentifierIntoSymbolTable(AstBranch*);
         Token* GetNextToken(std::string msg);
+        std::string GenerateCallFunctionHash();
 
     private:
         template<class T> void CheckMemoryAllocated(T entity)
@@ -75,7 +78,7 @@ class Parser
         ReturnExpression* BuildReturnExpression(Token*);
 
     private:
-        Expression* BuildExpression(bool ValidateOpenParentheses = true, int initialParen = 0);
+        Expression* BuildExpression(bool ValidateOpenParentheses = true);
         BinaryOperation* ParserExpression(Tokens* tokenList, Expression* expr, uint8_t minPrecedence);
         BinaryOperation* ParserPrimary(Tokens* tokenList, Expression* expr);
         uint8_t GetPrecedenceValue(Token*);

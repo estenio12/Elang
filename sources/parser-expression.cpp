@@ -1,12 +1,11 @@
 #include "../headers/parser.hpp"
 
-Expression* Parser::BuildExpression(bool ValidateOpenParentheses, int initialParen)
+Expression* Parser::BuildExpression(bool ValidateOpenParentheses)
 {
     auto expression = new Expression();
     auto tokenList  = new Tokens();
-    auto parenOpen  = false;
-    auto closeWithParenthesis  = false;
-    int parenCounter = initialParen;
+    auto closeWithParenthesis = false;
+    int parenCounter = 0;
 
     while(true)
     {
@@ -31,9 +30,7 @@ Expression* Parser::BuildExpression(bool ValidateOpenParentheses, int initialPar
             if(parenCounter < 0)
             {
                 if(ValidateOpenParentheses)
-                {
                     ThrowError(token, "Unexpected closing parentheses");
-                }
 
                 closeWithParenthesis = true;
                 MemTools::FreeObjectFromMemory(token);
@@ -42,7 +39,36 @@ Expression* Parser::BuildExpression(bool ValidateOpenParentheses, int initialPar
             
             tokenList->AddToken(token);
         }
-        else tokenList->AddToken(token);
+        else 
+        {
+            if(token->type == TYPE_TOKEN::T_IDENTIDIER)
+            {
+                if(this->symbolTable->ExistsFunctionIdentifier(token->value))
+                {
+                    auto hash_name = this->GenerateCallFunctionHash();
+                    
+                    auto token_copy = token->GetCopy();
+                    token_copy->value = hash_name;
+                    token_copy->IsStorageInHashTable = true;
+
+                    tokenList->AddToken(token_copy);
+
+                    expression->CallTable
+                    .push_back
+                    (
+                        std::make_pair
+                        (
+                            hash_name, 
+                            this->BuildCallFunction(token)->branch_call_function_declaration
+                        )
+                    );
+                }
+                else
+                    tokenList->AddToken(token);
+            }
+            else
+                tokenList->AddToken(token);
+        }
     }
 
     // # Was request a new expression, but not have, then, will return nullptr for sinalize this.
@@ -99,12 +125,17 @@ BinaryOperation* Parser::ParserPrimary(Tokens* tokenList, Expression* expr)
             {
                 return new BinaryOperation(nullptr, token, nullptr);
             }
-            else if(this->symbolTable->ExistsFunctionIdentifier(token->value))
+            // else if(this->symbolTable->ExistsFunctionIdentifier(token->value))
+            // {
+            //     auto nexpr = new BinaryOperation(nullptr, nullptr, nullptr);
+            //     nexpr->IsCallFuncion = true;
+            //     nexpr->call_function = this->BuildCallFunction(token)->branch_call_function_declaration;
+            //     return nexpr;
+            // }
+            // else if(expr->ExistCallFunctionID(token->value))
+            else if(token->IsStorageInHashTable)
             {
-                auto nexpr = new BinaryOperation(nullptr, nullptr, nullptr);
-                nexpr->IsCallFuncion = true;
-                nexpr->call_function = this->BuildCallFunction(token)->branch_call_function_declaration;
-                return nexpr;
+                return new BinaryOperation(nullptr, token, nullptr);
             }
             else
                 this->ThrowError(token, "Identifier not declarad in scope");

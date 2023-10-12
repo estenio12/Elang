@@ -125,7 +125,11 @@ Token* Parser::GetNextToken(std::string msg)
     return token;
 }
 
-
+std::string Parser::GenerateCallFunctionHash()
+{
+    srand(std::chrono::high_resolution_clock::now().time_since_epoch().count());
+    return std::to_string(std::hash<std::string>{}(std::to_string(rand() % 9)));
+}
 
 
 

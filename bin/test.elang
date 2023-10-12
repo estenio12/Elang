@@ -5,6 +5,6 @@ fun sum(n1: int, n2: int): int
 	return n1 + n2;
 end
 
-const age: int = sum(5, 5) + 10 * 12);
+const age: int = sum(5, 5) + 10 * 12;
 
 sum(10 + 10 - 5, 76);

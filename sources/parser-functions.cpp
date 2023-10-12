@@ -319,7 +319,7 @@ AstBranch* Parser::BuildCallFunction(Token* token)
     {
         while(param_readed > 0)
         {
-            auto expr = BuildExpression(false, 1);       
+            auto expr = BuildExpression(false);       
 
             if(expr == nullptr && param_readed > 0)
             {

@@ -12,6 +12,8 @@
 #include "../models/token.hpp"
 #include "../helpers/mem-tools.hpp"
 
+using CallFunDictionary = std::vector<std::pair<std::string, class CallFunction*>>;
+
 enum EBRANCH_TYPE
 {
     UNDEFINED,
@@ -56,6 +58,7 @@ class Expression : public AstNode
         bool IsConcatenation    = false;
         bool TerminateWithCloseParenthesis = false;
         BinaryOperation* operation;
+        CallFunDictionary CallTable;
 
     public:
         Expression()
@@ -64,6 +67,13 @@ class Expression : public AstNode
         }
 
         ~Expression(){}
+
+        bool ExistCallFunctionID(std::string ID)
+        {
+            for(auto item : CallTable)
+                if(item.first == ID) return true;
+            return false;
+        }
 };
 
 class VariableDeclaration : public AstNode
