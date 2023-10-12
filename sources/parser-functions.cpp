@@ -105,9 +105,7 @@ AstBranch* Parser::BuildVariableDeclaration(Token* token)
     // # Free from memory
     MemTools::FreeObjectFromMemory(t_type);
 
-    auto branch = new AstBranch();
-    branch->branch_variable_declaration = variable;
-    branch->TYPE = EBRANCH_TYPE::VARIABLE_DECLARATION;
+    auto branch = new AstBranch(variable);
 
     this->InsertIdentifierIntoSymbolTable(branch);
 
@@ -250,15 +248,15 @@ AstBranch* Parser::BuildFunctionDeclaration(Token* token)
         switch(operation)
         {
             case EBRANCH_TYPE::VARIABLE_DECLARATION:
-                function->listBodyLocalVariableDeclaration.push_back(BuildVariableDeclaration(stmt_token)->branch_variable_declaration);
+                function->BodyContent.push_back(BuildVariableDeclaration(stmt_token));
             break;
 
             case EBRANCH_TYPE::RETURN_EXPRESSION:
-                function->listBodyLocalReturnExpression.push_back(BuildReturnExpression(stmt_token));
+                function->BodyContent.push_back(BuildReturnExpression(stmt_token));
             break;
 
             case EBRANCH_TYPE::CALL_FUNCTION:
-                function->listBodyLocalCallFunction.push_back(BuildCallFunction(token)->branch_call_function_declaration);
+                function->BodyContent.push_back(BuildCallFunction(token));
                 this->ExpectValue(DELIMITER::T_EOF, "Expected ';' after the called function ");
             break;
 
@@ -276,10 +274,7 @@ AstBranch* Parser::BuildFunctionDeclaration(Token* token)
     this->symbolTable->InsertFunctionIdentifier(funModel);
 
     // # Complete Task
-    auto branch = new AstBranch();
-    branch->branch_function_declaration = function;
-    branch->TYPE = EBRANCH_TYPE::FUNCTION_DECLARATION;
-
+    auto branch = new AstBranch(function);
     return branch;
 }
 
@@ -341,9 +336,7 @@ AstBranch* Parser::BuildCallFunction(Token* token)
         this->ExpectValue(DELIMITER::T_CLOSE_PARAM, "Expect closing parenthesis.");
 
     // # Build branch
-    auto branch = new AstBranch();
-    branch->branch_call_function_declaration = call_function;
-    branch->TYPE = EBRANCH_TYPE::CALL_FUNCTION;
+    auto branch = new AstBranch(call_function);
     return branch;
 }
 

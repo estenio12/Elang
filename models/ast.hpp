@@ -32,6 +32,9 @@ class AstNode
     public:
         AstNode(){}
         ~AstNode(){}
+
+    public:
+        virtual std::vector<std::string> GetByteCode() = 0;
 };
 
 class BinaryOperation
@@ -181,9 +184,10 @@ class FunctionDeclaration : public AstNode
         std::vector<ParameterDeclaration*> parameterList;
 
     public:
-        std::vector<VariableDeclaration*> listBodyLocalVariableDeclaration;
-        std::vector<ReturnExpression*> listBodyLocalReturnExpression;
-        std::vector<CallFunction*> listBodyLocalCallFunction;
+        // std::vector<VariableDeclaration*> listBodyLocalVariableDeclaration;
+        // std::vector<ReturnExpression*> listBodyLocalReturnExpression;
+        // std::vector<CallFunction*> listBodyLocalCallFunction;
+        std::vector<AstNode*> BodyContent;
 
     public:
         FunctionDeclaration()
@@ -194,18 +198,20 @@ class FunctionDeclaration : public AstNode
         ~FunctionDeclaration()
         {
             MemTools::FreeVectorFromMemory(parameterList);
-            MemTools::FreeVectorFromMemory(listBodyLocalVariableDeclaration);
-            MemTools::FreeVectorFromMemory(listBodyLocalReturnExpression);
-            MemTools::FreeVectorFromMemory(listBodyLocalCallFunction);
+            // MemTools::FreeVectorFromMemory(listBodyLocalVariableDeclaration);
+            // MemTools::FreeVectorFromMemory(listBodyLocalReturnExpression);
+            // MemTools::FreeVectorFromMemory(listBodyLocalCallFunction);
+            MemTools::FreeVectorFromMemory(BodyContent);
         }
 
     public:
         bool IsFunctionEmpty()
         {
-            return listBodyLocalVariableDeclaration.empty() && 
-                   listBodyLocalReturnExpression.empty() && 
-                   listBodyLocalCallFunction.empty() 
-                   ;
+            // return listBodyLocalVariableDeclaration.empty() && 
+            //        listBodyLocalReturnExpression.empty() && 
+            //        listBodyLocalCallFunction.empty() 
+            //        ;
+            return BodyContent.empty();
         }
 
         bool ExistsParameter(std::string name)
@@ -229,20 +235,13 @@ class FunctionDeclaration : public AstNode
 class AstBranch
 {
     public:
-        EBRANCH_TYPE TYPE = EBRANCH_TYPE::UNDEFINED;
+        AstNode* entity;
 
     public:
-        class VariableDeclaration* branch_variable_declaration = nullptr;
-        class FunctionDeclaration* branch_function_declaration = nullptr;
-        class CallFunction* branch_call_function_declaration   = nullptr;
-
-    public:
-        AstBranch(){}
+        AstBranch(AstNode* entity):entity(entity){}
         ~AstBranch()
         {
-            MemTools::FreeObjectFromMemory(branch_variable_declaration);
-            MemTools::FreeObjectFromMemory(branch_function_declaration);
-            MemTools::FreeObjectFromMemory(branch_call_function_declaration);
+            MemTools::FreeObjectFromMemory(entity);
         }
 };
 
