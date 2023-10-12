@@ -1,17 +1,18 @@
 #include "../headers/parser.hpp"
 
-Expression* Parser::BuildExpression()
+Expression* Parser::BuildExpression(bool ValidateOpenParentheses, int initialParen)
 {
     auto expression = new Expression();
     auto tokenList  = new Tokens();
     auto parenOpen  = false;
     auto closeWithParenthesis  = false;
+    int parenCounter = initialParen;
 
     while(true)
     {
         auto token = this->GetNextToken("");
 
-        if(token->value == DELIMITER::T_OPEN_PARAM) parenOpen = true;
+        if(token->value == DELIMITER::T_OPEN_PARAM) parenCounter++;
 
         if(token == nullptr) 
         {
@@ -19,11 +20,27 @@ Expression* Parser::BuildExpression()
             exit(EXIT_FAILURE);
         }
         else if(token->value == DELIMITER::T_EOF   || 
-                token->value == DELIMITER::T_COMMA ||
-                token->value == DELIMITER::T_CLOSE_PARAM && parenOpen == false) 
+                token->value == DELIMITER::T_COMMA )
         {
-            closeWithParenthesis = token->value == DELIMITER::T_CLOSE_PARAM && parenOpen == false;
             break;
+        }
+        else if(token->value == DELIMITER::T_CLOSE_PARAM) 
+        {
+            parenCounter--;
+
+            if(parenCounter < 0)
+            {
+                if(ValidateOpenParentheses)
+                {
+                    ThrowError(token, "Unexpected closing parentheses");
+                }
+
+                closeWithParenthesis = true;
+                MemTools::FreeObjectFromMemory(token);
+                break;
+            }
+            
+            tokenList->AddToken(token);
         }
         else tokenList->AddToken(token);
     }

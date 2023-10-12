@@ -75,7 +75,7 @@ class Parser
         ReturnExpression* BuildReturnExpression(Token*);
 
     private:
-        Expression* BuildExpression();
+        Expression* BuildExpression(bool ValidateOpenParentheses = true, int initialParen = 0);
         BinaryOperation* ParserExpression(Tokens* tokenList, Expression* expr, uint8_t minPrecedence);
         BinaryOperation* ParserPrimary(Tokens* tokenList, Expression* expr);
         uint8_t GetPrecedenceValue(Token*);
