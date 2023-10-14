@@ -88,12 +88,10 @@ void Parser::PushToAst(AstBranch* node)
     // debug->PrintAstBranch(node);
 }
 
-void Parser::InsertIdentifierIntoSymbolTable(AstBranch* node)
+void Parser::InsertIdentifierIntoSymbolTable(VariableDeclaration* variable)
 {
-    if(node != nullptr && node->entity->kind == EBRANCH_TYPE::VARIABLE_DECLARATION)
+    if(variable != nullptr)
     {
-        auto variable = node->branch_variable_declaration;
-
         auto NewID = new IdentifierModel
         (
             variable->name, 

@@ -107,7 +107,7 @@ AstBranch* Parser::BuildVariableDeclaration(Token* token)
 
     auto branch = new AstBranch(variable);
 
-    this->InsertIdentifierIntoSymbolTable(branch);
+    this->InsertIdentifierIntoSymbolTable(variable);
 
     return branch;
 }

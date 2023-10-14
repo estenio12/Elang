@@ -49,7 +49,7 @@ class Parser
         void ThrowError(Token*, std::string message);
         void ThrowInternalError(std::string message);
         void PushToAst(AstBranch* node);
-        void InsertIdentifierIntoSymbolTable(AstBranch*);
+        void InsertIdentifierIntoSymbolTable(VariableDeclaration*);
         Token* GetNextToken(std::string msg);
         std::string GenerateCallFunctionHash();
 
