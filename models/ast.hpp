@@ -12,7 +12,7 @@
 #include "../models/token.hpp"
 #include "../helpers/mem-tools.hpp"
 
-using CallFunDictionary = std::vector<std::pair<std::string, class CallFunction*>>;
+using CallFunDictionary = std::vector<std::pair<std::string, class AstBranch*>>;
 
 enum EBRANCH_TYPE
 {
@@ -77,6 +77,10 @@ class Expression : public AstNode
                 if(item.first == ID) return true;
             return false;
         }
+
+    public:
+        std::vector<std::string> __temp_empty_list;
+        std::vector<std::string> GetByteCode() override {return __temp_empty_list;}
 };
 
 class VariableDeclaration : public AstNode
@@ -124,6 +128,10 @@ class VariableDeclaration : public AstNode
 
             return this;
         }
+
+    public:
+        std::vector<std::string> __temp_empty_list;
+        std::vector<std::string> GetByteCode() override {return __temp_empty_list;}
 };
 
 class CallFunction : public AstNode
@@ -149,6 +157,10 @@ class CallFunction : public AstNode
         {
             this->ArgumetList.push_back(expr);
         }
+    
+    public:
+        std::vector<std::string> __temp_empty_list;
+        std::vector<std::string> GetByteCode() override {return __temp_empty_list;}
 
 };
 
@@ -163,6 +175,10 @@ class ReturnExpression : public AstNode
         {
             delete expression;
         }
+
+    public:
+        std::vector<std::string> __temp_empty_list;
+        std::vector<std::string> GetByteCode() override {return __temp_empty_list;}
 };
 
 class ParameterDeclaration
@@ -184,10 +200,7 @@ class FunctionDeclaration : public AstNode
         std::vector<ParameterDeclaration*> parameterList;
 
     public:
-        // std::vector<VariableDeclaration*> listBodyLocalVariableDeclaration;
-        // std::vector<ReturnExpression*> listBodyLocalReturnExpression;
-        // std::vector<CallFunction*> listBodyLocalCallFunction;
-        std::vector<AstNode*> BodyContent;
+        std::vector<AstBranch*> BodyContent;
 
     public:
         FunctionDeclaration()
@@ -198,19 +211,12 @@ class FunctionDeclaration : public AstNode
         ~FunctionDeclaration()
         {
             MemTools::FreeVectorFromMemory(parameterList);
-            // MemTools::FreeVectorFromMemory(listBodyLocalVariableDeclaration);
-            // MemTools::FreeVectorFromMemory(listBodyLocalReturnExpression);
-            // MemTools::FreeVectorFromMemory(listBodyLocalCallFunction);
             MemTools::FreeVectorFromMemory(BodyContent);
         }
 
     public:
         bool IsFunctionEmpty()
         {
-            // return listBodyLocalVariableDeclaration.empty() && 
-            //        listBodyLocalReturnExpression.empty() && 
-            //        listBodyLocalCallFunction.empty() 
-            //        ;
             return BodyContent.empty();
         }
 
@@ -229,6 +235,10 @@ class FunctionDeclaration : public AstNode
 
             return nullptr;
         }
+
+    public:
+        std::vector<std::string> __temp_empty_list;
+        std::vector<std::string> GetByteCode() override {return __temp_empty_list;}
 
 };
 

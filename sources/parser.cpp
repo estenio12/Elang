@@ -90,7 +90,7 @@ void Parser::PushToAst(AstBranch* node)
 
 void Parser::InsertIdentifierIntoSymbolTable(AstBranch* node)
 {
-    if(node != nullptr && node->TYPE == EBRANCH_TYPE::VARIABLE_DECLARATION)
+    if(node != nullptr && node->entity->kind == EBRANCH_TYPE::VARIABLE_DECLARATION)
     {
         auto variable = node->branch_variable_declaration;
 

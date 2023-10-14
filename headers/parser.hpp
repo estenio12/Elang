@@ -75,7 +75,7 @@ class Parser
         AstBranch* BuildCallFunction(Token*);
 
     private:
-        ReturnExpression* BuildReturnExpression(Token*);
+        AstBranch* BuildReturnExpression(Token*);
 
     private:
         Expression* BuildExpression(bool ValidateOpenParentheses = true);

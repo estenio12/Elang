@@ -83,12 +83,12 @@ class DebugCompiler
             if(token != nullptr)
             {
                 std::string buffer = token->value + " | " + GetTypeText(token->type) + " | " + std::to_string(token->startpos) + " | " + std::to_string(token->endpos);
-                Output::PrintDebug(buffer);
+                    Output::PrintDebug(buffer);
             }
         }
         
         void PrintAstBranch(AstBranch* node)
         {
-            if(node->TYPE == EBRANCH_TYPE::VARIABLE_DECLARATION) printVariableDeclaration(node->branch_variable_declaration);
+            // if(node->TYPE == EBRANCH_TYPE::VARIABLE_DECLARATION) printVariableDeclaration(node->branch_variable_declaration);
         }
 };

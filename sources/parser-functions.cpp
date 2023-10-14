@@ -278,7 +278,7 @@ AstBranch* Parser::BuildFunctionDeclaration(Token* token)
     return branch;
 }
 
-ReturnExpression* Parser::BuildReturnExpression(Token* token)
+AstBranch* Parser::BuildReturnExpression(Token* token)
 {
     auto return_expression = new ReturnExpression();
 
@@ -286,8 +286,8 @@ ReturnExpression* Parser::BuildReturnExpression(Token* token)
     MemTools::FreeObjectFromMemory(token);
 
     return_expression->expression = BuildExpression();
-
-    return return_expression;
+    auto branch = new AstBranch(return_expression);
+    return branch;
 }
 
 AstBranch* Parser::BuildCallFunction(Token* token)

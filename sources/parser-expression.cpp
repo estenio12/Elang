@@ -59,7 +59,7 @@ Expression* Parser::BuildExpression(bool ValidateOpenParentheses)
                         std::make_pair
                         (
                             hash_name, 
-                            this->BuildCallFunction(token)->branch_call_function_declaration
+                            this->BuildCallFunction(token)
                         )
                     );
                 }
