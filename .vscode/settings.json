@@ -86,6 +86,8 @@
         "typeinfo": "cpp",
         "valarray": "cpp",
         "variant": "cpp",
-        "filesystem": "cpp"
-    }
+        "filesystem": "cpp",
+        "strstream": "cpp"
+    },
+    "C_Cpp.errorSquiggles": "disabled"
 }
