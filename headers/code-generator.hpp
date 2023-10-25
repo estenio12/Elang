@@ -10,6 +10,7 @@
 
 #include <vector>
 #include <string>
+#include <fstream>
 #include "../models/ast.hpp"
 
 class CodeGenerator
@@ -19,6 +20,10 @@ class CodeGenerator
         std::vector<std::string> FunctionImplementation;
         std::vector<std::string> GlobalDeclaration;
 
+    private:
+        std::string OutputFileName = "MyApplication.cpp";
+        std::fstream fileHandler;
+
     public:
         CodeGenerator();
         ~CodeGenerator();
@@ -27,5 +32,5 @@ class CodeGenerator
         void Run(Ast* ast);
 
     private:
-        
+        void WriteChunkToFile(std::string& chunk);
 };
