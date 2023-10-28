@@ -3,13 +3,14 @@
 CodeGenerator::CodeGenerator()
 {
     this->fileHandler.open(this->OutputFileName, std::ios::app);
+    this->LoadProgramInitialize();
 }
 
 CodeGenerator::~CodeGenerator()
 {
     this->FunctionInterface.clear();
     this->FunctionImplementation.clear();
-    this->GlobalDeclaration.clear();
+    this->RunnableImplementation.clear();
 }
 
 void CodeGenerator::Run(Ast* ast)
@@ -21,6 +22,51 @@ void CodeGenerator::WriteChunkToFile(std::string& chunk)
 {
     if(!chunk.empty())
         this->fileHandler.write(chunk.c_str(), chunk.size());
+}
+
+void CodeGenerator::LoadProgramInitialize()
+{
+    this->WriteChunkToFile(this->COMMENTARY);
+    this->WriteChunkToFile(this->INCLUDES);
+    this->WriteChunkToFile(this->PROGRAM_INTERFACE);
+}
+
+void CodeGenerator::FlushFunctionInterfaceToFile()
+{
+    std::string buffer;
+
+    for(auto item : this->FunctionInterface)
+        buffer += item;
+
+    this->WriteChunkToFile(buffer);
+    this->WriteChunkToFile(this->CLOSE_PROGRAM_INTERFACE);
+    buffer.clear();
+    this->FunctionInterface.clear();
+}
+
+void CodeGenerator::FlushFunctionImplementationToFile()
+{
+    std::string buffer;
+
+    for(auto item : this->FunctionImplementation)
+        buffer += item;
+
+    this->WriteChunkToFile(buffer);
+    buffer.clear();
+    this->FunctionImplementation.clear();
+}
+
+void CodeGenerator::FlushRunnableImplementationToFile()
+{
+    std::string buffer;
+
+    for(auto item : this->RunnableImplementation)
+        buffer += item;
+
+    this->WriteChunkToFile(buffer);
+    this->WriteChunkToFile(this->CLOSE_PROGRAM_RUNNABLE);
+    buffer.clear();
+    this->RunnableImplementation.clear();
 }
 
 
