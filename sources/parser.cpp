@@ -10,8 +10,9 @@ Parser::~Parser()
     delete this->debug;
 }
 
-void Parser::Parse()
+Ast* Parser::Parse()
 {
+    // # Passing
     while(true)
     {
         auto token = this->lexer->GetNextToken();
@@ -40,6 +41,9 @@ void Parser::Parse()
             break;
         }
     }
+
+    // # Return Ast
+    return this->ast;
 }
 
 void Parser::ThrowError(Token* token, std::string message)

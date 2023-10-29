@@ -12,6 +12,7 @@
 #include "lexer.hpp"
 #include "output.hpp"
 #include "parser.hpp"
+#include "code-generator.hpp"
 
 #include "../models/symbol-table.hpp"
 
@@ -20,8 +21,12 @@ class Compiler
     private:
         Lexer* lexer;
         Parser* parser;
-        SymbolTable* symbolTable;
         Ast* ast;
+        SymbolTable* symbolTable;
+        CodeGenerator* codegen;
+
+    private:
+        std::string OutputFileName = "MyApplication.cpp";
 
     public:
         Compiler(std::string sourcePath);
@@ -31,5 +36,6 @@ class Compiler
         void Run();
 
     private:
+        void DeleteExistsFile();
         bool IsNotValidPath(std::string sourcePath);
 };

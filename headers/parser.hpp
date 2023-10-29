@@ -40,7 +40,7 @@ class Parser
         ~Parser();
 
     public:
-        void Parse();
+        Ast* Parse();
 
     private:    
         EBRANCH_TYPE BindOperation(Token*);

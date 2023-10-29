@@ -8,10 +8,13 @@ Compiler::Compiler(std::string sourcePath)
         exit(EXIT_FAILURE);
     }
 
+    this->DeleteExistsFile();
+
     this->symbolTable = new SymbolTable();
     this->ast         = new Ast();
     this->lexer       = new Lexer(sourcePath);
     this->parser      = new Parser(lexer, symbolTable, ast);
+    this->codegen     = new CodeGenerator();
 }
 
 Compiler::~Compiler()
@@ -25,7 +28,19 @@ bool Compiler::IsNotValidPath(std::string sourcePath)
     return !std::filesystem::exists(std::filesystem::path(sourcePath));
 }
 
+void Compiler::DeleteExistsFile()
+{
+    auto path = std::filesystem::path(this->OutputFileName);
+
+    if(std::filesystem::exists(path))
+        std::filesystem::remove(path);
+}
+
 void Compiler::Run()
 {
-    this->parser->Parse();
+    // # Parsing
+    auto ast = this->parser->Parse();
+    
+    // # Output Code
+    this->codegen->Run(ast);
 }

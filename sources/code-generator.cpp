@@ -2,7 +2,7 @@
 
 CodeGenerator::CodeGenerator()
 {
-    this->fileHandler.open(this->OutputFileName, std::ios::app);
+    this->fileHandler.open(this->OutputFileName, std::ios::out | std::ios::app);
     this->LoadProgramInitialize();
 }
 
@@ -15,10 +15,19 @@ CodeGenerator::~CodeGenerator()
 
 void CodeGenerator::Run(Ast* ast)
 {
+    Output::Print("Entrei");
     
+    // # Flush code resultant to file
+    this->FlushFunctionInterfaceToFile();
+    this->FlushRunnableImplementationToFile();
+    this->FlushFunctionImplementationToFile();
+    this->WriteChunkToFile(this->PROGRAM_BOOTSTRAP);
+
+    // # Close file stream
+    this->fileHandler.close();
 }
 
-void CodeGenerator::WriteChunkToFile(std::string& chunk)
+void CodeGenerator::WriteChunkToFile(std::string chunk)
 {
     if(!chunk.empty())
         this->fileHandler.write(chunk.c_str(), chunk.size());
@@ -59,6 +68,7 @@ void CodeGenerator::FlushFunctionImplementationToFile()
 void CodeGenerator::FlushRunnableImplementationToFile()
 {
     std::string buffer;
+    this->WriteChunkToFile(this->PROGRAM_RUNNABLE);
 
     for(auto item : this->RunnableImplementation)
         buffer += item;
@@ -68,5 +78,6 @@ void CodeGenerator::FlushRunnableImplementationToFile()
     buffer.clear();
     this->RunnableImplementation.clear();
 }
+
 
 
