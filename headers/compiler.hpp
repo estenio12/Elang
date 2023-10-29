@@ -25,9 +25,6 @@ class Compiler
         SymbolTable* symbolTable;
         CodeGenerator* codegen;
 
-    private:
-        std::string OutputFileName = "MyApplication.cpp";
-
     public:
         Compiler(std::string sourcePath);
         ~Compiler();
@@ -36,6 +33,5 @@ class Compiler
         void Run();
 
     private:
-        void DeleteExistsFile();
         bool IsNotValidPath(std::string sourcePath);
 };

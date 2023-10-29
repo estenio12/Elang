@@ -2,6 +2,7 @@
 
 CodeGenerator::CodeGenerator()
 {
+    this->DeleteExistsFile();
     this->fileHandler.open(this->OutputFileName, std::ios::out | std::ios::app);
     this->LoadProgramInitialize();
 }
@@ -77,6 +78,14 @@ void CodeGenerator::FlushRunnableImplementationToFile()
     this->WriteChunkToFile(this->CLOSE_PROGRAM_RUNNABLE);
     buffer.clear();
     this->RunnableImplementation.clear();
+}
+
+void CodeGenerator::DeleteExistsFile()
+{
+    auto path = std::filesystem::path(this->OutputFileName);
+
+    if(std::filesystem::exists(path))
+        std::filesystem::remove(path);
 }
 
 

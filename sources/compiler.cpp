@@ -8,7 +8,7 @@ Compiler::Compiler(std::string sourcePath)
         exit(EXIT_FAILURE);
     }
 
-    this->DeleteExistsFile();
+    // this->DeleteExistsFile();
 
     this->symbolTable = new SymbolTable();
     this->ast         = new Ast();
@@ -26,14 +26,6 @@ bool Compiler::IsNotValidPath(std::string sourcePath)
 {
     if(sourcePath.empty()) return false;
     return !std::filesystem::exists(std::filesystem::path(sourcePath));
-}
-
-void Compiler::DeleteExistsFile()
-{
-    auto path = std::filesystem::path(this->OutputFileName);
-
-    if(std::filesystem::exists(path))
-        std::filesystem::remove(path);
 }
 
 void Compiler::Run()

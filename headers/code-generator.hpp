@@ -43,7 +43,8 @@ class CodeGenerator
     public:
         void Run(Ast* ast);
 
-    
+    private:
+        void DeleteExistsFile();
 
     private:
         void LoadProgramInitialize();
