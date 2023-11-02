@@ -34,7 +34,8 @@ class AstNode
         ~AstNode(){}
 
     public:
-        virtual std::vector<std::string> GetByteCode() = 0;
+        virtual std::string GetInterface() { return ""; }
+        virtual std::string GetByteCode() = 0;
 };
 
 class BinaryOperation
@@ -79,8 +80,7 @@ class Expression : public AstNode
         }
 
     public:
-        std::vector<std::string> __temp_empty_list;
-        std::vector<std::string> GetByteCode() override {return __temp_empty_list;}
+        std::string GetByteCode() override { return ""; }
 };
 
 class VariableDeclaration : public AstNode
@@ -130,8 +130,7 @@ class VariableDeclaration : public AstNode
         }
 
     public:
-        std::vector<std::string> __temp_empty_list;
-        std::vector<std::string> GetByteCode() override {return __temp_empty_list;}
+        std::string GetByteCode() override { return ""; }
 };
 
 class CallFunction : public AstNode
@@ -159,8 +158,7 @@ class CallFunction : public AstNode
         }
     
     public:
-        std::vector<std::string> __temp_empty_list;
-        std::vector<std::string> GetByteCode() override {return __temp_empty_list;}
+        std::string GetByteCode() override { return ""; }
 
 };
 
@@ -177,8 +175,7 @@ class ReturnExpression : public AstNode
         }
 
     public:
-        std::vector<std::string> __temp_empty_list;
-        std::vector<std::string> GetByteCode() override {return __temp_empty_list;}
+        std::string GetByteCode() override { return ""; }
 };
 
 class ParameterDeclaration
@@ -237,9 +234,7 @@ class FunctionDeclaration : public AstNode
         }
 
     public:
-        std::vector<std::string> __temp_empty_list;
-        std::vector<std::string> GetByteCode() override {return __temp_empty_list;}
-
+        std::string GetByteCode() override { return ""; }
 };
 
 class AstBranch
@@ -280,4 +275,5 @@ class Ast
 
             return nullptr;
         }
+        bool HasContent() { return this->tree.size() > 0; }
 };

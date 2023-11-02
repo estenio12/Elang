@@ -52,4 +52,8 @@ class CodeGenerator
         void FlushFunctionInterfaceToFile();
         void FlushFunctionImplementationToFile();
         void FlushRunnableImplementationToFile();
+
+    private:
+        void AstVisitor(Ast* ast);
+        void GenerateFunction(AstBranch* branc);
 };

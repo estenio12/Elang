@@ -8,8 +8,6 @@ Compiler::Compiler(std::string sourcePath)
         exit(EXIT_FAILURE);
     }
 
-    // this->DeleteExistsFile();
-
     this->symbolTable = new SymbolTable();
     this->ast         = new Ast();
     this->lexer       = new Lexer(sourcePath);

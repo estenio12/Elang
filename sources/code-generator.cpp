@@ -16,7 +16,8 @@ CodeGenerator::~CodeGenerator()
 
 void CodeGenerator::Run(Ast* ast)
 {
-    Output::Print("Entrei");
+    // # Walk through the AST
+    this->AstVisitor(ast);
     
     // # Flush code resultant to file
     this->FlushFunctionInterfaceToFile();
@@ -87,6 +88,43 @@ void CodeGenerator::DeleteExistsFile()
     if(std::filesystem::exists(path))
         std::filesystem::remove(path);
 }
+
+void CodeGenerator::AstVisitor(Ast* ast)
+{
+    while(ast->HasContent())
+    {
+        auto branch = ast->ConsumeBranch();
+
+        if(branch != nullptr)
+        {
+            switch (branch->entity->kind)
+            {
+                case EBRANCH_TYPE::VARIABLE_DECLARATION:
+                case EBRANCH_TYPE::CALL_FUNCTION:
+                    this->RunnableImplementation.push_back(branch->entity->GetByteCode());
+                break;
+
+                case EBRANCH_TYPE::FUNCTION_DECLARATION:
+                   this->GenerateFunction(branch);
+                break;
+            }
+        }
+
+        MemTools::FreeObjectFromMemory(branch);
+    }
+}
+
+void CodeGenerator::GenerateFunction(AstBranch* branch)
+{
+    // # Generate interface
+    this->FunctionInterface.push_back(branch->entity->GetInterface());
+
+    // # Generate implementation
+    this->FunctionImplementation.push_back(branch->entity->GetByteCode());
+}
+
+
+
 
 
 
