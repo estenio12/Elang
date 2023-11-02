@@ -232,15 +232,8 @@ class CallFunction : public AstNode
         std::vector<Expression*> ArgumetList;
 
     public:
-        CallFunction()
-        {
-            this->kind = EBRANCH_TYPE::CALL_FUNCTION;
-        }
-
-        ~CallFunction()
-        {
-            MemTools::FreeVectorFromMemory(ArgumetList);
-        }
+        CallFunction(){ this->kind = EBRANCH_TYPE::CALL_FUNCTION; }
+        ~CallFunction(){ MemTools::FreeVectorFromMemory(ArgumetList); }
     
     public:
         void InsertArgument(Expression* expr)
@@ -249,7 +242,29 @@ class CallFunction : public AstNode
         }
     
     public:
-        std::string GetByteCode() override { return ""; }
+        std::string GetByteCode() override 
+        { 
+            std::string outcode;
+
+            // # Function name
+            outcode += this->name;
+
+            outcode.push_back('(');
+
+            // # Get Arguments of call function
+            for(int i = 0; i < ArgumetList.size(); i++)
+            {
+                if(i > 0)
+                    outcode.push_back(',');
+
+                outcode += ArgumetList[i]->GetByteCode();
+            }
+
+            outcode.push_back(')');
+            outcode.push_back(';');
+
+            return outcode; 
+        }
 
 };
 
@@ -266,7 +281,10 @@ class ReturnExpression : public AstNode
         }
 
     public:
-        std::string GetByteCode() override { return ""; }
+        std::string GetByteCode() override 
+        { 
+            return "return " + this->expression->GetByteCode();
+        }
 };
 
 class ParameterDeclaration
@@ -289,6 +307,9 @@ class FunctionDeclaration : public AstNode
 
     public:
         std::vector<AstBranch*> BodyContent;
+
+    private:
+        const std::string STANDARD_PROGRAM_NAME = "__elang_class_runnable_cxx::";
 
     public:
         FunctionDeclaration()
@@ -325,7 +346,55 @@ class FunctionDeclaration : public AstNode
         }
 
     public:
-        std::string GetByteCode() override { return ""; }
+        std::string GetByteCode() override 
+        { 
+            std::string outcode;
+
+            // # Add template 
+            outcode += this->STANDARD_PROGRAM_NAME;
+
+            // # Add function name
+            outcode += this->name;
+
+            // # Add parameters
+            outcode.push_back('(');
+
+            for(int i = 0; i < parameterList.size(); i++)
+            {
+                if(i > 0) outcode.push_back(',');
+                outcode += parameterList[i]->type + " ";
+                outcode += parameterList[i]->name;
+            }
+
+            outcode.push_back(')');
+
+            return outcode; 
+        }
+
+    private:
+        std::string GetType(TYPE_TOKEN type)
+        {
+            switch (type)
+            {
+                case TYPE_TOKEN::T_BOOL_LITERAL:
+                    return TYPE::T_BOOL;
+                    
+                case TYPE_TOKEN::T_CHAR_LITERAL:
+                    return TYPE::T_CHAR;
+
+                case TYPE_TOKEN::T_FLOAT_LITERAL:
+                    return TYPE::T_FLOAT;
+
+                case TYPE_TOKEN::T_INT_LITERAL:
+                    return TYPE::T_INT;
+
+                case TYPE_TOKEN::T_STRING_LITERAL:
+                    return TYPE::T_STRING;
+
+                default:
+                    Output::PrintError)
+            }
+        }
 };
 
 class AstBranch

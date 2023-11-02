@@ -1,1 +1,7 @@
 var idade: int = 10 + 10 * 2;
+
+fun sum(n1: int, n2: int): void
+    return n1 + n2;
+end
+
+sum(10 * 5, idade);
