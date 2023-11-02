@@ -1,5 +1,7 @@
 #include "../headers/parser.hpp"
 
+#pragma region CHECKERS
+
 EBRANCH_TYPE Parser::BindOperation(Token* token)
 {
     if(IsVariableDeclaration(token)) return EBRANCH_TYPE::VARIABLE_DECLARATION;
@@ -11,7 +13,6 @@ EBRANCH_TYPE Parser::BindOperation(Token* token)
     return EBRANCH_TYPE::UNDEFINED;
 }
 
-// # Checkers
 bool Parser::IsVariableDeclaration(Token* token)
 {
     if(token->value == KEYWORD::T_VAR   ||
@@ -40,7 +41,10 @@ bool Parser::IsCallFunction(Token* token)
     return this->symbolTable->ExistsFunctionIdentifier(token->value);
 }
 
-// # Builders
+#pragma endregion
+
+#pragma region BUILDERS
+
 AstBranch* Parser::BuildVariableDeclaration(Token* token)
 {
     auto variable = new VariableDeclaration();
@@ -95,6 +99,9 @@ AstBranch* Parser::BuildVariableDeclaration(Token* token)
     }
     else if(t_bridge_token->value == DELIMITER::T_EOF)
     {
+        if(variable->isConstant)
+            ThrowError(t_bridge_token, "constant variables must to be initialized");
+
         MemTools::FreeObjectFromMemory(t_bridge_token);
     }
     else
@@ -340,7 +347,7 @@ AstBranch* Parser::BuildCallFunction(Token* token)
     return branch;
 }
 
-
+#pragma endregion
 
 
 

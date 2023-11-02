@@ -11,6 +11,7 @@
 #include <vector>
 #include "../models/token.hpp"
 #include "../helpers/mem-tools.hpp"
+#include "../headers/output.hpp"
 
 using CallFunDictionary = std::vector<std::pair<std::string, class AstBranch*>>;
 
@@ -65,12 +66,22 @@ class Expression : public AstNode
         CallFunDictionary CallTable;
 
     public:
-        Expression()
+        Expression(){ kind = EBRANCH_TYPE::EXPRESSION; }
+
+        #pragma GCC diagnostic ignored "-Wdelete-incomplete"
+
+        ~Expression()
         {
-            kind = EBRANCH_TYPE::EXPRESSION;
+            MemTools::FreeObjectFromMemory(operation);
+            
+            for(auto item : CallTable)
+                if(item.second != nullptr)
+                    delete item.second;
+
+            CallTable.clear();
         }
 
-        ~Expression(){}
+        #pragma GCC diagnostic pop
 
         bool ExistCallFunctionID(std::string ID)
         {
@@ -80,7 +91,54 @@ class Expression : public AstNode
         }
 
     public:
-        std::string GetByteCode() override { return ""; }
+        std::string GetByteCode() override 
+        { 
+            // # Get output code
+            auto outcode = this->Visitor(this->operation);
+            
+            // # Free Binary operation from memory
+            this->FreeBinaryOperationFromMemory(this->operation);
+            
+            // # Return output code
+            return outcode;
+        }
+
+    private:
+        std::string Visitor(BinaryOperation* oper)
+        {
+            if(oper != nullptr)
+            {
+                // # Return the simple value attribution 
+                if(oper->left == nullptr && oper->right == nullptr)
+                    return oper->token->value;
+
+                // # Return expression
+                if(oper->token->type == TYPE_TOKEN::T_ARITHMETIC)
+                {
+                    auto arithmeticOperator = oper->token->value; 
+
+                    // # Get operation from left and right nodes
+                    auto leftOper  = this->Visitor(oper->left);
+                    auto rightOper = this->Visitor(oper->right);
+
+                    // # build final operation
+                    return leftOper + arithmeticOperator + rightOper;
+                }
+            }
+
+            return "";
+        }
+
+        void FreeBinaryOperationFromMemory(BinaryOperation* binOp)
+        {
+            if(binOp != nullptr)
+            {
+                FreeBinaryOperationFromMemory(binOp->left);
+                FreeBinaryOperationFromMemory(binOp->right);
+
+                delete binOp;   
+            }
+        }
 };
 
 class VariableDeclaration : public AstNode
@@ -95,10 +153,7 @@ class VariableDeclaration : public AstNode
         Expression* expression = nullptr;
 
     public:
-        VariableDeclaration()
-        {
-            kind = EBRANCH_TYPE::VARIABLE_DECLARATION;
-        }
+        VariableDeclaration(){ kind = EBRANCH_TYPE::VARIABLE_DECLARATION; }
 
         VariableDeclaration(VariableDeclaration* origin)
         {
@@ -130,7 +185,43 @@ class VariableDeclaration : public AstNode
         }
 
     public:
-        std::string GetByteCode() override { return ""; }
+        std::string GetByteCode() override 
+        { 
+            // # result
+            std::string outcode;
+
+            // # Check if it const variable
+            if(isConstant) outcode = "const ";
+
+            // # Build type varaible
+            outcode += this->GetType();
+
+            // # Set add variable name
+            outcode += this->name;
+
+            // # Check if it has initializer
+            if(expression != nullptr)
+                outcode += "=" + this->expression->GetByteCode();
+
+            // # Close variable declaration
+            outcode.push_back(';');
+
+            return outcode; 
+        }
+
+    private:
+        std::string GetType()
+        {
+            if(this->type == TYPE::T_BOOL)   return TYPE::T_BOOL + " ";
+            if(this->type == TYPE::T_CHAR)   return TYPE::T_CHAR + " ";
+            if(this->type == TYPE::T_FLOAT)  return TYPE::T_FLOAT + " ";
+            if(this->type == TYPE::T_INT)    return TYPE::T_INT + " ";
+            if(this->type == TYPE::T_STRING) return "std::" + TYPE::T_STRING + " ";
+            if(this->type == TYPE::T_VOID)   return TYPE::T_VOID + " ";
+
+            Output::PrintCustomizeError("Fatal Error: ", "In code generator variable declartion has not type.");
+            exit(EXIT_FAILURE);
+        }
 };
 
 class CallFunction : public AstNode

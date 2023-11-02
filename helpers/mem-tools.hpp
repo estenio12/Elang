@@ -8,6 +8,8 @@
 
 #pragma once
 
+#include "../models/ast.hpp"
+
 namespace MemTools
 {
     /// @brief Free vector pointers from memory
@@ -15,7 +17,8 @@ namespace MemTools
     /// @param vector 
     template<class T> void FreeVectorFromMemory(T vector)
     {
-        for(auto item : vector) delete item;
+        for(auto item : vector) 
+            if(item != nullptr) delete item;
         vector.clear();
     }
 
