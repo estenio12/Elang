@@ -15,6 +15,7 @@
 
 using CallFunDictionary = std::vector<std::pair<std::string, class AstBranch*>>;
 
+
 enum EBRANCH_TYPE
 {
     UNDEFINED,
@@ -37,6 +38,47 @@ class AstNode
     public:
         virtual std::string GetInterface() { return ""; }
         virtual std::string GetByteCode() = 0;
+};
+
+class AstBranch
+{
+    public:
+        AstNode* entity;
+
+    public:
+        AstBranch(AstNode* entity):entity(entity){}
+        ~AstBranch()
+        {
+            MemTools::FreeObjectFromMemory(entity);
+        }
+};
+
+class Ast
+{
+    public:
+        std::vector<AstBranch*> tree;
+
+    public:
+        Ast(){}
+        ~Ast()
+        {
+            MemTools::FreeVectorFromMemory(tree);
+        }
+
+    public:
+        void AddNode(AstBranch* branch) { this->tree.push_back(branch); }
+        AstBranch* ConsumeBranch() 
+        { 
+            if(tree.size() > 0)
+            {
+                auto tmpBranch = tree[0];
+                tree.erase(tree.begin(), tree.begin() + 1);
+                return tmpBranch;
+            }
+
+            return nullptr;
+        }
+        bool HasContent() { return this->tree.size() > 0; }
 };
 
 class BinaryOperation
@@ -283,7 +325,7 @@ class ReturnExpression : public AstNode
     public:
         std::string GetByteCode() override 
         { 
-            return "return " + this->expression->GetByteCode();
+            return "return " + this->expression->GetByteCode() + ";";
         }
 };
 
@@ -291,7 +333,7 @@ class ParameterDeclaration
 {
     public:
         std::string name;
-        TYPE_TOKEN type;
+        std::string type;
 
     public:
         ParameterDeclaration(){}
@@ -350,13 +392,16 @@ class FunctionDeclaration : public AstNode
         { 
             std::string outcode;
 
-            // # Add template 
+            // # Set type function
+            outcode += this->type + " ";
+
+            // # Set template 
             outcode += this->STANDARD_PROGRAM_NAME;
 
-            // # Add function name
+            // # Set function name
             outcode += this->name;
 
-            // # Add parameters
+            // # Set parameters
             outcode.push_back('(');
 
             for(int i = 0; i < parameterList.size(); i++)
@@ -366,74 +411,55 @@ class FunctionDeclaration : public AstNode
                 outcode += parameterList[i]->name;
             }
 
+            // # Set close parenthesis
             outcode.push_back(')');
+
+            // # Open function scope
+            outcode.push_back('{');
+
+            // # Add function body
+            for(auto item : this->BodyContent)
+            {
+                outcode += item->entity->GetByteCode();
+            }
+
+            // # Close function scope 
+            outcode += "}\n";
 
             return outcode; 
         }
 
-    private:
-        std::string GetType(TYPE_TOKEN type)
+        std::string GetInterface() override
         {
-            switch (type)
+            std::string outcode;
+
+            // # Set type function
+            outcode += this->type + " ";
+
+            // # Set function name
+            outcode += this->name;
+
+            // # Set open parenthesis
+            outcode.push_back('(');
+
+            // # Set parameters
+            for(int i = 0; i < this->parameterList.size(); i++)
             {
-                case TYPE_TOKEN::T_BOOL_LITERAL:
-                    return TYPE::T_BOOL;
-                    
-                case TYPE_TOKEN::T_CHAR_LITERAL:
-                    return TYPE::T_CHAR;
-
-                case TYPE_TOKEN::T_FLOAT_LITERAL:
-                    return TYPE::T_FLOAT;
-
-                case TYPE_TOKEN::T_INT_LITERAL:
-                    return TYPE::T_INT;
-
-                case TYPE_TOKEN::T_STRING_LITERAL:
-                    return TYPE::T_STRING;
-
-                default:
-                    Output::PrintError)
-            }
-        }
-};
-
-class AstBranch
-{
-    public:
-        AstNode* entity;
-
-    public:
-        AstBranch(AstNode* entity):entity(entity){}
-        ~AstBranch()
-        {
-            MemTools::FreeObjectFromMemory(entity);
-        }
-};
-
-class Ast
-{
-    public:
-        std::vector<AstBranch*> tree;
-
-    public:
-        Ast(){}
-        ~Ast()
-        {
-            MemTools::FreeVectorFromMemory(tree);
-        }
-
-    public:
-        void AddNode(AstBranch* branch) { this->tree.push_back(branch); }
-        AstBranch* ConsumeBranch() 
-        { 
-            if(tree.size() > 0)
-            {
-                auto tmpBranch = tree[0];
-                tree.erase(tree.begin(), tree.begin() + 1);
-                return tmpBranch;
+                if(i > 0) outcode.push_back(',');
+                outcode += this->parameterList[i]->type + " ";
+                outcode += this->parameterList[i]->name;
             }
 
-            return nullptr;
+            // # Set close parenthesis
+            outcode.push_back(')');
+
+            // # Close interface
+            outcode.push_back(';');
+
+            return outcode;
         }
-        bool HasContent() { return this->tree.size() > 0; }
 };
+
+
+
+

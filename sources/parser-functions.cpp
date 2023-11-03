@@ -188,9 +188,7 @@ AstBranch* Parser::BuildFunctionDeclaration(Token* token)
 
             auto param = new ParameterDeclaration();
             param->name = id_token->value;
-            param->type = type_token->type;
-
-            Output::PrintDebug(type_token->value);
+            param->type = type_token->value;
 
             funModel->parameterList.push_back(param);
             function->parameterList.push_back(param);
