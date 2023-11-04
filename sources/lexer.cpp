@@ -359,8 +359,8 @@ bool Lexer::IsDelimiterToken(std::string value)
        value == DELIMITER::T_CLOSE_BRACKET   ||
        value == DELIMITER::T_OPEN_BRANCE     ||
        value == DELIMITER::T_CLOSE_BRACE     ||
-       value == DELIMITER::T_OPEN_PARAM      ||
-       value == DELIMITER::T_CLOSE_PARAM     ||
+       value == DELIMITER::T_OPEN_PAREM      ||
+       value == DELIMITER::T_CLOSE_PAREM     ||
        value == DELIMITER::T_QUOTATION_MARKS ||
        value == DELIMITER::T_APHOSTROFE      ||
        value == DELIMITER::T_EOF             )
@@ -434,8 +434,8 @@ bool Lexer::IsDelimiter(std::string value)
        value == DELIMITER::T_CLOSE_BRACKET   ||
        value == DELIMITER::T_OPEN_BRANCE     ||
        value == DELIMITER::T_CLOSE_BRACE     ||
-       value == DELIMITER::T_OPEN_PARAM      ||
-       value == DELIMITER::T_CLOSE_PARAM     ||
+       value == DELIMITER::T_OPEN_PAREM      ||
+       value == DELIMITER::T_CLOSE_PAREM     ||
        value == DELIMITER::T_QUOTATION_MARKS ||
        value == DELIMITER::T_APHOSTROFE      ||
        value == DELIMITER::T_ASSIGN          ||
@@ -488,7 +488,7 @@ TYPE_TOKEN Lexer::GetTypeSelfIncrementation()
 
     if(token != nullptr && 
       (token->type == TYPE_TOKEN::T_IDENTIDIER  || 
-       token->value == DELIMITER::T_CLOSE_PARAM )
+       token->value == DELIMITER::T_CLOSE_PAREM )
       )
     {
         return TYPE_TOKEN::T_POSTFIX;

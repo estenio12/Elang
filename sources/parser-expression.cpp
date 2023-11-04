@@ -1,73 +1,69 @@
 #include "../headers/parser.hpp"
 
-Expression* Parser::BuildExpression(bool ValidateOpenParentheses)
+Expression* Parser::BuildExpression(Tokens* tokenList)
 {
-    auto expression = new Expression();
-    auto tokenList  = new Tokens();
-    auto closeWithParenthesis = false;
-    int parenCounter = 0;
+    auto expression  = new Expression();
 
-    while(true)
+    if(tokenList == nullptr)
     {
-        auto token = this->GetNextToken("");
+        tokenList        = new Tokens();
+        int parenCounter = 0;
 
-        if(token->value == DELIMITER::T_OPEN_PARAM) parenCounter++;
+        while(true)
+        {
+            auto token = this->GetNextToken("");
 
-        if(token == nullptr) 
-        {
-            Output::PrintCustomizeError("Line: " + std::to_string(lexer->lineCounter) + " | Syntax error: ", "missing ';' at the end of the expression");
-            exit(EXIT_FAILURE);
-        }
-        else if(token->value == DELIMITER::T_EOF   || 
-                token->value == DELIMITER::T_COMMA )
-        {
-            break;
-        }
-        else if(token->value == DELIMITER::T_CLOSE_PARAM) 
-        {
-            parenCounter--;
+            if(token->value == DELIMITER::T_OPEN_PAREM) parenCounter++;
 
-            if(parenCounter < 0)
+            if(token == nullptr) 
             {
-                if(ValidateOpenParentheses)
-                    ThrowError(token, "Unexpected closing parentheses");
-
-                closeWithParenthesis = true;
-                MemTools::FreeObjectFromMemory(token);
+                Output::PrintCustomizeError("Line: " + std::to_string(lexer->lineCounter) + " | Syntax error: ", "missing ';' at the end of the expression");
+                exit(EXIT_FAILURE);
+            }
+            else if(token->value == DELIMITER::T_EOF   || 
+                    token->value == DELIMITER::T_COMMA )
+            {
                 break;
             }
-            
-            tokenList->AddToken(token);
-        }
-        else 
-        {
-            if(token->type == TYPE_TOKEN::T_IDENTIDIER)
+            else if(token->value == DELIMITER::T_CLOSE_PAREM) 
             {
-                if(this->symbolTable->ExistsFunctionIdentifier(token->value))
+                parenCounter--;
+
+                if(parenCounter < 0)
+                    ThrowError(token, "Unexpected closing parentheses");
+                
+                tokenList->AddToken(token);
+            }
+            else 
+            {
+                if(token->type == TYPE_TOKEN::T_IDENTIDIER)
                 {
-                    auto hash_name = this->GenerateCallFunctionHash();
-                    
-                    auto token_copy = token->GetCopy();
-                    token_copy->value = hash_name;
-                    token_copy->IsStorageInHashTable = true;
+                    if(this->symbolTable->ExistsFunctionIdentifier(token->value))
+                    {
+                        auto hash_name = this->GenerateCallFunctionHash();
+                        
+                        auto token_copy = token->GetCopy();
+                        token_copy->value = hash_name;
+                        token_copy->IsStorageInHashTable = true;
 
-                    tokenList->AddToken(token_copy);
+                        tokenList->AddToken(token_copy);
 
-                    expression->CallTable
-                    .push_back
-                    (
-                        std::make_pair
+                        expression->CallTable
+                        .push_back
                         (
-                            hash_name, 
-                            this->BuildCallFunction(token)
-                        )
-                    );
+                            std::make_pair
+                            (
+                                hash_name, 
+                                this->BuildCallFunction(token)
+                            )
+                        );
+                    }
+                    else
+                        tokenList->AddToken(token);
                 }
                 else
                     tokenList->AddToken(token);
             }
-            else
-                tokenList->AddToken(token);
         }
     }
 
@@ -75,7 +71,6 @@ Expression* Parser::BuildExpression(bool ValidateOpenParentheses)
     if(tokenList->GetSize() <= 0) return nullptr;
 
     expression->operation = ParserExpression(tokenList, expression, 0);
-    expression->TerminateWithCloseParenthesis = closeWithParenthesis;
 
     return expression;
 }
@@ -100,7 +95,7 @@ BinaryOperation* Parser::ParserPrimary(Tokens* tokenList, Expression* expr)
 {
     auto token = tokenList->Shift();
 
-    if(token->value == DELIMITER::T_OPEN_PARAM)
+    if(token->value == DELIMITER::T_OPEN_PAREM)
     {
         auto expression = ParserExpression(tokenList, expr);
 

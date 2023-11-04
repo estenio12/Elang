@@ -149,7 +149,7 @@ AstBranch* Parser::BuildFunctionDeclaration(Token* token)
     MemTools::FreeObjectFromMemory(t_fun_id);
 
     // # Consume opening parenthesis 
-    this->ExpectValue(DELIMITER::T_OPEN_PARAM, "Expected open parenthesis after identifier.");
+    this->ExpectValue(DELIMITER::T_OPEN_PAREM, "Expected open parenthesis after identifier.");
 
     // # Read parameters
     while(true)
@@ -158,7 +158,7 @@ AstBranch* Parser::BuildFunctionDeclaration(Token* token)
         auto id_token = this->GetNextToken("Expected a parameter identifier here");
 
         // # check type after closing parenthesis
-        if(id_token->value == DELIMITER::T_CLOSE_PARAM) 
+        if(id_token->value == DELIMITER::T_CLOSE_PAREM) 
         {
             MemTools::FreeObjectFromMemory(id_token);
 
@@ -214,7 +214,7 @@ AstBranch* Parser::BuildFunctionDeclaration(Token* token)
         // # Check if next token is comma or close parentheses
         auto next_token = this->GetNextToken("Expect ',' or ')' after parameter declaration");
 
-        if(next_token->value == DELIMITER::T_CLOSE_PARAM)
+        if(next_token->value == DELIMITER::T_CLOSE_PAREM)
         {
             MemTools::FreeObjectFromMemory(next_token);
 
@@ -308,39 +308,64 @@ AstBranch* Parser::BuildCallFunction(Token* token)
     call_function->name = fun_data->name;
     call_function->type = fun_data->type;
 
-    this->ExpectValue(DELIMITER::T_OPEN_PARAM, "Expected opening parenthesis");
-
-    // # build argument list
-    int param_readed = fun_data->parameterList.size();
+    this->ExpectValue(DELIMITER::T_OPEN_PAREM, "Expected opening parenthesis");
 
     // # standard messages
     std::string few_arg_header_msg = "Syntax error (Line: "+std::to_string(lineHistory)+"): "; 
     std::string few_arg_error_msg  = "Too few arguments to function '" + fun_data->name + "'. This function expect " + std::to_string(fun_data->parameterList.size()) + " arguments";
 
-    if(param_readed > 0)
+    // # Read arguments
+    int argument_size = fun_data->parameterList.size();
+
+    if(argument_size > 0)
     {
-        while(param_readed > 0)
+        auto argument_list = this->GetNewInstanceOfArgumentList(argument_size);
+        int opened_paren   = 1;
+        int argument_index = 0;
+
+        // # Build argument list
+        while(true)
         {
-            auto expr = BuildExpression(false);       
+            auto next_token = this->GetNextToken("");
 
-            if(expr == nullptr && param_readed > 0)
+            if(next_token->value == DELIMITER::T_COMMA)
             {
-                Output::PrintCustomizeError(few_arg_header_msg, few_arg_error_msg);
-                exit(EXIT_FAILURE);
+                argument_index++;
+
+                if(argument_size == 1 || argument_index > argument_size - 1)
+                    this->ThrowError(next_token, "Too many arguments passed o function '" + fun_data->name + "'. This function expect " + std::to_string(fun_data->parameterList.size()) + " arguments");
+
+                continue;
             }
 
-            call_function->InsertArgument(expr);
-            param_readed--;
-
-            if(expr->TerminateWithCloseParenthesis && param_readed > 0)
+            if(next_token->value == DELIMITER::T_OPEN_PAREM)   
             {
-                Output::PrintCustomizeError(few_arg_header_msg, few_arg_error_msg);
-                exit(EXIT_FAILURE);
+                opened_paren++;
+                argument_list[argument_index]->AddToken(next_token);
             }
+
+            if(next_token->value == DELIMITER::T_CLOSE_PAREM)
+            {
+                opened_paren--;
+
+                if(opened_paren == 0)
+                    break;
+                else if(opened_paren < 0)
+                    this->ThrowError(next_token, "Unexpected closing parenthesis");
+                else
+                    argument_list[argument_index]->AddToken(next_token);
+            }
+        }
+    
+        // # Build expression
+        for(auto item : argument_list)
+        {
+            auto expression = this->BuildExpression(item);
+            call_function->InsertArgument(expression);
         }
     }
     else
-        this->ExpectValue(DELIMITER::T_CLOSE_PARAM, "Expect closing parenthesis.");
+        this->ExpectValue(DELIMITER::T_CLOSE_PAREM, "Expect closing parenthesis.");
 
     // # Build branch
     auto branch = new AstBranch(call_function);

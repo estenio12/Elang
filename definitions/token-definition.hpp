@@ -70,8 +70,8 @@ namespace DELIMITER
     static const std::string T_CLOSE_BRACKET = "}";
     static const std::string T_OPEN_BRANCE   = "[";
     static const std::string T_CLOSE_BRACE   = "]";
-    static const std::string T_OPEN_PARAM    = "(";
-    static const std::string T_CLOSE_PARAM   = ")";
+    static const std::string T_OPEN_PAREM    = "(";
+    static const std::string T_CLOSE_PAREM   = ")";
     static const std::string T_QUOTATION_MARKS = "\"";
     static const std::string T_APHOSTROFE      = "\'";
     static const std::string T_EOF             = ";";

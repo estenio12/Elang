@@ -110,8 +110,6 @@ class Expression : public AstNode
     public:
         Expression(){ kind = EBRANCH_TYPE::EXPRESSION; }
 
-        #pragma GCC diagnostic ignored "-Wdelete-incomplete"
-
         ~Expression()
         {
             MemTools::FreeObjectFromMemory(operation);
@@ -122,8 +120,6 @@ class Expression : public AstNode
 
             CallTable.clear();
         }
-
-        #pragma GCC diagnostic pop
 
         bool ExistCallFunctionID(std::string ID)
         {

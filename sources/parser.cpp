@@ -133,6 +133,15 @@ std::string Parser::GenerateCallFunctionHash()
     return std::to_string(std::hash<std::string>{}(std::to_string(rand() % 9)));
 }
 
+std::vector<Tokens*> Parser::GetNewInstanceOfArgumentList(int ArgumentSize)
+{
+    std::vector<Tokens*> list;
+
+    for(int i = 0; i < ArgumentSize; i++)
+        list.push_back(new Tokens());
+
+    return list;
+}
 
 
 

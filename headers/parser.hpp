@@ -11,6 +11,7 @@
 #include <cstdint>
 #include <functional>
 #include <chrono>
+#include <vector>
 #include "lexer.hpp"
 #include "../models/ast.hpp"
 #include "../models/expression.hpp"
@@ -52,6 +53,7 @@ class Parser
         void InsertIdentifierIntoSymbolTable(VariableDeclaration*);
         Token* GetNextToken(std::string msg);
         std::string GenerateCallFunctionHash();
+        std::vector<Tokens*> GetNewInstanceOfArgumentList(int ArgumentSize);
 
     private:
         template<class T> void CheckMemoryAllocated(T entity)
@@ -78,7 +80,7 @@ class Parser
         AstBranch* BuildReturnExpression(Token*);
 
     private:
-        Expression* BuildExpression(bool ValidateOpenParentheses = true);
+        Expression* BuildExpression(Tokens* token_list = nullptr);
         BinaryOperation* ParserExpression(Tokens* tokenList, Expression* expr, uint8_t minPrecedence);
         BinaryOperation* ParserPrimary(Tokens* tokenList, Expression* expr);
         uint8_t GetPrecedenceValue(Token*);
