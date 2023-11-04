@@ -1,5 +1,5 @@
 - Bugs Open:
-    > [ WORKING ] - Open parentheses not checking in expression.
+    > [ OK ] - Open parentheses not checking in expression.
     > [ TODO ] - Call function and return expression doesn't type check.
     > [ TODO ] - The parser let pass duplication variable declaration, in global and local scope.
     > [ TODO ] - traits in code generator of expression for process call functions. 

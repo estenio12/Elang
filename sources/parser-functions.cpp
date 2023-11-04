@@ -310,10 +310,6 @@ AstBranch* Parser::BuildCallFunction(Token* token)
 
     this->ExpectValue(DELIMITER::T_OPEN_PAREM, "Expected opening parenthesis");
 
-    // # standard messages
-    std::string few_arg_header_msg = "Syntax error (Line: "+std::to_string(lineHistory)+"): "; 
-    std::string few_arg_error_msg  = "Too few arguments to function '" + fun_data->name + "'. This function expect " + std::to_string(fun_data->parameterList.size()) + " arguments";
-
     // # Read arguments
     int argument_size = fun_data->parameterList.size();
 
@@ -357,10 +353,20 @@ AstBranch* Parser::BuildCallFunction(Token* token)
 
             argument_list[argument_index]->AddToken(next_token);
         }
-    
+
         // # Build expression
         for(auto item : argument_list)
         {
+            // # Check if all argument has filled
+            if(item->GetSize() == 0)
+            {
+                // # standard messages
+                std::string few_arg_header_msg = "Syntax error (Line: "+std::to_string(lineHistory)+"): "; 
+                std::string few_arg_error_msg  = "Too few arguments to function '" + fun_data->name + "'. This function expect " + std::to_string(fun_data->parameterList.size()) + " arguments";
+                Output::PrintCustomizeError(few_arg_header_msg, few_arg_error_msg);
+                exit(EXIT_FAILURE);
+            }
+            
             auto expression = this->BuildExpression(item);
             call_function->InsertArgument(expression);
         }

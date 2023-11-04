@@ -89,7 +89,6 @@ void Parser::ExpectValue(std::string expected, std::string message)
 void Parser::PushToAst(AstBranch* node)
 {
     this->ast->AddNode(node);
-    // debug->PrintAstBranch(node);
 }
 
 void Parser::InsertIdentifierIntoSymbolTable(VariableDeclaration* variable)
