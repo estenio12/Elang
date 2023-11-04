@@ -99,7 +99,10 @@ BinaryOperation* Parser::ParserPrimary(Tokens* tokenList, Expression* expr)
     {
         auto expression = ParserExpression(tokenList, expr);
 
-        this->ExpectValue(tokenList->Shift()->value, "Expected closing paratheses");
+        auto next_token = tokenList->Shift();
+
+        if(next_token->value == DELIMITER::T_OPEN_PAREM)
+            this->ThrowError(next_token, "Expected closing paratheses");
 
         return expression;
     }

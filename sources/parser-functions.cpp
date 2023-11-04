@@ -342,6 +342,7 @@ AstBranch* Parser::BuildCallFunction(Token* token)
             {
                 opened_paren++;
                 argument_list[argument_index]->AddToken(next_token);
+                continue;
             }
 
             if(next_token->value == DELIMITER::T_CLOSE_PAREM)
@@ -352,9 +353,9 @@ AstBranch* Parser::BuildCallFunction(Token* token)
                     break;
                 else if(opened_paren < 0)
                     this->ThrowError(next_token, "Unexpected closing parenthesis");
-                else
-                    argument_list[argument_index]->AddToken(next_token);
             }
+
+            argument_list[argument_index]->AddToken(next_token);
         }
     
         // # Build expression

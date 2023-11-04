@@ -4,4 +4,4 @@ fun sum(n1: int, n2: int): int
     return n1 + n2;
 end
 
-sum(10 * 5, idade);
+sum((10 + 5) * 2, idade);
