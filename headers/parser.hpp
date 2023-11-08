@@ -12,6 +12,7 @@
 #include <functional>
 #include <chrono>
 #include <vector>
+#include <stack>
 #include "lexer.hpp"
 #include "../models/ast.hpp"
 #include "../models/expression.hpp"

@@ -10,6 +10,8 @@ Expression* Parser::BuildExpression(Tokens* tokenList)
         int parenCounter = 0;
         Token* history = nullptr;
 
+        std::stack<Token*> StoreOpenParenToken;
+
         while(true)
         {
             auto token = this->GetNextToken("");
@@ -22,15 +24,35 @@ Expression* Parser::BuildExpression(Tokens* tokenList)
 
             if(token->value == DELIMITER::T_EOF)
             {
-                if(history == nullptr) ThrowError(token, "Unexpected token");
-                tokenList->AddToken(token);
-                break;
+                if(history != nullptr) 
+                {
+                    if(history->type  == TYPE_TOKEN::T_BOOL_LITERAL   ||
+                       history->type  == TYPE_TOKEN::T_CHAR_LITERAL   ||
+                       history->type  == TYPE_TOKEN::T_FLOAT_LITERAL  ||
+                       history->type  == TYPE_TOKEN::T_INT_LITERAL    ||
+                       history->type  == TYPE_TOKEN::T_IDENTIDIER     ||
+                       history->type  == TYPE_TOKEN::T_STRING_LITERAL ||
+                       history->value == DELIMITER::T_CLOSE_PAREM     )
+                    {
+                        break;
+                    }
+                }
+
+                ThrowError(token, "Unexpected token");
             }
 
             if(history == nullptr)
             {
-                if(token->value == DELIMITER::T_OPEN_PAREM      ||
-                   token->type  == TYPE_TOKEN::T_BOOL_LITERAL   ||
+                if(token->value == DELIMITER::T_OPEN_PAREM)
+                {
+                    parenCounter++;
+                    history = token;
+                    tokenList->AddToken(token);
+                    StoreOpenParenToken.push(token);
+                    continue;
+                }
+
+                if(token->type  == TYPE_TOKEN::T_BOOL_LITERAL   ||
                    token->type  == TYPE_TOKEN::T_CHAR_LITERAL   ||
                    token->type  == TYPE_TOKEN::T_FLOAT_LITERAL  ||
                    token->type  == TYPE_TOKEN::T_INT_LITERAL    ||
@@ -63,6 +85,7 @@ Expression* Parser::BuildExpression(Tokens* tokenList)
                     parenCounter++;
                     history = token;
                     tokenList->AddToken(token);
+                    StoreOpenParenToken.push(token);
                     continue;
                 }
 
@@ -81,6 +104,7 @@ Expression* Parser::BuildExpression(Tokens* tokenList)
                    history->type == TYPE_TOKEN::T_STRING_LITERAL )
                 {
                     parenCounter--;
+                    StoreOpenParenToken.pop();
 
                     if(parenCounter < 0)
                         ThrowError(token, "Unexpected closing parentheses");
@@ -95,17 +119,15 @@ Expression* Parser::BuildExpression(Tokens* tokenList)
 
             if(token->type == TYPE_TOKEN::T_ARITHMETIC)
             {
-                Output::PrintDebug(token->value + " | " + std::to_string(token->type));
-                Output::PrintDebug(history->value + " | " + std::to_string(history->type));
-
-                if(history->type == TYPE_TOKEN::T_BOOL_LITERAL   ||
-                   history->type == TYPE_TOKEN::T_CHAR_LITERAL   ||
-                   history->type == TYPE_TOKEN::T_FLOAT_LITERAL  ||
-                   history->type == TYPE_TOKEN::T_INT_LITERAL    ||
-                   history->type == TYPE_TOKEN::T_IDENTIDIER     ||
-                   history->type == TYPE_TOKEN::T_LOGICAL        ||
-                   history->type == TYPE_TOKEN::T_POSTFIX        ||
-                   history->type == TYPE_TOKEN::T_STRING_LITERAL )
+                if(history->type  == TYPE_TOKEN::T_BOOL_LITERAL   ||
+                   history->type  == TYPE_TOKEN::T_CHAR_LITERAL   ||
+                   history->type  == TYPE_TOKEN::T_FLOAT_LITERAL  ||
+                   history->type  == TYPE_TOKEN::T_INT_LITERAL    ||
+                   history->type  == TYPE_TOKEN::T_IDENTIDIER     ||
+                   history->type  == TYPE_TOKEN::T_LOGICAL        ||
+                   history->type  == TYPE_TOKEN::T_POSTFIX        ||
+                   history->type  == TYPE_TOKEN::T_STRING_LITERAL ||
+                   history->value == DELIMITER::T_CLOSE_PAREM     )
                 {
                     history = token;
                     tokenList->AddToken(token);
@@ -125,6 +147,7 @@ Expression* Parser::BuildExpression(Tokens* tokenList)
                    history->type == TYPE_TOKEN::T_POSTFIX        ||
                    history->type == TYPE_TOKEN::T_STRING_LITERAL )
                 {
+                    history = token;
                     tokenList->AddToken(token);
                     continue;
                 }
@@ -132,19 +155,31 @@ Expression* Parser::BuildExpression(Tokens* tokenList)
                 ThrowError(token, "Unexpected token");
             }
 
-            if(history->type == TYPE_TOKEN::T_BOOL_LITERAL   ||
-               history->type == TYPE_TOKEN::T_CHAR_LITERAL   ||
-               history->type == TYPE_TOKEN::T_FLOAT_LITERAL  ||
-               history->type == TYPE_TOKEN::T_INT_LITERAL    ||
-               history->type == TYPE_TOKEN::T_IDENTIDIER     ||
-               history->type == TYPE_TOKEN::T_STRING_LITERAL )
+            if(token->type == TYPE_TOKEN::T_BOOL_LITERAL   ||
+               token->type == TYPE_TOKEN::T_CHAR_LITERAL   ||
+               token->type == TYPE_TOKEN::T_FLOAT_LITERAL  ||
+               token->type == TYPE_TOKEN::T_INT_LITERAL    ||
+               token->type == TYPE_TOKEN::T_IDENTIDIER     ||
+               token->type == TYPE_TOKEN::T_STRING_LITERAL )
             {
-                history = token;
-                tokenList->AddToken(token);
-                continue;
+                if(history->type == TYPE_TOKEN::T_ARITHMETIC ||
+                   history->type == TYPE_TOKEN::T_DELIMITER  ||
+                   history->type == TYPE_TOKEN::T_LOGICAL    ||
+                   history->type == TYPE_TOKEN::T_PREFIX     )
+                {
+                    history = token;
+                    tokenList->AddToken(token);
+                    continue;
+                }
             }
 
             ThrowError(token, "Unexpected token");
+        }
+
+        if(parenCounter > 0)
+        {
+            ThrowError(StoreOpenParenToken.top(), "parentheses opened but never close");
+            exit(EXIT_FAILURE);
         }
     }
 
