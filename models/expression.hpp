@@ -15,19 +15,20 @@ class Tokens
 {
     private:
         std::queue<Token*> list;
+        std::vector<Token*> tempList;
 
     public:
         Tokens(){}
         ~Tokens(){}
     
     public:
-        size_t GetSize(){return this->list.size();}
+        size_t GetSize(){return this->tempList.size();}
         Token* GetFirstData(){return list.front();}
 
         void AddToken(Token* token)
         {
             if(token != nullptr)
-                list.push(token);
+                tempList.push_back(token);
         }
 
         Token* Shift()
@@ -35,6 +36,16 @@ class Tokens
             auto token = list.front();
             list.pop();
             return token;
+        }
+
+        std::string GetExpression()
+        {
+            std::string build;
+
+            for(auto item : this->tempList)
+                build += item->value;
+
+            return build;
         }
 
 };

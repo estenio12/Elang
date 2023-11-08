@@ -6,74 +6,227 @@ Expression* Parser::BuildExpression(Tokens* tokenList)
 
     if(tokenList == nullptr)
     {
-        tokenList        = new Tokens();
+        tokenList = new Tokens();
         int parenCounter = 0;
+        Token* history = nullptr;
 
         while(true)
         {
             auto token = this->GetNextToken("");
-
-            if(token->value == DELIMITER::T_OPEN_PAREM) parenCounter++;
 
             if(token == nullptr) 
             {
                 Output::PrintCustomizeError("Line: " + std::to_string(lexer->lineCounter) + " | Syntax error: ", "missing ';' at the end of the expression");
                 exit(EXIT_FAILURE);
             }
-            else if(token->value == DELIMITER::T_EOF   || 
-                    token->value == DELIMITER::T_COMMA )
+
+            if(token->value == DELIMITER::T_EOF)
             {
+                if(history == nullptr) ThrowError(token, "Unexpected token");
+                tokenList->AddToken(token);
                 break;
             }
-            else if(token->value == DELIMITER::T_CLOSE_PAREM) 
-            {
-                parenCounter--;
 
-                if(parenCounter < 0)
-                    ThrowError(token, "Unexpected closing parentheses");
-                
-                tokenList->AddToken(token);
-            }
-            else 
+            if(history == nullptr)
             {
-                if(token->type == TYPE_TOKEN::T_IDENTIDIER)
+                if(token->value == DELIMITER::T_OPEN_PAREM      ||
+                   token->type  == TYPE_TOKEN::T_BOOL_LITERAL   ||
+                   token->type  == TYPE_TOKEN::T_CHAR_LITERAL   ||
+                   token->type  == TYPE_TOKEN::T_FLOAT_LITERAL  ||
+                   token->type  == TYPE_TOKEN::T_INT_LITERAL    ||
+                   token->type  == TYPE_TOKEN::T_IDENTIDIER     ||
+                   token->type  == TYPE_TOKEN::T_PREFIX         ||
+                   token->type  == TYPE_TOKEN::T_STRING_LITERAL )
                 {
-                    if(this->symbolTable->ExistsFunctionIdentifier(token->value))
-                    {
-                        auto hash_name = this->GenerateCallFunctionHash();
-                        
-                        auto token_copy = token->GetCopy();
-                        token_copy->value = hash_name;
-                        token_copy->IsStorageInHashTable = true;
-
-                        tokenList->AddToken(token_copy);
-
-                        expression->CallTable
-                        .push_back
-                        (
-                            std::make_pair
-                            (
-                                hash_name, 
-                                this->BuildCallFunction(token)
-                            )
-                        );
-                    }
-                    else
-                        tokenList->AddToken(token);
-                }
-                else
+                    history = token;
                     tokenList->AddToken(token);
+                    continue;
+                }
+
+                ThrowError(token, "Unexpected token");
             }
+
+            if(token->value == DELIMITER::T_OPEN_PAREM) 
+            {
+                if(history->type == TYPE_TOKEN::T_ARITHMETIC     ||
+                   history->type == TYPE_TOKEN::T_BOOL_LITERAL   ||
+                   history->type == TYPE_TOKEN::T_CHAR_LITERAL   ||
+                   history->type == TYPE_TOKEN::T_FLOAT_LITERAL  ||
+                   history->type == TYPE_TOKEN::T_INT_LITERAL    ||
+                   history->type == TYPE_TOKEN::T_DELIMITER      ||
+                   history->type == TYPE_TOKEN::T_IDENTIDIER     ||
+                   history->type == TYPE_TOKEN::T_LOGICAL        ||
+                   history->type == TYPE_TOKEN::T_POSTFIX        ||
+                   history->type == TYPE_TOKEN::T_PREFIX         ||
+                   history->type == TYPE_TOKEN::T_STRING_LITERAL )
+                {
+                    parenCounter++;
+                    history = token;
+                    tokenList->AddToken(token);
+                    continue;
+                }
+
+                ThrowError(token, "Unexpected token");
+            }
+
+            if(token->value == DELIMITER::T_CLOSE_PAREM) 
+            {
+                if(history->type == TYPE_TOKEN::T_BOOL_LITERAL   ||
+                   history->type == TYPE_TOKEN::T_CHAR_LITERAL   ||
+                   history->type == TYPE_TOKEN::T_FLOAT_LITERAL  ||
+                   history->type == TYPE_TOKEN::T_INT_LITERAL    ||
+                   history->type == TYPE_TOKEN::T_IDENTIDIER     ||
+                   history->type == TYPE_TOKEN::T_LOGICAL        ||
+                   history->type == TYPE_TOKEN::T_POSTFIX        ||
+                   history->type == TYPE_TOKEN::T_STRING_LITERAL )
+                {
+                    parenCounter--;
+
+                    if(parenCounter < 0)
+                        ThrowError(token, "Unexpected closing parentheses");
+                    
+                    history = token;
+                    tokenList->AddToken(token);
+                    continue;
+                }
+
+                ThrowError(token, "Unexpected token");
+            }
+
+            if(token->type == TYPE_TOKEN::T_ARITHMETIC)
+            {
+                Output::PrintDebug(token->value + " | " + std::to_string(token->type));
+                Output::PrintDebug(history->value + " | " + std::to_string(history->type));
+
+                if(history->type == TYPE_TOKEN::T_BOOL_LITERAL   ||
+                   history->type == TYPE_TOKEN::T_CHAR_LITERAL   ||
+                   history->type == TYPE_TOKEN::T_FLOAT_LITERAL  ||
+                   history->type == TYPE_TOKEN::T_INT_LITERAL    ||
+                   history->type == TYPE_TOKEN::T_IDENTIDIER     ||
+                   history->type == TYPE_TOKEN::T_LOGICAL        ||
+                   history->type == TYPE_TOKEN::T_POSTFIX        ||
+                   history->type == TYPE_TOKEN::T_STRING_LITERAL )
+                {
+                    history = token;
+                    tokenList->AddToken(token);
+                    continue;
+                }
+
+                ThrowError(token, "Unexpected token");
+            }
+
+            if(token->type == TYPE_TOKEN::T_LOGICAL)
+            {
+                if(history->type == TYPE_TOKEN::T_BOOL_LITERAL   ||
+                   history->type == TYPE_TOKEN::T_CHAR_LITERAL   ||
+                   history->type == TYPE_TOKEN::T_FLOAT_LITERAL  ||
+                   history->type == TYPE_TOKEN::T_INT_LITERAL    ||
+                   history->type == TYPE_TOKEN::T_IDENTIDIER     ||
+                   history->type == TYPE_TOKEN::T_POSTFIX        ||
+                   history->type == TYPE_TOKEN::T_STRING_LITERAL )
+                {
+                    tokenList->AddToken(token);
+                    continue;
+                }
+
+                ThrowError(token, "Unexpected token");
+            }
+
+            if(history->type == TYPE_TOKEN::T_BOOL_LITERAL   ||
+               history->type == TYPE_TOKEN::T_CHAR_LITERAL   ||
+               history->type == TYPE_TOKEN::T_FLOAT_LITERAL  ||
+               history->type == TYPE_TOKEN::T_INT_LITERAL    ||
+               history->type == TYPE_TOKEN::T_IDENTIDIER     ||
+               history->type == TYPE_TOKEN::T_STRING_LITERAL )
+            {
+                history = token;
+                tokenList->AddToken(token);
+                continue;
+            }
+
+            ThrowError(token, "Unexpected token");
         }
     }
 
-    // # Was request a new expression, but not have, then, will return nullptr for sinalize this.
-    if(tokenList->GetSize() <= 0) return nullptr;
-
-    expression->operation = ParserExpression(tokenList, expression, 0);
+    expression->expr = tokenList->GetExpression();
 
     return expression;
 }
+
+// Expression* Parser::BuildExpression(Tokens* tokenList)
+// {
+//     auto expression  = new Expression();
+
+//     if(tokenList == nullptr)
+//     {
+//         tokenList        = new Tokens();
+//         int parenCounter = 0;
+
+//         while(true)
+//         {
+//             auto token = this->GetNextToken("");
+
+//             if(token->value == DELIMITER::T_OPEN_PAREM) parenCounter++;
+
+//             if(token == nullptr) 
+//             {
+//                 Output::PrintCustomizeError("Line: " + std::to_string(lexer->lineCounter) + " | Syntax error: ", "missing ';' at the end of the expression");
+//                 exit(EXIT_FAILURE);
+//             }
+//             else if(token->value == DELIMITER::T_EOF   || 
+//                     token->value == DELIMITER::T_COMMA )
+//             {
+//                 break;
+//             }
+//             else if(token->value == DELIMITER::T_CLOSE_PAREM) 
+//             {
+//                 parenCounter--;
+
+//                 if(parenCounter < 0)
+//                     ThrowError(token, "Unexpected closing parentheses");
+                
+//                 tokenList->AddToken(token);
+//             }
+//             else 
+//             {
+//                 if(token->type == TYPE_TOKEN::T_IDENTIDIER)
+//                 {
+//                     if(this->symbolTable->ExistsFunctionIdentifier(token->value))
+//                     {
+//                         auto hash_name = this->GenerateCallFunctionHash();
+                        
+//                         auto token_copy = token->GetCopy();
+//                         token_copy->value = hash_name;
+//                         token_copy->IsStorageInHashTable = true;
+
+//                         tokenList->AddToken(token_copy);
+
+//                         expression->CallTable
+//                         .push_back
+//                         (
+//                             std::make_pair
+//                             (
+//                                 hash_name, 
+//                                 this->BuildCallFunction(token)
+//                             )
+//                         );
+//                     }
+//                     else
+//                         tokenList->AddToken(token);
+//                 }
+//                 else
+//                     tokenList->AddToken(token);
+//             }
+//         }
+//     }
+
+//     // # Was request a new expression, but not have, then, will return nullptr for sinalize this.
+//     if(tokenList->GetSize() <= 0) return nullptr;
+
+//     expression->operation = ParserExpression(tokenList, expression, 0);
+
+//     return expression;
+// }
 
 BinaryOperation* Parser::ParserExpression(Tokens* tokenList, Expression* expr, uint8_t minPrecedence = 0)
 {

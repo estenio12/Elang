@@ -15,7 +15,6 @@
 
 using CallFunDictionary = std::vector<std::pair<std::string, class AstBranch*>>;
 
-
 enum EBRANCH_TYPE
 {
     UNDEFINED,
@@ -103,9 +102,9 @@ class Expression : public AstNode
     public:
         bool IsLiteralOperation = true;
         bool IsConcatenation    = false;
-        bool TerminateWithCloseParenthesis = false;
         BinaryOperation* operation;
         CallFunDictionary CallTable;
+        std::string expr;
 
     public:
         Expression(){ kind = EBRANCH_TYPE::EXPRESSION; }
@@ -132,13 +131,13 @@ class Expression : public AstNode
         std::string GetByteCode() override 
         { 
             // # Get output code
-            auto outcode = this->Visitor(this->operation);
+            // auto outcode = this->Visitor(this->operation);
             
             // # Free Binary operation from memory
-            this->FreeBinaryOperationFromMemory(this->operation);
+            // this->FreeBinaryOperationFromMemory(this->operation);
             
             // # Return output code
-            return outcode;
+            return this->expr;
         }
 
     private:

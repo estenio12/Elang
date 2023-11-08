@@ -1,6 +1,6 @@
 - Bugs Open:
     > [ OK ] - Open parentheses not checking in expression.
-    > [ TODO ] - Refactoring the BinaryOperation to build with correctly precedence.
+    > [ WORKING ] - Refactoring the BinaryOperation to build with correctly precedence.
     > [ TODO ] - Change BinaryOperation token to support use call function in your place:
                - When find call function in expression processing, set call function variable instead of BinaryOperation
                - then use GetByteCode() function of call function, making the process easy. 
