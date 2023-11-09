@@ -18,13 +18,11 @@
 #include "../models/expression.hpp"
 #include "../models/symbol-table.hpp"
 #include "../definitions/token-definition.hpp"
-#include "../helpers/debug-compiler.hpp"
 
 class Parser
 {
     private:
         Lexer* lexer;
-        DebugCompiler* debug;
         SymbolTable* symbolTable;
         Ast* ast;
 
@@ -82,8 +80,8 @@ class Parser
 
     private:
         Expression* BuildExpression(Tokens* token_list = nullptr);
-        BinaryOperation* ParserExpression(Tokens* tokenList, Expression* expr, uint8_t minPrecedence);
-        BinaryOperation* ParserPrimary(Tokens* tokenList, Expression* expr);
-        uint8_t GetPrecedenceValue(Token*);
+        // BinaryOperation* ParserExpression(Tokens* tokenList, Expression* expr, uint8_t minPrecedence);
+        // BinaryOperation* ParserPrimary(Tokens* tokenList, Expression* expr);
+        // uint8_t GetPrecedenceValue(Token*);
 
 };

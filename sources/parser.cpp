@@ -1,14 +1,8 @@
 #include "../headers/parser.hpp"
 
-Parser::Parser(Lexer* lexer, SymbolTable* symbolTable, Ast* ast):lexer(lexer), symbolTable(symbolTable), ast(ast)
-{
-    debug = new DebugCompiler();
-}
+Parser::Parser(Lexer* lexer, SymbolTable* symbolTable, Ast* ast):lexer(lexer), symbolTable(symbolTable), ast(ast){}
 
-Parser::~Parser()
-{
-    delete this->debug;
-}
+Parser::~Parser(){}
 
 Ast* Parser::Parse()
 {
