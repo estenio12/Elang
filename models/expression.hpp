@@ -8,7 +8,6 @@
 
 #pragma once
 
-#include <queue>
 #include "../definitions/token-definition.hpp"
 
 class Tokens
@@ -32,11 +31,10 @@ class Tokens
 
         Token* Shift()
         {
-            if(list.size() <= 0) return nullptr;
-
             auto token = list.front();
             list.erase(list.begin(), list.begin() + 1);
-            
+
+            if(list.size() == 0) return nullptr;
             return token;
         }
 
@@ -49,7 +47,6 @@ class Tokens
 
             return build;
         }
-
 };
 
 

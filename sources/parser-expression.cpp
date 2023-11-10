@@ -8,7 +8,9 @@ Expression* Parser::BuildExpression(Tokens* tokenList)
 
     if(enableFindToken)
         tokenList = new Tokens();
-    
+    else
+        expression->expr = tokenList->GetExpression();
+
     Token* history     = nullptr;
     int parenCounter   = 0;
     int executeCounter = 0;
@@ -26,7 +28,7 @@ Expression* Parser::BuildExpression(Tokens* tokenList)
 
         if(token == nullptr) 
         {
-            // # Situation where tokenlist is passed, the ';' will not have
+            // # The Situation where the tokenlist is passed, the ';' will not have
             // # Then, this verification is a breakpoint. 
             if(!enableFindToken) break;
 
@@ -73,7 +75,10 @@ Expression* Parser::BuildExpression(Tokens* tokenList)
                token->type  == TYPE_TOKEN::T_STRING_LITERAL )
             {
                 history = token;
-                tokenList->AddToken(token);
+
+                if(enableFindToken)
+                    tokenList->AddToken(token);
+                
                 continue;
             }
 
@@ -96,7 +101,10 @@ Expression* Parser::BuildExpression(Tokens* tokenList)
             {
                 parenCounter++;
                 history = token;
-                tokenList->AddToken(token);
+                
+                if(enableFindToken)
+                    tokenList->AddToken(token);
+                
                 StoreOpenParenToken.push(token);
                 continue;
             }
@@ -122,7 +130,10 @@ Expression* Parser::BuildExpression(Tokens* tokenList)
                     ThrowError(token, "Unexpected closing parentheses");
                 
                 history = token;
-                tokenList->AddToken(token);
+                
+                if(enableFindToken)
+                    tokenList->AddToken(token);
+                
                 continue;
             }
 
@@ -142,7 +153,10 @@ Expression* Parser::BuildExpression(Tokens* tokenList)
                history->value == DELIMITER::T_CLOSE_PAREM     )
             {
                 history = token;
-                tokenList->AddToken(token);
+                
+                if(enableFindToken)
+                    tokenList->AddToken(token);
+                
                 continue;
             }
 
@@ -160,7 +174,10 @@ Expression* Parser::BuildExpression(Tokens* tokenList)
                history->type == TYPE_TOKEN::T_STRING_LITERAL )
             {
                 history = token;
-                tokenList->AddToken(token);
+                
+                if(enableFindToken)
+                    tokenList->AddToken(token);
+                
                 continue;
             }
 
@@ -180,7 +197,10 @@ Expression* Parser::BuildExpression(Tokens* tokenList)
                history->type == TYPE_TOKEN::T_PREFIX     )
             {
                 history = token;
-                tokenList->AddToken(token);
+                
+                if(enableFindToken)
+                    tokenList->AddToken(token);
+                
                 continue;
             }
         }
@@ -194,7 +214,8 @@ Expression* Parser::BuildExpression(Tokens* tokenList)
         exit(EXIT_FAILURE);
     }
 
-    expression->expr = tokenList->GetExpression();
+    if(enableFindToken)
+        expression->expr = tokenList->GetExpression();
 
     return expression;
 }
