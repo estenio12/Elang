@@ -4,9 +4,11 @@ Expression* Parser::BuildExpression(Tokens* tokenList)
 {
     auto expression  = new Expression();
 
-    bool findToken = (tokenList == nullptr);
+    bool enableFindToken = (tokenList == nullptr);
 
-    tokenList          = new Tokens();
+    if(enableFindToken)
+        tokenList = new Tokens();
+    
     Token* history     = nullptr;
     int parenCounter   = 0;
     int executeCounter = 0;
@@ -17,7 +19,7 @@ Expression* Parser::BuildExpression(Tokens* tokenList)
     {
         Token* token = nullptr;
 
-        if(findToken)
+        if(enableFindToken)
             token = this->GetNextToken("");
         else
             token = tokenList->Shift();
@@ -26,7 +28,7 @@ Expression* Parser::BuildExpression(Tokens* tokenList)
         {
             // # Situation where tokenlist is passed, the ';' will not have
             // # Then, this verification is a breakpoint. 
-            if(findToken) break;
+            if(!enableFindToken) break;
 
             Output::PrintCustomizeError("Line: " + std::to_string(this->lineHistory) + " | Syntax error: ", "missing ';' at the end of the expression");
             exit(EXIT_FAILURE);
@@ -37,12 +39,12 @@ Expression* Parser::BuildExpression(Tokens* tokenList)
             if(history != nullptr) 
             {
                 if(history->type  == TYPE_TOKEN::T_BOOL_LITERAL   ||
-                    history->type  == TYPE_TOKEN::T_CHAR_LITERAL   ||
-                    history->type  == TYPE_TOKEN::T_FLOAT_LITERAL  ||
-                    history->type  == TYPE_TOKEN::T_INT_LITERAL    ||
-                    history->type  == TYPE_TOKEN::T_IDENTIDIER     ||
-                    history->type  == TYPE_TOKEN::T_STRING_LITERAL ||
-                    history->value == DELIMITER::T_CLOSE_PAREM     )
+                   history->type  == TYPE_TOKEN::T_CHAR_LITERAL   ||
+                   history->type  == TYPE_TOKEN::T_FLOAT_LITERAL  ||
+                   history->type  == TYPE_TOKEN::T_INT_LITERAL    ||
+                   history->type  == TYPE_TOKEN::T_IDENTIDIER     ||
+                   history->type  == TYPE_TOKEN::T_STRING_LITERAL ||
+                   history->value == DELIMITER::T_CLOSE_PAREM     )
                 {
                     break;
                 }
@@ -63,12 +65,12 @@ Expression* Parser::BuildExpression(Tokens* tokenList)
             }
 
             if(token->type  == TYPE_TOKEN::T_BOOL_LITERAL   ||
-                token->type  == TYPE_TOKEN::T_CHAR_LITERAL   ||
-                token->type  == TYPE_TOKEN::T_FLOAT_LITERAL  ||
-                token->type  == TYPE_TOKEN::T_INT_LITERAL    ||
-                token->type  == TYPE_TOKEN::T_IDENTIDIER     ||
-                token->type  == TYPE_TOKEN::T_PREFIX         ||
-                token->type  == TYPE_TOKEN::T_STRING_LITERAL )
+               token->type  == TYPE_TOKEN::T_CHAR_LITERAL   ||
+               token->type  == TYPE_TOKEN::T_FLOAT_LITERAL  ||
+               token->type  == TYPE_TOKEN::T_INT_LITERAL    ||
+               token->type  == TYPE_TOKEN::T_IDENTIDIER     ||
+               token->type  == TYPE_TOKEN::T_PREFIX         ||
+               token->type  == TYPE_TOKEN::T_STRING_LITERAL )
             {
                 history = token;
                 tokenList->AddToken(token);
@@ -81,16 +83,16 @@ Expression* Parser::BuildExpression(Tokens* tokenList)
         if(token->value == DELIMITER::T_OPEN_PAREM) 
         {
             if(history->type == TYPE_TOKEN::T_ARITHMETIC     ||
-                history->type == TYPE_TOKEN::T_BOOL_LITERAL   ||
-                history->type == TYPE_TOKEN::T_CHAR_LITERAL   ||
-                history->type == TYPE_TOKEN::T_FLOAT_LITERAL  ||
-                history->type == TYPE_TOKEN::T_INT_LITERAL    ||
-                history->type == TYPE_TOKEN::T_DELIMITER      ||
-                history->type == TYPE_TOKEN::T_IDENTIDIER     ||
-                history->type == TYPE_TOKEN::T_LOGICAL        ||
-                history->type == TYPE_TOKEN::T_POSTFIX        ||
-                history->type == TYPE_TOKEN::T_PREFIX         ||
-                history->type == TYPE_TOKEN::T_STRING_LITERAL )
+               history->type == TYPE_TOKEN::T_BOOL_LITERAL   ||
+               history->type == TYPE_TOKEN::T_CHAR_LITERAL   ||
+               history->type == TYPE_TOKEN::T_FLOAT_LITERAL  ||
+               history->type == TYPE_TOKEN::T_INT_LITERAL    ||
+               history->type == TYPE_TOKEN::T_DELIMITER      ||
+               history->type == TYPE_TOKEN::T_IDENTIDIER     ||
+               history->type == TYPE_TOKEN::T_LOGICAL        ||
+               history->type == TYPE_TOKEN::T_POSTFIX        ||
+               history->type == TYPE_TOKEN::T_PREFIX         ||
+               history->type == TYPE_TOKEN::T_STRING_LITERAL )
             {
                 parenCounter++;
                 history = token;
@@ -105,13 +107,13 @@ Expression* Parser::BuildExpression(Tokens* tokenList)
         if(token->value == DELIMITER::T_CLOSE_PAREM) 
         {
             if(history->type == TYPE_TOKEN::T_BOOL_LITERAL   ||
-                history->type == TYPE_TOKEN::T_CHAR_LITERAL   ||
-                history->type == TYPE_TOKEN::T_FLOAT_LITERAL  ||
-                history->type == TYPE_TOKEN::T_INT_LITERAL    ||
-                history->type == TYPE_TOKEN::T_IDENTIDIER     ||
-                history->type == TYPE_TOKEN::T_LOGICAL        ||
-                history->type == TYPE_TOKEN::T_POSTFIX        ||
-                history->type == TYPE_TOKEN::T_STRING_LITERAL )
+               history->type == TYPE_TOKEN::T_CHAR_LITERAL   ||
+               history->type == TYPE_TOKEN::T_FLOAT_LITERAL  ||
+               history->type == TYPE_TOKEN::T_INT_LITERAL    ||
+               history->type == TYPE_TOKEN::T_IDENTIDIER     ||
+               history->type == TYPE_TOKEN::T_LOGICAL        ||
+               history->type == TYPE_TOKEN::T_POSTFIX        ||
+               history->type == TYPE_TOKEN::T_STRING_LITERAL )
             {
                 parenCounter--;
                 StoreOpenParenToken.pop();
@@ -130,14 +132,14 @@ Expression* Parser::BuildExpression(Tokens* tokenList)
         if(token->type == TYPE_TOKEN::T_ARITHMETIC)
         {
             if(history->type  == TYPE_TOKEN::T_BOOL_LITERAL   ||
-                history->type  == TYPE_TOKEN::T_CHAR_LITERAL   ||
-                history->type  == TYPE_TOKEN::T_FLOAT_LITERAL  ||
-                history->type  == TYPE_TOKEN::T_INT_LITERAL    ||
-                history->type  == TYPE_TOKEN::T_IDENTIDIER     ||
-                history->type  == TYPE_TOKEN::T_LOGICAL        ||
-                history->type  == TYPE_TOKEN::T_POSTFIX        ||
-                history->type  == TYPE_TOKEN::T_STRING_LITERAL ||
-                history->value == DELIMITER::T_CLOSE_PAREM     )
+               history->type  == TYPE_TOKEN::T_CHAR_LITERAL   ||
+               history->type  == TYPE_TOKEN::T_FLOAT_LITERAL  ||
+               history->type  == TYPE_TOKEN::T_INT_LITERAL    ||
+               history->type  == TYPE_TOKEN::T_IDENTIDIER     ||
+               history->type  == TYPE_TOKEN::T_LOGICAL        ||
+               history->type  == TYPE_TOKEN::T_POSTFIX        ||
+               history->type  == TYPE_TOKEN::T_STRING_LITERAL ||
+               history->value == DELIMITER::T_CLOSE_PAREM     )
             {
                 history = token;
                 tokenList->AddToken(token);
@@ -150,12 +152,12 @@ Expression* Parser::BuildExpression(Tokens* tokenList)
         if(token->type == TYPE_TOKEN::T_LOGICAL)
         {
             if(history->type == TYPE_TOKEN::T_BOOL_LITERAL   ||
-                history->type == TYPE_TOKEN::T_CHAR_LITERAL   ||
-                history->type == TYPE_TOKEN::T_FLOAT_LITERAL  ||
-                history->type == TYPE_TOKEN::T_INT_LITERAL    ||
-                history->type == TYPE_TOKEN::T_IDENTIDIER     ||
-                history->type == TYPE_TOKEN::T_POSTFIX        ||
-                history->type == TYPE_TOKEN::T_STRING_LITERAL )
+               history->type == TYPE_TOKEN::T_CHAR_LITERAL   ||
+               history->type == TYPE_TOKEN::T_FLOAT_LITERAL  ||
+               history->type == TYPE_TOKEN::T_INT_LITERAL    ||
+               history->type == TYPE_TOKEN::T_IDENTIDIER     ||
+               history->type == TYPE_TOKEN::T_POSTFIX        ||
+               history->type == TYPE_TOKEN::T_STRING_LITERAL )
             {
                 history = token;
                 tokenList->AddToken(token);
@@ -166,16 +168,16 @@ Expression* Parser::BuildExpression(Tokens* tokenList)
         }
 
         if(token->type == TYPE_TOKEN::T_BOOL_LITERAL   ||
-            token->type == TYPE_TOKEN::T_CHAR_LITERAL   ||
-            token->type == TYPE_TOKEN::T_FLOAT_LITERAL  ||
-            token->type == TYPE_TOKEN::T_INT_LITERAL    ||
-            token->type == TYPE_TOKEN::T_IDENTIDIER     ||
-            token->type == TYPE_TOKEN::T_STRING_LITERAL )
+           token->type == TYPE_TOKEN::T_CHAR_LITERAL   ||
+           token->type == TYPE_TOKEN::T_FLOAT_LITERAL  ||
+           token->type == TYPE_TOKEN::T_INT_LITERAL    ||
+           token->type == TYPE_TOKEN::T_IDENTIDIER     ||
+           token->type == TYPE_TOKEN::T_STRING_LITERAL )
         {
             if(history->type == TYPE_TOKEN::T_ARITHMETIC ||
-                history->type == TYPE_TOKEN::T_DELIMITER  ||
-                history->type == TYPE_TOKEN::T_LOGICAL    ||
-                history->type == TYPE_TOKEN::T_PREFIX     )
+               history->type == TYPE_TOKEN::T_DELIMITER  ||
+               history->type == TYPE_TOKEN::T_LOGICAL    ||
+               history->type == TYPE_TOKEN::T_PREFIX     )
             {
                 history = token;
                 tokenList->AddToken(token);
