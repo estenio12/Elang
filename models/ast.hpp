@@ -101,10 +101,6 @@ class BinaryOperation
 class Expression : public AstNode
 {
     public:
-        // bool IsLiteralOperation = true;
-        // bool IsConcatenation    = false;
-        // BinaryOperation* operation;
-        // CallFunDictionary CallTable;
         std::vector<Token*> TokenVector;
 
     public:
@@ -113,21 +109,7 @@ class Expression : public AstNode
         ~Expression()
         {
             MemTools::FreeVectorFromMemory(TokenVector);
-            // MemTools::FreeObjectFromMemory(operation);
-            
-            // for(auto item : CallTable)
-            //     if(item.second != nullptr)
-            //         delete item.second;
-
-            // CallTable.clear();
         }
-
-        // bool ExistCallFunctionID(std::string ID)
-        // {
-        //     for(auto item : CallTable)
-        //         if(item.first == ID) return true;
-        //     return false;
-        // }
 
     public:
         std::string GetByteCode() override 
@@ -140,43 +122,6 @@ class Expression : public AstNode
 
             return buffer;
         }
-
-    private:
-        // std::string Visitor(BinaryOperation* oper)
-        // {
-        //     if(oper != nullptr)
-        //     {
-        //         // # Return the simple value attribution 
-        //         if(oper->left == nullptr && oper->right == nullptr)
-        //             return oper->token->value;
-
-        //         // # Return expression
-        //         if(oper->token->type == TYPE_TOKEN::T_ARITHMETIC)
-        //         {
-        //             auto arithmeticOperator = oper->token->value; 
-
-        //             // # Get operation from left and right nodes
-        //             auto leftOper  = this->Visitor(oper->left);
-        //             auto rightOper = this->Visitor(oper->right);
-
-        //             // # build final operation
-        //             return leftOper + arithmeticOperator + rightOper;
-        //         }
-        //     }
-
-        //     return "";
-        // }
-
-        // void FreeBinaryOperationFromMemory(BinaryOperation* binOp)
-        // {
-        //     if(binOp != nullptr)
-        //     {
-        //         FreeBinaryOperationFromMemory(binOp->left);
-        //         FreeBinaryOperationFromMemory(binOp->right);
-
-        //         delete binOp;   
-        //     }
-        // }
 };
 
 class VariableDeclaration : public AstNode
