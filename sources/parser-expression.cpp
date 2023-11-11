@@ -74,6 +74,8 @@ Expression* Parser::BuildExpression(Tokens* tokenList)
                token->type  == TYPE_TOKEN::T_PREFIX         ||
                token->type  == TYPE_TOKEN::T_STRING_LITERAL )
             {
+                this->CheckIdentifier(token);
+                
                 history = token;
 
                 if(enableFindToken)
@@ -196,6 +198,8 @@ Expression* Parser::BuildExpression(Tokens* tokenList)
                history->type == TYPE_TOKEN::T_LOGICAL    ||
                history->type == TYPE_TOKEN::T_PREFIX     )
             {
+                this->CheckIdentifier(token);
+
                 history = token;
                 
                 if(enableFindToken)

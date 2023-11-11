@@ -53,6 +53,7 @@ class Parser
         Token* GetNextToken(std::string msg);
         std::string GenerateCallFunctionHash();
         std::vector<Tokens*> GetNewInstanceOfArgumentList(int ArgumentSize);
+        void CheckIdentifier(Token* token);
 
     private:
         template<class T> void CheckMemoryAllocated(T entity)
@@ -74,8 +75,6 @@ class Parser
         AstBranch* BuildVariableDeclaration(Token*);
         AstBranch* BuildFunctionDeclaration(Token*);
         AstBranch* BuildCallFunction(Token*);
-
-    private:
         AstBranch* BuildReturnExpression(Token*);
 
     private:

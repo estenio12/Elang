@@ -107,7 +107,7 @@ Token* Parser::GetNextToken(std::string msg)
 {
     std::string header = "Syntax Error (Line: "+std::to_string(this->lineHistory)+"): ";
     if(msg.empty()) msg = "the source code ends abruptly before closing compilaion";
-    auto token = this->lexer->GetNextToken();
+    auto token = this->lexer->GetNextToken();bool IsValidIdentifier(Token* token);
 
     if(token == nullptr) 
     {
@@ -136,7 +136,16 @@ std::vector<Tokens*> Parser::GetNewInstanceOfArgumentList(int ArgumentSize)
     return list;
 }
 
-
+void Parser::CheckIdentifier(Token* token)
+{
+    if(token->type == TYPE_TOKEN::T_IDENTIDIER)
+    {
+        auto result = this->symbolTable->ExistsIdentifier(token->value, this->currentScope, this->currentDeep);
+        
+        if(!result)
+            ThrowError(token, "Identifier not declared in the scope");
+    }
+}
 
 
 
