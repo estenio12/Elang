@@ -37,6 +37,7 @@ class AstNode
     public:
         virtual std::string GetInterface() { return ""; }
         virtual std::string GetByteCode() = 0;
+        template<class T> T GetEntity();
 };
 
 class AstBranch
@@ -104,13 +105,14 @@ class Expression : public AstNode
         // bool IsConcatenation    = false;
         // BinaryOperation* operation;
         // CallFunDictionary CallTable;
-        std::string expr;
+        std::vector<Token*> TokenVector;
 
     public:
         Expression(){ kind = EBRANCH_TYPE::EXPRESSION; }
 
         ~Expression()
         {
+            MemTools::FreeVectorFromMemory(TokenVector);
             // MemTools::FreeObjectFromMemory(operation);
             
             // for(auto item : CallTable)
@@ -131,13 +133,12 @@ class Expression : public AstNode
         std::string GetByteCode() override 
         { 
             // # Get output code
-            // auto outcode = this->Visitor(this->operation);
-            
-            // # Free Binary operation from memory
-            // this->FreeBinaryOperationFromMemory(this->operation);
-            
-            // # Return output code
-            return this->expr;
+            std::string buffer;
+
+            for(auto item : this->TokenVector)
+                buffer += item->value;
+
+            return buffer;
         }
 
     private:
@@ -298,10 +299,11 @@ class CallFunction : public AstNode
             }
 
             outcode.push_back(')');
-            outcode.push_back(';');
 
             return outcode; 
         }
+
+        template<class T> T GetEntity() { return this; }
 
 };
 

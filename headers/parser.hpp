@@ -46,6 +46,7 @@ class Parser
         EBRANCH_TYPE BindOperation(Token*);
         void ExpectType(TYPE_TOKEN, std::string message);
         void ExpectValue(std::string expected, std::string message);
+        void ExpectThisToken(Token* token, std::string expected, std::string message);
         void ThrowError(Token*, std::string message);
         void ThrowInternalError(std::string message);
         void PushToAst(AstBranch* node);
@@ -53,7 +54,7 @@ class Parser
         Token* GetNextToken(std::string msg);
         std::string GenerateCallFunctionHash();
         std::vector<Tokens*> GetNewInstanceOfArgumentList(int ArgumentSize);
-        void CheckIdentifier(Token* token);
+        TYPE_IDENTIFIER GetTypeIdentifier(Token* token);
 
     private:
         template<class T> void CheckMemoryAllocated(T entity)
@@ -74,7 +75,7 @@ class Parser
     private:
         AstBranch* BuildVariableDeclaration(Token*);
         AstBranch* BuildFunctionDeclaration(Token*);
-        AstBranch* BuildCallFunction(Token*);
+        AstBranch* BuildCallFunction(Token*, Tokens* list = nullptr);
         AstBranch* BuildReturnExpression(Token*);
 
     private:

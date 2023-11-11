@@ -100,8 +100,10 @@ void CodeGenerator::AstVisitor(Ast* ast)
             switch (branch->entity->kind)
             {
                 case EBRANCH_TYPE::VARIABLE_DECLARATION:
-                case EBRANCH_TYPE::CALL_FUNCTION:
                     this->RunnableImplementation.push_back(branch->entity->GetByteCode());
+                break;
+                case EBRANCH_TYPE::CALL_FUNCTION:
+                    this->RunnableImplementation.push_back(branch->entity->GetByteCode() + ';');
                 break;
 
                 case EBRANCH_TYPE::FUNCTION_DECLARATION:

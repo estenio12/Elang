@@ -10,6 +10,13 @@
 
 #include <string>
 
+enum TYPE_IDENTIFIER
+{
+    IDENTIFIER_VARIABLE,
+    IDENTIFIER_FUNCTION,
+    NOT_FOUND
+};
+
 enum TYPE_TOKEN
 {
     T_KEYWORD,

@@ -1,9 +1,7 @@
 - Bugs Open:
     > [ OK ] - Open parentheses not checking in expression.
     > [ OK ] - Refactoring the BinaryOperation to build with correctly precedence.
-    > [ WORKING ] - Change BinaryOperation token to support use call function in your place:
-               - When find call function in expression processing, set call function variable instead of BinaryOperation
-               - then use GetByteCode() function of call function, making the process easy. 
+    > [ OK ] - Change expression for support call function.
+    > [ OK ] - traits in code generator of expression for process call functions.
     > [ TODO ] - Call function and return expression doesn't type check.
-    > [ TODO ] - The parser let pass duplication variable declaration, in global and local scope.
-    > [ TODO ] - traits in code generator of expression for process call functions.  the
+    > [ TODO ] - The parser let pass the duplication variable declaration, in global and local scope.

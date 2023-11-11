@@ -6,15 +6,11 @@ Expression* Parser::BuildExpression(Tokens* tokenList)
 
     bool enableFindToken = (tokenList == nullptr);
 
-    if(enableFindToken)
-        tokenList = new Tokens();
-    else
-        expression->expr = tokenList->GetExpression();
-
     Token* history     = nullptr;
     int parenCounter   = 0;
     int executeCounter = 0;
 
+    std::vector<Token*> BuildTokenList;
     std::stack<Token*> StoreOpenParenToken;
 
     while(true)
@@ -61,25 +57,43 @@ Expression* Parser::BuildExpression(Tokens* tokenList)
             {
                 parenCounter++;
                 history = token;
-                tokenList->AddToken(token);
+                BuildTokenList.push_back(token);
                 StoreOpenParenToken.push(token);
                 continue;
             }
 
-            if(token->type  == TYPE_TOKEN::T_BOOL_LITERAL   ||
-               token->type  == TYPE_TOKEN::T_CHAR_LITERAL   ||
-               token->type  == TYPE_TOKEN::T_FLOAT_LITERAL  ||
-               token->type  == TYPE_TOKEN::T_INT_LITERAL    ||
-               token->type  == TYPE_TOKEN::T_IDENTIDIER     ||
-               token->type  == TYPE_TOKEN::T_PREFIX         ||
-               token->type  == TYPE_TOKEN::T_STRING_LITERAL )
+            if(token->type == TYPE_TOKEN::T_BOOL_LITERAL   ||
+               token->type == TYPE_TOKEN::T_CHAR_LITERAL   ||
+               token->type == TYPE_TOKEN::T_FLOAT_LITERAL  ||
+               token->type == TYPE_TOKEN::T_INT_LITERAL    ||
+               token->type == TYPE_TOKEN::T_IDENTIDIER     ||
+               token->type == TYPE_TOKEN::T_PREFIX         ||
+               token->type == TYPE_TOKEN::T_STRING_LITERAL )
             {
-                this->CheckIdentifier(token);
-                
-                history = token;
+                if(token->type == TYPE_TOKEN::T_IDENTIDIER)
+                {
+                    switch(this->GetTypeIdentifier(token))
+                    {
+                        case TYPE_IDENTIFIER::IDENTIFIER_VARIABLE:
+                            history = token;                
+                            BuildTokenList.push_back(token);
+                            continue;
+                        break;
 
-                if(enableFindToken)
-                    tokenList->AddToken(token);
+                        case TYPE_IDENTIFIER::IDENTIFIER_FUNCTION:
+                            history       = token;                
+                            auto tmpToken = token->GetCopy();
+                            token->value  = this->BuildCallFunction(tmpToken, tokenList)->entity->GetByteCode();
+                            BuildTokenList.push_back(token);
+                            continue;
+                        break;
+                    }
+
+                    ThrowError(token, "Identifier not declared in the scope");
+                }
+
+                history = token;
+                BuildTokenList.push_back(token);
                 
                 continue;
             }
@@ -102,12 +116,10 @@ Expression* Parser::BuildExpression(Tokens* tokenList)
                history->type == TYPE_TOKEN::T_STRING_LITERAL )
             {
                 parenCounter++;
-                history = token;
-                
-                if(enableFindToken)
-                    tokenList->AddToken(token);
-                
+                history = token;                
+                BuildTokenList.push_back(token);
                 StoreOpenParenToken.push(token);
+
                 continue;
             }
 
@@ -131,10 +143,8 @@ Expression* Parser::BuildExpression(Tokens* tokenList)
                 if(parenCounter < 0)
                     ThrowError(token, "Unexpected closing parentheses");
                 
-                history = token;
-                
-                if(enableFindToken)
-                    tokenList->AddToken(token);
+                history = token;                
+                BuildTokenList.push_back(token);
                 
                 continue;
             }
@@ -155,9 +165,7 @@ Expression* Parser::BuildExpression(Tokens* tokenList)
                history->value == DELIMITER::T_CLOSE_PAREM     )
             {
                 history = token;
-                
-                if(enableFindToken)
-                    tokenList->AddToken(token);
+                BuildTokenList.push_back(token);
                 
                 continue;
             }
@@ -176,9 +184,7 @@ Expression* Parser::BuildExpression(Tokens* tokenList)
                history->type == TYPE_TOKEN::T_STRING_LITERAL )
             {
                 history = token;
-                
-                if(enableFindToken)
-                    tokenList->AddToken(token);
+                BuildTokenList.push_back(token);
                 
                 continue;
             }
@@ -198,12 +204,30 @@ Expression* Parser::BuildExpression(Tokens* tokenList)
                history->type == TYPE_TOKEN::T_LOGICAL    ||
                history->type == TYPE_TOKEN::T_PREFIX     )
             {
-                this->CheckIdentifier(token);
+                if(token->type == TYPE_TOKEN::T_IDENTIDIER)
+                {
+                    switch(this->GetTypeIdentifier(token))
+                    {
+                        case TYPE_IDENTIFIER::IDENTIFIER_VARIABLE:
+                            history = token;                
+                            BuildTokenList.push_back(token);
+                            continue;
+                        break;
 
-                history = token;
-                
-                if(enableFindToken)
-                    tokenList->AddToken(token);
+                        case TYPE_IDENTIFIER::IDENTIFIER_FUNCTION:
+                            history       = token;                
+                            auto tmpToken = token->GetCopy();
+                            token->value  = this->BuildCallFunction(tmpToken, tokenList)->entity->GetByteCode();
+                            BuildTokenList.push_back(token);
+                            continue;
+                        break;
+                    }
+
+                    ThrowError(token, "Identifier not declared in the scope");
+                }
+
+                history = token;                
+                BuildTokenList.push_back(token);
                 
                 continue;
             }
@@ -218,8 +242,7 @@ Expression* Parser::BuildExpression(Tokens* tokenList)
         exit(EXIT_FAILURE);
     }
 
-    if(enableFindToken)
-        expression->expr = tokenList->GetExpression();
+    expression->TokenVector = BuildTokenList;
 
     return expression;
 }
@@ -256,7 +279,7 @@ Expression* Parser::BuildExpression(Tokens* tokenList)
 //                 if(parenCounter < 0)
 //                     ThrowError(token, "Unexpected closing parentheses");
                 
-//                 tokenList->AddToken(token);
+//                 BuildTokenList.push_back(token);
 //             }
 //             else 
 //             {
@@ -270,7 +293,7 @@ Expression* Parser::BuildExpression(Tokens* tokenList)
 //                         token_copy->value = hash_name;
 //                         token_copy->IsStorageInHashTable = true;
 
-//                         tokenList->AddToken(token_copy);
+//                         BuildTokenList.push_back(token_copy);
 
 //                         expression->CallTable
 //                         .push_back
@@ -283,10 +306,10 @@ Expression* Parser::BuildExpression(Tokens* tokenList)
 //                         );
 //                     }
 //                     else
-//                         tokenList->AddToken(token);
+//                         BuildTokenList.push_back(token);
 //                 }
 //                 else
-//                     tokenList->AddToken(token);
+//                     BuildTokenList.push_back(token);
 //             }
 //         }
 //     }

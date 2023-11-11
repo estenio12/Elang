@@ -297,7 +297,7 @@ AstBranch* Parser::BuildReturnExpression(Token* token)
     return branch;
 }
 
-AstBranch* Parser::BuildCallFunction(Token* token)
+AstBranch* Parser::BuildCallFunction(Token* token, Tokens* tokenList)
 {
     auto call_function = new CallFunction();
     auto fun_data = this->symbolTable->GetFunctionIdentifier(token->value);
@@ -308,7 +308,12 @@ AstBranch* Parser::BuildCallFunction(Token* token)
     call_function->name = fun_data->name;
     call_function->type = fun_data->type;
 
-    this->ExpectValue(DELIMITER::T_OPEN_PAREM, "Expected opening parenthesis");
+    bool isTokenList = tokenList != nullptr;
+
+    if(isTokenList)
+        this->ExpectThisToken(tokenList->Shift(), DELIMITER::T_OPEN_PAREM, "Expected opening parenthesis");
+    else
+        this->ExpectValue(DELIMITER::T_OPEN_PAREM, "Expected opening parenthesis");
 
     // # Read arguments
     int argument_size = fun_data->parameterList.size();
@@ -322,7 +327,25 @@ AstBranch* Parser::BuildCallFunction(Token* token)
         // # Build argument list
         while(true)
         {
-            auto next_token = this->GetNextToken("");
+            Token* next_token = nullptr;
+
+            if(isTokenList)
+            {
+                next_token = tokenList->Shift();
+
+                std::string header = "Syntax Error (Line: "+std::to_string(this->lineHistory)+"): ";
+                std::string msg    = "the source code ends abruptly before closing compilaion";
+                
+                if(next_token == nullptr) 
+                {
+                    Output::PrintCustomizeError(header, msg);
+                    exit(EXIT_FAILURE);
+                }
+
+                this->lineHistory = token->line;
+            }
+            else
+                next_token = this->GetNextToken("");
 
             if(next_token->value == DELIMITER::T_COMMA)
             {
@@ -372,7 +395,12 @@ AstBranch* Parser::BuildCallFunction(Token* token)
         }
     }
     else
-        this->ExpectValue(DELIMITER::T_CLOSE_PAREM, "Expect closing parenthesis.");
+    {
+        if(isTokenList)
+            this->ExpectThisToken(tokenList->Shift(), DELIMITER::T_CLOSE_PAREM, "Expect closing parenthesis.");
+        else
+            this->ExpectValue(DELIMITER::T_CLOSE_PAREM, "Expect closing parenthesis.");
+    }
 
     // # Build branch
     auto branch = new AstBranch(call_function);

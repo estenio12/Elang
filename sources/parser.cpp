@@ -107,7 +107,8 @@ Token* Parser::GetNextToken(std::string msg)
 {
     std::string header = "Syntax Error (Line: "+std::to_string(this->lineHistory)+"): ";
     if(msg.empty()) msg = "the source code ends abruptly before closing compilaion";
-    auto token = this->lexer->GetNextToken();bool IsValidIdentifier(Token* token);
+    
+    auto token = this->lexer->GetNextToken();
 
     if(token == nullptr) 
     {
@@ -136,16 +137,25 @@ std::vector<Tokens*> Parser::GetNewInstanceOfArgumentList(int ArgumentSize)
     return list;
 }
 
-void Parser::CheckIdentifier(Token* token)
+TYPE_IDENTIFIER Parser::GetTypeIdentifier(Token* token)
 {
-    if(token->type == TYPE_TOKEN::T_IDENTIDIER)
-    {
-        auto result = this->symbolTable->ExistsIdentifier(token->value, this->currentScope, this->currentDeep);
-        
-        if(!result)
-            ThrowError(token, "Identifier not declared in the scope");
-    }
+    auto isVariable = this->symbolTable->ExistsIdentifier(token->value, this->currentScope, this->currentDeep);
+    if(isVariable) return TYPE_IDENTIFIER::IDENTIFIER_VARIABLE;
+
+    auto isCallFunction = this->symbolTable->ExistsFunctionIdentifier(token->value);
+    if(isCallFunction) return TYPE_IDENTIFIER::IDENTIFIER_FUNCTION;
+
+    return TYPE_IDENTIFIER::NOT_FOUND;
 }
+
+void Parser::ExpectThisToken(Token* token, std::string expected, std::string message)
+{
+    if(token->value != expected) ThrowError(token, message);
+}
+
+
+
+
 
 
 

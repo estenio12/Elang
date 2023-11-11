@@ -4,4 +4,11 @@ fun sum(n1: int, n2: int): int
 	return n1 + n2;
 end
 
-sum(idades, 10 + (5 * 3));
+fun ret(): int
+	return 25;
+end
+
+sum(idade, 10 + (ret() * 3));
+
+var t1: int = 10 + ret() - 5;
+

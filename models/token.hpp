@@ -19,10 +19,6 @@ class Token
         TYPE_TOKEN type    = TYPE_TOKEN::T_IDENTIDIER;
 
     public:
-        /// @brief this property was created to sinalize on parser-expression, that is storaged in HashTable
-        bool IsStorageInHashTable = false;
-
-    public:
         Token(int line           = 0,
               int start_position = 0,
               int end_position   = 0,
