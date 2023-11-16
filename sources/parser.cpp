@@ -48,6 +48,14 @@ void Parser::ThrowError(Token* token, std::string message)
     exit(EXIT_FAILURE);
 }
 
+void Parser::ThrowErrorDataType(Token* token, std::string type_token, std::string expected_type)
+{
+    std::string lineError = "Line: " + std::to_string(token->line) + ", Col: " + std::to_string(token->startpos);
+    Output::PrintCustomizeError("Syntax Error (" + lineError + "): ", "Cannot implicity convert type '" + type_token + "' to '"+ expected_type +"'");
+    MemTools::FreeObjectFromMemory(token);
+    exit(EXIT_FAILURE);
+}
+
 void Parser::ThrowInternalError(std::string message)
 {
     Output::PrintCustomizeError("Compiler internal error: ", message);
@@ -137,13 +145,23 @@ std::vector<Tokens*> Parser::GetNewInstanceOfArgumentList(int ArgumentSize)
     return list;
 }
 
-TYPE_IDENTIFIER Parser::GetTypeIdentifier(Token* token)
+TYPE_IDENTIFIER Parser::GetTypeIdentifier(Token* token, std::string expected_type)
 {
-    auto isVariable = this->symbolTable->ExistsIdentifier(token->value, this->currentScope, this->currentDeep);
-    if(isVariable) return TYPE_IDENTIFIER::IDENTIFIER_VARIABLE;
+    auto isVariable = this->symbolTable->GetIdentifier(token->value, this->currentScope, this->currentDeep);
+    
+    if(isVariable != nullptr) 
+    {
+        if(isVariable->type != expected_type) this->ThrowErrorDataType(token, isVariable->type, expected_type);
+        return TYPE_IDENTIFIER::IDENTIFIER_VARIABLE;
+    }
 
-    auto isCallFunction = this->symbolTable->ExistsFunctionIdentifier(token->value);
-    if(isCallFunction) return TYPE_IDENTIFIER::IDENTIFIER_FUNCTION;
+    auto isCallFunction = this->symbolTable->GetFunctionIdentifier(token->value);
+
+    if(isCallFunction != nullptr) 
+    {
+        if(isCallFunction->type != expected_type) this->ThrowErrorDataType(token, isCallFunction->type, expected_type);
+        return TYPE_IDENTIFIER::IDENTIFIER_FUNCTION;
+    }
 
     return TYPE_IDENTIFIER::NOT_FOUND;
 }
@@ -153,7 +171,44 @@ void Parser::ExpectThisToken(Token* token, std::string expected, std::string mes
     if(token->value != expected) ThrowError(token, message);
 }
 
+void Parser::CheckDataType(Token* token, std::string expected_type)
+{
+    if(token->type == TYPE_TOKEN::T_FLOAT_LITERAL  && expected_type == TYPE::T_FLOAT  ||
+       token->type == TYPE_TOKEN::T_INT_LITERAL    && expected_type == TYPE::T_INT    ||
+       token->type == TYPE_TOKEN::T_BOOL_LITERAL   && expected_type == TYPE::T_BOOL   ||
+       token->type == TYPE_TOKEN::T_CHAR_LITERAL   && expected_type == TYPE::T_CHAR   ||
+       token->type == TYPE_TOKEN::T_STRING_LITERAL && expected_type == TYPE::T_STRING )
+    {
+        return;
+    }
 
+    this->ThrowErrorDataType(token, ConvertTypeTokenToType(token->type), expected_type);
+}
+
+std::string Parser::ConvertTypeTokenToType(TYPE_TOKEN type)
+{
+    switch (type)
+    {
+        case TYPE_TOKEN::T_BOOL_LITERAL:
+            return TYPE::T_BOOL;    
+        
+        case TYPE_TOKEN::T_CHAR_LITERAL:
+            return TYPE::T_CHAR;    
+        
+        case TYPE_TOKEN::T_FLOAT_LITERAL:
+            return TYPE::T_FLOAT;    
+        
+        case TYPE_TOKEN::T_INT_LITERAL:
+            return TYPE::T_INT;    
+        
+        case TYPE_TOKEN::T_STRING_LITERAL:
+            return TYPE::T_STRING;
+        
+        default:
+            this->ThrowInternalError("Cannot convert Type Token");
+            break;
+    }
+}
 
 
 

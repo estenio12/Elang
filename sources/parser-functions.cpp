@@ -95,7 +95,7 @@ AstBranch* Parser::BuildVariableDeclaration(Token* token)
     }
     else if(t_bridge_token->value == DELIMITER::T_ASSIGN)
     {
-        variable->expression = BuildExpression();
+        variable->expression = BuildExpression(variable->type, nullptr);
     }
     else if(t_bridge_token->value == DELIMITER::T_EOF)
     {
@@ -259,7 +259,8 @@ AstBranch* Parser::BuildFunctionDeclaration(Token* token)
             break;
 
             case EBRANCH_TYPE::RETURN_EXPRESSION:
-                function->BodyContent.push_back(BuildReturnExpression(stmt_token));
+                if(function->type == TYPE::T_VOID) this->ThrowError(stmt_token, "the return keyword is invalid for the void function type"); 
+                function->BodyContent.push_back(BuildReturnExpression(stmt_token, function->type));
             break;
 
             case EBRANCH_TYPE::CALL_FUNCTION:
@@ -285,14 +286,14 @@ AstBranch* Parser::BuildFunctionDeclaration(Token* token)
     return branch;
 }
 
-AstBranch* Parser::BuildReturnExpression(Token* token)
+AstBranch* Parser::BuildReturnExpression(Token* token, std::string expected_type)
 {
     auto return_expression = new ReturnExpression();
 
     // # Free from memory
     MemTools::FreeObjectFromMemory(token);
 
-    return_expression->expression = BuildExpression();
+    return_expression->expression = BuildExpression(expected_type, nullptr);
     auto branch = new AstBranch(return_expression);
     return branch;
 }

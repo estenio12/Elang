@@ -48,13 +48,16 @@ class Parser
         void ExpectValue(std::string expected, std::string message);
         void ExpectThisToken(Token* token, std::string expected, std::string message);
         void ThrowError(Token*, std::string message);
+        void ThrowErrorDataType(Token*, std::string type_token, std::string expected_type);
         void ThrowInternalError(std::string message);
         void PushToAst(AstBranch* node);
         void InsertIdentifierIntoSymbolTable(VariableDeclaration*);
         Token* GetNextToken(std::string msg);
         std::string GenerateCallFunctionHash();
         std::vector<Tokens*> GetNewInstanceOfArgumentList(int ArgumentSize);
-        TYPE_IDENTIFIER GetTypeIdentifier(Token* token);
+        TYPE_IDENTIFIER GetTypeIdentifier(Token* token, std::string expected_type);
+        void CheckDataType(Token* token, std::string expected_type);
+        std::string ConvertTypeTokenToType(TYPE_TOKEN type);
 
     private:
         template<class T> void CheckMemoryAllocated(T entity)
@@ -76,12 +79,9 @@ class Parser
         AstBranch* BuildVariableDeclaration(Token*);
         AstBranch* BuildFunctionDeclaration(Token*);
         AstBranch* BuildCallFunction(Token*, Tokens* list = nullptr);
-        AstBranch* BuildReturnExpression(Token*);
+        AstBranch* BuildReturnExpression(Token*, std::string expected_type);
 
     private:
-        Expression* BuildExpression(Tokens* token_list = nullptr);
-        // BinaryOperation* ParserExpression(Tokens* tokenList, Expression* expr, uint8_t minPrecedence);
-        // BinaryOperation* ParserPrimary(Tokens* tokenList, Expression* expr);
-        // uint8_t GetPrecedenceValue(Token*);
+        Expression* BuildExpression(const std::string expected_type, Tokens* token_list = nullptr);
 
 };

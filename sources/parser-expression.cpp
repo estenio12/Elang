@@ -1,6 +1,6 @@
 #include "../headers/parser.hpp"
 
-Expression* Parser::BuildExpression(Tokens* tokenList)
+Expression* Parser::BuildExpression(const std::string expected_type, Tokens* tokenList)
 {
     auto expression  = new Expression();
 
@@ -72,7 +72,7 @@ Expression* Parser::BuildExpression(Tokens* tokenList)
             {
                 if(token->type == TYPE_TOKEN::T_IDENTIDIER)
                 {
-                    switch(this->GetTypeIdentifier(token))
+                    switch(this->GetTypeIdentifier(token, expected_type))
                     {
                         case TYPE_IDENTIFIER::IDENTIFIER_VARIABLE:
                             history = token;                
@@ -91,6 +91,8 @@ Expression* Parser::BuildExpression(Tokens* tokenList)
 
                     ThrowError(token, "Identifier not declared in the scope");
                 }
+
+                this->CheckDataType(token, expected_type);
 
                 history = token;
                 BuildTokenList.push_back(token);
@@ -206,7 +208,7 @@ Expression* Parser::BuildExpression(Tokens* tokenList)
             {
                 if(token->type == TYPE_TOKEN::T_IDENTIDIER)
                 {
-                    switch(this->GetTypeIdentifier(token))
+                    switch(this->GetTypeIdentifier(token, expected_type))
                     {
                         case TYPE_IDENTIFIER::IDENTIFIER_VARIABLE:
                             history = token;                
@@ -225,6 +227,8 @@ Expression* Parser::BuildExpression(Tokens* tokenList)
 
                     ThrowError(token, "Identifier not declared in the scope");
                 }
+
+                this->CheckDataType(token, expected_type);
 
                 history = token;                
                 BuildTokenList.push_back(token);
