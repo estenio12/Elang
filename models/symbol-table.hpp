@@ -40,6 +40,18 @@ class FunctionIdenfierModel
         {
             MemTools::FreeVectorFromMemory(parameterList);
         }
+
+    public:
+        std::string GetTypeParameter(int index)
+        {
+            if(index < 0 || index > parameterList.size())
+            {
+                Output::PrintCustomizeError("Fatal Error: ", "Out of bounds index in get function paramenter");
+                exit(EXIT_FAILURE);
+            }
+
+            return parameterList[index]->type;
+        }
 };
 
 class SymbolTable

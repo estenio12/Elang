@@ -325,6 +325,9 @@ AstBranch* Parser::BuildCallFunction(Token* token, Tokens* tokenList)
         int opened_paren   = 1;
         int argument_index = 0;
 
+        // # Assign type to first index of argument list
+        argument_list[argument_index]->SetExpectedType(fun_data->GetTypeParameter(argument_index));
+
         // # Build argument list
         while(true)
         {
@@ -355,6 +358,7 @@ AstBranch* Parser::BuildCallFunction(Token* token, Tokens* tokenList)
                 if(argument_size == 1 || argument_index > argument_size - 1)
                     this->ThrowError(next_token, "Too many arguments passed o function '" + fun_data->name + "'. This function expect " + std::to_string(fun_data->parameterList.size()) + " arguments");
 
+                argument_list[argument_index]->SetExpectedType(fun_data->GetTypeParameter(argument_index));
                 continue;
             }
 
@@ -390,8 +394,8 @@ AstBranch* Parser::BuildCallFunction(Token* token, Tokens* tokenList)
                 Output::PrintCustomizeError(few_arg_header_msg, few_arg_error_msg);
                 exit(EXIT_FAILURE);
             }
-            
-            auto expression = this->BuildExpression(item);
+
+            auto expression = this->BuildExpression(item->GetExpectedType(), item);
             call_function->InsertArgument(expression);
         }
     }

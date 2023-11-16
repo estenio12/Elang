@@ -208,6 +208,8 @@ std::string Parser::ConvertTypeTokenToType(TYPE_TOKEN type)
             this->ThrowInternalError("Cannot convert Type Token");
             break;
     }
+
+    return "";
 }
 
 
