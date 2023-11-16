@@ -15,6 +15,8 @@ class Tokens
 {
     private:
         std::vector<Token*> list;
+
+    public:
         std::string expected_type;
 
     public:
@@ -49,16 +51,6 @@ class Tokens
                 build += item->value;
 
             return build;
-        }
-
-        std::string GetExpectedType()
-        {
-            return this->expected_type;
-        }
-
-        void SetExpectedType(std::string expectedType)
-        {
-            this->expected_type = expected_type;
         }
 };
 

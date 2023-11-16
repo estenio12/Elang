@@ -168,7 +168,10 @@ AstBranch* Parser::BuildFunctionDeclaration(Token* token)
             auto t_type = this->GetNextToken("It's expected an type after seperator.");
 
             if(t_type->type == TYPE_TOKEN::T_TYPE)
+            {
                 function->type = t_type->value;
+                funModel->type = t_type->value;
+            }
             else
                 this->ThrowError(t_type, "It's expected an function return type here");
 
@@ -326,7 +329,7 @@ AstBranch* Parser::BuildCallFunction(Token* token, Tokens* tokenList)
         int argument_index = 0;
 
         // # Assign type to first index of argument list
-        argument_list[argument_index]->SetExpectedType(fun_data->GetTypeParameter(argument_index));
+        argument_list[argument_index]->expected_type = fun_data->GetTypeParameter(argument_index);
 
         // # Build argument list
         while(true)
@@ -358,7 +361,7 @@ AstBranch* Parser::BuildCallFunction(Token* token, Tokens* tokenList)
                 if(argument_size == 1 || argument_index > argument_size - 1)
                     this->ThrowError(next_token, "Too many arguments passed o function '" + fun_data->name + "'. This function expect " + std::to_string(fun_data->parameterList.size()) + " arguments");
 
-                argument_list[argument_index]->SetExpectedType(fun_data->GetTypeParameter(argument_index));
+                argument_list[argument_index]->expected_type = fun_data->GetTypeParameter(argument_index);
                 continue;
             }
 
@@ -395,7 +398,7 @@ AstBranch* Parser::BuildCallFunction(Token* token, Tokens* tokenList)
                 exit(EXIT_FAILURE);
             }
 
-            auto expression = this->BuildExpression(item->GetExpectedType(), item);
+            auto expression = this->BuildExpression(item->expected_type, item);
             call_function->InsertArgument(expression);
         }
     }

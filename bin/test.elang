@@ -5,7 +5,7 @@ fun sum(n1: int, n2: int): int
 end
 
 fun ret(): int
-	return 25;
+	return 10;
 end
 
 sum(idade, 10 + (ret() * 3));

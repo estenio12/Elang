@@ -51,7 +51,7 @@ void Parser::ThrowError(Token* token, std::string message)
 void Parser::ThrowErrorDataType(Token* token, std::string type_token, std::string expected_type)
 {
     std::string lineError = "Line: " + std::to_string(token->line) + ", Col: " + std::to_string(token->startpos);
-    Output::PrintCustomizeError("Syntax Error (" + lineError + "): ", "Cannot implicity convert type '" + type_token + "' to '"+ expected_type +"'");
+    Output::PrintCustomizeError("Syntax Error (" + lineError + "): ", "Cannot implicitly convert type '" + type_token + "' to '"+ expected_type +"'");
     MemTools::FreeObjectFromMemory(token);
     exit(EXIT_FAILURE);
 }

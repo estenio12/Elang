@@ -3,5 +3,5 @@
     > [ OK ] - Refactoring the BinaryOperation to build with correctly precedence.
     > [ OK ] - Change expression for support call function.
     > [ OK ] - traits in code generator of expression for process call functions.
-    > [ WORKING ] - Call function and return expression doesn't type check.
+    > [ OK ] - Call function and return expression doesn't type check.
     > [ TODO ] - The parser let pass the duplication variable declaration, in global and local scope.
