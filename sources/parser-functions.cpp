@@ -65,7 +65,12 @@ AstBranch* Parser::BuildVariableDeclaration(Token* token)
     if(t_identifier != nullptr)
     {
         if(t_identifier->type == TYPE_TOKEN::T_IDENTIDIER)
+        {
+            if(this->symbolTable->ExistsIdentifier(t_identifier->value, this->currentScope, this->currentDeep))
+                this->ThrowError(t_identifier, "duplicating variable declaration");
+
             variable->name = t_identifier->value;
+        }
         else
             this->ThrowError(t_identifier, "It's expected an identifier");
 

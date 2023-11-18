@@ -4,4 +4,4 @@
     > [ OK ] - Change expression for support call function.
     > [ OK ] - traits in code generator of expression for process call functions.
     > [ OK ] - Call function and return expression doesn't type check.
-    > [ TODO ] - The parser let pass the duplication variable declaration, in global and local scope.
+    > [ OK ] - The parser let pass the duplication variable declaration, in global and local scope.

@@ -1,14 +1,5 @@
-var idade: int = (10 + 5) * 2;
+var age: int = 10;
 
-fun sum(n1: int, n2: int): int
-	return n1 + n2;
+fun pub(): void
+	const t: int = age;
 end
-
-fun ret(): int
-	return 10;
-end
-
-sum(idade, 10 + (ret() * 3));
-
-var t1: int = 10 + ret() - 5;
-
