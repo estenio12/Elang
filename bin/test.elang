@@ -1,4 +1,4 @@
-var age: int = 10;
+var age: int = 450;
 
 fun pub(): void
 	const t: int = age;

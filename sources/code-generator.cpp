@@ -20,6 +20,7 @@ void CodeGenerator::Run(Ast* ast)
     this->AstVisitor(ast);
     
     // # Flush code resultant to file
+    this->FlushGlobalDeclarationToFile();
     this->FlushFunctionInterfaceToFile();
     this->FlushRunnableImplementationToFile();
     this->FlushFunctionImplementationToFile();
@@ -38,8 +39,21 @@ void CodeGenerator::WriteChunkToFile(std::string chunk)
 void CodeGenerator::LoadProgramInitialize()
 {
     this->WriteChunkToFile(this->COMMENTARY);
+    this->WriteChunkToFile(this->LICENSE);
     this->WriteChunkToFile(this->INCLUDES);
-    this->WriteChunkToFile(this->PROGRAM_INTERFACE);
+    this->WriteChunkToFile(this->GLOBAL_VARAIBLES);
+}
+
+void CodeGenerator::FlushGlobalDeclarationToFile()
+{
+    std::string buffer;
+
+    for(auto item : this->GlobalVariables)
+        buffer += item;
+
+    this->WriteChunkToFile(buffer);
+    buffer.clear();
+    this->GlobalVariables.clear();
 }
 
 void CodeGenerator::FlushFunctionInterfaceToFile()
@@ -49,6 +63,7 @@ void CodeGenerator::FlushFunctionInterfaceToFile()
     for(auto item : this->FunctionInterface)
         buffer += item;
 
+    this->WriteChunkToFile(this->PROGRAM_INTERFACE);
     this->WriteChunkToFile(buffer);
     this->WriteChunkToFile(this->CLOSE_PROGRAM_INTERFACE);
     buffer.clear();
@@ -100,7 +115,7 @@ void CodeGenerator::AstVisitor(Ast* ast)
             switch (branch->entity->kind)
             {
                 case EBRANCH_TYPE::VARIABLE_DECLARATION:
-                    this->RunnableImplementation.push_back(branch->entity->GetByteCode());
+                    this->GenerateVaraibleDeclaration(branch);
                 break;
                 case EBRANCH_TYPE::CALL_FUNCTION:
                     this->RunnableImplementation.push_back(branch->entity->GetByteCode() + ';');
@@ -125,6 +140,15 @@ void CodeGenerator::GenerateFunction(AstBranch* branch)
     this->FunctionImplementation.push_back(branch->entity->GetByteCode());
 }
 
+void CodeGenerator::GenerateVaraibleDeclaration(AstBranch* branch)
+{
+    auto output_code = branch->entity->GetByteCode();
+
+    if(branch->IsGlobalScope)
+        this->GlobalVariables.push_back(output_code);
+    else
+        this->RunnableImplementation.push_back(output_code);
+}
 
 
 

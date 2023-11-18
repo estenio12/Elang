@@ -1,7 +1,39 @@
-- Bugs Open:
+- Bugs Opened:
     > [ OK ] - Open parentheses not checking in expression.
     > [ OK ] - Refactoring the BinaryOperation to build with correctly precedence.
     > [ OK ] - Change expression for support call function.
-    > [ OK ] - traits in code generator of expression for process call functions.
+    > [ OK ] - traits in code generator from expression process call functions.
     > [ OK ] - Call function and return expression doesn't type check.
     > [ OK ] - The parser let pass the duplication variable declaration, in global and local scope.
+
+[ CONCLUÍDO EM - 18/09/2023 ] ======================================================================
+
+- Features:
+    > [ TODO ] - Support to string and char.
+    > [ TODO ] - Implemenenting assignments.
+    > [ TODO ] - Implemenenting if, else condition
+    > [ TODO ] - Implemenenting Loop while;
+
+- Bugs Opened:
+    > [ TODO ] - reassignment on constant variables 
+
+[ TARGET TO - 10/12/2023 ] ======================================================================
+
+- Features:
+    > [ TODO ] - Add basic functions of data converting.
+    > [ TODO ] - Add basic functions of I/O operations
+
+- Bugs Opened:
+    > [ TODO ] - 
+
+[ TARGET TO - 15/12/2023 ] ======================================================================
+
+- FULL TEST:
+    > [ TODO ] - Realize full test in the all features implemented before.
+    > [ TODO ] - Realize test with others peaples.
+
+[ TARGET TO - 31/01/2024 ] ======================================================================
+
+    > [ TODO ] - Build the last version of compiler.
+
+[ TARGET TO - 28/02/2024 ] ======================================================================

@@ -117,7 +117,7 @@ AstBranch* Parser::BuildVariableDeclaration(Token* token)
     // # Free from memory
     MemTools::FreeObjectFromMemory(t_type);
 
-    auto branch = new AstBranch(variable);
+    auto branch = new AstBranch(variable, variable->IsGlobalScope());
 
     this->InsertIdentifierIntoSymbolTable(variable);
 

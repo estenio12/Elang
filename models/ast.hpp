@@ -44,9 +44,10 @@ class AstBranch
 {
     public:
         AstNode* entity;
+        bool IsGlobalScope = false;
 
     public:
-        AstBranch(AstNode* entity):entity(entity){}
+        AstBranch(AstNode* entity, bool IsGlobalScope = false):entity(entity), IsGlobalScope(IsGlobalScope){}
         ~AstBranch()
         {
             MemTools::FreeObjectFromMemory(entity);
@@ -151,6 +152,8 @@ class VariableDeclaration : public AstNode
 
     public:
         bool IsInitialized(){ return this->expression != nullptr; }
+        bool IsGlobalScope(){ return this->scopeName == "GLOBAL"; }
+
         VariableDeclaration* operator=(const VariableDeclaration* origin)
         {
             if(this != origin)
