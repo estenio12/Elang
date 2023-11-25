@@ -74,12 +74,14 @@ class Parser
         bool IsFunctionDeclaration(Token*);
         bool IsReturnExpression(Token*);
         bool IsCallFunction(Token*);
+        bool IsAssignment(Token*);
 
     private:
         AstBranch* BuildVariableDeclaration(Token*);
         AstBranch* BuildFunctionDeclaration(Token*);
         AstBranch* BuildCallFunction(Token*, Tokens* list = nullptr);
         AstBranch* BuildReturnExpression(Token*, std::string expected_type);
+        AstBranch* BuildAssignment(Token*);
 
     private:
         Expression* BuildExpression(const std::string expected_type, Tokens* token_list = nullptr);

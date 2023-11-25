@@ -124,6 +124,10 @@ void CodeGenerator::AstVisitor(Ast* ast)
                 case EBRANCH_TYPE::FUNCTION_DECLARATION:
                    this->GenerateFunction(branch);
                 break;
+
+                case EBRANCH_TYPE::ASSIGNMENT:
+                   this->RunnableImplementation.push_back(branch->entity->GetByteCode());
+                break;
             }
         }
 
@@ -149,7 +153,6 @@ void CodeGenerator::GenerateVaraibleDeclaration(AstBranch* branch)
     else
         this->RunnableImplementation.push_back(output_code);
 }
-
 
 
 

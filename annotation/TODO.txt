@@ -6,16 +6,16 @@
     > [ OK ] - Call function and return expression doesn't type check.
     > [ OK ] - The parser let pass the duplication variable declaration, in global and local scope.
 
-[ CONCLUÍDO EM - 18/09/2023 ] ======================================================================
+[ DONE IN - 18/09/2023 ] ======================================================================
 
 - Features:
     > [ OK ] - Support to string and char.
-    > [ TODO ] - Implemenenting assignments.
+    > [ OK ] - Implemenenting assignments.
     > [ TODO ] - Implemenenting if, else condition
     > [ TODO ] - Implemenenting Loop while;
 
 - Bugs Opened:
-    > [ TODO ] - reassignment on constant variables 
+    > [ OK ] - reassignment on constant variables 
 
 [ TARGET TO - 10/12/2023 ] ======================================================================
 

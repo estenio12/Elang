@@ -22,7 +22,8 @@ enum EBRANCH_TYPE
     EXPRESSION,
     FUNCTION_DECLARATION,
     CALL_FUNCTION,
-    RETURN_EXPRESSION
+    RETURN_EXPRESSION,
+    ASSIGNMENT
 };
 
 class AstNode
@@ -37,7 +38,6 @@ class AstNode
     public:
         virtual std::string GetInterface() { return ""; }
         virtual std::string GetByteCode() = 0;
-        template<class T> T GetEntity();
 };
 
 class AstBranch
@@ -405,6 +405,39 @@ class FunctionDeclaration : public AstNode
         }
 };
 
+class Assignment: public AstNode
+{
+    public:
+        std::string name;
+        Expression* expression = nullptr;
+
+    public:
+        Assignment()
+        {
+            this->kind = EBRANCH_TYPE::ASSIGNMENT;
+        }
+        ~Assignment(){}
+
+    public:
+        std::string GetByteCode() override 
+        {
+            // # result
+            std::string outcode;
+
+            // # Set add variable name
+            outcode += this->name;
+
+            // # Check if it has initializer
+            if(expression != nullptr)
+                outcode += "=" + this->expression->GetByteCode();
+
+            // # Close variable declaration
+            outcode.push_back(';');
+
+            return outcode; 
+        }
+
+};
 
 
 

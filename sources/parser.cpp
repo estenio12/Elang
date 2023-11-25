@@ -29,6 +29,10 @@ Ast* Parser::Parse()
                 PushToAst(this->BuildCallFunction(token));
                 this->ExpectValue(DELIMITER::T_EOF, "Expected ';' after the called function ");
             break;
+
+            case EBRANCH_TYPE::ASSIGNMENT:
+                PushToAst(this->BuildAssignment(token));
+            break;
             
             default:
                 ThrowInternalError("Parser operation not implemented!");
@@ -102,7 +106,8 @@ void Parser::InsertIdentifierIntoSymbolTable(VariableDeclaration* variable)
             variable->name, 
             variable->type, 
             variable->scopeName, 
-            variable->deep
+            variable->deep,
+            variable->isConstant
         );
 
         this->CheckMemoryAllocated(NewID);

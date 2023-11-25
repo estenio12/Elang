@@ -7,10 +7,16 @@ EBRANCH_TYPE Parser::BindOperation(Token* token)
     if(IsVariableDeclaration(token)) return EBRANCH_TYPE::VARIABLE_DECLARATION;
     if(IsFunctionDeclaration(token)) return EBRANCH_TYPE::FUNCTION_DECLARATION;
     if(IsReturnExpression(token)) return EBRANCH_TYPE::RETURN_EXPRESSION;
+    if(IsAssignment(token)) return EBRANCH_TYPE::ASSIGNMENT;
     if(IsCallFunction(token)) return EBRANCH_TYPE::CALL_FUNCTION;
 
     this->ThrowError(token, "Unexpected token");
     return EBRANCH_TYPE::UNDEFINED;
+}
+
+bool Parser::IsAssignment(Token* token)
+{
+    return this->symbolTable->ExistsIdentifier(token->value, this->currentScope, this->currentDeep);
 }
 
 bool Parser::IsVariableDeclaration(Token* token)
@@ -418,6 +424,25 @@ AstBranch* Parser::BuildCallFunction(Token* token, Tokens* tokenList)
     // # Build branch
     auto branch = new AstBranch(call_function);
     return branch;
+}
+
+AstBranch* Parser::BuildAssignment(Token* token)
+{
+    auto assignment = new Assignment();
+    auto variable = this->symbolTable->GetIdentifier(token->value, this->currentScope, this->currentDeep);
+
+    if(variable->IsConstant)
+        this->ThrowError(token, "Cannot assign value to constant identifier");
+
+    MemTools::FreeObjectFromMemory(token);
+
+    assignment->name = variable->name;
+    
+    this->ExpectValue(DELIMITER::T_ASSIGN, "Expected '=' after the identifier to attribution value.");
+
+    assignment->expression = this->BuildExpression(variable->type, nullptr);
+
+    return new AstBranch(assignment);
 }
 
 #pragma endregion

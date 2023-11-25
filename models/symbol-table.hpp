@@ -19,10 +19,11 @@ class IdentifierModel
         std::string type; 
         std::string scopeName; 
         int deep;
+        bool IsConstant = false;
 
     public:
-        IdentifierModel(std::string name, std::string type, std::string scopeName, int deep):
-        name(name), type(type), scopeName(scopeName), deep(deep){}
+        IdentifierModel(std::string name, std::string type, std::string scopeName, int deep, bool IsConstant = false):
+        name(name), type(type), scopeName(scopeName), deep(deep), IsConstant(IsConstant){}
         ~IdentifierModel(){}
 };
 

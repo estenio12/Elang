@@ -1,2 +1,2 @@
-var t: string = "Hello' world";
-var h: char   = '"';
+const t: int;
+#t = 78;
