@@ -21,7 +21,8 @@ class Lexer
         {
             UNDEFINED,
             BUILD_DIGIT,
-            BUILD_ALPHA_DIGIT
+            BUILD_ALPHA_DIGIT,
+            BUILD_STRING_LITERAL
         };
 
     private:
@@ -77,4 +78,7 @@ class Lexer
         bool IsArithmeticToken(std::string value);
         bool IsLogicalToken(std::string value);
         bool IsBoolLiteralToken(std::string value);
+        bool IsStringScope(std::string value);
+        bool IsCharacterScope(std::string value);
+
 };

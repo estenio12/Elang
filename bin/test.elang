@@ -1,5 +1,2 @@
-var age: int = 450;
-
-fun pub(): void
-	const t: int = age;
-end
+var t: string = "Hello' world";
+var h: char   = '"';

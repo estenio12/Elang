@@ -9,7 +9,7 @@
 [ CONCLUÍDO EM - 18/09/2023 ] ======================================================================
 
 - Features:
-    > [ TODO ] - Support to string and char.
+    > [ OK ] - Support to string and char.
     > [ TODO ] - Implemenenting assignments.
     > [ TODO ] - Implemenenting if, else condition
     > [ TODO ] - Implemenenting Loop while;

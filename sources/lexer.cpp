@@ -121,6 +121,46 @@ void Lexer::Tokenize(std::string line)
         
         if(current_job == JOB_STATE::UNDEFINED)
         {
+            if(IsStringScope({line[i]}))
+            {
+                current_job = JOB_STATE::BUILD_STRING_LITERAL;
+                buffer.push_back(line[i]);
+                continue;
+            }
+
+            if(IsCharacterScope({line[i]}))
+            {
+                if(line[i + 2] == DELIMITER::T_APHOSTROFE[0])
+                {
+                    int startpos = i + 1;
+                    int endpos   = i + 3;
+                    
+                    buffer.clear();
+                    
+                    buffer.push_back('\'');
+
+                    if(line[i + 1] == DELIMITER::T_APHOSTROFE[0]      ||
+                       line[i + 1] == DELIMITER::T_QUOTATION_MARKS[0] )
+                    {
+                        buffer.push_back(SCAPE_CHARACTER::BACK_SLASH);
+                    }                    
+                    
+                    buffer.push_back(line[i + 1]);
+                    buffer.push_back('\'');
+
+                    this->BuildToken(buffer, TYPE_TOKEN::T_CHAR_LITERAL, startpos, endpos);
+                    i += 2;
+
+                    buffer.clear();
+
+                    continue;
+                }
+
+                std::string message = "Invalid character declaration";
+                Output::PrintCustomizeError("Lexer error (Line: " + std::to_string(this->lineCounter) + ", Col: " + std::to_string(i + 3) + "): ", message + " | " + line[i + 2]);
+                exit(EXIT_FAILURE);
+            }
+
             if(IsDelimiter({line[i], line[i + 1]}))
             {
                 int startpos = i + 1;
@@ -242,6 +282,23 @@ void Lexer::Tokenize(std::string line)
             }
         }
 
+        if(current_job == JOB_STATE::BUILD_STRING_LITERAL)
+        {
+            if(line[i] == DELIMITER::T_QUOTATION_MARKS[0] &&
+               line[i - 1] != SCAPE_CHARACTER::BACK_SLASH)
+            {
+                buffer.push_back(line[i]);
+                int startpos = i - (buffer.size() - 1);
+                int endpos   = i;
+
+                this->BuildToken(buffer, TYPE_TOKEN::T_STRING_LITERAL, startpos, endpos);
+                buffer.clear();
+                current_job = JOB_STATE::UNDEFINED;
+            }
+            else
+                buffer.push_back(line[i]);
+        }
+
         // # Check if next character is end of string '\0' and buffer has content to tokenize
         if(line[i + 1] == '\0' && buffer.length() > 0)
         {
@@ -313,6 +370,16 @@ void Lexer::BuildToken(std::string value, TYPE_TOKEN type, int startpos, int end
     CheckOutOfMemoryBuildToken(token);
 
     this->tokenPool.push(token);
+}
+
+bool Lexer::IsStringScope(std::string value)
+{
+    return value == DELIMITER::T_QUOTATION_MARKS;
+}
+
+bool Lexer::IsCharacterScope(std::string value)
+{
+    return value == DELIMITER::T_APHOSTROFE;
 }
 
 bool Lexer::IsKeywordToken(std::string value)
@@ -535,4 +602,12 @@ int Lexer::IsLogical(std::string value)
 
     return 0;
 }
+
+
+
+
+
+
+
+
 

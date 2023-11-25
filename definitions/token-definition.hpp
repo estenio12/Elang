@@ -71,18 +71,18 @@ namespace TYPE
 
 namespace DELIMITER
 {
-    static const std::string T_COLON         = ":";
-    static const std::string T_COMMA         = ",";
-    static const std::string T_OPEN_BRACKET  = "{";
-    static const std::string T_CLOSE_BRACKET = "}";
-    static const std::string T_OPEN_BRANCE   = "[";
-    static const std::string T_CLOSE_BRACE   = "]";
-    static const std::string T_OPEN_PAREM    = "(";
-    static const std::string T_CLOSE_PAREM   = ")";
+    static const std::string T_COLON           = ":";
+    static const std::string T_COMMA           = ",";
+    static const std::string T_OPEN_BRACKET    = "{";
+    static const std::string T_CLOSE_BRACKET   = "}";
+    static const std::string T_OPEN_BRANCE     = "[";
+    static const std::string T_CLOSE_BRACE     = "]";
+    static const std::string T_OPEN_PAREM      = "(";
+    static const std::string T_CLOSE_PAREM     = ")";
     static const std::string T_QUOTATION_MARKS = "\"";
     static const std::string T_APHOSTROFE      = "\'";
     static const std::string T_EOF             = ";";
-    static const std::string T_ASSIGN      = "=";
+    static const std::string T_ASSIGN          = "=";
 }
 
 namespace ARITHMETIC
@@ -127,5 +127,10 @@ namespace SKIP_CHARACTER
     static const char TABULATION = '\t';
     static const char RETURN     = '\r';
     static const char NEWLINE    = '\n';
+}
+
+namespace SCAPE_CHARACTER
+{
+    static const char BACK_SLASH = '\\';
 }
 
