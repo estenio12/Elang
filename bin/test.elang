@@ -1,2 +1,5 @@
-const t: int;
-#t = 78;
+fun sum(n1: int, n2: int): int
+	var t: int = 45;
+	return n1 + n2;
+end
+

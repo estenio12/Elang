@@ -12,6 +12,7 @@
 #include "../models/token.hpp"
 #include "../helpers/mem-tools.hpp"
 #include "../headers/output.hpp"
+#include "block-stmt-policy.hpp"
 
 using CallFunDictionary = std::vector<std::pair<std::string, class AstBranch*>>;
 
@@ -23,7 +24,8 @@ enum EBRANCH_TYPE
     FUNCTION_DECLARATION,
     CALL_FUNCTION,
     RETURN_EXPRESSION,
-    ASSIGNMENT
+    ASSIGNMENT,
+    BLOCK_STATEMENT
 };
 
 class AstNode
@@ -285,6 +287,35 @@ class ParameterDeclaration
         ~ParameterDeclaration(){}
 };
 
+class BlockStatement : public AstNode
+{
+    public:
+        std::string GlobalType;
+
+    public:
+        BlockStmtPolicy* policy;
+        std::vector<AstBranch*> content;
+
+    public:
+        BlockStatement(BlockStmtPolicy* policy, std::string type): policy(policy), GlobalType(type)
+        {
+            this->kind = EBRANCH_TYPE::BLOCK_STATEMENT;
+        }
+
+        ~BlockStatement(){}
+
+    public:
+        std::string GetByteCode() override
+        {
+            std::string outcode;
+
+            for(auto item : this->content)
+                outcode += item->entity->GetByteCode();
+
+            return outcode;
+        }
+};
+
 class FunctionDeclaration : public AstNode
 {
     public:
@@ -293,7 +324,8 @@ class FunctionDeclaration : public AstNode
         std::vector<ParameterDeclaration*> parameterList;
 
     public:
-        std::vector<AstBranch*> BodyContent;
+        // std::vector<AstBranch*> BodyContent;
+        BlockStatement* block_stmt;
 
     private:
         const std::string STANDARD_PROGRAM_NAME = "__elang_class_runnable_cxx::";
@@ -307,14 +339,14 @@ class FunctionDeclaration : public AstNode
         ~FunctionDeclaration()
         {
             MemTools::FreeVectorFromMemory(parameterList);
-            MemTools::FreeVectorFromMemory(BodyContent);
+            MemTools::FreeObjectFromMemory(block_stmt);
         }
 
     public:
-        bool IsFunctionEmpty()
-        {
-            return BodyContent.empty();
-        }
+        // bool IsFunctionEmpty()
+        // {
+        //     return BodyContent.empty();
+        // }
 
         bool ExistsParameter(std::string name)
         {
@@ -363,10 +395,11 @@ class FunctionDeclaration : public AstNode
             outcode.push_back('{');
 
             // # Add function body
-            for(auto item : this->BodyContent)
-            {
-                outcode += item->entity->GetByteCode();
-            }
+            // for(auto item : this->BodyContent)
+            // {
+            //     outcode += item->entity->GetByteCode();
+            // }
+            outcode += this->block_stmt->GetByteCode();
 
             // # Close function scope 
             outcode += "}\n";

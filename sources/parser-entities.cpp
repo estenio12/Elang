@@ -251,7 +251,50 @@ Expression* Parser::BuildExpression(const std::string expected_type, Tokens* tok
     return expression;
 }
 
+BlockStatement* Parser::BuildBlockStatement(BlockStmtPolicy* policy, std::string expected_type)
+{
+    auto block_stmt = new BlockStatement(policy, expected_type);
+    int endStatmetCount = 1;
 
+    while(endStatmetCount > 0)
+    {
+        auto stmt_token = this->GetNextToken("Expected 'end' keyword to close function statement");
+
+        if(stmt_token->value == KEYWORD::T_END) 
+        {
+            MemTools::FreeObjectFromMemory(stmt_token);
+            endStatmetCount--;
+            continue;
+        }
+
+        auto operation = this->BindOperation(stmt_token);
+
+        switch(operation)
+        {
+            case EBRANCH_TYPE::VARIABLE_DECLARATION:
+                block_stmt->content.push_back(BuildVariableDeclaration(stmt_token));
+            break;
+
+            case EBRANCH_TYPE::RETURN_EXPRESSION:
+                if(!policy->HasPolicy(BLOCK_STMT_POLICY::ALLOW_RETURN)) this->ThrowError(stmt_token, "the return expression is not allow for this statement"); 
+                if(expected_type == TYPE::T_VOID) this->ThrowError(stmt_token, "the return keyword is invalid for the void function type"); 
+                
+                block_stmt->content.push_back(BuildReturnExpression(stmt_token, expected_type));
+            break;
+
+            case EBRANCH_TYPE::CALL_FUNCTION:
+                block_stmt->content.push_back(BuildCallFunction(stmt_token));
+                this->ExpectValue(DELIMITER::T_EOF, "Expected ';' after the called function ");
+            break;
+
+            default:
+                ThrowError(stmt_token, "Unexpected token ");
+            break;
+        }
+    }
+
+    return block_stmt;
+}
 
 
 

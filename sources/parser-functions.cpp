@@ -141,7 +141,6 @@ AstBranch* Parser::BuildFunctionDeclaration(Token* token)
     // # Set states
     this->currentScope = function->name;
     this->currentDeep++;
-    int endStatmetCount = 1;
 
     // # KEYWORD 'fun' from memory
     MemTools::FreeObjectFromMemory(token);
@@ -252,41 +251,14 @@ AstBranch* Parser::BuildFunctionDeclaration(Token* token)
             this->ThrowError(next_token, "Expect ',' or ')' after parameter declaration");
     }
 
+    // # Load body setting 
+    auto policy = new BlockStmtPolicy();
+
+    if(function->type != TYPE::T_VOID)
+        policy->AddPolicy(BLOCK_STMT_POLICY::ALLOW_RETURN);
+
     // # Read Function Body
-    while(endStatmetCount > 0)
-    {
-        auto stmt_token = this->GetNextToken("Expected 'end' keyword to close function statement");
-
-        if(stmt_token->value == KEYWORD::T_END) 
-        {
-            MemTools::FreeObjectFromMemory(stmt_token);
-            endStatmetCount--;
-            continue;
-        }
-
-        auto operation = this->BindOperation(stmt_token);
-
-        switch(operation)
-        {
-            case EBRANCH_TYPE::VARIABLE_DECLARATION:
-                function->BodyContent.push_back(BuildVariableDeclaration(stmt_token));
-            break;
-
-            case EBRANCH_TYPE::RETURN_EXPRESSION:
-                if(function->type == TYPE::T_VOID) this->ThrowError(stmt_token, "the return keyword is invalid for the void function type"); 
-                function->BodyContent.push_back(BuildReturnExpression(stmt_token, function->type));
-            break;
-
-            case EBRANCH_TYPE::CALL_FUNCTION:
-                function->BodyContent.push_back(BuildCallFunction(token));
-                this->ExpectValue(DELIMITER::T_EOF, "Expected ';' after the called function ");
-            break;
-
-            default:
-                ThrowError(stmt_token, "Unexpected token ");
-            break;
-        }
-    }
+    function->block_stmt = this->BuildBlockStatement(policy, function->type);
 
     // # Reset stats
     this->currentScope = GLOBAL_SCOPE;

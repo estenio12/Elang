@@ -18,6 +18,7 @@
 #include "../models/expression.hpp"
 #include "../models/symbol-table.hpp"
 #include "../definitions/token-definition.hpp"
+#include "../definitions/block-stmt-policy.hpp"
 
 class Parser
 {
@@ -84,6 +85,7 @@ class Parser
         AstBranch* BuildAssignment(Token*);
 
     private:
+        BlockStatement* BuildBlockStatement(BlockStmtPolicy*, std::string);
         Expression* BuildExpression(const std::string expected_type, Tokens* token_list = nullptr);
 
 };
