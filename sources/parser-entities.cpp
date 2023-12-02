@@ -1,6 +1,6 @@
 #include "../headers/parser.hpp"
 
-Expression* Parser::BuildExpression(const std::string expected_type, Tokens* tokenList)
+Expression* Parser::BuildExpression(const std::vector<std::string> expected_type, Tokens* tokenList)
 {
     auto expression  = new Expression();
 
@@ -92,7 +92,8 @@ Expression* Parser::BuildExpression(const std::string expected_type, Tokens* tok
                     ThrowError(token, "Identifier not declared in the scope");
                 }
 
-                this->CheckDataType(token, expected_type);
+                if(!this->IsValidDataType(token, expected_type))
+                    this->ThrowErrorDataType(token, ConvertTypeTokenToType(token->type), expected_type);
 
                 history = token;
                 BuildTokenList.push_back(token);
@@ -228,7 +229,8 @@ Expression* Parser::BuildExpression(const std::string expected_type, Tokens* tok
                     ThrowError(token, "Identifier not declared in the scope");
                 }
 
-                this->CheckDataType(token, expected_type);
+                if(!this->IsValidDataType(token, expected_type))
+                    this->ThrowErrorDataType(token, ConvertTypeTokenToType(token->type), expected_type);
 
                 history = token;                
                 BuildTokenList.push_back(token);
@@ -253,7 +255,7 @@ Expression* Parser::BuildExpression(const std::string expected_type, Tokens* tok
 
 BlockStatement* Parser::BuildBlockStatement(BlockStmtPolicy* policy, std::string expected_type)
 {
-    auto block_stmt = new BlockStatement(policy, expected_type);
+    auto block_stmt = new BlockStatement(expected_type);
     int endStatmetCount = 1;
 
     while(endStatmetCount > 0)
@@ -285,6 +287,19 @@ BlockStatement* Parser::BuildBlockStatement(BlockStmtPolicy* policy, std::string
             case EBRANCH_TYPE::CALL_FUNCTION:
                 block_stmt->content.push_back(BuildCallFunction(stmt_token));
                 this->ExpectValue(DELIMITER::T_EOF, "Expected ';' after the called function ");
+            break;
+
+            case EBRANCH_TYPE::BREAK_STATEMENT:
+                if(!policy->HasPolicy(BLOCK_STMT_POLICY::ALLOW_BREAK)) this->ThrowError(stmt_token, "the break keyword is allow only for loops"); 
+                block_stmt->content.push_back(BuildBreakStatement(stmt_token));
+            break;
+
+            case EBRANCH_TYPE::WHILE_DECLARATION:
+                block_stmt->content.push_back(BuildWhileDeclaration(policy, stmt_token));
+            break;
+
+            case EBRANCH_TYPE::ASSIGNMENT:
+                block_stmt->content.push_back(this->BuildAssignment(stmt_token));
             break;
 
             default:

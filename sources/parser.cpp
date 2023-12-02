@@ -33,6 +33,10 @@ Ast* Parser::Parse()
             case EBRANCH_TYPE::ASSIGNMENT:
                 PushToAst(this->BuildAssignment(token));
             break;
+
+            case EBRANCH_TYPE::WHILE_DECLARATION:
+                PushToAst(this->BuildWhileDeclaration(new BlockStmtPolicy(), token));
+            break;
             
             default:
                 ThrowInternalError("Parser operation not implemented!");
@@ -52,10 +56,15 @@ void Parser::ThrowError(Token* token, std::string message)
     exit(EXIT_FAILURE);
 }
 
-void Parser::ThrowErrorDataType(Token* token, std::string type_token, std::string expected_type)
+void Parser::ThrowErrorDataType(Token* token, std::string type_token, std::vector<std::string> expected_type)
 {
+    std::string allow_types;
+
+    for(auto item : expected_type)
+        allow_types += item;
+
     std::string lineError = "Line: " + std::to_string(token->line) + ", Col: " + std::to_string(token->startpos);
-    Output::PrintCustomizeError("Syntax Error (" + lineError + "): ", "Cannot implicitly convert type '" + type_token + "' to '"+ expected_type +"'");
+    Output::PrintCustomizeError("Syntax Error (" + lineError + "): ", "Cannot implicitly convert type '" + type_token + "' to '"+ allow_types +"'");
     MemTools::FreeObjectFromMemory(token);
     exit(EXIT_FAILURE);
 }
@@ -150,22 +159,32 @@ std::vector<Tokens*> Parser::GetNewInstanceOfArgumentList(int ArgumentSize)
     return list;
 }
 
-TYPE_IDENTIFIER Parser::GetTypeIdentifier(Token* token, std::string expected_type)
+TYPE_IDENTIFIER Parser::GetTypeIdentifier(Token* token, const std::vector<std::string> expected_type)
 {
     auto isVariable = this->symbolTable->GetIdentifier(token->value, this->currentScope, this->currentDeep);
     
     if(isVariable != nullptr) 
     {
-        if(isVariable->type != expected_type) this->ThrowErrorDataType(token, isVariable->type, expected_type);
-        return TYPE_IDENTIFIER::IDENTIFIER_VARIABLE;
+        for(auto item : expected_type)
+        {
+            if(isVariable->type == item) 
+                return TYPE_IDENTIFIER::IDENTIFIER_VARIABLE;
+        }
+
+        this->ThrowErrorDataType(token, isVariable->type, expected_type);
     }
 
     auto isCallFunction = this->symbolTable->GetFunctionIdentifier(token->value);
 
     if(isCallFunction != nullptr) 
-    {
-        if(isCallFunction->type != expected_type) this->ThrowErrorDataType(token, isCallFunction->type, expected_type);
-        return TYPE_IDENTIFIER::IDENTIFIER_FUNCTION;
+    {   
+        for(auto item : expected_type)
+        {
+            if(isCallFunction->type == item) 
+                return TYPE_IDENTIFIER::IDENTIFIER_FUNCTION;
+        }
+        
+        this->ThrowErrorDataType(token, isCallFunction->type, expected_type);
     }
 
     return TYPE_IDENTIFIER::NOT_FOUND;
@@ -176,18 +195,22 @@ void Parser::ExpectThisToken(Token* token, std::string expected, std::string mes
     if(token->value != expected) ThrowError(token, message);
 }
 
-void Parser::CheckDataType(Token* token, std::string expected_type)
+bool Parser::IsValidDataType(Token* token, std::vector<std::string> expected_type)
 {
-    if(token->type == TYPE_TOKEN::T_FLOAT_LITERAL  && expected_type == TYPE::T_FLOAT  ||
-       token->type == TYPE_TOKEN::T_INT_LITERAL    && expected_type == TYPE::T_INT    ||
-       token->type == TYPE_TOKEN::T_BOOL_LITERAL   && expected_type == TYPE::T_BOOL   ||
-       token->type == TYPE_TOKEN::T_CHAR_LITERAL   && expected_type == TYPE::T_CHAR   ||
-       token->type == TYPE_TOKEN::T_STRING_LITERAL && expected_type == TYPE::T_STRING )
+    for(auto item : expected_type)
     {
-        return;
+        if(token->type == TYPE_TOKEN::T_FLOAT_LITERAL  && item == TYPE::T_FLOAT  ||
+           token->type == TYPE_TOKEN::T_INT_LITERAL    && item == TYPE::T_INT    ||
+           token->type == TYPE_TOKEN::T_BOOL_LITERAL   && item == TYPE::T_BOOL   ||
+           token->type == TYPE_TOKEN::T_CHAR_LITERAL   && item == TYPE::T_CHAR   ||
+           token->type == TYPE_TOKEN::T_STRING_LITERAL && item == TYPE::T_STRING )
+        {
+            return true;
+        }
     }
 
-    this->ThrowErrorDataType(token, ConvertTypeTokenToType(token->type), expected_type);
+    // this->ThrowErrorDataType(token, ConvertTypeTokenToType(token->type), expected_type);
+    return false;
 }
 
 std::string Parser::ConvertTypeTokenToType(TYPE_TOKEN type)
@@ -216,6 +239,16 @@ std::string Parser::ConvertTypeTokenToType(TYPE_TOKEN type)
 
     return "";
 }
+
+std::vector<std::string> Parser::CreateExpectedType(std::string type)
+{
+    std::vector<std::string> tmpVec { type };
+    return tmpVec;
+}
+
+
+
+
 
 
 

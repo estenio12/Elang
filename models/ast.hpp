@@ -25,7 +25,10 @@ enum EBRANCH_TYPE
     CALL_FUNCTION,
     RETURN_EXPRESSION,
     ASSIGNMENT,
-    BLOCK_STATEMENT
+    BLOCK_STATEMENT,
+    BREAK_STATEMENT,
+    WHILE_DECLARATION,
+    IF_ELSE_DECLARATION
 };
 
 class AstNode
@@ -253,8 +256,6 @@ class CallFunction : public AstNode
             return outcode; 
         }
 
-        template<class T> T GetEntity() { return this; }
-
 };
 
 class ReturnExpression : public AstNode
@@ -293,11 +294,10 @@ class BlockStatement : public AstNode
         std::string GlobalType;
 
     public:
-        BlockStmtPolicy* policy;
         std::vector<AstBranch*> content;
 
     public:
-        BlockStatement(BlockStmtPolicy* policy, std::string type): policy(policy), GlobalType(type)
+        BlockStatement(std::string type): GlobalType(type)
         {
             this->kind = EBRANCH_TYPE::BLOCK_STATEMENT;
         }
@@ -472,5 +472,49 @@ class Assignment: public AstNode
 
 };
 
+class BreakStatement : public AstNode
+{
+    public:
+        BreakStatement(){ this->kind = EBRANCH_TYPE::BREAK_STATEMENT; }
+        ~BreakStatement(){}
 
+    public:
+        std::string GetByteCode() override
+        {
+            return "break;";
+        }
+};
+
+class WhileDeclaration : public AstNode
+{
+    public:
+        Expression* argument;
+        BlockStatement* block_stmt;
+
+    public:
+        WhileDeclaration(){ this->kind = EBRANCH_TYPE::WHILE_DECLARATION; }
+        ~WhileDeclaration()
+        { 
+            MemTools::FreeObjectFromMemory(argument); 
+            MemTools::FreeObjectFromMemory(block_stmt); 
+        }
+    
+    public:
+        std::string GetByteCode() override 
+        { 
+            std::string outcode;
+
+            outcode += "while(";
+
+            outcode += argument->GetByteCode();
+
+            outcode += "){";
+
+            outcode += block_stmt->GetByteCode();
+
+            outcode.push_back('}');
+
+            return outcode; 
+        }
+};
 

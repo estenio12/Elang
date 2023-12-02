@@ -49,16 +49,17 @@ class Parser
         void ExpectValue(std::string expected, std::string message);
         void ExpectThisToken(Token* token, std::string expected, std::string message);
         void ThrowError(Token*, std::string message);
-        void ThrowErrorDataType(Token*, std::string type_token, std::string expected_type);
+        void ThrowErrorDataType(Token*, std::string type_token, std::vector<std::string> expected_type);
         void ThrowInternalError(std::string message);
         void PushToAst(AstBranch* node);
         void InsertIdentifierIntoSymbolTable(VariableDeclaration*);
         Token* GetNextToken(std::string msg);
         std::string GenerateCallFunctionHash();
         std::vector<Tokens*> GetNewInstanceOfArgumentList(int ArgumentSize);
-        TYPE_IDENTIFIER GetTypeIdentifier(Token* token, std::string expected_type);
-        void CheckDataType(Token* token, std::string expected_type);
+        TYPE_IDENTIFIER GetTypeIdentifier(Token* token, const std::vector<std::string> expected_type);
+        bool IsValidDataType(Token* token, std::vector<std::string> expected_type);
         std::string ConvertTypeTokenToType(TYPE_TOKEN type);
+        std::vector<std::string> CreateExpectedType(std::string type);
 
     private:
         template<class T> void CheckMemoryAllocated(T entity)
@@ -76,6 +77,7 @@ class Parser
         bool IsReturnExpression(Token*);
         bool IsCallFunction(Token*);
         bool IsAssignment(Token*);
+        bool IsWhileDeclaration(Token*);
 
     private:
         AstBranch* BuildVariableDeclaration(Token*);
@@ -83,9 +85,11 @@ class Parser
         AstBranch* BuildCallFunction(Token*, Tokens* list = nullptr);
         AstBranch* BuildReturnExpression(Token*, std::string expected_type);
         AstBranch* BuildAssignment(Token*);
+        AstBranch* BuildBreakStatement(Token*);
+        AstBranch* BuildWhileDeclaration(BlockStmtPolicy*, Token*);
 
     private:
         BlockStatement* BuildBlockStatement(BlockStmtPolicy*, std::string);
-        Expression* BuildExpression(const std::string expected_type, Tokens* token_list = nullptr);
+        Expression* BuildExpression(const std::vector<std::string> expected_type, Tokens* token_list = nullptr);
 
 };

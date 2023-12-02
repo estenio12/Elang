@@ -11,8 +11,8 @@
 - Features:
     > [ OK ] - Support to string and char.
     > [ OK ] - Implemenenting assignments.
+    > [ OK ] - Implemenenting Loop while;
     > [ WORKING ] - Implemenenting if, else condition
-    > [ TODO ] - Implemenenting Loop while;
 
 - Bugs Opened:
     > [ OK ] - reassignment on constant variables 

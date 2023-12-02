@@ -9,6 +9,7 @@ EBRANCH_TYPE Parser::BindOperation(Token* token)
     if(IsReturnExpression(token)) return EBRANCH_TYPE::RETURN_EXPRESSION;
     if(IsAssignment(token)) return EBRANCH_TYPE::ASSIGNMENT;
     if(IsCallFunction(token)) return EBRANCH_TYPE::CALL_FUNCTION;
+    if(IsWhileDeclaration(token)) return EBRANCH_TYPE::WHILE_DECLARATION;
 
     this->ThrowError(token, "Unexpected token");
     return EBRANCH_TYPE::UNDEFINED;
@@ -45,6 +46,11 @@ bool Parser::IsReturnExpression(Token* token)
 bool Parser::IsCallFunction(Token* token)
 {
     return this->symbolTable->ExistsFunctionIdentifier(token->value);
+}
+
+bool Parser::IsWhileDeclaration(Token* token)
+{
+    return token->value == KEYWORD::T_WHILE;
 }
 
 #pragma endregion
@@ -106,7 +112,7 @@ AstBranch* Parser::BuildVariableDeclaration(Token* token)
     }
     else if(t_bridge_token->value == DELIMITER::T_ASSIGN)
     {
-        variable->expression = BuildExpression(variable->type, nullptr);
+        variable->expression = BuildExpression(this->CreateExpectedType(variable->type), nullptr);
     }
     else if(t_bridge_token->value == DELIMITER::T_EOF)
     {
@@ -279,7 +285,7 @@ AstBranch* Parser::BuildReturnExpression(Token* token, std::string expected_type
     // # Free from memory
     MemTools::FreeObjectFromMemory(token);
 
-    return_expression->expression = BuildExpression(expected_type, nullptr);
+    return_expression->expression = BuildExpression(this->CreateExpectedType(expected_type), nullptr);
     auto branch = new AstBranch(return_expression);
     return branch;
 }
@@ -381,7 +387,7 @@ AstBranch* Parser::BuildCallFunction(Token* token, Tokens* tokenList)
                 exit(EXIT_FAILURE);
             }
 
-            auto expression = this->BuildExpression(item->expected_type, item);
+            auto expression = this->BuildExpression(this->CreateExpectedType(item->expected_type), item);
             call_function->InsertArgument(expression);
         }
     }
@@ -412,10 +418,69 @@ AstBranch* Parser::BuildAssignment(Token* token)
     
     this->ExpectValue(DELIMITER::T_ASSIGN, "Expected '=' after the identifier to attribution value.");
 
-    assignment->expression = this->BuildExpression(variable->type, nullptr);
+    assignment->expression = this->BuildExpression(this->CreateExpectedType(variable->type), nullptr);
 
     return new AstBranch(assignment);
 }
+
+AstBranch* Parser::BuildBreakStatement(Token* token)
+{
+    if(token->value != KEYWORD::T_BREAK) this->ThrowError(token, "Unexpected token");
+    this->ExpectValue(DELIMITER::T_EOF, "Expected ';' after keyword break");
+    
+    return new AstBranch(new BreakStatement());
+}
+
+AstBranch* Parser::BuildWhileDeclaration(BlockStmtPolicy* policy, Token* token)
+{
+    auto while_declaration = new WhileDeclaration();
+    
+    MemTools::FreeObjectFromMemory(token);
+
+    this->ExpectValue(DELIMITER::T_OPEN_PAREM, "Expected opening parenthesis");
+
+    // # Read arguments
+    auto allow_types = this->CreateExpectedType(TYPE::T_INT);
+    allow_types.push_back(TYPE::T_BOOL);
+
+    int opened_paren = 1;
+    auto tokens = new Tokens();
+
+    while(true)
+    {
+        auto next_token = this->GetNextToken("");
+
+        if(next_token->value == DELIMITER::T_OPEN_PAREM)   
+        {
+            opened_paren++;
+            tokens->AddToken(next_token);
+            continue;
+        }
+
+        if(next_token->value == DELIMITER::T_CLOSE_PAREM)
+        {
+            opened_paren--;
+
+            if(opened_paren == 0)
+                break;
+            else if(opened_paren < 0)
+                this->ThrowError(next_token, "Unexpected closing parenthesis");
+        }
+
+        tokens->AddToken(next_token);
+    }
+
+    while_declaration->argument = this->BuildExpression(allow_types, tokens);
+
+    // # Read Body
+    policy->AddPolicy(BLOCK_STMT_POLICY::ALLOW_BREAK);
+    while_declaration->block_stmt = this->BuildBlockStatement(policy, "");
+
+    // # Build branch
+    auto branch = new AstBranch(while_declaration);
+    return branch;
+}
+
 
 #pragma endregion
 

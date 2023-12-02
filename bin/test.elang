@@ -1,5 +1,12 @@
 fun sum(n1: int, n2: int): int
-	var t: int = 45;
+	
+	var t: int  = 0;
+
+	while(t < 10)
+		t = t + 1;
+	end
+
 	return n1 + n2;
 end
 
+sum(10, 10);
