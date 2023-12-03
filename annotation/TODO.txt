@@ -20,9 +20,9 @@
 [ DONE IN - 03/12/2023 ] ======================================================================
 
 - Features:
-    > [ TODO ] - Add basic functions of data converting.
+    > [ WORKING ] - Add basic functions of data converting.
     > [ TODO ] - Add basic functions of I/O operations
-    > [ TODO ] - Make elang CLI
+    > [ TODO ] - Create elang CLI
 
 - Bugs Opened:
     > [ TODO ] - 

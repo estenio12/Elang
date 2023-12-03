@@ -62,6 +62,18 @@ class Parser
         std::vector<std::string> CreateExpectedType(std::string type);
 
     private:
+        void LoadElangLibrary();
+        FunctionIdenfierModel* LoadfloatToInt();
+        FunctionIdenfierModel* LoadstrToInt();
+        FunctionIdenfierModel* LoadstrToFloat();
+        FunctionIdenfierModel* LoadstrToBool();
+        
+        FunctionIdenfierModel* LoadfloatToStr();
+        FunctionIdenfierModel* LoadintToStr();
+        FunctionIdenfierModel* LoadboolToStr();
+        FunctionIdenfierModel* LoadintToFloat();
+
+    private:
         template<class T> void CheckMemoryAllocated(T entity)
         {
             if(entity == nullptr) 

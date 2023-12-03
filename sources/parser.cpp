@@ -1,6 +1,9 @@
 #include "../headers/parser.hpp"
 
-Parser::Parser(Lexer* lexer, SymbolTable* symbolTable, Ast* ast):lexer(lexer), symbolTable(symbolTable), ast(ast){}
+Parser::Parser(Lexer* lexer, SymbolTable* symbolTable, Ast* ast):lexer(lexer), symbolTable(symbolTable), ast(ast)
+{
+    this->LoadElangLibrary();
+}
 
 Parser::~Parser(){}
 
@@ -249,6 +252,9 @@ std::vector<std::string> Parser::CreateExpectedType(std::string type)
     std::vector<std::string> tmpVec { type };
     return tmpVec;
 }
+
+
+
 
 
 

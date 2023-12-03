@@ -41,6 +41,14 @@ void CodeGenerator::LoadProgramInitialize()
     this->WriteChunkToFile(this->COMMENTARY);
     this->WriteChunkToFile(this->LICENSE);
     this->WriteChunkToFile(this->INCLUDES);
+    this->WriteChunkToFile(this->LIBRARY_LANG_1);
+    this->WriteChunkToFile(this->LIBRARY_LANG_2);
+    this->WriteChunkToFile(this->LIBRARY_LANG_3);
+    this->WriteChunkToFile(this->LIBRARY_LANG_4);
+    this->WriteChunkToFile(this->LIBRARY_LANG_5);
+    this->WriteChunkToFile(this->LIBRARY_LANG_6);
+    this->WriteChunkToFile(this->LIBRARY_LANG_7);
+    this->WriteChunkToFile(this->LIBRARY_LANG_8);
     this->WriteChunkToFile(this->GLOBAL_VARAIBLES);
 }
 

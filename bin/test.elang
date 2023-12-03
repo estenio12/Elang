@@ -1,14 +1,1 @@
-fun sum(n1: int, n2: int): int
-
-	if(n1 < 5)
-		n1 = 10;
-		return n1;
-	else
-		return n2;
-	end
-
-	return n1 + n2;
-end
-
-
-sum(3, 7);
+floatToInt(10.56);
