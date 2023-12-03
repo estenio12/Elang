@@ -4,7 +4,7 @@
     > [ OK ] - Change expression for support call function.
     > [ OK ] - traits in code generator from expression process call functions.
     > [ OK ] - Call function and return expression doesn't type check.
-    > [ OK ] - The parser let pass the duplication variable declaration, in global and local scope.
+    > [ OK ] - The parser let pass the duplication variable declaration in global and local scope.
 
 [ DONE IN - 18/09/2023 ] ======================================================================
 
@@ -12,16 +12,17 @@
     > [ OK ] - Support to string and char.
     > [ OK ] - Implemenenting assignments.
     > [ OK ] - Implemenenting Loop while;
-    > [ WORKING ] - Implemenenting if, else condition
+    > [ OK ] - Implemenenting if, else condition
 
 - Bugs Opened:
     > [ OK ] - reassignment on constant variables 
 
-[ TARGET TO - 10/12/2023 ] ======================================================================
+[ DONE IN - 03/12/2023 ] ======================================================================
 
 - Features:
     > [ TODO ] - Add basic functions of data converting.
     > [ TODO ] - Add basic functions of I/O operations
+    > [ TODO ] - Make elang CLI
 
 - Bugs Opened:
     > [ TODO ] - 

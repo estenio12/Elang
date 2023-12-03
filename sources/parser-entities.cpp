@@ -253,9 +253,9 @@ Expression* Parser::BuildExpression(const std::vector<std::string> expected_type
     return expression;
 }
 
-BlockStatement* Parser::BuildBlockStatement(BlockStmtPolicy* policy, std::string expected_type)
+BlockStatement* Parser::BuildBlockStatement(BlockStmtPolicy* policy, std::vector<std::string> expected_type)
 {
-    auto block_stmt = new BlockStatement(expected_type);
+    auto block_stmt = new BlockStatement(expected_type[0]);
     int endStatmetCount = 1;
 
     while(endStatmetCount > 0)
@@ -289,7 +289,7 @@ BlockStatement* Parser::BuildBlockStatement(BlockStmtPolicy* policy, std::string
 
             case EBRANCH_TYPE::RETURN_EXPRESSION:
                 if(!policy->HasPolicy(BLOCK_STMT_POLICY::ALLOW_RETURN)) this->ThrowError(stmt_token, "the return expression is not allow for this statement"); 
-                if(expected_type == TYPE::T_VOID) this->ThrowError(stmt_token, "the return keyword is invalid for the void function type"); 
+                if(expected_type[0] == TYPE::T_VOID) this->ThrowError(stmt_token, "the return keyword is invalid for the void function type"); 
                 
                 block_stmt->content.push_back(BuildReturnExpression(stmt_token, expected_type));
             break;
@@ -305,7 +305,7 @@ BlockStatement* Parser::BuildBlockStatement(BlockStmtPolicy* policy, std::string
             break;
 
             case EBRANCH_TYPE::WHILE_DECLARATION:
-                block_stmt->content.push_back(BuildWhileDeclaration(policy, stmt_token));
+                block_stmt->content.push_back(BuildWhileDeclaration(policy, stmt_token, expected_type));
             break;
 
             case EBRANCH_TYPE::ASSIGNMENT:
@@ -313,7 +313,7 @@ BlockStatement* Parser::BuildBlockStatement(BlockStmtPolicy* policy, std::string
             break;
 
             case EBRANCH_TYPE::IF_ELSE_CONDITION:
-                block_stmt->content.push_back(this->BuildIfElseCondition(new BlockStmtPolicy(), stmt_token));
+                block_stmt->content.push_back(this->BuildIfElseCondition(policy, stmt_token, expected_type));
             break;
 
             default:

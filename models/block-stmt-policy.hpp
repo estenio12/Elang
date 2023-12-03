@@ -48,7 +48,7 @@ class BlockStmtPolicy
             for(int i = 0; i < policy_list.size(); i++)
             {
                 if(policy_list[i] == policy)
-                    this->policy_list.erase(policy_list.begin(), policy_list.begin() + i);
+                    this->policy_list.erase(policy_list.begin() + i, policy_list.begin() + ( i + 1 ));
             }
         }
 };

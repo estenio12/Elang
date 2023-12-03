@@ -270,7 +270,7 @@ AstBranch* Parser::BuildFunctionDeclaration(Token* token)
         policy->AddPolicy(BLOCK_STMT_POLICY::ALLOW_RETURN);
 
     // # Read Function Body
-    function->block_stmt = this->BuildBlockStatement(policy, function->type);
+    function->block_stmt = this->BuildBlockStatement(policy, CreateExpectedType(function->type));
 
     // # Reset stats
     this->currentScope = GLOBAL_SCOPE;
@@ -284,14 +284,14 @@ AstBranch* Parser::BuildFunctionDeclaration(Token* token)
     return branch;
 }
 
-AstBranch* Parser::BuildReturnExpression(Token* token, std::string expected_type)
+AstBranch* Parser::BuildReturnExpression(Token* token, std::vector<std::string> expected_type)
 {
     auto return_expression = new ReturnExpression();
 
     // # Free from memory
     MemTools::FreeObjectFromMemory(token);
 
-    return_expression->expression = BuildExpression(this->CreateExpectedType(expected_type), nullptr);
+    return_expression->expression = BuildExpression(expected_type, nullptr);
     auto branch = new AstBranch(return_expression);
     return branch;
 }
@@ -437,7 +437,7 @@ AstBranch* Parser::BuildBreakStatement(Token* token)
     return new AstBranch(new BreakStatement());
 }
 
-AstBranch* Parser::BuildWhileDeclaration(BlockStmtPolicy* policy, Token* token)
+AstBranch* Parser::BuildWhileDeclaration(BlockStmtPolicy* policy, Token* token, std::vector<std::string> expected_type)
 {
     auto while_declaration = new WhileDeclaration();
     
@@ -480,14 +480,14 @@ AstBranch* Parser::BuildWhileDeclaration(BlockStmtPolicy* policy, Token* token)
 
     // # Read Body
     policy->AddPolicy(BLOCK_STMT_POLICY::ALLOW_BREAK);
-    while_declaration->block_stmt = this->BuildBlockStatement(policy, "");
+    while_declaration->block_stmt = this->BuildBlockStatement(policy, expected_type);
 
     // # Build branch
     auto branch = new AstBranch(while_declaration);
     return branch;
 }
 
-AstBranch* Parser::BuildIfElseCondition(BlockStmtPolicy* policy, Token* token)
+AstBranch* Parser::BuildIfElseCondition(BlockStmtPolicy* policy, Token* token, std::vector<std::string> expected_type)
 {
     auto if_else_condition = new IfElseCondition();
     
@@ -530,12 +530,12 @@ AstBranch* Parser::BuildIfElseCondition(BlockStmtPolicy* policy, Token* token)
 
     // # Read if block statement
     policy->AddPolicy(BLOCK_STMT_POLICY::ALLOW_ELSE_CONDITION);
-    if_else_condition->if_block_stmt = this->BuildBlockStatement(policy, "");
+    if_else_condition->if_block_stmt = this->BuildBlockStatement(policy, expected_type);
 
     if(if_else_condition->if_block_stmt->closeWithElse)
     {
         policy->RemovePolicy(BLOCK_STMT_POLICY::ALLOW_ELSE_CONDITION);
-        if_else_condition->else_block_stmt = this->BuildBlockStatement(policy, "");
+        if_else_condition->else_block_stmt = this->BuildBlockStatement(policy, expected_type);
     }
 
     // # Build branch

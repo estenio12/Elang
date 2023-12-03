@@ -84,14 +84,14 @@ class Parser
         AstBranch* BuildVariableDeclaration(Token*);
         AstBranch* BuildFunctionDeclaration(Token*);
         AstBranch* BuildCallFunction(Token*, Tokens* list = nullptr);
-        AstBranch* BuildReturnExpression(Token*, std::string expected_type);
+        AstBranch* BuildReturnExpression(Token*, std::vector<std::string> expected_type);
         AstBranch* BuildAssignment(Token*);
         AstBranch* BuildBreakStatement(Token*);
-        AstBranch* BuildWhileDeclaration(BlockStmtPolicy*, Token*);
-        AstBranch* BuildIfElseCondition(BlockStmtPolicy*, Token*);
+        AstBranch* BuildWhileDeclaration(BlockStmtPolicy*, Token*, std::vector<std::string> expected_type);
+        AstBranch* BuildIfElseCondition(BlockStmtPolicy*, Token*, std::vector<std::string> expected_type);
 
     private:
-        BlockStatement* BuildBlockStatement(BlockStmtPolicy*, std::string expected_type);
+        BlockStatement* BuildBlockStatement(BlockStmtPolicy*, std::vector<std::string> expected_type);
         Expression* BuildExpression(const std::vector<std::string> expected_type, Tokens* token_list = nullptr);
 
 };

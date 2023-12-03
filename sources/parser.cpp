@@ -35,11 +35,11 @@ Ast* Parser::Parse()
             break;
 
             case EBRANCH_TYPE::WHILE_DECLARATION:
-                PushToAst(this->BuildWhileDeclaration(new BlockStmtPolicy(), token));
+                PushToAst(this->BuildWhileDeclaration(new BlockStmtPolicy(), token, this->CreateExpectedType("")));
             break;
 
             case EBRANCH_TYPE::IF_ELSE_CONDITION:
-                PushToAst(this->BuildIfElseCondition(new BlockStmtPolicy(), token));
+                PushToAst(this->BuildIfElseCondition(new BlockStmtPolicy(), token, this->CreateExpectedType("")));
             break;
             
             default:
