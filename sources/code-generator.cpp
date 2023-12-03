@@ -128,6 +128,14 @@ void CodeGenerator::AstVisitor(Ast* ast)
                 case EBRANCH_TYPE::ASSIGNMENT:
                    this->RunnableImplementation.push_back(branch->entity->GetByteCode());
                 break;
+
+                case EBRANCH_TYPE::WHILE_DECLARATION:
+                   this->RunnableImplementation.push_back(branch->entity->GetByteCode());
+                break;
+
+                case EBRANCH_TYPE::IF_ELSE_CONDITION:
+                   this->RunnableImplementation.push_back(branch->entity->GetByteCode());
+                break;
             }
         }
 

@@ -37,6 +37,10 @@ Ast* Parser::Parse()
             case EBRANCH_TYPE::WHILE_DECLARATION:
                 PushToAst(this->BuildWhileDeclaration(new BlockStmtPolicy(), token));
             break;
+
+            case EBRANCH_TYPE::IF_ELSE_CONDITION:
+                PushToAst(this->BuildIfElseCondition(new BlockStmtPolicy(), token));
+            break;
             
             default:
                 ThrowInternalError("Parser operation not implemented!");

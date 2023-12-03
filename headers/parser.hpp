@@ -78,6 +78,7 @@ class Parser
         bool IsCallFunction(Token*);
         bool IsAssignment(Token*);
         bool IsWhileDeclaration(Token*);
+        bool IsIfElseCondition(Token*);
 
     private:
         AstBranch* BuildVariableDeclaration(Token*);
@@ -87,9 +88,10 @@ class Parser
         AstBranch* BuildAssignment(Token*);
         AstBranch* BuildBreakStatement(Token*);
         AstBranch* BuildWhileDeclaration(BlockStmtPolicy*, Token*);
+        AstBranch* BuildIfElseCondition(BlockStmtPolicy*, Token*);
 
     private:
-        BlockStatement* BuildBlockStatement(BlockStmtPolicy*, std::string);
+        BlockStatement* BuildBlockStatement(BlockStmtPolicy*, std::string expected_type);
         Expression* BuildExpression(const std::vector<std::string> expected_type, Tokens* token_list = nullptr);
 
 };

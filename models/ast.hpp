@@ -28,7 +28,7 @@ enum EBRANCH_TYPE
     BLOCK_STATEMENT,
     BREAK_STATEMENT,
     WHILE_DECLARATION,
-    IF_ELSE_DECLARATION
+    IF_ELSE_CONDITION
 };
 
 class AstNode
@@ -292,6 +292,7 @@ class BlockStatement : public AstNode
 {
     public:
         std::string GlobalType;
+        bool closeWithElse = false;
 
     public:
         std::vector<AstBranch*> content;
@@ -488,14 +489,14 @@ class BreakStatement : public AstNode
 class WhileDeclaration : public AstNode
 {
     public:
-        Expression* argument;
+        Expression* condition;
         BlockStatement* block_stmt;
 
     public:
         WhileDeclaration(){ this->kind = EBRANCH_TYPE::WHILE_DECLARATION; }
         ~WhileDeclaration()
         { 
-            MemTools::FreeObjectFromMemory(argument); 
+            MemTools::FreeObjectFromMemory(condition); 
             MemTools::FreeObjectFromMemory(block_stmt); 
         }
     
@@ -506,13 +507,57 @@ class WhileDeclaration : public AstNode
 
             outcode += "while(";
 
-            outcode += argument->GetByteCode();
+            outcode += condition->GetByteCode();
 
             outcode += "){";
 
             outcode += block_stmt->GetByteCode();
 
             outcode.push_back('}');
+
+            return outcode; 
+        }
+};
+
+class IfElseCondition : public AstNode
+{
+    public:
+        Expression* condition;
+        BlockStatement* if_block_stmt;
+        BlockStatement* else_block_stmt;
+
+    public:
+        IfElseCondition(){ this->kind = EBRANCH_TYPE::IF_ELSE_CONDITION; }
+        ~IfElseCondition()
+        { 
+            MemTools::FreeObjectFromMemory(condition); 
+            MemTools::FreeObjectFromMemory(if_block_stmt); 
+            MemTools::FreeObjectFromMemory(else_block_stmt); 
+        }
+    
+    public:
+        std::string GetByteCode() override 
+        { 
+            std::string outcode;
+
+            outcode += "if(";
+
+            outcode += condition->GetByteCode();
+
+            outcode += "){";
+
+            outcode += if_block_stmt->GetByteCode();
+
+            outcode.push_back('}');
+
+            if(this->else_block_stmt != nullptr)
+            {
+                outcode += "else{";
+
+                outcode += else_block_stmt->GetByteCode();
+
+                outcode.push_back('}');
+            }
 
             return outcode; 
         }

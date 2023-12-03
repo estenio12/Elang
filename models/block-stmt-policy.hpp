@@ -42,4 +42,13 @@ class BlockStmtPolicy
         {
             this->policy_list.clear();
         }
+
+        void RemovePolicy(uint8_t policy)
+        {
+            for(int i = 0; i < policy_list.size(); i++)
+            {
+                if(policy_list[i] == policy)
+                    this->policy_list.erase(policy_list.begin(), policy_list.begin() + i);
+            }
+        }
 };

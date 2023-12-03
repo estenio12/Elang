@@ -10,6 +10,7 @@ EBRANCH_TYPE Parser::BindOperation(Token* token)
     if(IsAssignment(token)) return EBRANCH_TYPE::ASSIGNMENT;
     if(IsCallFunction(token)) return EBRANCH_TYPE::CALL_FUNCTION;
     if(IsWhileDeclaration(token)) return EBRANCH_TYPE::WHILE_DECLARATION;
+    if(IsIfElseCondition(token)) return EBRANCH_TYPE::IF_ELSE_CONDITION;
 
     this->ThrowError(token, "Unexpected token");
     return EBRANCH_TYPE::UNDEFINED;
@@ -51,6 +52,11 @@ bool Parser::IsCallFunction(Token* token)
 bool Parser::IsWhileDeclaration(Token* token)
 {
     return token->value == KEYWORD::T_WHILE;
+}
+
+bool Parser::IsIfElseCondition(Token* token)
+{
+    return token->value == KEYWORD::T_IF;
 }
 
 #pragma endregion
@@ -470,7 +476,7 @@ AstBranch* Parser::BuildWhileDeclaration(BlockStmtPolicy* policy, Token* token)
         tokens->AddToken(next_token);
     }
 
-    while_declaration->argument = this->BuildExpression(allow_types, tokens);
+    while_declaration->condition = this->BuildExpression(allow_types, tokens);
 
     // # Read Body
     policy->AddPolicy(BLOCK_STMT_POLICY::ALLOW_BREAK);
@@ -481,6 +487,61 @@ AstBranch* Parser::BuildWhileDeclaration(BlockStmtPolicy* policy, Token* token)
     return branch;
 }
 
+AstBranch* Parser::BuildIfElseCondition(BlockStmtPolicy* policy, Token* token)
+{
+    auto if_else_condition = new IfElseCondition();
+    
+    MemTools::FreeObjectFromMemory(token);
+
+    this->ExpectValue(DELIMITER::T_OPEN_PAREM, "Expected opening parenthesis");
+
+    // # Read arguments
+    auto allow_types = this->CreateExpectedType(TYPE::T_INT);
+    allow_types.push_back(TYPE::T_BOOL);
+
+    int opened_paren = 1;
+    auto tokens = new Tokens();
+
+    while(true)
+    {
+        auto next_token = this->GetNextToken("");
+
+        if(next_token->value == DELIMITER::T_OPEN_PAREM)   
+        {
+            opened_paren++;
+            tokens->AddToken(next_token);
+            continue;
+        }
+
+        if(next_token->value == DELIMITER::T_CLOSE_PAREM)
+        {
+            opened_paren--;
+
+            if(opened_paren == 0)
+                break;
+            else if(opened_paren < 0)
+                this->ThrowError(next_token, "Unexpected closing parenthesis");
+        }
+
+        tokens->AddToken(next_token);
+    }
+
+    if_else_condition->condition = this->BuildExpression(allow_types, tokens);
+
+    // # Read if block statement
+    policy->AddPolicy(BLOCK_STMT_POLICY::ALLOW_ELSE_CONDITION);
+    if_else_condition->if_block_stmt = this->BuildBlockStatement(policy, "");
+
+    if(if_else_condition->if_block_stmt->closeWithElse)
+    {
+        policy->RemovePolicy(BLOCK_STMT_POLICY::ALLOW_ELSE_CONDITION);
+        if_else_condition->else_block_stmt = this->BuildBlockStatement(policy, "");
+    }
+
+    // # Build branch
+    auto branch = new AstBranch(if_else_condition);
+    return branch;
+}
 
 #pragma endregion
 

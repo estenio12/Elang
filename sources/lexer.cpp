@@ -231,7 +231,6 @@ void Lexer::Tokenize(std::string line)
 
             if(IsDigit(line[i]))
             {
-                // Output::PrintDebug("Entrei");
                 current_job = JOB_STATE::BUILD_DIGIT;
             }
             
@@ -492,8 +491,9 @@ bool Lexer::IsBoolLiteralToken(std::string value)
 
 bool Lexer::IsDelimiter(std::string value)
 {
-    // # IN CURRENT VERSION OF COMPILER, DELIMITER DOES NOT HAVE MORE THE ONE CHARACTER
-    if(value.size() > 1) value.pop_back();
+    // # IN THIS CURRENT COMPILER VERSION, DELIMITER DOES NOT HAVE MORE THE ONE CHARACTER
+    if(value != LOGICAL::T_EQUALS && value.size() > 1) 
+        value.pop_back();
 
     if(value == DELIMITER::T_COLON           ||
        value == DELIMITER::T_COMMA           ||

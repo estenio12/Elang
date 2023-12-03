@@ -268,6 +268,16 @@ BlockStatement* Parser::BuildBlockStatement(BlockStmtPolicy* policy, std::string
             endStatmetCount--;
             continue;
         }
+        
+        if(stmt_token->value == KEYWORD::T_ELSE) 
+        {
+            if(!policy->HasPolicy(BLOCK_STMT_POLICY::ALLOW_ELSE_CONDITION))
+                this->ThrowError(stmt_token, "the keyword else it's not allow in this context");
+
+            MemTools::FreeObjectFromMemory(stmt_token);
+            block_stmt->closeWithElse = true;
+            return block_stmt;
+        }
 
         auto operation = this->BindOperation(stmt_token);
 
@@ -300,6 +310,10 @@ BlockStatement* Parser::BuildBlockStatement(BlockStmtPolicy* policy, std::string
 
             case EBRANCH_TYPE::ASSIGNMENT:
                 block_stmt->content.push_back(this->BuildAssignment(stmt_token));
+            break;
+
+            case EBRANCH_TYPE::IF_ELSE_CONDITION:
+                block_stmt->content.push_back(this->BuildIfElseCondition(new BlockStmtPolicy(), stmt_token));
             break;
 
             default:
