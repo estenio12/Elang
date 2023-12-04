@@ -29,6 +29,8 @@ class CodeGenerator
         const std::string LIBRARY_LANG_6          = "int strToInt(std::string __elang_param){if(__elang_param.empty()){std::cerr<<\"\\nData Format error: cannot convert empty string to integer\\n\";exit(EXIT_FAILURE);}return std::stoi(__elang_param);}\n";
         const std::string LIBRARY_LANG_7          = "float strToFloat(std::string __elang_param){if(__elang_param.empty()){std::cerr<<\"\\nData Format error: cannot convert empty string to float\\n\";exit(EXIT_FAILURE);}return std::stof(__elang_param);}\n";
         const std::string LIBRARY_LANG_8          = "bool strToBool(std::string __elang_param){if(__elang_param.empty()){std::cerr<<\"\\nData Format error: cannot convert empty string to boolean\\n\";exit(EXIT_FAILURE);}return (__elang_param==\"false\"||__elang_param==\"0\") ? false : true;}\n";
+        const std::string LIBRARY_LANG_9          = "int charToInt(char __elang_param){return static_cast<int>(__elang_param);}";
+        const std::string LIBRARY_LANG_10         = "std::string charToStr(char __elang_param){return std::string{__elang_param};}\n";
         const std::string GLOBAL_VARAIBLES        = "class __elang_class_runnable_cxx{private:";
         const std::string PROGRAM_INTERFACE       = "public:__elang_class_runnable_cxx();~__elang_class_runnable_cxx();public:void __elang_run_body_cxx();private:";
         const std::string CLOSE_PROGRAM_INTERFACE = "};\n";

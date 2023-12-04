@@ -21,7 +21,7 @@
 
 - Features:
     > [ OK ] - Add basic functions of data converting.
-    > [ TODO ] - Add basic functions of I/O operations
+    > [ WORKING ] - Add basic functions of I/O operations
     > [ TODO ] - Create elang CLI
 
 - Bugs Opened:

@@ -49,6 +49,8 @@ void CodeGenerator::LoadProgramInitialize()
     this->WriteChunkToFile(this->LIBRARY_LANG_6);
     this->WriteChunkToFile(this->LIBRARY_LANG_7);
     this->WriteChunkToFile(this->LIBRARY_LANG_8);
+    this->WriteChunkToFile(this->LIBRARY_LANG_9);
+    this->WriteChunkToFile(this->LIBRARY_LANG_10);
     this->WriteChunkToFile(this->GLOBAL_VARAIBLES);
 }
 

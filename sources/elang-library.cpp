@@ -11,6 +11,9 @@ void Parser::LoadElangLibrary()
     this->symbolTable->InsertFunctionIdentifier(this->LoadintToStr());
     this->symbolTable->InsertFunctionIdentifier(this->LoadboolToStr());
     this->symbolTable->InsertFunctionIdentifier(this->LoadintToFloat());
+    
+    this->symbolTable->InsertFunctionIdentifier(this->LoadcharToStr());
+    this->symbolTable->InsertFunctionIdentifier(this->LoadCharToInt());
 }
 
 FunctionIdenfierModel* Parser::LoadfloatToInt()
@@ -124,6 +127,39 @@ FunctionIdenfierModel* Parser::LoadintToFloat()
 
     return elang_lib_fun;
 }
+
+FunctionIdenfierModel* Parser::LoadcharToStr()
+{   
+    auto elang_lib_fun = new FunctionIdenfierModel();
+    auto param  = new ParameterDeclaration();
+    param->name = "__elang_param";
+    param->type = TYPE::T_CHAR;
+
+    elang_lib_fun->name = "charToStr";
+    elang_lib_fun->type = TYPE::T_STRING;
+    elang_lib_fun->parameterList.push_back(param);
+
+    return elang_lib_fun;
+}
+
+FunctionIdenfierModel* Parser::LoadCharToInt()
+{   
+    auto elang_lib_fun = new FunctionIdenfierModel();
+    auto param  = new ParameterDeclaration();
+    param->name = "__elang_param";
+    param->type = TYPE::T_CHAR;
+
+    elang_lib_fun->name = "charToInt";
+    elang_lib_fun->type = TYPE::T_INT;
+    elang_lib_fun->parameterList.push_back(param);
+
+    return elang_lib_fun;
+}
+
+
+
+
+
 
 
 

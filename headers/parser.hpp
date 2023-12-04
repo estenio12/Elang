@@ -73,6 +73,9 @@ class Parser
         FunctionIdenfierModel* LoadboolToStr();
         FunctionIdenfierModel* LoadintToFloat();
 
+        FunctionIdenfierModel* LoadcharToStr();
+        FunctionIdenfierModel* LoadCharToInt();
+
     private:
         template<class T> void CheckMemoryAllocated(T entity)
         {
