@@ -26,7 +26,7 @@ class Compiler
         CodeGenerator* codegen;
 
     public:
-        Compiler(std::string sourcePath);
+        Compiler(std::string sourcePath, std::string outputFileName);
         ~Compiler();
 
     public:

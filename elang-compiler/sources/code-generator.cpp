@@ -1,7 +1,10 @@
 #include "../headers/code-generator.hpp"
 
-CodeGenerator::CodeGenerator()
+CodeGenerator::CodeGenerator(std::string outputFileName)
 {
+    if(!outputFileName.empty())
+        this->OutputFileName = outputFileName+".cpp";
+
     this->DeleteExistsFile();
     this->fileHandler.open(this->OutputFileName, std::ios::out | std::ios::app);
     this->LoadProgramInitialize();

@@ -1,6 +1,6 @@
 #include "../headers/compiler.hpp"
 
-Compiler::Compiler(std::string sourcePath)
+Compiler::Compiler(std::string sourcePath, std::string outputFileName)
 {
     if(IsNotValidPath(sourcePath))
     {
@@ -12,7 +12,7 @@ Compiler::Compiler(std::string sourcePath)
     this->ast         = new Ast();
     this->lexer       = new Lexer(sourcePath);
     this->parser      = new Parser(lexer, symbolTable, ast);
-    this->codegen     = new CodeGenerator();
+    this->codegen     = new CodeGenerator(outputFileName);
 }
 
 Compiler::~Compiler()

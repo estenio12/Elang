@@ -50,11 +50,11 @@ class CodeGenerator
         std::vector<std::string> GlobalVariables;
 
     private:
-        std::string OutputFileName = "MyApplication.cpp";
+        std::string OutputFileName = "elcout.cpp";
         std::fstream fileHandler;
 
     public:
-        CodeGenerator();
+        CodeGenerator(std::string OutputFileName);
         ~CodeGenerator();
 
     public:
