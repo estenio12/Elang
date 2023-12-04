@@ -13,7 +13,12 @@ void Parser::LoadElangLibrary()
     this->symbolTable->InsertFunctionIdentifier(this->LoadintToFloat());
     
     this->symbolTable->InsertFunctionIdentifier(this->LoadcharToStr());
-    this->symbolTable->InsertFunctionIdentifier(this->LoadCharToInt());
+    this->symbolTable->InsertFunctionIdentifier(this->LoadcharToInt());
+
+    this->symbolTable->InsertFunctionIdentifier(this->Loadsyscmd());
+    this->symbolTable->InsertFunctionIdentifier(this->Loadprint());
+    this->symbolTable->InsertFunctionIdentifier(this->LoadreadLine());
+    this->symbolTable->InsertFunctionIdentifier(this->LoadreadKey());
 }
 
 FunctionIdenfierModel* Parser::LoadfloatToInt()
@@ -142,7 +147,7 @@ FunctionIdenfierModel* Parser::LoadcharToStr()
     return elang_lib_fun;
 }
 
-FunctionIdenfierModel* Parser::LoadCharToInt()
+FunctionIdenfierModel* Parser::LoadcharToInt()
 {   
     auto elang_lib_fun = new FunctionIdenfierModel();
     auto param  = new ParameterDeclaration();
@@ -155,6 +160,64 @@ FunctionIdenfierModel* Parser::LoadCharToInt()
 
     return elang_lib_fun;
 }
+
+FunctionIdenfierModel* Parser::Loadsyscmd()
+{   
+    auto elang_lib_fun = new FunctionIdenfierModel();
+    auto param  = new ParameterDeclaration();
+    param->name = "__elang_param";
+    param->type = TYPE::T_STRING;
+
+    elang_lib_fun->name = "syscmd";
+    elang_lib_fun->type = TYPE::T_INT;
+    elang_lib_fun->parameterList.push_back(param);
+
+    return elang_lib_fun;
+}
+
+FunctionIdenfierModel* Parser::Loadprint()
+{   
+    auto elang_lib_fun = new FunctionIdenfierModel();
+    auto param  = new ParameterDeclaration();
+    param->name = "__elang_param";
+    param->type = TYPE::T_STRING;
+
+    elang_lib_fun->name = "print";
+    elang_lib_fun->type = TYPE::T_VOID;
+    elang_lib_fun->parameterList.push_back(param);
+
+    return elang_lib_fun;
+}
+
+FunctionIdenfierModel* Parser::LoadreadLine()
+{   
+    auto elang_lib_fun = new FunctionIdenfierModel();
+
+    elang_lib_fun->name = "readLine";
+    elang_lib_fun->type = TYPE::T_STRING;
+
+    return elang_lib_fun;
+}
+
+FunctionIdenfierModel* Parser::LoadreadKey()
+{   
+    auto elang_lib_fun = new FunctionIdenfierModel();
+
+    elang_lib_fun->name = "readKey";
+    elang_lib_fun->type = TYPE::T_CHAR;
+
+    return elang_lib_fun;
+}
+
+
+
+
+
+
+
+
+
+
 
 
 

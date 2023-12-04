@@ -1,10 +1,1 @@
-floatToInt(65.76);
-strToInt("34");
-strToFloat("78.32");
-strToBool("false");
-floatToStr(93.233);
-intToStr(52);
-boolToStr(true);
-intToFloat(22);
-charToInt('a');
-charToStr('k');
+print("Hello World\n");

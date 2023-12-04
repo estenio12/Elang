@@ -8,6 +8,8 @@ int strToInt(std::string __elang_param){if(__elang_param.empty()){std::cerr<<"\n
 float strToFloat(std::string __elang_param){if(__elang_param.empty()){std::cerr<<"\nData Format error: cannot convert empty string to float\n";exit(EXIT_FAILURE);}return std::stof(__elang_param);}
 bool strToBool(std::string __elang_param){if(__elang_param.empty()){std::cerr<<"\nData Format error: cannot convert empty string to boolean\n";exit(EXIT_FAILURE);}return (__elang_param=="false"||__elang_param=="0") ? false : true;}
 int charToInt(char __elang_param){return static_cast<int>(__elang_param);}std::string charToStr(char __elang_param){return std::string{__elang_param};}
+int syscmd(std::string __elang_param){return system(__elang_param.c_str());}void print(std::string __elang_param){std::cout<<__elang_param;}
+std::string readLine(){std::string __elang_line;std::getline(std::cin, __elang_line);return __elang_line;}char readKey(){char __elang_key;std::cin>>__elang_key;return __elang_key;}
 class __elang_class_runnable_cxx{private:public:__elang_class_runnable_cxx();~__elang_class_runnable_cxx();public:void __elang_run_body_cxx();private:};
-__elang_class_runnable_cxx::__elang_class_runnable_cxx(){}__elang_class_runnable_cxx::~__elang_class_runnable_cxx(){}void __elang_class_runnable_cxx::__elang_run_body_cxx(){floatToInt(65.76);strToInt("34");strToFloat("78.32");strToBool("false");floatToStr(93.233);intToStr(52);boolToStr(true);intToFloat(22);charToInt('a');charToStr('k');}
+__elang_class_runnable_cxx::__elang_class_runnable_cxx(){}__elang_class_runnable_cxx::~__elang_class_runnable_cxx(){}void __elang_class_runnable_cxx::__elang_run_body_cxx(){print("Hello World\n");}
 int main(int argc, char* argv[]){auto startup=new __elang_class_runnable_cxx();startup->__elang_run_body_cxx();return EXIT_SUCCESS;}

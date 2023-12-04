@@ -31,6 +31,10 @@ class CodeGenerator
         const std::string LIBRARY_LANG_8          = "bool strToBool(std::string __elang_param){if(__elang_param.empty()){std::cerr<<\"\\nData Format error: cannot convert empty string to boolean\\n\";exit(EXIT_FAILURE);}return (__elang_param==\"false\"||__elang_param==\"0\") ? false : true;}\n";
         const std::string LIBRARY_LANG_9          = "int charToInt(char __elang_param){return static_cast<int>(__elang_param);}";
         const std::string LIBRARY_LANG_10         = "std::string charToStr(char __elang_param){return std::string{__elang_param};}\n";
+        const std::string LIBRARY_LANG_11         = "int syscmd(std::string __elang_param){return system(__elang_param.c_str());}";
+        const std::string LIBRARY_LANG_12         = "void print(std::string __elang_param){std::cout<<__elang_param;}\n";
+        const std::string LIBRARY_LANG_13         = "std::string readLine(){std::string __elang_line;std::getline(std::cin, __elang_line);return __elang_line;}";
+        const std::string LIBRARY_LANG_14         = "char readKey(){char __elang_key;std::cin>>__elang_key;return __elang_key;}\n";
         const std::string GLOBAL_VARAIBLES        = "class __elang_class_runnable_cxx{private:";
         const std::string PROGRAM_INTERFACE       = "public:__elang_class_runnable_cxx();~__elang_class_runnable_cxx();public:void __elang_run_body_cxx();private:";
         const std::string CLOSE_PROGRAM_INTERFACE = "};\n";
