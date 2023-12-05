@@ -1,7 +1,0 @@
-fun sum(n1: int, n2: int): int
-	return n1 + n1;
-end
-
-var t: int = sum(10, 10);
-
-print("Debug: " + intToStr(t) + "\n");

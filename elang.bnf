@@ -1,0 +1,112 @@
+<digit> :=
+	1-9
+
+<alpha> :=
+	a-zA-Z
+
+<identifier> :=
+	  <alpha>
+	| <alpha><digit>
+	| _<alpha><digit>
+	| _<alpha>_<digit>
+	| <alpha>_<digit>
+
+<type> := 
+	  <float>
+	| <int>
+	| <bool>
+	| <char>
+	| <void>
+
+<variable-declaration> := 
+	  var <identifier> : <type> ;
+	| var <identifier> : <type> = <expression> ;
+	| const <identifier> : <type> ;
+	| const <identifier> : <type> = <expression> ;
+
+<function-declaration> :=
+	  fun  <identifier> ( ) : <type> end
+	| fun  <identifier> ( ) : <type> <statement> end
+	| fun  <identifier> ( <parameter-list> ) : <type> end
+	| fun  <identifier> ( <parameter-list> ) : <type> <statement> end
+
+<iteration-statement> := 
+	  while ( <expression> ) end
+	| while ( <expression> ) <statement> end
+	| for ( <for-declaration-statement> ) end
+	| for ( <for-declaration-statement> ) <for-statement> end
+
+<condition-statement> :=
+	  if ( <expression> ) end
+	| if ( <expression> ) <statement> end
+	| if ( <expression> ) <statement> else end
+	| if ( <expression> ) <statement> else <statement> end
+
+<parameter-list> := 
+	  <parameter-declaration>
+	| <parameter-declaration> , <parameter-declaration> 
+
+<parameter-declaration> := 
+	  var <identifier> : <type>
+	| const <identifier> : <type>
+
+<expression> := 
+	  <expression>
+	| <identifier>
+	| <digit>
+	| <call-function>
+	| <identifier> <arithmetic> <identifier>
+    | <identifier> <arithmetic> <digit>
+    | <expression> <arithmetic> <digit>
+    | <expression> <arithmetic> <expression>
+	| ( <expression> )
+	| <call-function> <arithmetic> <expression>
+	| <postfix> 
+	| <prefix> 
+
+<statement> := 
+	  <variable-declaration>
+	| <call-function>
+	| <iteration-statement>
+	| <condition-statement>
+	| <return-expression>
+	| <postfix> ;
+	| <prefix> ;
+
+<return-expression> := 
+	  return <expression> ;
+
+<call-function> := 
+	  <identifier> ( <expression> ) ;
+
+<for-statement> :=
+	  <statement> := 
+	  <variable-declaration>
+	| <call-function>
+	| <iteration-statement>
+	| <condition-statement>
+	| <return-expression>
+	| break ;
+	| continue ;
+	| <postfix> ;
+	| <prefix> ;
+
+<for-declaration-statement> :=
+	  <variable-declaration>
+	| <variable-declaration> <expression>
+	| <expression>
+	| <postfix> ;
+	| <prefix> ;
+
+<prefix> := 
+	  -- <identifier>
+	| -- <call-function>
+	| ++ <identifier>
+	| ++ <call-function>
+
+<postfix> := 
+	  <identifier> --
+	| <call-function> --
+	| <identifier> ++
+	| <call-function> ++
+
