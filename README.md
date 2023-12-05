@@ -12,8 +12,8 @@ Link: https://github.com/estenio12/Elang/blob/main/Documentation/elang.md
 
 #### Linux:
 
-  Link: [Linux](https://github.com/estenio12/Elang/blob/Remaking/bin/elang.bin)
+  Link: [https://github.com/estenio12/Elang/blob/Remaking/bin/elang](https://github.com/estenio12/Elang/blob/Remaking/bin/elang)
 
 #### Windows:
 
-  Link: [https://github.com/estenio12/Elang/blob/Remaking/bin/elang.exe](Windows)
+  Link: [https://github.com/estenio12/Elang/blob/Remaking/bin/elang.exe](https://github.com/estenio12/Elang/blob/Remaking/bin/elang.exe)
