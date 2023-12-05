@@ -12,7 +12,7 @@ Link: https://github.com/estenio12/Elang/blob/main/Documentation/elang.md
 
 #### Linux:
 
-  Link: [https://github.com/estenio12/Elang/blob/Remaking/bin/elang.bin](linux)
+  Link: [Linux](https://github.com/estenio12/Elang/blob/Remaking/bin/elang.bin)
 
 #### Windows:
 
