@@ -22,7 +22,6 @@
 - Features:
     > [ OK ] - Add basic functions of data converting.
     > [ OK ] - Add basic functions of I/O operations
-    > [ Working ] - Create elang CLI
 
 - Bugs Opened:
     > [ TODO ] - When call the function like argument in another function with more then one arguments, throw error.
