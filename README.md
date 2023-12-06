@@ -6,7 +6,7 @@ Elang é um projeto simples, voltado único e exclusivamente para um projeto aca
 
 # Documentação:
 
-Link: https://github.com/estenio12/Elang/blob/main/Documentation/elang.md
+Link: [https://github.com/estenio12/Elang/blob/main/Documentation/elang.md](https://github.com/estenio12/Elang/blob/main/documentation/elang.md)
 
 # Download do compilador
 
