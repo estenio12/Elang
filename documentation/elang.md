@@ -104,7 +104,7 @@ var foo: string;
 Seguindo uma strutura similar a delcaração de variáveis, a declaração de função também é simples:
 
 ```erlang
-fun soma(var n1: int, var n2: int): int
+fun soma(n1: int, n2: int): int
    return n1 + n2;
 end
 ```
