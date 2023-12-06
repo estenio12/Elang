@@ -4,16 +4,10 @@ Elang é uma linguagem de programação desenvolvida por Estenio Garcia como pro
 
 Elang é um projeto simples, voltado único e exclusivamente para um projeto acadêmico, não deve ser utilizado em produção, pois muitas "features" e até mesmo a arquitetura não foi planejada para atender este cenário.
 
-Click no link para ir até a documentação:
+# Documentação:
 
 Link: https://github.com/estenio12/Elang/blob/main/Documentation/elang.md
 
 # Download do compilador
 
-#### Linux:
-
-  Link: [https://github.com/estenio12/Elang/blob/Remaking/bin/elang](https://github.com/estenio12/Elang/blob/Remaking/bin/elang)
-
-#### Windows:
-
-  Link: [https://github.com/estenio12/Elang/blob/Remaking/bin/elang.exe](https://github.com/estenio12/Elang/blob/Remaking/bin/elang.exe)
+Link: https://github.com/estenio12/Elang/releases/tag/Teste
