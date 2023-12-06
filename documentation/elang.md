@@ -1,8 +1,9 @@
 ### O que é Elang
 
-Semelhante ao processo que o typescript faz, onde converte seu código typescript em javascript, elang converte seu código elang para C++.
+Semelhante ao processo que o typescript faz, que consiste em converter seu código typescript em javascript, elang converte seu código elang para C++.
 
-A sintax de elang foi inspirada nas linguagens Kotlin e Ruby. Buscando ser o mais simples possível e mantendo uma boa ergonomia.
+A sintax foi inspirada nas linguagens Kotlin e Ruby. Buscando ser o mais simples possível e mantendo uma boa ergonomia.
+Como este projeto foi pensado e desenvolvido para atender ao único e exclusivo propósito de ser meu projeto de TCC para faculdade de ciência da computação, dei suporte somente para funionalidades e semântica que são necessárias para mim. Assim ficando algumas características básicas que todas as linguagens de programação tem de fora.
 
 ## Conhecendo o Compilador
 
@@ -21,7 +22,7 @@ Resultado:
 	Versão: (C) Elang Compiler v1.0
 	Author: Estenio Garcia
 	License: Apache 2.0
-	Platform: Windows ou Linux
+	Platform: <nome da plataforma que está usando>
 
 Se este resultado apareceu na sua tela, então está tudo certo com o compilador.
 
@@ -102,8 +103,8 @@ var foo: string;
 
 Seguindo uma strutura similar a delcaração de variáveis, a declaração de função também é simples:
 
-```kotlin
-fun:number soma(var:number n1, var:number n2)
+```erlang
+fun soma(var n1: int, var n2: int): int
    return n1 + n2;
 end
 ```
@@ -190,14 +191,14 @@ charToStr(char)    # converte dado do tipo character para string
 ### Operações de entrada e saída
 
 ```kotlin
-readLine()     # Lê uma linha no terminal.
-readKey()      # Lê uma tecla no terminal.
-print(string)  # Escreve uma linha de texto no terminal.
-syscmd(string) # Passa comandos para o sistema operacional hospedeiro.
+readLine()     # Lê uma linha no terminal e retorna como ```string```.
+readKey()      # Lê uma tecla no terminal e retorna como ```char```.
+print(string)  # Escreve uma linha de texto no terminal não possui retorno.
+syscmd(string) # Passa comandos para o sistema operacional hospedeiro retornando ```ìnt``` sendo este inteiro o status da execução do comando.
 ```
 
 ## Conclusão
 
-É tudo! Muito obrigado por avaliar o projeto! Sei que não tem o básico como arrays, mas, meu intuito era ter a experiência de desenvolver um linguagem de programação. E este projeto é a prova de que sim eu sou capaz.
+É tudo! Muito obrigado por avaliar o projeto! Sei que não tem o básico como arrays, incrementadores, decrementadores, estruturas etc, mas, meu intuito era ter a experiência de desenvolver um linguagem de programação. E este projeto por mais simples que seja, é a prova de que sim eu sou capaz.
 
 
