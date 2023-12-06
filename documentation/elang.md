@@ -175,7 +175,7 @@ end
 
 ### Convesores de dados
 
-```erlang
+```python
 floatToStr(float)  # converte dado do tipo float para string
 intToStr(int)      # converte dado do tipo integer para string
 boolToStr(bool)    # converte dado do tipo boolean para string
@@ -190,7 +190,7 @@ charToStr(char)    # converte dado do tipo character para string
 
 ### Operações de entrada e saída
 
-```kotlin
+```python
 readLine()     # Lê uma linha no terminal e retorna como ```string```.
 readKey()      # Lê uma tecla no terminal e retorna como ```char```.
 print(string)  # Escreve uma linha de texto no terminal não possui retorno.
