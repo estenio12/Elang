@@ -1,7 +1,11 @@
-fun sum(n1: int, n2: int): int
-	return n1 + n1;
+fun prt(msg: string): void
+	print(msg);
 end
 
-var t: int = sum(10, 10);
+var contador: int = 0;
 
-print("Debug: " + intToStr(t) + "\n");
+while(contador < 10)
+	prt("Contador: " + intToStr(contador) + "\n");
+	contador = contador + 1;
+end
+
