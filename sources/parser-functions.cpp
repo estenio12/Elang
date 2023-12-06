@@ -243,7 +243,7 @@ AstBranch* Parser::BuildFunctionDeclaration(Token* token)
         {
             MemTools::FreeObjectFromMemory(next_token);
 
-            this->ExpectValue(DELIMITER::T_COLON, "Expect separate after close parentheses");
+            this->ExpectValue(DELIMITER::T_COLON, "Expect separator ':' after close parentheses");
 
             // # Get Type
             auto t_type = this->GetNextToken("It's expected an type after seperator.");
@@ -271,6 +271,14 @@ AstBranch* Parser::BuildFunctionDeclaration(Token* token)
 
     // # Read Function Body
     function->block_stmt = this->BuildBlockStatement(policy, CreateExpectedType(function->type));
+
+    if(function->type != TYPE::T_VOID && !function->block_stmt->HasEntity(EBRANCH_TYPE::RETURN_EXPRESSION))
+    {
+        auto tmpToken   = new Token();
+        tmpToken->line  = this->lineHistory;
+        tmpToken->value = "end";
+        this->ThrowError(tmpToken, "Any functions other than type 'void' must have a return expression");
+    } 
 
     // # Reset stats
     this->currentScope = GLOBAL_SCOPE;

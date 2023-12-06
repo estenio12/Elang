@@ -58,7 +58,7 @@ Ast* Parser::Parse()
 void Parser::ThrowError(Token* token, std::string message)
 {
     std::string lineError = "Line: " + std::to_string(token->line) + ", Col: " + std::to_string(token->startpos);
-    Output::PrintCustomizeError("Syntax Error (" + lineError + "): ", message + " '" + token->value + "'");
+    Output::PrintCustomizeError("Syntax Error (" + lineError + "): ", message + " | Last token found '" + token->value + "'");
     MemTools::FreeObjectFromMemory(token);
     exit(EXIT_FAILURE);
 }

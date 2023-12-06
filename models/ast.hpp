@@ -293,7 +293,6 @@ class BlockStatement : public AstNode
     public:
         std::string GlobalType;
         bool closeWithElse = false;
-
     public:
         std::vector<AstBranch*> content;
 
@@ -306,12 +305,28 @@ class BlockStatement : public AstNode
         ~BlockStatement(){}
 
     public:
+        bool HasEntity(EBRANCH_TYPE entity)
+        {
+            for(auto item : content)
+            {
+                if(item->entity->kind == entity)
+                    return true;
+            }
+
+            return false;
+        }
+
+    public:
         std::string GetByteCode() override
         {
             std::string outcode;
 
             for(auto item : this->content)
+            {
                 outcode += item->entity->GetByteCode();
+                if(item->entity->kind == EBRANCH_TYPE::CALL_FUNCTION)
+                    outcode.push_back(';');
+            }
 
             return outcode;
         }
@@ -325,7 +340,6 @@ class FunctionDeclaration : public AstNode
         std::vector<ParameterDeclaration*> parameterList;
 
     public:
-        // std::vector<AstBranch*> BodyContent;
         BlockStatement* block_stmt;
 
     private:
@@ -344,11 +358,6 @@ class FunctionDeclaration : public AstNode
         }
 
     public:
-        // bool IsFunctionEmpty()
-        // {
-        //     return BodyContent.empty();
-        // }
-
         bool ExistsParameter(std::string name)
         {
             for(auto item : parameterList)
@@ -371,7 +380,10 @@ class FunctionDeclaration : public AstNode
             std::string outcode;
 
             // # Set type function
-            outcode += this->type + " ";
+            if(this->type == TYPE::T_STRING)
+                outcode += "std::string ";
+            else
+                outcode += this->type + " ";
 
             // # Set template 
             outcode += this->STANDARD_PROGRAM_NAME;
@@ -385,7 +397,12 @@ class FunctionDeclaration : public AstNode
             for(int i = 0; i < parameterList.size(); i++)
             {
                 if(i > 0) outcode.push_back(',');
-                outcode += parameterList[i]->type + " ";
+                
+                if(parameterList[i]->type == TYPE::T_STRING)
+                    outcode += "std::string ";
+                else
+                    outcode += parameterList[i]->type + " ";
+
                 outcode += parameterList[i]->name;
             }
 
@@ -395,11 +412,6 @@ class FunctionDeclaration : public AstNode
             // # Open function scope
             outcode.push_back('{');
 
-            // # Add function body
-            // for(auto item : this->BodyContent)
-            // {
-            //     outcode += item->entity->GetByteCode();
-            // }
             outcode += this->block_stmt->GetByteCode();
 
             // # Close function scope 
@@ -413,7 +425,10 @@ class FunctionDeclaration : public AstNode
             std::string outcode;
 
             // # Set type function
-            outcode += this->type + " ";
+            if(this->type == TYPE::T_STRING)
+                outcode += "std::string ";
+            else
+                outcode += this->type + " ";
 
             // # Set function name
             outcode += this->name;
@@ -425,7 +440,12 @@ class FunctionDeclaration : public AstNode
             for(int i = 0; i < this->parameterList.size(); i++)
             {
                 if(i > 0) outcode.push_back(',');
-                outcode += this->parameterList[i]->type + " ";
+                
+                if(parameterList[i]->type == TYPE::T_STRING)
+                    outcode += "std::string ";
+                else
+                    outcode += parameterList[i]->type + " ";
+
                 outcode += this->parameterList[i]->name;
             }
 
