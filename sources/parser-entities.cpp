@@ -20,7 +20,20 @@ Expression* Parser::BuildExpression(const std::vector<std::string> expected_type
         if(enableFindToken)
             token = this->GetNextToken("");
         else
+        {
+            if(tokenList->GetSize() <= 0) break;
             token = tokenList->Shift();
+        }
+        
+        // # When the token is a function call, it's means they were processed
+        if(token->isCallFunction)
+        {
+            history = token->GetCopy();
+            history->type  = TYPE_TOKEN::T_DELIMITER;
+            history->value = DELIMITER::T_CLOSE_PAREM;
+            BuildTokenList.push_back(token);
+            continue;
+        }
 
         if(token == nullptr) 
         {

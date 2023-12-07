@@ -357,6 +357,18 @@ AstBranch* Parser::BuildCallFunction(Token* token, Tokens* tokenList)
             else
                 next_token = this->GetNextToken("");
 
+            // # Block to handle with another call functions
+            if(next_token->type == TYPE_TOKEN::T_IDENTIDIER && 
+               this->symbolTable->ExistsFunctionIdentifier(next_token->value))
+            {
+                auto ntoken   = next_token->GetCopy();
+                ntoken->value = BuildCallFunction(next_token, nullptr)->entity->GetByteCode();
+                ntoken->isCallFunction = true;
+
+                argument_list[argument_index]->AddToken(ntoken);
+                continue;
+            }
+
             if(next_token->value == DELIMITER::T_COMMA)
             {
                 argument_index++;

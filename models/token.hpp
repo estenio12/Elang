@@ -12,11 +12,14 @@
 class Token
 {
     public:
-        int line     = 0;
-        int startpos = 0;
-        int endpos   = 0;
-        std::string value  = "";
-        TYPE_TOKEN type    = TYPE_TOKEN::T_IDENTIDIER;
+        int line          = 0;
+        int startpos      = 0;
+        int endpos        = 0;
+        std::string value = "";
+        TYPE_TOKEN type   = TYPE_TOKEN::T_IDENTIDIER;
+
+    public:
+        bool isCallFunction = false;
 
     public:
         Token(int line           = 0,
