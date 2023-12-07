@@ -215,10 +215,11 @@ Expression* Parser::BuildExpression(const std::vector<std::string> expected_type
            token->type == TYPE_TOKEN::T_IDENTIDIER     ||
            token->type == TYPE_TOKEN::T_STRING_LITERAL )
         {
-            if(history->type == TYPE_TOKEN::T_ARITHMETIC ||
-               history->type == TYPE_TOKEN::T_DELIMITER  ||
-               history->type == TYPE_TOKEN::T_LOGICAL    ||
-               history->type == TYPE_TOKEN::T_PREFIX     )
+            if(history->type  == TYPE_TOKEN::T_ARITHMETIC ||
+               history->type  == TYPE_TOKEN::T_LOGICAL    ||
+               history->type  == TYPE_TOKEN::T_PREFIX     ||
+               history->value == DELIMITER::T_COMMA       ||     
+               history->value == DELIMITER::T_ASSIGN      )
             {
                 if(token->type == TYPE_TOKEN::T_IDENTIDIER)
                 {
