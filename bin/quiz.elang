@@ -5,7 +5,7 @@ const msg_continue: string = "\nContinuar?";
 # Questians
 
 fun CheckAnswer(answear: char): int
-    print("\n\nResponsta > ");
+    print("\n\nResposta > ");
 
     if(answear == readKey())
         return 1;
