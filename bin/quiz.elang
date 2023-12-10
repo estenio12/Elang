@@ -1,7 +1,13 @@
+# Defines
+
+const msg_continue: string = "Continuar?";
+
 # Questians
 
 fun CheckAnswer(answear: char): int
-    if(answear != readKey())
+    print("\n\nResponsta > ");
+
+    if(answear == readKey())
         return 1;
     end
 
@@ -10,71 +16,94 @@ end
 
 fun Quest_1(): int 
     const answear: char = '4';
-    print("Qual destes listado abaixo não é um sistema operacional?");
+    print("Qual destes listado abaixo não é um sistema operacional?\n");
 
-    print("1 - Microsoft Windows");
-    print("2 - FreeBSD");
-    print("3 - Ubuntu");
-    print("4 - FireFox");
+    print("1 - Microsoft Windows\n");
+    print("2 - FreeBSD\n");
+    print("3 - Ubuntu\n");
+    print("4 - FireFox\n");
 
     return CheckAnswer(answear);
 end
 
 fun Quest_2(): int 
     const answear: char = '3';
-    print("Qual foi o primeiro navegador web de sucesso?");
+    print("Qual foi o primeiro navegador web de sucesso?\n");
 
-    print("1 - Mozilla FireFox");
-    print("2 - Internet Explorer");
-    print("3 - Netscape");
-    print("4 - Google Chrome");
+    print("1 - Mozilla FireFox\n");
+    print("2 - Internet Explorer\n");
+    print("3 - Netscape\n");
+    print("4 - Google Chrome\n");
 
     return CheckAnswer(answear);
 end
 
 fun Quest_3(): int 
     const answear: char = '3';
-    print("Qual o primeiro sistema operacional comercializado pelo Microsoft?");
+    print("Qual o primeiro sistema operacional comercializado pelo Microsoft?\n");
 
-    print("1 - Windows");
-    print("2 - Ubuntu");
-    print("3 - MS-Dos");
-    print("4 - MacOS");
+    print("1 - Windows\n");
+    print("2 - Ubuntu\n");
+    print("3 - MS-Dos\n");
+    print("4 - MacOS\n");
 
     return CheckAnswer(answear);
 end
 
 fun Quest_4(): int 
     const answear: char = '2';
-    print("O que é antivírus de computador?");
+    print("O que é antivírus de computador?\n");
 
-    print("1 - É um antivírus contra malária, febre amarela e tosse");
-    print("2 - É um software contra vírus");
-    print("3 - É um hardware contra vírus");
-    print("4 - É um software que protege os seres humanos contra vírus");
+    print("1 - É um antivírus contra malária, febre amarela e tosse\n");
+    print("2 - É um software contra vírus\n");
+    print("3 - É um hardware contra vírus\n");
+    print("4 - É um software que protege os seres humanos contra vírus\n");
 
     return CheckAnswer(answear);
 end
 
 fun Quest_5(): int 
     const answear: char = '2';
-    print("O que significa a sigla PC?");
+    print("O que significa a sigla PC?\n");
 
-    print("1 - PLACA COMPACTA");
-    print("2 - COMPUTADOR PESSOAL");
-    print("3 - PROCESSAMENTO COMPUTADORIZADO");
-    print("4 - COMPUTADOR PEQUENO");
+    print("1 - PLACA COMPACTA\n");
+    print("2 - COMPUTADOR PESSOAL\n");
+    print("3 - PROCESSAMENTO COMPUTADORIZADO\n");
+    print("4 - COMPUTADOR PEQUENO\n");
 
     return CheckAnswer(answear);
 end
 
+fun Popup(msg: string, showNot: bool): bool
+    print(msg);
+    print("1 - Sim");
+    
+    if(showNot)
+        print("\n2 - Não");
+    end
+
+    print("\n\nResposta > ");
+    
+    return readKey() == '1';
+end
+
+fun Tutorial(): void
+    print("Para responder todos os questionários, digite o número correspondente à sua opção desejada e aperte enter.");
+    Popup(msg_continue, false);
+end
+
 # Presentation
+# Clear terminal
+syscmd("cls|clear");
 
-print("Bem vindo ao Quiz!");
-print("Vamos apresentar um quiz sobre computação em geral.");
+print("Bem vindo ao Quiz!\n");
+print("Vamos apresentar um quiz sobre computação em geral.\n\n");
 
-print("Precione qualquer tecla para começar...");
-readKey();
+Popup(msg_continue, false);
+
+Tutorial();
+
+Popup(msg_continue, false);
 
 while(true)
     var score: int = 0;
@@ -92,9 +121,8 @@ while(true)
     syscmd("cls|clear");
 
     print("Sua pontuação final foi " + intToStr(score) + "/5!\n\n");
-    print("Gostaria de tentar novamente?");
 
-    if(readKey() != 'S')
+    if(Popup("Gostaria de tentar novamente?", true))
         break;
     end
 end
