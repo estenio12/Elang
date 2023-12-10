@@ -26,7 +26,7 @@ enum EBRANCH_TYPE
     RETURN_EXPRESSION,
     ASSIGNMENT,
     BLOCK_STATEMENT,
-    BREAK_STATEMENT,
+    BREAK_EXPRESSION,
     WHILE_DECLARATION,
     IF_ELSE_CONDITION
 };
@@ -496,7 +496,7 @@ class Assignment: public AstNode
 class BreakStatement : public AstNode
 {
     public:
-        BreakStatement(){ this->kind = EBRANCH_TYPE::BREAK_STATEMENT; }
+        BreakStatement(){ this->kind = EBRANCH_TYPE::BREAK_EXPRESSION; }
         ~BreakStatement(){}
 
     public:
@@ -543,8 +543,8 @@ class IfElseCondition : public AstNode
 {
     public:
         Expression* condition;
-        BlockStatement* if_block_stmt;
-        BlockStatement* else_block_stmt;
+        BlockStatement* if_block_stmt   = nullptr;
+        BlockStatement* else_block_stmt = nullptr;
 
     public:
         IfElseCondition(){ this->kind = EBRANCH_TYPE::IF_ELSE_CONDITION; }

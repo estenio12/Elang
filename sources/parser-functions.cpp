@@ -11,6 +11,7 @@ EBRANCH_TYPE Parser::BindOperation(Token* token)
     if(IsCallFunction(token)) return EBRANCH_TYPE::CALL_FUNCTION;
     if(IsWhileDeclaration(token)) return EBRANCH_TYPE::WHILE_DECLARATION;
     if(IsIfElseCondition(token)) return EBRANCH_TYPE::IF_ELSE_CONDITION;
+    if(IsBreakExpression(token)) return EBRANCH_TYPE::BREAK_EXPRESSION;
 
     this->ThrowError(token, "Unexpected token");
     return EBRANCH_TYPE::UNDEFINED;
@@ -57,6 +58,11 @@ bool Parser::IsWhileDeclaration(Token* token)
 bool Parser::IsIfElseCondition(Token* token)
 {
     return token->value == KEYWORD::T_IF;
+}
+
+bool Parser::IsBreakExpression(Token* token)
+{
+    return token->value == KEYWORD::T_BREAK;
 }
 
 #pragma endregion
@@ -150,15 +156,15 @@ AstBranch* Parser::BuildFunctionDeclaration(Token* token)
     this->CheckMemoryAllocated(function);
     this->CheckMemoryAllocated(funModel);
 
-    // # Set states
-    this->currentScope = function->name;
-    this->currentDeep++;
-
     // # KEYWORD 'fun' from memory
     MemTools::FreeObjectFromMemory(token);
 
     // # Function identifier validations
     auto t_fun_id = this->GetNextToken("An identifier was expected after the keyword 'fun'");
+
+    // # Set states
+    this->currentScope = t_fun_id->value;// # Scope is function name
+    this->currentDeep++;
 
     if(this->symbolTable->ExistsIdentifier(t_fun_id->value, this->currentScope, this->currentDeep) ||
        this->symbolTable->ExistsFunctionIdentifier(t_fun_id->value) &&
@@ -516,8 +522,7 @@ AstBranch* Parser::BuildIfElseCondition(BlockStmtPolicy* policy, Token* token, s
     this->ExpectValue(DELIMITER::T_OPEN_PAREM, "Expected opening parenthesis");
 
     // # Read arguments
-    auto allow_types = this->CreateExpectedType(TYPE::T_INT);
-    allow_types.push_back(TYPE::T_BOOL);
+    std::vector<std::string> allow_types;
 
     int opened_paren = 1;
     auto tokens = new Tokens();

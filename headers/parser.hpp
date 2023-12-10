@@ -99,6 +99,7 @@ class Parser
         bool IsAssignment(Token*);
         bool IsWhileDeclaration(Token*);
         bool IsIfElseCondition(Token*);
+        bool IsBreakExpression(Token*);
 
     private:
         AstBranch* BuildVariableDeclaration(Token*);

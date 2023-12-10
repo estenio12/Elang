@@ -67,8 +67,11 @@ void Parser::ThrowErrorDataType(Token* token, std::string type_token, std::vecto
 {
     std::string allow_types;
 
-    for(auto item : expected_type)
-        allow_types += item;
+    for(int i =0; i < expected_type.size(); i++)
+    {
+        if(i > 0) allow_types += " | ";
+        allow_types += expected_type[i];
+    }
 
     std::string lineError = "Line: " + std::to_string(token->line) + ", Col: " + std::to_string(token->startpos);
     Output::PrintCustomizeError("Syntax Error (" + lineError + "): ", "Cannot implicitly convert type '" + type_token + "' to '"+ allow_types +"'");
@@ -172,6 +175,8 @@ TYPE_IDENTIFIER Parser::GetTypeIdentifier(Token* token, const std::vector<std::s
     
     if(isVariable != nullptr) 
     {
+        if(expected_type.size() <= 0) return TYPE_IDENTIFIER::IDENTIFIER_VARIABLE;
+
         for(auto item : expected_type)
         {
             if(isVariable->type == item) 
@@ -185,6 +190,8 @@ TYPE_IDENTIFIER Parser::GetTypeIdentifier(Token* token, const std::vector<std::s
 
     if(isCallFunction != nullptr) 
     {   
+        if(expected_type.size() <= 0) return TYPE_IDENTIFIER::IDENTIFIER_FUNCTION;
+
         for(auto item : expected_type)
         {
             if(isCallFunction->type == item) 
@@ -204,6 +211,8 @@ void Parser::ExpectThisToken(Token* token, std::string expected, std::string mes
 
 bool Parser::IsValidDataType(Token* token, std::vector<std::string> expected_type)
 {
+    if(expected_type.size() <= 0) return true;
+
     for(auto item : expected_type)
     {
         if(token->type == TYPE_TOKEN::T_FLOAT_LITERAL  && item == TYPE::T_FLOAT  ||
@@ -216,7 +225,6 @@ bool Parser::IsValidDataType(Token* token, std::vector<std::string> expected_typ
         }
     }
 
-    // this->ThrowErrorDataType(token, ConvertTypeTokenToType(token->type), expected_type);
     return false;
 }
 

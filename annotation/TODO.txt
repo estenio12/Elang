@@ -24,7 +24,7 @@
     > [ OK ] - Add basic functions of I/O operations
 
 - Bugs Opened:
-    > [ TODO ] - When call the function like argument in another function with more then one arguments, throw error.
+    > [ OK ] - When call the function like argument in another function with more then one arguments, throw error.
 
 [ TARGET TO - 15/12/2023 ] ======================================================================
 

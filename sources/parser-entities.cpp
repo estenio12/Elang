@@ -215,6 +215,7 @@ Expression* Parser::BuildExpression(const std::vector<std::string> expected_type
            token->type == TYPE_TOKEN::T_IDENTIDIER     ||
            token->type == TYPE_TOKEN::T_STRING_LITERAL )
         {
+            
             if(history->type  == TYPE_TOKEN::T_ARITHMETIC ||
                history->type  == TYPE_TOKEN::T_LOGICAL    ||
                history->type  == TYPE_TOKEN::T_PREFIX     ||
@@ -313,7 +314,7 @@ BlockStatement* Parser::BuildBlockStatement(BlockStmtPolicy* policy, std::vector
                 this->ExpectValue(DELIMITER::T_EOF, "Expected ';' after the called function ");
             break;
 
-            case EBRANCH_TYPE::BREAK_STATEMENT:
+            case EBRANCH_TYPE::BREAK_EXPRESSION:
                 if(!policy->HasPolicy(BLOCK_STMT_POLICY::ALLOW_BREAK)) this->ThrowError(stmt_token, "the break keyword is allow only for loops"); 
                 block_stmt->content.push_back(BuildBreakStatement(stmt_token));
             break;
