@@ -1,6 +1,6 @@
 # Defines
 
-const msg_continue: string = "Continuar?";
+const msg_continue: string = "\nContinuar?";
 
 # Questians
 
@@ -74,21 +74,26 @@ fun Quest_5(): int
     return CheckAnswer(answear);
 end
 
-fun Popup(msg: string, showNot: bool): bool
+fun Popup(msg: string, show: bool): bool
     print(msg);
-    print("1 - Sim");
+    print("\n\n1 - Sim");
     
-    if(showNot)
-        print("\n2 - Não");
+    if(show)
+        print("\n\n2 - Não");
     end
 
     print("\n\nResposta > ");
     
-    return readKey() == '1';
+    if(readKey() == '1')
+        return true;
+    end
+
+    syscmd("cls|clear");
+    return false;
 end
 
 fun Tutorial(): void
-    print("Para responder todos os questionários, digite o número correspondente à sua opção desejada e aperte enter.");
+    print("Para responder todos os questionários, digite o número correspondente à sua opção desejada e aperte enter.\n\n");
     Popup(msg_continue, false);
 end
 
@@ -99,11 +104,7 @@ syscmd("cls|clear");
 print("Bem vindo ao Quiz!\n");
 print("Vamos apresentar um quiz sobre computação em geral.\n\n");
 
-Popup(msg_continue, false);
-
 Tutorial();
-
-Popup(msg_continue, false);
 
 while(true)
     var score: int = 0;
@@ -122,7 +123,7 @@ while(true)
 
     print("Sua pontuação final foi " + intToStr(score) + "/5!\n\n");
 
-    if(Popup("Gostaria de tentar novamente?", true))
+    if(Popup("Gostaria de tentar novamente?", true) == false)
         break;
     end
 end
