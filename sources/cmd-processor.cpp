@@ -62,9 +62,9 @@ void CmdProcessor::ExecuteBuild(std::string source, std::string OutputFileName)
 std::string CmdProcessor::GetOSName()
 {
     #ifdef _WIN32
-        return "Windows 32-bit";
+        return "Windows 32-bits";
     #elif _WIN64
-        return "Windows 64-bit";
+        return "Windows 64-bits";
     #elif __APPLE__ || __MACH__
         return "Mac OSX";
     #elif __linux__
