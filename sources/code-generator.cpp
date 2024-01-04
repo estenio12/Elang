@@ -36,7 +36,7 @@ void CodeGenerator::Run(Ast* ast)
 void CodeGenerator::WriteChunkToFile(std::string chunk)
 {
     if(!chunk.empty())
-        this->fileHandler.write(chunk.c_str(), chunk.size());
+        this->fileHandler << chunk;
 }
 
 void CodeGenerator::LoadProgramInitialize()
