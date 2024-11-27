@@ -12,10 +12,13 @@ Ast* Parser::Parse()
     // # Passing
     while(true)
     {
+        // # Busca próximo token.,
         auto token = this->lexer->GetNextToken();
 
+        // # Verifica se é nulo, caso verdadeiro, a fase análise sintática acabou.
         if(token == nullptr) break;
 
+        // # Identifica qual operação está sendo feita.
         auto operation = this->BindOperation(token);
 
         switch(operation)

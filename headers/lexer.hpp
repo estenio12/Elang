@@ -27,7 +27,7 @@ class Lexer
 
     private:
         std::queue<Token*> tokenPool;
-        std::ifstream fileHanler;
+        std::ifstream fileHandler;
         std::string sourcePath;
         bool endTokenize = false;
 

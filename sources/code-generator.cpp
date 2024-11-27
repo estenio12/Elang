@@ -125,10 +125,15 @@ void CodeGenerator::AstVisitor(Ast* ast)
 {
     while(ast->HasContent())
     {
+        // # Pega uma branch para processar, ao mesmo tempo 
+        // # que remove ela AST para ser processada novamente.
         auto branch = ast->ConsumeBranch();
 
+        // # Verifica se é uma branch válida.
         if(branch != nullptr)
         {
+            // # Identifica qual o tipo da branch e aplica a 
+            // # geração de código correspondente.
             switch (branch->entity->kind)
             {
                 case EBRANCH_TYPE::VARIABLE_DECLARATION:

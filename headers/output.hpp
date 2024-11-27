@@ -1,7 +1,7 @@
 // #######################################
 // ## 
 // ## @author: Estenio Garcia
-// ## @copyright: (c) Allright reserved 
+// ## @copyright: (c) All right reserved 
 // ## @License: Apache 2.0
 // ## 
 // #######################################

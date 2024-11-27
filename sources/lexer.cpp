@@ -2,16 +2,20 @@
 
 Lexer::Lexer(std::string sourcePath):sourcePath(sourcePath)
 {
-    this->fileHanler.open(sourcePath);
+    this->fileHandler.open(sourcePath);
 }
 
 Lexer::~Lexer(){}
 
 Token* Lexer::GetNextToken()
 {
-    if((tokenPool.empty() || tokenPool.size() <= 2) && !this->fileHanler.eof())
+    // # Verifica se pool de tokens está vazio ou quase, e processa mais tokens.
+    if((tokenPool.empty() || tokenPool.size() <= 2) && !this->fileHandler.eof())
         this->LoadMoreToken();
 
+    // # Verifica se após executar a função de carregar mais tokens, o pool ainda está vazio.
+    // # Caso tenha conteúdo o primeiro token será recuperado do pool e então removido do mesmo.
+    // # Por outro lado, caso esteja vazio não executará anda e encerrará o processo.
     if(!tokenPool.empty())
     {
         auto token = tokenPool.front();
@@ -20,7 +24,10 @@ Token* Lexer::GetNextToken()
         return token;
     }
 
-    fileHanler.close();
+    // # Fecha o stream de leitura do código-fonte.
+    fileHandler.close();
+
+    // # Retorna nullptr para sinalizar que o conteúdo do código-fonte acabou.
     return nullptr;
 }
 
@@ -49,15 +56,21 @@ void Lexer::LoadMoreToken()
 {
     try
     {
+        // # Lê a próxima linha do código-fonte e armazena em line.
         std::string line;
-        std::getline(this->fileHanler, line);
+        std::getline(this->fileHandler, line);
         this->lineCounter++;
 
+        // # Aplica a sanitização.
         line = Sanitaze(line);
 
-        if(!fileHanler.eof() && line.empty()) 
+        // # Logica para validar se o que foi lido foi uma linha em branco, 
+        // # caso verdadeiro, o a função será chamada novamente até o conteúdo
+        // # do arquivo abacar ou encontrar uma linha com código para processar.
+        if(!fileHandler.eof() && line.empty()) 
             LoadMoreToken();
 
+        // # O conteúdo da linha for válido, ela será tokenizada. 
         if(!line.empty()) 
             this->Tokenize(line);
     }
